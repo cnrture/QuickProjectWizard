@@ -2,17 +2,16 @@
 <idea-plugin>
     <id>com.github.cnrture.quickprojectwizard</id>
     <name>QuickProjectWizard</name>
-    <vendor>cnrture</vendor>
+    <vendor email="cnrture@gmail.com" url="https://canerture.com">Caner Ture</vendor>
+
+    <description>
+        <![CDATA[<p>Build your project with simply selected libraries and pages</p>]]></description>
 
     <depends>com.intellij.modules.platform</depends>
+    <depends>org.jetbrains.android</depends>
+    <depends>com.intellij.modules.androidstudio</depends>
 
-    <resource-bundle>messages.MyBundle</resource-bundle>
-
-    <extensions defaultExtensionNs="com.intellij">
-        <toolWindow factoryClass="com.github.cnrture.quickprojectwizard.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
+    <extensions defaultExtensionNs="com.android.tools.idea.wizard.template">
+        <wizardTemplateProvider implementation="com.github.cnrture.quickprojectwizard.AndroidStudioTemplateProvider"/>
     </extensions>
-
-    <applicationListeners>
-        <listener class="com.github.cnrture.quickprojectwizard.listeners.MyApplicationActivationListener" topic="com.intellij.openapi.application.ApplicationActivationListener"/>
-    </applicationListeners>
 </idea-plugin>

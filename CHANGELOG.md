@@ -1,7 +1,9 @@
 <!-- Keep a Changelog guide -> https://keepachangelog.com -->
 
-# QuickProjectWizard Changelog
+# Quick Project Wizard Changelog
 
-## [Unreleased]
+## [0.0.1]
 ### Added
-- Initial scaffold created from [IntelliJ Platform Plugin Template](https://github.com/JetBrains/intellij-platform-plugin-template)
+- Popular libraries and frameworks added to the list
+- Compose and XML support added
+- Add data, di, domain, ui, and common packages
