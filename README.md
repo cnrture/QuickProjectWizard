@@ -44,17 +44,24 @@ To keep everything working, do not remove `<!-- ... -->` sections.
   <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
 
 ## Usage
+
+### 1. Create a new project
+
 <img src="images/new_project.png" alt="New Project">
 
 - Open your Android Studio.
 - Click New Project.
 - Select Quick Project Wizard and click Next.
 
+### 2. Configure your project
+
 <img src="images/details.png" alt="Quick Project Wizard Page">
 
 - Select the libraries, dependencies and screens you want to include in your project (for example, Retrofit, Room, Hilt, etc.).
 - Customize versions and additional configurations.
 - After all selections have been made, click Finish.
+
+### 3. Finalize and start coding
 
 <img src="images/final.png" alt="Quick Project Wizard Page">
 
