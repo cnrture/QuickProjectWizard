@@ -52,6 +52,7 @@ To keep everything working, do not remove `<!-- ... -->` sections.
 - Open your Android Studio.
 - Click New Project.
 - Select Quick Project Wizard and click Next.
+</br></br>
 
 ### 2. Configure your project
 
@@ -60,6 +61,7 @@ To keep everything working, do not remove `<!-- ... -->` sections.
 - Select the libraries, dependencies and screens you want to include in your project (for example, Retrofit, Room, Hilt, etc.).
 - Customize versions and additional configurations.
 - After all selections have been made, click Finish.
+</br></br>
 
 ### 3. Finalize and start coding
 
