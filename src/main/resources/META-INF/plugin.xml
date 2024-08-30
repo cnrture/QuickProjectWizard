@@ -4,9 +4,6 @@
     <name>QuickProjectWizard</name>
     <vendor email="cnrture@gmail.com" url="https://canerture.com">Caner Ture</vendor>
 
-    <description>
-        <![CDATA[<p>Build your project with simply selected libraries and pages</p>]]></description>
-
     <depends>com.intellij.modules.platform</depends>
     <depends>org.jetbrains.android</depends>
     <depends>com.intellij.modules.androidstudio</depends>

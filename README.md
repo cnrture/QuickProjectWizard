@@ -6,6 +6,13 @@
 
 <img src="src/main/resources/META-INF/pluginIcon.svg" alt="New Project" width="144">
 
+<!-- Plugin description -->
+#### This plugin simplifies the process of setting up a new Android project with all the necessary dependencies and configurations.
+- Popular libraries and frameworks
+- Compose and XML
+- data, di, domain, ui, and common packages
+<!-- Plugin description end -->
+
 ## Installation
 
 - Using the IDE built-in plugin system:
