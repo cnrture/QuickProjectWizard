@@ -3,6 +3,7 @@ package com.github.cnrture.quickprojectwizard
 import com.android.tools.idea.wizard.template.*
 import com.android.tools.idea.wizard.template.impl.defaultPackageNameParameter
 import java.net.URL
+import java.util.*
 
 enum class ImageLibrary { None, Coil, Glide }
 enum class NetworkLibrary { None, Retrofit, Ktor }
@@ -19,6 +20,8 @@ val projectTemplate
         screens = listOf(WizardUiContext.NewProject, WizardUiContext.NewProjectExtraDetail)
 
         val packageName = defaultPackageNameParameter
+        val projectName = packageName.value.split(".").last()
+            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
 
         val selectedUISystem = enumParameter<UISystem> {
             name = "UI System"
@@ -123,6 +126,7 @@ val projectTemplate
                 screens = screens.value,
                 minApi = minApi,
                 javaJvmVersion = javaJvmVersion.value,
+                projectName = projectName
             )
         }
     }

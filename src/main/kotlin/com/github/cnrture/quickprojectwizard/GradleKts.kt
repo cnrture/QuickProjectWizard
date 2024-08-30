@@ -19,7 +19,7 @@ fun getGradleKts(
     addGradlePlugin("android.application")
     addGradlePlugin("jetbrains.kotlin.android")
     if (isCompose) addGradlePlugin("compose.compiler")
-    if (isHiltEnable || isRoomEnable) addGradlePlugin("ksp")
+    if (isHiltEnable || isRoomEnable || selectedImageLibrary == ImageLibrary.Glide) addGradlePlugin("ksp")
     if (isHiltEnable) addGradlePlugin("hilt.plugin")
     if (isKtLintEnable) addGradlePlugin("ktlint")
     if (isDetektEnable) addGradlePlugin("detekt")
@@ -109,8 +109,8 @@ private fun StringBuilder.addNavigationLibrary(isCompose: Boolean, isNavigationE
 
 private fun StringBuilder.addImageLibrary(isCompose: Boolean, selectedImageLibrary: ImageLibrary) {
     when {
-        isCompose && selectedImageLibrary == ImageLibrary.Coil -> addGradleImplementation("coil.compose")
-        isCompose && selectedImageLibrary == ImageLibrary.Glide -> addGradleImplementation("glide.compose")
+        isCompose && selectedImageLibrary == ImageLibrary.Coil -> addGradleImplementation("coil")
+        isCompose && selectedImageLibrary == ImageLibrary.Glide -> addGradleImplementation("glide")
         !isCompose && selectedImageLibrary == ImageLibrary.Coil -> addGradleImplementation("coil")
         !isCompose && selectedImageLibrary == ImageLibrary.Glide -> addGradleImplementation("glide")
         else -> Unit

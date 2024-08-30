@@ -5,7 +5,6 @@ import com.android.tools.idea.wizard.template.ModuleTemplateData
 import com.android.tools.idea.wizard.template.PackageName
 import com.android.tools.idea.wizard.template.RecipeExecutor
 import com.android.tools.idea.wizard.template.escapeKotlinIdentifier
-import org.canerture.quickprojectwizard.*
 import com.github.cnrture.quickprojectwizard.arch.app.emptyMainApplication
 import com.github.cnrture.quickprojectwizard.arch.app.emptyManifestXml
 import com.github.cnrture.quickprojectwizard.arch.common.emptyCollectExtension
@@ -14,6 +13,7 @@ import com.github.cnrture.quickprojectwizard.arch.data.model.emptyMainEntityMode
 import com.github.cnrture.quickprojectwizard.arch.data.repository.emptyMainRepositoryImpl
 import com.github.cnrture.quickprojectwizard.arch.data.source.local.emptyMainDao
 import com.github.cnrture.quickprojectwizard.arch.data.source.local.emptyMainRoomDB
+import com.github.cnrture.quickprojectwizard.arch.data.source.remote.emptyKtorApi
 import com.github.cnrture.quickprojectwizard.arch.data.source.remote.emptyMainService
 import com.github.cnrture.quickprojectwizard.arch.detekt.emptyDetektConfig
 import com.github.cnrture.quickprojectwizard.arch.di.emptyLocalModule
@@ -29,6 +29,9 @@ import com.github.cnrture.quickprojectwizard.arch.ui.compose.main.emptyMainScree
 import com.github.cnrture.quickprojectwizard.arch.ui.compose.main.emptyMainScreenPreviewProvider
 import com.github.cnrture.quickprojectwizard.arch.ui.compose.main.emptyMainViewModel
 import com.github.cnrture.quickprojectwizard.arch.ui.compose.navigation.emptyNavigationGraph
+import com.github.cnrture.quickprojectwizard.arch.ui.compose.theme.emptyColor
+import com.github.cnrture.quickprojectwizard.arch.ui.compose.theme.emptyTheme
+import com.github.cnrture.quickprojectwizard.arch.ui.compose.theme.emptyType
 import com.github.cnrture.quickprojectwizard.arch.ui.xml.*
 import java.io.File
 
@@ -48,6 +51,7 @@ fun RecipeExecutor.projectRecipe(
     screens: String,
     minApi: Int,
     javaJvmVersion: String,
+    projectName: String,
 ) {
     val packagePath = escapeKotlinIdentifier(packageName)
 
@@ -63,13 +67,19 @@ fun RecipeExecutor.projectRecipe(
 
     addExtensions(moduleData, packagePath, isCompose)
 
-    addActivity(moduleData, packagePath, isCompose, isHiltEnable, screenList)
+    if (isCompose) {
+        addSrcFile(emptyColor(packagePath), moduleData, "ui/theme/Color.kt")
+        addSrcFile(emptyTheme(packagePath, projectName), moduleData, "ui/theme/Theme.kt")
+        addSrcFile(emptyType(packagePath), moduleData, "ui/theme/Type.kt")
+    }
+
+    addActivity(moduleData, packagePath, isCompose, isHiltEnable, screenList, projectName)
 
     if (isHiltEnable) {
         addSrcFile(emptyMainApplication(packagePath), moduleData, "MainApplication.kt")
     }
 
-    addNavigation(moduleData, packagePath, isCompose, isNavigationEnable, screenList)
+    addNavigation(moduleData, packagePath, isCompose, isNavigationEnable, screenList, isHiltEnable)
 
     addScreens(moduleData, packagePath, isCompose, isHiltEnable, screenList)
 
@@ -98,10 +108,18 @@ fun RecipeExecutor.projectRecipe(
     }
 
     if (selectedNetworkLibrary != NetworkLibrary.None) {
-        addSrcFile(emptyMainService(packagePath), moduleData, "data/source/remote/MainService.kt")
+        addSrcFile(
+            emptyMainService(packagePath, selectedNetworkLibrary),
+            moduleData,
+            "data/source/remote/MainService.kt"
+        )
 
         if (isHiltEnable) {
             addSrcFile(emptyNetworkModule(packagePath, selectedNetworkLibrary), moduleData, "di/NetworkModule.kt")
+        }
+
+        if (selectedNetworkLibrary == NetworkLibrary.Ktor) {
+            addSrcFile(emptyKtorApi(packagePath), moduleData, "data/source/remote/KtorApi.kt")
         }
     }
 
@@ -161,9 +179,14 @@ private fun RecipeExecutor.addActivity(
     isCompose: Boolean,
     isHiltEnable: Boolean,
     screenList: List<String>,
+    projectName: String,
 ) {
     if (isCompose) {
-        addSrcFile(emptyActivity(packagePath, screenList[0]), moduleData, "ui/MainActivity.kt")
+        addSrcFile(
+            emptyActivity(packagePath, projectName, screenList[0], isHiltEnable),
+            moduleData,
+            "ui/MainActivity.kt"
+        )
     } else {
         addSrcFile(emptyActivityXML(packagePath, isHiltEnable), moduleData, "ui/MainActivity.kt")
         addRootFile(
@@ -180,13 +203,15 @@ private fun RecipeExecutor.addNavigation(
     isCompose: Boolean,
     isNavigationEnable: Boolean,
     screenList: List<String>,
+    isHiltEnable: Boolean,
 ) {
     when {
         isCompose && isNavigationEnable -> {
             val screenListString = StringBuilder().apply {
                 screenList.forEach {
                     append("        composable(\"$it\") {\n")
-                    append("            val viewModel: ${it}ViewModel = hiltViewModel()\n")
+                    if (isHiltEnable) append("            val viewModel: ${it}ViewModel = hiltViewModel()\n")
+                    else append("            val viewModel = viewModel<${it}ViewModel>(it)\n")
                     append("            val uiState by viewModel.uiState.collectAsStateWithLifecycle()\n")
                     append("            val uiEffect = viewModel.uiEffect\n")
                     append("            ${it}Screen(\n")
@@ -204,7 +229,7 @@ private fun RecipeExecutor.addNavigation(
                 }
             }.toString()
             addSrcFile(
-                emptyNavigationGraph(packagePath, screenListString, screensImportsString),
+                emptyNavigationGraph(packagePath, screenListString, screensImportsString, isHiltEnable),
                 moduleData,
                 "ui/navigation/NavigationGraph.kt"
             )
@@ -239,7 +264,11 @@ private fun RecipeExecutor.addScreens(
     if (isCompose) {
         screenList.forEach {
             addSrcFile(emptyMainScreen(packagePath, it), moduleData, "ui/${it.lowercase()}/${it}Screen.kt")
-            addSrcFile(emptyMainViewModel(packagePath, it), moduleData, "ui/${it.lowercase()}/${it}ViewModel.kt")
+            addSrcFile(
+                emptyMainViewModel(packagePath, it, isHiltEnable),
+                moduleData,
+                "ui/${it.lowercase()}/${it}ViewModel.kt"
+            )
             addSrcFile(emptyMainContract(packagePath, it), moduleData, "ui/${it.lowercase()}/${it}Contract.kt")
             addSrcFile(
                 emptyMainScreenPreviewProvider(packagePath, it),
@@ -311,7 +340,15 @@ private fun addDependenciesAndGradle(
     )
 
     val projectGradleKts =
-        getProjectGradleKts(isCompose, isHiltEnable, isRoomEnable, isKtLintEnable, isDetektEnable, isFirebaseEnable)
+        getProjectGradleKts(
+            isCompose,
+            isHiltEnable,
+            isRoomEnable,
+            isKtLintEnable,
+            isDetektEnable,
+            isFirebaseEnable,
+            selectedImageLibrary,
+        )
 
     val libsVersionFile = File(moduleData.rootDir.parentFile, "gradle/libs.versions.toml")
     val buildGradleFile = File(moduleData.rootDir.parentFile, "app/build.gradle.kts")

@@ -1,6 +1,4 @@
-package org.canerture.quickprojectwizard
-
-import com.github.cnrture.quickprojectwizard.*
+package com.github.cnrture.quickprojectwizard
 
 fun getDependencies(
     isCompose: Boolean,
@@ -16,7 +14,10 @@ fun getDependencies(
 ) = StringBuilder().apply {
     append("[versions]\n")
     addDefaultVersions()
-    if (isHiltEnable || isRoomEnable) addLibsVersion("ksp", "2.0.20-1.0.24")
+    if (isHiltEnable || isRoomEnable || selectedImageLibrary == ImageLibrary.Glide) addLibsVersion(
+        "ksp",
+        "2.0.20-1.0.24"
+    )
     if (isCompose) {
         addLibsVersion("lifecycle-runtime-ktx", "2.8.4")
         addLibsVersion("activity-compose", "1.9.1")
@@ -30,7 +31,7 @@ fun getDependencies(
     addNetworkLibraryVersions(selectedNetworkLibrary)
     if (isHiltEnable) {
         addLibsVersion("hilt", "2.52")
-        addLibsVersion("hiltNavigationCompose", "1.2.0")
+        if (isCompose) addLibsVersion("hiltNavigationCompose", "1.2.0")
     }
     addNavigationVersions(isCompose, isNavigationEnable)
     if (isKtLintEnable) addLibsVersion("ktlint", "11.3.2")
@@ -63,7 +64,7 @@ fun getDependencies(
     if (isHiltEnable) {
         addLibsDependency("hilt-compiler", "com.google.dagger", "hilt-compiler", "hilt")
         addLibsDependency("hilt-android", "com.google.dagger", "hilt-android", "hilt")
-        addLibsDependency(
+        if (isCompose) addLibsDependency(
             "hilt-navigation-compose",
             "androidx.hilt",
             "hilt-navigation-compose",
@@ -88,7 +89,7 @@ fun getDependencies(
     if (isCompose) {
         addLibsPlugin("compose-compiler", "org.jetbrains.kotlin.plugin.compose", "kotlin")
     }
-    if (isHiltEnable || isRoomEnable) {
+    if (isHiltEnable || isRoomEnable || selectedImageLibrary == ImageLibrary.Glide) {
         addLibsPlugin("ksp", "com.google.devtools.ksp", "ksp")
     }
     if (isHiltEnable) {
@@ -186,6 +187,7 @@ private fun StringBuilder.addNetworkLibraryDependencies(selectedNetworkLibrary: 
             addLibsDependency("ktor-client-content-negotiation", "io.ktor", "ktor-client-content-negotiation", "ktor")
             addLibsDependency("ktor-serialization-kotlinx-json", "io.ktor", "ktor-serialization-kotlinx-json", "ktor")
         }
+
         else -> Unit
     }
 }
@@ -195,6 +197,7 @@ private fun StringBuilder.addNavigationLibrary(isCompose: Boolean, isNavigationE
         isCompose && isNavigationEnable -> {
             addLibsDependency("navigation-compose", "androidx.navigation", "navigation-compose", "navigationCompose")
         }
+
         !isCompose && isNavigationEnable -> {
             addLibsDependency("navigation-fragment", "androidx.navigation", "navigation-fragment-ktx", "navigation")
             addLibsDependency("navigation-ui", "androidx.navigation", "navigation-ui-ktx", "navigation")
@@ -205,14 +208,17 @@ private fun StringBuilder.addNavigationLibrary(isCompose: Boolean, isNavigationE
 private fun StringBuilder.addImageLibraryDependencies(isCompose: Boolean, selectedImageLibrary: ImageLibrary) {
     when {
         isCompose && selectedImageLibrary == ImageLibrary.Coil -> {
-            addLibsDependency("coil-compose", "io.coil-kt", "coil-compose", "coilVersion")
+            addLibsDependency("coil", "io.coil-kt", "coil-compose", "coilVersion")
         }
+
         isCompose && selectedImageLibrary == ImageLibrary.Glide -> {
             addLibsDependency("glide", "com.github.bumptech.glide", "compose", "glideVersion")
         }
+
         !isCompose && selectedImageLibrary == ImageLibrary.Coil -> {
             addLibsDependency("coil", "io.coil-kt", "coil", "coilVersion")
         }
+
         !isCompose && selectedImageLibrary == ImageLibrary.Glide -> {
             addLibsDependency("glide", "com.github.bumptech.glide", "glide", "glideVersion")
         }
