@@ -43,6 +43,24 @@ To keep everything working, do not remove `<!-- ... -->` sections.
   Download the [latest release](https://github.com/cnrture/QuickProjectWizard/releases/latest) and install it manually using
   <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
 
+## Usage
+<img src="images/new_project.png" alt="New Project">
+
+- Open your Android Studio.
+- Click New Project.
+- Select Quick Project Wizard and click Next.
+
+<img src="images/details.png" alt="Quick Project Wizard Page">
+
+- Select the libraries, dependencies and screens you want to include in your project (for example, Retrofit, Room, Hilt, etc.).
+- Customize versions and additional configurations.
+- After all selections have been made, click Finish.
+
+<img src="images/final.png" alt="Quick Project Wizard Page">
+
+- Review the generated project structure to ensure all necessary dependencies and configurations are correctly applied.
+- Start coding your new project with all the essential tools and libraries already integrated.
+- Congratulations! You have successfully installed and configured the Quick Project Wizard plugin. Your new Android project is now set up with the latest and most essential dependencies, making your development process more efficient and streamlined.
 
 ---
 Plugin based on the [IntelliJ Platform Plugin Template][template].
