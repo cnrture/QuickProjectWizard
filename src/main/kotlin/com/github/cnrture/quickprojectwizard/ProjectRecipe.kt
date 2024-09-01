@@ -33,6 +33,9 @@ import com.github.cnrture.quickprojectwizard.arch.ui.compose.theme.emptyColor
 import com.github.cnrture.quickprojectwizard.arch.ui.compose.theme.emptyTheme
 import com.github.cnrture.quickprojectwizard.arch.ui.compose.theme.emptyType
 import com.github.cnrture.quickprojectwizard.arch.ui.xml.*
+import com.github.cnrture.quickprojectwizard.gradle.getDependencies
+import com.github.cnrture.quickprojectwizard.gradle.getGradleKts
+import com.github.cnrture.quickprojectwizard.gradle.getProjectGradleKts
 import java.io.File
 
 fun RecipeExecutor.projectRecipe(

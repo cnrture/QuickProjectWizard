@@ -2,6 +2,9 @@ package com.github.cnrture.quickprojectwizard
 
 import com.android.tools.idea.wizard.template.ModuleTemplateData
 import com.android.tools.idea.wizard.template.RecipeExecutor
+import com.github.cnrture.quickprojectwizard.gradle.Library
+import com.github.cnrture.quickprojectwizard.gradle.Plugin
+import com.github.cnrture.quickprojectwizard.gradle.Version
 
 fun RecipeExecutor.addRootFile(
     data: String,
@@ -19,52 +22,62 @@ fun RecipeExecutor.addSrcFile(
     save(data, moduleData.srcDir.resolve(filePath))
 }
 
-fun StringBuilder.addLibsVersion(name: String, versionRef: String) {
-    append("$name = \"$versionRef\"\n")
+fun StringBuilder.addLibsVersion(version: Version) {
+    append("${version.name} = \"${version.value}\"\n")
 }
 
-fun StringBuilder.addLibsDependency(libName: String, group: String, name: String, versionRef: String? = null) {
-    val version = if (versionRef == null) "" else ", version.ref = \"$versionRef\""
-    append("$libName = { group = \"$group\", name = \"$name\"$version }\n")
+fun StringBuilder.addLibsDependency(library: Library) {
+    val version = if (library.verRef == null) "" else ", version.ref = \"${library.verRef}\""
+    append("${library.libName} = { group = \"${library.group}\", name = \"${library.name}\"$version }\n")
 }
 
-fun StringBuilder.addLibsPlugin(name: String, id: String, versionRef: String) {
-    append("$name = { id = \"$id\", version.ref = \"$versionRef\" }\n")
+fun StringBuilder.addLibsPlugin(plugin: Plugin) {
+    append("${plugin.name} = { id = \"${plugin.id}\", version.ref = \"${plugin.verRef}\" }\n")
 }
 
-fun StringBuilder.addGradlePlugin(name: String, isProject: Boolean = false) {
+fun StringBuilder.addGradlePlugin(plugin: Plugin, isProject: Boolean = false) {
+    val name = plugin.name.replace("-", ".")
     val lastPath = if (isProject) " apply false" else ""
     append("    alias(libs.plugins.$name)$lastPath\n")
 }
 
-fun StringBuilder.addGradleImplementation(name: String) {
+fun StringBuilder.addGradleImplementation(library: Library) {
+    val name = library.libName.replace("-", ".")
     append("    implementation(libs.$name)\n")
 }
 
-fun StringBuilder.addGradleDetektImplementation(name: String) {
+fun StringBuilder.addGradleDetektImplementation(library: Library) {
+    val name = library.libName.replace("-", ".")
     append("    detektPlugins(libs.$name)\n")
 }
 
-fun StringBuilder.addGradlePlatformImplementation(name: String) {
+fun StringBuilder.addGradlePlatformImplementation(library: Library) {
+    val name = library.libName.replace("-", ".")
     append("    implementation(platform(libs.$name))\n")
 }
 
-fun StringBuilder.addGradleTestImplementation(name: String) {
+fun StringBuilder.addGradleTestImplementation(library: Library) {
+    val name = library.libName.replace("-", ".")
     append("    testImplementation(libs.$name)\n")
 }
 
-fun StringBuilder.addGradleAndroidTestImplementation(name: String) {
+fun StringBuilder.addGradleAndroidTestImplementation(library: Library) {
+    val name = library.libName.replace("-", ".")
     append("    androidTestImplementation(libs.$name)\n")
 }
-fun StringBuilder.addGradleAndroidTestPlatformImplementation(name: String) {
+
+fun StringBuilder.addGradleAndroidTestPlatformImplementation(library: Library) {
+    val name = library.libName.replace("-", ".")
     append("    androidTestImplementation(platform(libs.$name))\n")
 }
 
-fun StringBuilder.addGradleDebugImplementation(name: String) {
+fun StringBuilder.addGradleDebugImplementation(library: Library) {
+    val name = library.libName.replace("-", ".")
     append("    debugImplementation(libs.$name)\n")
 }
 
-fun StringBuilder.addKspImplementation(name: String) {
+fun StringBuilder.addKspImplementation(library: Library) {
+    val name = library.libName.replace("-", ".")
     append("    ksp(libs.$name)\n")
 }
 
