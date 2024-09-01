@@ -53,12 +53,12 @@ sealed class Library(val libName: String, val group: String, val name: String, v
         Library("hilt-navigation-compose", "androidx.hilt", "hilt-navigation-compose", "hiltNavigationCompose")
 
     data object NavigationCompose :
-        Library("navigation-compose", "androidx.navigation", "navigation-compose", "navigationCompose")
+        Library("navigation-compose", "androidx.navigation", "navigation-compose", "navigation")
 
     data object NavigationFragment :
-        Library("navigation-fragment", "androidx.navigation", "navigation-fragment-ktx", "navigationCompose")
+        Library("navigation-fragment", "androidx.navigation", "navigation-fragment-ktx", "navigation")
 
-    data object NavigationUi : Library("navigation-ui", "androidx.navigation", "navigation-ui-ktx", "navigationCompose")
+    data object NavigationUi : Library("navigation-ui", "androidx.navigation", "navigation-ui-ktx", "navigation")
     data object Detekt : Library("detekt", "io.gitlab.arturbosch", "detekt", "detekt")
     data object Firebase : Library("firebase", "com.google.firebase", "firebase-bom", "firebase")
     data object WorkManager : Library("workManager", "androidx.work", "work-runtime-ktx", "workManagerVersion")
