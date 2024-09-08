@@ -1,6 +1,8 @@
 package com.github.cnrture.quickprojectwizard.gradle
 
 import com.github.cnrture.quickprojectwizard.*
+import com.github.cnrture.quickprojectwizard.general.ImageLibrary
+import com.github.cnrture.quickprojectwizard.general.NetworkLibrary
 
 fun getGradleKts(
     isCompose: Boolean,
@@ -32,25 +34,100 @@ fun getGradleKts(
 
     append("dependencies {\n\n")
     addDefaultDependencies()
+
     if (isCompose) {
         addComposeDependencies()
     } else {
         addGradleImplementation(Library.Activity)
         addGradleImplementation(Library.ConstraintLayout)
     }
-    addRoomLibrary(isRoomEnable)
-    addNetworkLibrary(selectedNetworkLibrary)
+
+    if (isRoomEnable) {
+        append("\n")
+        append("    // Room\n")
+        addKspImplementation(Library.RoomCompiler)
+        addGradleImplementation(Library.RoomRuntime)
+        addGradleImplementation(Library.RoomKtx)
+    }
+
+    when (selectedNetworkLibrary) {
+        NetworkLibrary.Retrofit -> {
+            append("\n")
+            append("    // Retrofit\n")
+            addGradleImplementation(Library.Retrofit)
+            addGradleImplementation(Library.ConverterGson)
+        }
+
+        NetworkLibrary.Ktor -> {
+            append("\n")
+            append("    // Ktor\n")
+            addGradleImplementation(Library.KtorClientCore)
+            addGradleImplementation(Library.KtorClientOkHttp)
+            addGradleImplementation(Library.KtorContentNegotiation)
+            addGradleImplementation(Library.KtorSerialization)
+        }
+
+        else -> Unit
+    }
+
     if (isHiltEnable) {
+        append("\n")
+        append("    // Hilt\n")
         addKspImplementation(Library.HiltCompiler)
         addGradleImplementation(Library.HiltAndroid)
         if (isCompose) addGradleImplementation(Library.HiltNavigationCompose)
     }
-    addNavigationLibrary(isCompose, isNavigationEnable)
-    addImageLibrary(isCompose, selectedImageLibrary)
 
-    if (isDetektEnable) addGradleDetektImplementation(Library.Detekt)
-    if (isFirebaseEnable) addGradlePlatformImplementation(Library.Firebase)
-    if (isWorkManagerEnable) addGradleImplementation(Library.WorkManager)
+
+    if (isNavigationEnable) {
+        append("\n")
+        append("    // Navigation\n")
+        if (isCompose) addGradleImplementation(Library.NavigationCompose)
+        else {
+            addGradleImplementation(Library.NavigationFragment)
+            addGradleImplementation(Library.NavigationUi)
+        }
+    }
+
+    when {
+        isCompose && selectedImageLibrary == ImageLibrary.Coil -> {
+            append("\n")
+            append("    // Coil\n")
+            addGradleImplementation(Library.CoilCompose)
+        }
+        isCompose && selectedImageLibrary == ImageLibrary.Glide -> {
+            append("\n")
+            append("    // Glide\n")
+            addGradleImplementation(Library.GlideCompose)
+        }
+        !isCompose && selectedImageLibrary == ImageLibrary.Coil -> {
+            append("\n")
+            append("    // Coil\n")
+            addGradleImplementation(Library.Coil)
+        }
+        !isCompose && selectedImageLibrary == ImageLibrary.Glide -> {
+            append("\n")
+            append("    // Glide\n")
+            addGradleImplementation(Library.Glide)
+        }
+        else -> Unit
+    }
+
+    if (isDetektEnable) {
+        append("\n")
+        append("    // Detekt\n")
+        addGradleDetektImplementation(Library.Detekt)
+    }
+    if (isFirebaseEnable) {
+        append("\n")
+        append("    // Firebase\n")
+        addGradlePlatformImplementation(Library.Firebase)
+    }
+    if (isWorkManagerEnable) {
+        append("\n")
+        append("    // WorkManager\n")
+        addGradleImplementation(Library.WorkManager)
+    }
     append("}\n")
 
     if (isDetektEnable) addDetektBlock()
@@ -61,7 +138,7 @@ private fun StringBuilder.addDefaultDependencies() {
     addGradleImplementation(Library.AppCompat)
     addGradleImplementation(Library.Material)
     addGradleTestImplementation(Library.Junit)
-    addGradleAndroidTestImplementation(Library.JunitVersion)
+    addGradleAndroidTestImplementation(Library.JunitExt)
     addGradleAndroidTestImplementation(Library.EspressoCore)
 }
 
@@ -78,52 +155,4 @@ private fun StringBuilder.addComposeDependencies() {
     addGradleAndroidTestImplementation(Library.ComposeUiTestJunit4)
     addGradleDebugImplementation(Library.ComposeUiTooling)
     addGradleDebugImplementation(Library.ComposeUiTestManifest)
-}
-
-private fun StringBuilder.addNetworkLibrary(selectedNetworkLibrary: NetworkLibrary) {
-    when (selectedNetworkLibrary) {
-        NetworkLibrary.Retrofit -> {
-            addGradleImplementation(Library.Retrofit)
-            addGradleImplementation(Library.ConverterGson)
-        }
-
-        NetworkLibrary.Ktor -> {
-            addGradleImplementation(Library.KtorClientCore)
-            addGradleImplementation(Library.KtorClientOkHttp)
-            addGradleImplementation(Library.KtorContentNegotiation)
-            addGradleImplementation(Library.KtorSerialization)
-        }
-
-        else -> Unit
-    }
-}
-
-private fun StringBuilder.addNavigationLibrary(isCompose: Boolean, isNavigationEnable: Boolean) {
-    when {
-        isCompose && isNavigationEnable -> addGradleImplementation(Library.NavigationCompose)
-        !isCompose && isNavigationEnable -> {
-            addGradleImplementation(Library.NavigationFragment)
-            addGradleImplementation(Library.NavigationUi)
-        }
-
-        else -> Unit
-    }
-}
-
-private fun StringBuilder.addImageLibrary(isCompose: Boolean, selectedImageLibrary: ImageLibrary) {
-    when {
-        isCompose && selectedImageLibrary == ImageLibrary.Coil -> addGradleImplementation(Library.CoilCompose)
-        isCompose && selectedImageLibrary == ImageLibrary.Glide -> addGradleImplementation(Library.GlideCompose)
-        !isCompose && selectedImageLibrary == ImageLibrary.Coil -> addGradleImplementation(Library.Coil)
-        !isCompose && selectedImageLibrary == ImageLibrary.Glide -> addGradleImplementation(Library.Glide)
-        else -> Unit
-    }
-}
-
-private fun StringBuilder.addRoomLibrary(isRoomEnable: Boolean) {
-    if (isRoomEnable) {
-        addKspImplementation(Library.RoomCompiler)
-        addGradleImplementation(Library.RoomRuntime)
-        addGradleImplementation(Library.RoomKtx)
-    }
 }

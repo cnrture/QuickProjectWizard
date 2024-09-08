@@ -3,7 +3,7 @@ package com.github.cnrture.quickprojectwizard.gradle
 sealed class Library(val libName: String, val group: String, val name: String, val verRef: String? = null) {
     data object CoreKtx : Library("core-ktx", "androidx.core", "core-ktx", "core-ktx")
     data object Junit : Library("junit", "junit", "junit", "junit")
-    data object JunitVersion : Library("junitVersion", "androidx.test.ext", "junit", "junitVersion")
+    data object JunitExt : Library("junit-ext", "androidx.test.ext", "junit", "junitVersion")
     data object EspressoCore : Library("espresso-core", "androidx.test.espresso", "espresso-core", "espresso-core")
     data object AppCompat : Library("appcompat", "androidx.appcompat", "appcompat", "appcompat")
     data object Material : Library("material", "com.google.android.material", "material", "material")
@@ -33,7 +33,7 @@ sealed class Library(val libName: String, val group: String, val name: String, v
     data object Coil : Library("coil", "io.coil-kt", "coil", "coilVersion")
     data object CoilCompose : Library("coil-compose", "io.coil-kt", "coil-compose", "coilVersion")
     data object Glide : Library("glide", "com.github.bumptech.glide", "glide", "glideVersion")
-    data object GlideCompose : Library("glide-compose", "com.github.bumptech.glide", "compose", "glideVersion")
+    data object GlideCompose : Library("glide-compose", "com.github.bumptech.glide", "compose", "glideCompose")
     data object RoomKtx : Library("room-ktx", "androidx.room", "room-ktx", "room")
     data object RoomRuntime : Library("room-runtime", "androidx.room", "room-runtime", "room")
     data object RoomCompiler : Library("room-compiler", "androidx.room", "room-compiler", "room")

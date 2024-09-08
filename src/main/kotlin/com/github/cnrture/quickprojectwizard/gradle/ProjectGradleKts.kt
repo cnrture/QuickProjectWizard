@@ -1,7 +1,7 @@
 package com.github.cnrture.quickprojectwizard.gradle
 
-import com.github.cnrture.quickprojectwizard.ImageLibrary
 import com.github.cnrture.quickprojectwizard.addGradlePlugin
+import com.github.cnrture.quickprojectwizard.general.ImageLibrary
 
 fun getProjectGradleKts(
     isCompose: Boolean,

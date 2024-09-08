@@ -1,6 +1,8 @@
 package com.github.cnrture.quickprojectwizard.gradle
 
 import com.github.cnrture.quickprojectwizard.*
+import com.github.cnrture.quickprojectwizard.general.ImageLibrary
+import com.github.cnrture.quickprojectwizard.general.NetworkLibrary
 
 fun getDependencies(
     isCompose: Boolean,
@@ -82,7 +84,7 @@ private fun StringBuilder.addDefaultVersions() {
     addLibsVersion(Version.Kotlin)
     addLibsVersion(Version.CoreKtx)
     addLibsVersion(Version.Junit)
-    addLibsVersion(Version.JunitVersion)
+    addLibsVersion(Version.JunitExt)
     addLibsVersion(Version.EspressoCore)
     addLibsVersion(Version.AppCompat)
     addLibsVersion(Version.Material)
@@ -108,7 +110,7 @@ private fun StringBuilder.addNetworkLibraryVersions(selectedNetworkLibrary: Netw
 private fun StringBuilder.addDefaultDependencies() {
     addLibsDependency(Library.CoreKtx)
     addLibsDependency(Library.Junit)
-    addLibsDependency(Library.JunitVersion)
+    addLibsDependency(Library.JunitExt)
     addLibsDependency(Library.EspressoCore)
     addLibsDependency(Library.AppCompat)
     addLibsDependency(Library.Material)
