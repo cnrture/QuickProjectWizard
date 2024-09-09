@@ -59,7 +59,7 @@ fun RecipeExecutor.composeProjectRecipe(
     generateManifest(hasApplicationBlock = true)
 
     val screenList = if (screens.isNotEmpty()) {
-        screens.split(",").map { it.trim() }
+        screens.split(",").map { it.trim() }.filter { it.isNotEmpty() }
     } else {
         listOf("Main")
     }
