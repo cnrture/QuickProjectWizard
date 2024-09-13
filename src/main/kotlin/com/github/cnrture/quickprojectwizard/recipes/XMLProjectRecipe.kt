@@ -60,6 +60,7 @@ fun RecipeExecutor.xmlProjectRecipe(
         packagePath,
         isHiltEnable,
         dataDiDomainPresentationUiPackages,
+        isNavigationEnable,
     )
 
     val (_, _, _, manifestOut) = moduleData
@@ -144,6 +145,7 @@ fun RecipeExecutor.xmlProjectRecipe(
         packagePath,
         minApi,
         javaJvmVersion,
+        moduleData.themesData.main.name,
     )
 }
 
@@ -163,6 +165,7 @@ private fun RecipeExecutor.addActivity(
     packagePath: String,
     isHiltEnable: Boolean,
     dataDiDomainPresentationUiPackages: Boolean,
+    isNavigationEnable: Boolean,
 ) {
     addSrcFile(
         emptyActivityXML(packagePath, isHiltEnable, dataDiDomainPresentationUiPackages),
@@ -170,7 +173,7 @@ private fun RecipeExecutor.addActivity(
         "ui/MainActivity.kt"
     )
     addRootFile(
-        emptyActivityLayout(),
+        emptyActivityLayout(isNavigationEnable),
         moduleData,
         "app/src/main/res/layout/activity_main.xml"
     )
@@ -235,6 +238,7 @@ private fun addDependenciesAndGradle(
     packagePath: String,
     minApi: Int,
     javaJvmVersion: String,
+    styleName: String,
 ) {
     val dependencies = getDependencies(
         isCompose = false,
@@ -279,6 +283,8 @@ private fun addDependenciesAndGradle(
     val libsVersionFile = File(moduleData.rootDir.parentFile, "gradle/libs.versions.toml")
     val buildGradleFile = File(moduleData.rootDir.parentFile, "app/build.gradle.kts")
     val projectBuildGradleFile = File(moduleData.rootDir.parentFile, "build.gradle.kts")
+    val themesFile = File(moduleData.rootDir.parentFile, "app/src/main/res/values/themes.xml")
+    val themesNightFile = File(moduleData.rootDir.parentFile, "app/src/main/res/values-night/themes.xml")
 
     if (libsVersionFile.exists() && libsVersionFile.isFile) {
         libsVersionFile.writeText(
@@ -298,6 +304,38 @@ private fun addDependenciesAndGradle(
         projectBuildGradleFile.writeText(
             """$projectGradleKts
             """.trimIndent()
+        )
+    }
+
+    if (themesFile.exists() && themesFile.isFile) {
+        themesFile.writeText(
+"""
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.${styleName}" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+    <style name="$styleName" parent="Base.${styleName}" />
+</resources>
+""".trimIndent()
+        )
+    }
+
+    if (themesNightFile.exists() && themesNightFile.isFile) {
+        themesNightFile.writeText(
+"""
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.${styleName}" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+    <style name="$styleName" parent="Base.${styleName}" />
+</resources>
+""".trimIndent()
         )
     }
 }
