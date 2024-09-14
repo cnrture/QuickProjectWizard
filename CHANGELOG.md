@@ -2,6 +2,8 @@
 
 # Quick Project Wizard Changelog
 
+## [Unreleased]
+
 ## [0.0.3]
 
 ### Added
@@ -10,4 +12,5 @@
 - data, di, domain, ui packages made optional
 - Bugs fixed
 
+[Unreleased]: https://github.com/cnrture/QuickProjectWizard/compare/v0.0.3...HEAD
 [0.0.3]: https://github.com/cnrture/QuickProjectWizard/commits/v0.0.3
