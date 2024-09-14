@@ -81,7 +81,12 @@ fun RecipeExecutor.composeProjectRecipe(
     val (_, _, _, manifestOut) = moduleData
 
     mergeXml(
-        emptyManifestXml("@style/${moduleData.themesData.main.name}", isHiltEnable, dataDiDomainPresentationUiPackages),
+        emptyManifestXml(
+            "@style/${moduleData.themesData.main.name}",
+            isHiltEnable,
+            dataDiDomainPresentationUiPackages,
+            projectName
+        ),
         manifestOut.resolve("AndroidManifest.xml")
     )
 

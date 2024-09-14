@@ -1,23 +1,26 @@
 package com.github.cnrture.quickprojectwizard.general
 
-fun emptyManifestXml(styleName: String, isHiltEnable: Boolean, dataDiDomainPresentationUiPackages: Boolean): String {
-    return when {
-        isHiltEnable && dataDiDomainPresentationUiPackages -> hilt(
-            styleName
-        )
-
-        else -> withoutHilt(styleName)
+fun emptyManifestXml(
+    styleName: String,
+    isHiltEnable: Boolean,
+    dataDiDomainPresentationUiPackages: Boolean,
+    projectName: String
+): String {
+    return if (isHiltEnable && dataDiDomainPresentationUiPackages) {
+        hilt(styleName, projectName)
+    } else {
+        withoutHilt(styleName)
     }
 }
 
-fun hilt(styleName: String) = """
+fun hilt(styleName: String, projectName: String) = """
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".MainApplication"
+        android:name=".${projectName}Application"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
