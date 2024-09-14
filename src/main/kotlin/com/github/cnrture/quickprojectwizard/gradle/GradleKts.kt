@@ -95,21 +95,25 @@ fun getGradleKts(
             append("    // Coil\n")
             addGradleImplementation(Library.CoilCompose)
         }
+
         isCompose && selectedImageLibrary == ImageLibrary.Glide -> {
             append("\n")
             append("    // Glide\n")
             addGradleImplementation(Library.GlideCompose)
         }
+
         !isCompose && selectedImageLibrary == ImageLibrary.Coil -> {
             append("\n")
             append("    // Coil\n")
             addGradleImplementation(Library.Coil)
         }
+
         !isCompose && selectedImageLibrary == ImageLibrary.Glide -> {
             append("\n")
             append("    // Glide\n")
             addGradleImplementation(Library.Glide)
         }
+
         else -> Unit
     }
 

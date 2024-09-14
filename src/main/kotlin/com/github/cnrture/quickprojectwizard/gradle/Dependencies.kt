@@ -1,6 +1,8 @@
 package com.github.cnrture.quickprojectwizard.gradle
 
-import com.github.cnrture.quickprojectwizard.*
+import com.github.cnrture.quickprojectwizard.addLibsDependency
+import com.github.cnrture.quickprojectwizard.addLibsPlugin
+import com.github.cnrture.quickprojectwizard.addLibsVersion
 import com.github.cnrture.quickprojectwizard.general.ImageLibrary
 import com.github.cnrture.quickprojectwizard.general.NetworkLibrary
 

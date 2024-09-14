@@ -1,6 +1,6 @@
 package com.github.cnrture.quickprojectwizard.xmlarch.ui
 
-fun emptyActivityLayout(isNavigationEnable: Boolean,): String {
+fun emptyActivityLayout(isNavigationEnable: Boolean): String {
     return if (isNavigationEnable) withNavigation() else empty()
 }
 

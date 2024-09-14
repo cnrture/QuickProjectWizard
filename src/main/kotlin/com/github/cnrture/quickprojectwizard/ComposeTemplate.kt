@@ -6,7 +6,7 @@ import com.github.cnrture.quickprojectwizard.general.ImageLibrary
 import com.github.cnrture.quickprojectwizard.general.NetworkLibrary
 import com.github.cnrture.quickprojectwizard.gradle.network.getVersions
 import com.github.cnrture.quickprojectwizard.recipes.composeProjectRecipe
-import kotlinx.coroutines.*
+import kotlinx.coroutines.runBlocking
 import java.net.URL
 import java.util.*
 
