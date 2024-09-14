@@ -2,15 +2,12 @@
 
 # Quick Project Wizard Changelog
 
-## [Unreleased]
-
-## [0.0.2]
+## [0.0.3]
 
 ### Added
 
-- Popular libraries and frameworks added to the list
-- Compose and XML support added
-- Add data, di, domain, ui, and common packages
+- Added current version check for libraries
+- data, di, domain, ui packages made optional
+- Bugs fixed
 
-[Unreleased]: https://github.com/cnrture/QuickProjectWizard/compare/v0.0.1...HEAD
-[0.0.1]: https://github.com/cnrture/QuickProjectWizard/commits/v0.0.1
+[0.0.3]: https://github.com/cnrture/QuickProjectWizard/commits/v0.0.3
