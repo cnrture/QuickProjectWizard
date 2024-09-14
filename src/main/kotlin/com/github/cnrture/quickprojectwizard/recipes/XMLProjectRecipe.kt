@@ -213,6 +213,8 @@ private fun RecipeExecutor.addScreens(
     screenList: List<String>,
 ) {
     screenList.forEach {
+        val isFirstLetterUpperCase = it[0].isUpperCase()
+        val xmlName = it.split("(?=[A-Z])".toRegex()).joinToString("_").lowercase()
         addSrcFile(
             emptyMainFragment(packagePath, it, isHiltEnable),
             moduleData,
@@ -224,7 +226,11 @@ private fun RecipeExecutor.addScreens(
             "ui/${it.lowercase()}/${it}ViewModel.kt"
         )
         addSrcFile(emptyMainUIState(packagePath, it), moduleData, "ui/${it.lowercase()}/${it}UiState.kt")
-        addRootFile(emptyFragmentLayout(it), moduleData, "app/src/main/res/layout/fragment_${it.lowercase()}.xml")
+        if (isFirstLetterUpperCase) {
+            addRootFile(emptyFragmentLayout(it), moduleData, "app/src/main/res/layout/fragment$xmlName.xml")
+        } else {
+            addRootFile(emptyFragmentLayout(it), moduleData, "app/src/main/res/layout/fragment_${xmlName}.xml")
+        }
     }
 }
 

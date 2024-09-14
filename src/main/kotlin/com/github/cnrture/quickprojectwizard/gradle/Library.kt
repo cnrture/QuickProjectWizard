@@ -9,7 +9,7 @@ sealed class Library(val libName: String, val group: String, val name: String, v
     data object Material : Library("material", "com.google.android.material", "material", "material")
     data object LifecycleRuntimeKtx :
         Library("lifecycle-runtime-ktx", "androidx.lifecycle", "lifecycle-runtime-ktx", "lifecycle-runtime-ktx")
-
+    data object FragmentKtx : Library("fragment-ktx", "androidx.fragment", "fragment-ktx", "fragment-ktx")
     data object LifecycleRuntimeCompose :
         Library("lifecycle-runtime-compose", "androidx.lifecycle", "lifecycle-runtime-compose", "lifecycle-runtime-ktx")
 

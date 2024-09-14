@@ -40,6 +40,7 @@ fun getGradleKts(
     } else {
         addGradleImplementation(Library.Activity)
         addGradleImplementation(Library.ConstraintLayout)
+        addGradleImplementation(Library.FragmentKtx)
     }
 
     if (isRoomEnable) {
@@ -144,10 +145,10 @@ private fun StringBuilder.addDefaultDependencies() {
     addGradleTestImplementation(Library.Junit)
     addGradleAndroidTestImplementation(Library.JunitExt)
     addGradleAndroidTestImplementation(Library.EspressoCore)
+    addGradleImplementation(Library.LifecycleRuntimeKtx)
 }
 
 private fun StringBuilder.addComposeDependencies() {
-    addGradleImplementation(Library.LifecycleRuntimeKtx)
     addGradleImplementation(Library.LifecycleRuntimeCompose)
     addGradleImplementation(Library.ActivityCompose)
     addGradlePlatformImplementation(Library.ComposeBom)

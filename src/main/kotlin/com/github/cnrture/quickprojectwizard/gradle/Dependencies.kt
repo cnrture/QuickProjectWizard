@@ -22,12 +22,12 @@ fun getDependencies(
     addDefaultVersions()
     if (isHiltEnable || isRoomEnable || selectedImageLibrary == ImageLibrary.Glide) addLibsVersion(Version.Ksp)
     if (isCompose) {
-        addLibsVersion(Version.LifecycleRuntimeKtx)
         addLibsVersion(Version.ActivityCompose)
         addLibsVersion(Version.ComposeBom)
     } else {
         addLibsVersion(Version.Activity)
         addLibsVersion(Version.ConstraintLayout)
+        addLibsVersion(Version.FragmentKtx)
     }
     addImageLibraryVersions(isCompose, selectedImageLibrary)
     if (isRoomEnable) addLibsVersion(Version.Room)
@@ -52,6 +52,7 @@ fun getDependencies(
     } else {
         addLibsDependency(Library.Activity)
         addLibsDependency(Library.ConstraintLayout)
+        addLibsDependency(Library.FragmentKtx)
     }
     if (isRoomEnable) {
         addLibsDependency(Library.RoomCompiler)
@@ -90,6 +91,7 @@ private fun StringBuilder.addDefaultVersions() {
     addLibsVersion(Version.EspressoCore)
     addLibsVersion(Version.AppCompat)
     addLibsVersion(Version.Material)
+    addLibsVersion(Version.LifecycleRuntimeKtx)
 }
 
 private fun StringBuilder.addImageLibraryVersions(isCompose: Boolean, selectedImageLibrary: ImageLibrary) {
@@ -116,10 +118,10 @@ private fun StringBuilder.addDefaultDependencies() {
     addLibsDependency(Library.EspressoCore)
     addLibsDependency(Library.AppCompat)
     addLibsDependency(Library.Material)
+    addLibsDependency(Library.LifecycleRuntimeKtx)
 }
 
 private fun StringBuilder.addComposeDependencies() {
-    addLibsDependency(Library.LifecycleRuntimeKtx)
     addLibsDependency(Library.LifecycleRuntimeCompose)
     addLibsDependency(Library.ActivityCompose)
     addLibsDependency(Library.ComposeBom)

@@ -17,13 +17,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import $packageName.common.collect
 import $packageName.databinding.Fragment${screen}Binding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ${screen}Fragment : Fragment() {
@@ -74,12 +70,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import $packageName.common.collect
 import $packageName.databinding.Fragment${screen}Binding
-import kotlinx.coroutines.launch
 
 class ${screen}Fragment : Fragment() {
 

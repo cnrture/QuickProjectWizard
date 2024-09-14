@@ -30,6 +30,7 @@ object Versions {
         "googleServices" to "4.4.2",
         "firebase" to "33.2.0",
         "workManagerVersion" to "2.9.1",
+        "fragment-ktx" to "1.8.3",
     )
 }
 
@@ -46,6 +47,7 @@ sealed class Version(val name: String, val value: String) {
     data object LifecycleRuntimeKtx :
         Version("lifecycle-runtime-ktx", Versions.versionList["lifecycle-runtime-ktx"] ?: "2.8.4")
 
+    data object FragmentKtx : Version("fragment-ktx", Versions.versionList["fragment-ktx"] ?: "1.4.0")
     data object ActivityCompose : Version("activity-compose", Versions.versionList["activity-compose"] ?: "1.9.1")
     data object ComposeBom : Version("compose-bom", Versions.versionList["compose-bom"] ?: "2024.08.00")
     data object Activity : Version("activity", Versions.versionList["activity"] ?: "1.9.1")

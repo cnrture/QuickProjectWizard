@@ -22,15 +22,15 @@ package $packageName.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.ui.setContent
+import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.ui.foundation.layout.fillMaxSize
-import androidx.ui.foundation.layout.padding
-import androidx.ui.material3.Scaffold
-import androidx.ui.ui.Modifier
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.ui.Modifier
 import dagger.hilt.android.AndroidEntryPoint
 import $packageName.ui.theme.${projectName}Theme
-import androidx.ui.material3.Text
+import androidx.compose.material3.Text
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -53,13 +53,13 @@ package $packageName.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.ui.setContent
+import androidx.activity.compose.setContent
 import androidx.navigation.ui.rememberNavController
 import androidx.activity.enableEdgeToEdge
-import androidx.ui.foundation.layout.fillMaxSize
-import androidx.ui.foundation.layout.padding
-import androidx.ui.material3.Scaffold
-import androidx.ui.ui.Modifier
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.ui.Modifier
 import $packageName.ui.navigation.NavigationGraph
 import dagger.hilt.android.AndroidEntryPoint
 import $packageName.ui.theme.${projectName}Theme
@@ -91,13 +91,13 @@ package $packageName.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.ui.setContent
+import androidx.activity.compose.setContent
 import androidx.navigation.ui.rememberNavController
 import androidx.activity.enableEdgeToEdge
-import androidx.ui.foundation.layout.fillMaxSize
-import androidx.ui.foundation.layout.padding
-import androidx.ui.material3.Scaffold
-import androidx.ui.ui.Modifier
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.ui.Modifier
 import $packageName.ui.navigation.NavigationGraph
 import $packageName.ui.theme.${projectName}Theme
 
@@ -127,14 +127,14 @@ package $packageName.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.ui.setContent
+import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.ui.foundation.layout.fillMaxSize
-import androidx.ui.foundation.layout.padding
-import androidx.ui.material3.Scaffold
-import androidx.ui.ui.Modifier
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.ui.Modifier
 import $packageName.ui.theme.${projectName}Theme
-import androidx.ui.material3.Text
+import androidx.compose.material3.Text
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
