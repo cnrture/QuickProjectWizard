@@ -1,13 +1,5 @@
 package com.github.cnrture.quickprojectwizard.gradle
 
-import com.github.cnrture.quickprojectwizard.gradle.network.VersionModel
-import io.ktor.client.statement.*
-import kotlinx.serialization.json.Json
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.cio.CIO
-import io.ktor.client.request.get
-import io.ktor.client.statement.HttpResponse
-
 object Versions {
     val versionList = mutableMapOf(
         "agp" to "8.5.2",

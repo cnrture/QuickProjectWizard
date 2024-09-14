@@ -7,17 +7,7 @@ import com.android.tools.idea.wizard.template.RecipeExecutor
 import com.android.tools.idea.wizard.template.escapeKotlinIdentifier
 import com.github.cnrture.quickprojectwizard.addRootFile
 import com.github.cnrture.quickprojectwizard.addSrcFile
-import com.github.cnrture.quickprojectwizard.general.data.model.emptyMainEntityModel
-import com.github.cnrture.quickprojectwizard.general.data.repository.emptyMainRepositoryImpl
-import com.github.cnrture.quickprojectwizard.general.data.source.local.emptyMainDao
-import com.github.cnrture.quickprojectwizard.general.data.source.local.emptyMainRoomDB
-import com.github.cnrture.quickprojectwizard.general.data.source.remote.emptyKtorApi
-import com.github.cnrture.quickprojectwizard.general.data.source.remote.emptyMainService
-import com.github.cnrture.quickprojectwizard.general.detekt.emptyDetektConfig
-import com.github.cnrture.quickprojectwizard.general.di.emptyLocalModule
-import com.github.cnrture.quickprojectwizard.general.di.emptyMainRepositoryModule
-import com.github.cnrture.quickprojectwizard.general.di.emptyNetworkModule
-import com.github.cnrture.quickprojectwizard.general.domain.emptyMainRepository
+import com.github.cnrture.quickprojectwizard.composearch.common.emptyCollectExtension
 import com.github.cnrture.quickprojectwizard.composearch.ui.components.emptyEmptyScreen
 import com.github.cnrture.quickprojectwizard.composearch.ui.components.emptyLoadingBar
 import com.github.cnrture.quickprojectwizard.composearch.ui.emptyActivity
@@ -29,11 +19,22 @@ import com.github.cnrture.quickprojectwizard.composearch.ui.navigation.emptyNavi
 import com.github.cnrture.quickprojectwizard.composearch.ui.theme.emptyColor
 import com.github.cnrture.quickprojectwizard.composearch.ui.theme.emptyTheme
 import com.github.cnrture.quickprojectwizard.composearch.ui.theme.emptyType
-import com.github.cnrture.quickprojectwizard.composearch.common.emptyCollectExtension
 import com.github.cnrture.quickprojectwizard.general.*
+import com.github.cnrture.quickprojectwizard.general.data.model.emptyMainEntityModel
+import com.github.cnrture.quickprojectwizard.general.data.repository.emptyMainRepositoryImpl
+import com.github.cnrture.quickprojectwizard.general.data.source.local.emptyMainDao
+import com.github.cnrture.quickprojectwizard.general.data.source.local.emptyMainRoomDB
+import com.github.cnrture.quickprojectwizard.general.data.source.remote.emptyKtorApi
+import com.github.cnrture.quickprojectwizard.general.data.source.remote.emptyMainService
+import com.github.cnrture.quickprojectwizard.general.detekt.emptyDetektConfig
+import com.github.cnrture.quickprojectwizard.general.di.emptyLocalModule
+import com.github.cnrture.quickprojectwizard.general.di.emptyMainRepositoryModule
+import com.github.cnrture.quickprojectwizard.general.di.emptyNetworkModule
+import com.github.cnrture.quickprojectwizard.general.domain.emptyMainRepository
 import com.github.cnrture.quickprojectwizard.gradle.getDependencies
 import com.github.cnrture.quickprojectwizard.gradle.getGradleKts
 import com.github.cnrture.quickprojectwizard.gradle.getProjectGradleKts
+import com.github.cnrture.quickprojectwizard.util.NotificationUtil
 import java.io.File
 
 fun RecipeExecutor.composeProjectRecipe(
@@ -162,6 +163,11 @@ fun RecipeExecutor.composeProjectRecipe(
         packagePath,
         moduleData.apis.minApi.api,
         javaJvmVersion,
+    )
+
+    NotificationUtil.showInfo(
+        title = "Quick Project Wizard",
+        message = "Your project is ready! 🚀 If you like the plugin, please comment and rate it on the plugin page. 🙏",
     )
 }
 

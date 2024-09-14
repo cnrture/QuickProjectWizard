@@ -5,6 +5,7 @@ fun emptyManifestXml(styleName: String, isHiltEnable: Boolean, dataDiDomainPrese
         isHiltEnable && dataDiDomainPresentationUiPackages -> hilt(
             styleName
         )
+
         else -> withoutHilt(styleName)
     }
 }

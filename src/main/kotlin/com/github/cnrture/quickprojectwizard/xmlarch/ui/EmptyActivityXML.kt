@@ -1,6 +1,10 @@
 package com.github.cnrture.quickprojectwizard.xmlarch.ui
 
-fun emptyActivityXML(packageName: String, isHiltEnable: Boolean, dataDiDomainPresentationUiPackages: Boolean,): String {
+fun emptyActivityXML(
+    packageName: String,
+    isHiltEnable: Boolean,
+    dataDiDomainPresentationUiPackages: Boolean,
+): String {
     return when {
         !dataDiDomainPresentationUiPackages -> withoutHilt(packageName)
         isHiltEnable -> hilt(packageName)
