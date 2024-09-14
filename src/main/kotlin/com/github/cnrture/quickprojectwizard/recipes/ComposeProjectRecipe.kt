@@ -50,7 +50,6 @@ fun RecipeExecutor.composeProjectRecipe(
     isFirebaseEnable: Boolean,
     dataDiDomainPresentationUiPackages: Boolean,
     screens: String,
-    minApi: Int,
     javaJvmVersion: String,
     projectName: String,
 ) {
@@ -161,7 +160,7 @@ fun RecipeExecutor.composeProjectRecipe(
         selectedNetworkLibrary,
         selectedImageLibrary,
         packagePath,
-        minApi,
+        moduleData.apis.minApi.api,
         javaJvmVersion,
     )
 }

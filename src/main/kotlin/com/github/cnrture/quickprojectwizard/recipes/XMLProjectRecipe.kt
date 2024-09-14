@@ -41,7 +41,6 @@ fun RecipeExecutor.xmlProjectRecipe(
     isFirebaseEnable: Boolean,
     dataDiDomainPresentationUiPackages: Boolean,
     screens: String,
-    minApi: Int,
     javaJvmVersion: String,
     projectName: String,
 ) {
@@ -143,7 +142,7 @@ fun RecipeExecutor.xmlProjectRecipe(
         selectedNetworkLibrary,
         selectedImageLibrary,
         packagePath,
-        minApi,
+        moduleData.apis.minApi.api,
         javaJvmVersion,
         moduleData.themesData.main.name,
     )

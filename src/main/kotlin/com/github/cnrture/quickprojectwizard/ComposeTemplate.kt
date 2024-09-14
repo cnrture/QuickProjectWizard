@@ -11,7 +11,7 @@ import java.net.URL
 import java.util.*
 
 val composeTemplate = template {
-    name = "QPW - Compose Project"
+    name = "QuickProjectWizard - Compose"
     description = "Quickly create a new project with libraries, tools and screens you want."
     minApi = 23
     constraints = listOf(TemplateConstraint.AndroidX, TemplateConstraint.Kotlin)
@@ -116,7 +116,7 @@ val composeTemplate = template {
         PackageNameWidget(packageName),
     )
 
-    thumb = { Thumb { URL("https://canerture.com/quick_project_wizard_template.png") } }
+    thumb = { Thumb { URL("https://canerture.com/qpw_compose.png") } }
 
     recipe = { data: TemplateData ->
         composeProjectRecipe(
@@ -133,7 +133,6 @@ val composeTemplate = template {
             isFirebaseEnable = isFirebaseEnable.value,
             dataDiDomainPresentationUiPackages = dataDiDomainPresentationUiPackages.value,
             screens = screens.value,
-            minApi = minApi,
             javaJvmVersion = javaJvmVersion.value,
             projectName = projectName
         )
