@@ -17,4 +17,21 @@
                            displayType="BALLOON"
                            key="notification.group.qpw"/>
     </extensions>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+        <applicationService
+                serviceImplementation="com.github.cnrture.quickprojectwizard.dialog.PreferenceServiceImpl"
+        />
+    </extensions>
+
+    <actions>
+        <action
+                id="ModuleMaker.Open.ToolsMenu"
+                class="com.github.cnrture.quickprojectwizard.dialog.ModuleMakerAction"
+                text="Quick Project Wizard"
+                description="Open Quick Project Wizard">
+            <add-to-group group-id="ToolsMenu"/>
+        </action>
+    </actions>
 </idea-plugin>
