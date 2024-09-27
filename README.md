@@ -9,7 +9,7 @@
 <!-- Plugin description -->
 #### This plugin simplifies the process of setting up a new Android project with all the necessary dependencies and configurations.
 - Popular libraries and frameworks
-- Compose and XML
+- Compose, XML and Compose Multiplatform templates
 - data, di, domain, ui, and common packages
 <!-- Plugin description end -->
 

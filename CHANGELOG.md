@@ -8,8 +8,7 @@
 
 ### Added
 
-- Added current version check for libraries
-- data, di, domain, ui packages made optional
+- Added Compose Multiplatform support
 - Bugs fixed
 
 [Unreleased]: https://github.com/cnrture/QuickProjectWizard/compare/v0.0.3...HEAD
