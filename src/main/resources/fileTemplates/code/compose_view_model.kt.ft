@@ -1,0 +1,18 @@
+package ${PACKAGE_NAME}.ui.${SCREEN_LOWERCASE}
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import ${PACKAGE_NAME}.delegation.MVI
+import ${PACKAGE_NAME}.delegation.mvi
+import ${PACKAGE_NAME}.ui.${SCREEN_LOWERCASE}.${SCREEN}Contract.UiAction
+import ${PACKAGE_NAME}.ui.${SCREEN_LOWERCASE}.${SCREEN}Contract.UiEffect
+import ${PACKAGE_NAME}.ui.${SCREEN_LOWERCASE}.${SCREEN}Contract.UiState
+import kotlinx.coroutines.launch
+
+class ${SCREEN}ViewModel : ViewModel(), MVI<UiState, UiAction, UiEffect> by mvi(UiState()) {
+
+    override fun onAction(uiAction: UiAction) {
+        viewModelScope.launch {
+        }
+    }
+}

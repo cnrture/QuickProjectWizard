@@ -1,0 +1,48 @@
+package ${PACKAGE_NAME}.di
+
+import androidx.lifecycle.SavedStateHandle
+import ${PACKAGE_NAME}.data.repository.MainRepositoryImpl
+import ${PACKAGE_NAME}.data.source.remote.MainService
+import ${PACKAGE_NAME}.domain.repository.MainRepository
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.request.accept
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
+import org.koin.core.context.startKoin
+import org.koin.dsl.module
+
+val dataModule = module {
+    single {
+        HttpClient {
+            defaultRequest {
+                contentType(ContentType.Application.Json)
+                accept(ContentType.Application.Json)
+            }
+
+            install(ContentNegotiation) {
+                json(
+                    Json {
+                        prettyPrint = true
+                        ignoreUnknownKeys = true
+                    }
+                )
+            }
+        }
+    }
+
+    single<MainService> { MainService(get()) }
+    single<MainRepository> { MainRepositoryImpl(get()) }
+    single { SavedStateHandle() }
+}
+
+fun initKoin() {
+    startKoin {
+        modules(
+            dataModule,
+        )
+    }
+}

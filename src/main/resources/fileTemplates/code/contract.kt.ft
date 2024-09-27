@@ -1,0 +1,11 @@
+package ${PACKAGE_NAME}.ui.${SCREEN_LOWERCASE}
+
+object ${SCREEN}Contract {
+    data class UiState(
+        val isLoading: Boolean = false,
+        val list: List<String> = emptyList(),
+    )
+
+    sealed class UiAction
+    sealed class UiEffect
+}

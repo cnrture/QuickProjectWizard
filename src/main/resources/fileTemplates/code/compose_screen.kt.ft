@@ -1,0 +1,41 @@
+package ${PACKAGE_NAME}.ui.${SCREEN_LOWERCASE}
+
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.sp
+import ${PACKAGE_NAME}.ui.components.EmptyScreen
+import ${PACKAGE_NAME}.ui.components.LoadingBar
+import ${PACKAGE_NAME}.ui.${SCREEN_LOWERCASE}.${SCREEN}Contract.UiAction
+import ${PACKAGE_NAME}.ui.${SCREEN_LOWERCASE}.${SCREEN}Contract.UiEffect
+import ${PACKAGE_NAME}.ui.${SCREEN_LOWERCASE}.${SCREEN}Contract.UiState
+import kotlinx.coroutines.flow.Flow
+
+@Composable
+fun ${SCREEN}Screen(
+    uiState: UiState,
+    uiEffect: Flow<UiEffect>,
+    onAction: (UiAction) -> Unit,
+) {
+    when {
+        uiState.isLoading -> LoadingBar()
+        uiState.list.isNotEmpty() -> EmptyScreen()
+        else -> ${SCREEN}Content()
+        }
+}
+
+@Composable
+fun ${SCREEN}Content() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text = "${SCREEN} Content",
+            fontSize = 24.sp,
+        )
+    }
+}

@@ -1,0 +1,18 @@
+package ${PACKAGE_NAME}.data.repository
+
+<#if IS_ROOM_ENABLE>
+import ${PACKAGE_NAME}.data.source.local.MainRoomDB
+</#if>
+<#if IS_KTOR_ENABLE>
+import ${PACKAGE_NAME}.data.source.remote.MainService
+</#if>
+import ${PACKAGE_NAME}.domain.repository.MainRepository
+
+class MainRepositoryImpl(
+<#if IS_KTOR_ENABLE>
+    private val mainService: MainService<#if IS_ROOM_ENABLE>,</#if>
+</#if>
+<#if IS_ROOM_ENABLE>
+    private val mainRoomDB: MainRoomDB,
+</#if>
+) : MainRepository

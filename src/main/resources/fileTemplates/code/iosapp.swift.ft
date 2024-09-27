@@ -1,0 +1,16 @@
+import ComposeApp
+import SwiftUI
+
+@main
+struct iOSApp: App {
+<#if IS_IOS_ENABLE>
+    init() {
+        AppModuleKt.doInitKoin()
+    }
+</#if>
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+        }
+    }
+}

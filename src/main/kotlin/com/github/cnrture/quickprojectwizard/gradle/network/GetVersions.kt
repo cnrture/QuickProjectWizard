@@ -10,7 +10,7 @@ import kotlinx.serialization.json.Json
 suspend fun getVersions() {
     val client = HttpClient(CIO) {
         this.engine {
-            requestTimeout = 2000
+            requestTimeout = 5000
         }
     }
     val response: HttpResponse = client.get("https://api.canerture.com/qpwizard/versions")

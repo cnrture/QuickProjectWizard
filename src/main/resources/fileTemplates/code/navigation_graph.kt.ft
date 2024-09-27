@@ -1,0 +1,33 @@
+package ${PACKAGE_NAME}.navigation
+
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import org.koin.compose.koinInject
+${SCREENS_IMPORTS}
+private const val DURATION = 1000
+
+@Composable
+fun NavigationGraph(
+    navController: NavHostController,
+    startDestination: String,
+    modifier: Modifier = Modifier,
+) {
+    val enterAnim = fadeIn(tween(DURATION))
+    val exitAnim = fadeOut(tween(DURATION))
+
+    NavHost(
+        modifier = Modifier.then(modifier),
+        navController = navController,
+        startDestination = startDestination,
+    ) {
+${SCREENS}
+    }
+}

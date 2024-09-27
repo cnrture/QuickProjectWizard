@@ -1,0 +1,11 @@
+package ${PACKAGE_NAME}
+
+import android.app.Application
+import ${PACKAGE_NAME}.di.initKoin
+
+class MainApp: Application() {
+    override fun onCreate() {
+        super.onCreate()
+        initKoin()
+    }
+}

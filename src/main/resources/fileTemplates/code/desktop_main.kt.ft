@@ -1,0 +1,17 @@
+package ${PACKAGE_NAME}.composeApp
+
+import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.application
+import ${PACKAGE_NAME}.di.initKoin
+
+fun main() = application {
+<#if IS_IOS_ENABLE>
+    initKoin()
+</#if>
+    Window(
+        onCloseRequest = ::exitApplication,
+        title = "${APP_NAME}",
+    ) {
+        App()
+    }
+}

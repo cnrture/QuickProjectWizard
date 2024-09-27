@@ -1,0 +1,72 @@
+[versions]
+agp = "${CMP_AGP}"
+kotlin = "${CMP_KOTLIN}"
+androidx-activityCompose = "${CMP_ACTIVITY_COMPOSE}"
+androidx-ui-tooling = "${CMP_UI_TOOLING}"
+compose-multiplatform = "${CMP_MULTIPLATFORM}"
+<#if IS_KOIN_ENABLE>
+koin = "${CMP_KOIN}"
+</#if>
+<#if IS_KTOR_ENABLE>
+ktor = "${CMP_KTOR}"
+</#if>
+<#if IS_NAVIGATION_ENABLE>
+navigationCompose = "${CMP_NAVIGATION}"
+</#if>
+kotlinx-coroutines = "${CMP_KOTLINX_COROUTINES}"
+<#if IS_COIL_ENABLE>
+coil = "${CMP_COIL}"
+</#if>
+<#if IS_KAMEL_ENABLE>
+kamel = "${CMP_KAMEL}"
+</#if>
+<#if IS_ROOM_ENABLE>
+room = "${CMP_ROOM}"
+sqlite = "${CMP_SQLITE}"
+ksp = "${CMP_KSP}"
+</#if>
+
+[libraries]
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
+androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "androidx-ui-tooling" }
+androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "androidx-ui-tooling" }
+<#if IS_KOIN_ENABLE>
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }
+</#if>
+<#if IS_KTOR_ENABLE>
+ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+ktor-client-engine = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
+</#if>
+<#if IS_NAVIGATION_ENABLE>
+navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+</#if>
+<#if IS_COIL_ENABLE>
+coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
+</#if>
+<#if IS_KAMEL_ENABLE>
+kamel = { module = "media.kamel:kamel-image", version.ref = "kamel" }
+</#if>
+<#if IS_ROOM_ENABLE>
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
+</#if>
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
+kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlinxSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+<#if IS_ROOM_ENABLE>
+room-plugin = { id = "androidx.room", version.ref = "room" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+</#if>

@@ -31,6 +31,14 @@ object Versions {
         "firebase" to "33.2.0",
         "workManagerVersion" to "2.9.1",
         "fragment-ktx" to "1.8.3",
+        "cmp-agp" to "8.5.2",
+        "cmp-kotlin" to "2.0.20",
+        "cmp-activity-compose" to "1.9.2",
+        "cmp-ui-tooling" to "1.7.2",
+        "cmp-multiplatform" to "1.6.11",
+        "cmp-koin" to "4.0.0",
+        "cmp-ktor" to "2.3.12",
+        "cmp-navigation" to "2.7.0-alpha07",
     )
 }
 

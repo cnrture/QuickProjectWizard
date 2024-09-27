@@ -1,0 +1,173 @@
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+
+plugins {
+    alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.composeMultiplatform)
+    alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.kotlinxSerialization)
+    <#if IS_ROOM_ENABLE>
+alias(libs.plugins.ksp)
+    alias(libs.plugins.room.plugin)
+    </#if>
+}
+
+kotlin {
+    androidTarget {
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_11)
+        }
+    }
+
+<#if IS_DESKTOP_ENABLE>
+    jvm("desktop")
+</#if>
+
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            baseName = "ComposeApp"
+            isStatic = true
+<#if IS_ROOM_ENABLE>
+            linkerOpts.add("-lsqlite3")
+</#if>
+        }
+    }
+
+    <#if IS_ROOM_ENABLE>
+    sourceSets.commonMain {
+        kotlin.srcDir("build/generated/ksp/metadata")
+    }
+    </#if>
+
+    sourceSets {
+<#if IS_DESKTOP_ENABLE>
+        val desktopMain by getting
+</#if>
+
+        <#if IS_ANDROID_ENABLE>
+        androidMain.dependencies {
+            implementation(libs.androidx.compose.ui.tooling.preview)
+            implementation(libs.androidx.activity.compose)
+            implementation(libs.kotlinx.coroutines.android)
+            <#if IS_KTOR_ENABLE>
+            implementation(libs.ktor.client.okhttp)
+            </#if>
+        }
+        </#if>
+        <#if IS_IOS_ENABLE>
+        iosMain.dependencies {
+            <#if IS_KTOR_ENABLE>
+            implementation(libs.ktor.client.darwin)
+            </#if>
+        }
+        </#if>
+        commonMain.dependencies {
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            implementation(compose.material3)
+            implementation(compose.materialIconsExtended)
+            implementation(compose.ui)
+            implementation(compose.components.resources)
+            implementation(compose.components.uiToolingPreview)
+            implementation(libs.kotlinx.coroutines.core)
+            <#if IS_KTOR_ENABLE>
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
+            </#if>
+            <#if IS_KOIN_ENABLE>
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose.viewmodel)
+            </#if>
+            <#if IS_NAVIGATION_ENABLE>
+            implementation(libs.navigation.compose)
+            </#if>
+            <#if IS_COIL_ENABLE>
+            implementation(libs.coil)
+            </#if>
+            <#if IS_KAMEL_ENABLE>
+            implementation(libs.kamel)
+            </#if>
+            <#if IS_ROOM_ENABLE>
+            implementation(libs.room.runtime)
+            implementation(libs.room.compiler)
+            implementation(libs.sqlite.bundled)
+            </#if>
+        }
+        <#if IS_DESKTOP_ENABLE>
+        desktopMain.dependencies {
+            implementation(compose.desktop.currentOs)
+            implementation(libs.ktor.client.engine)
+            implementation(libs.kotlinx.coroutines.swing)
+        }
+        </#if>
+    }
+}
+
+android {
+    namespace = "${PACKAGE_NAME}"
+    compileSdk = 35
+
+    defaultConfig {
+        applicationId = "${PACKAGE_NAME}"
+        minSdk = 24
+        targetSdk = 35
+        versionCode = 1
+        versionName = "1.0"
+    }
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = false
+        }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    dependencies {
+        debugImplementation(compose.uiTooling)
+    }
+}
+
+<#if IS_DESKTOP_ENABLE>
+compose.desktop {
+    application {
+        mainClass = "MainKt"
+
+        nativeDistributions {
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            packageName = "com.canerture.valorantcmp"
+            packageVersion = "1.0.0"
+        }
+    }
+}
+</#if>
+
+<#if IS_ROOM_ENABLE>
+dependencies {
+    add("kspCommonMainMetadata", libs.room.compiler)
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinCompile<*>>().configureEach {
+    if (name != "kspCommonMainKotlinMetadata" ) {
+        dependsOn("kspCommonMainKotlinMetadata")
+    }
+}
+</#if>
