@@ -20,7 +20,7 @@ fun hilt(styleName: String, projectName: String) = """
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".${projectName}Application"
+        android:name=".MainApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"

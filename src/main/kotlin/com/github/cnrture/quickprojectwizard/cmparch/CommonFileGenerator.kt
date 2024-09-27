@@ -52,6 +52,10 @@ class CommonFileGenerator(
                         "composeApp/build.gradle.kts",
                         ftManager.getCodeTemplate(Template.COMPOSE_GRADLE_KTS)
                     ),
+                    GeneratorTemplateFile(
+                        "composeApp/src/commonMain/kotlin/$packageName/common/CollectExtension.kt",
+                        ftManager.getCodeTemplate(Template.COLLECT_EXTENSION)
+                    ),
                 )
             )
 

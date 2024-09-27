@@ -38,4 +38,5 @@ object Template {
     const val EMPTY_SCREEN = "empty_screen.kt"
     const val LOADING_BAR = "loading_bar.kt"
     const val IDEA_WORKSPACE = "idea_workspace.xml"
+    const val COLLECT_EXTENSION = "collect_extension.kt"
 }

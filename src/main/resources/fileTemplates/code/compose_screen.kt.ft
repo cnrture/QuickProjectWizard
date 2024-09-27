@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
+import ${PACKAGE_NAME}.common.collectWithLifecycle
 import ${PACKAGE_NAME}.ui.components.EmptyScreen
 import ${PACKAGE_NAME}.ui.components.LoadingBar
 import ${PACKAGE_NAME}.ui.${SCREEN_LOWERCASE}.${SCREEN}Contract.UiAction
@@ -20,11 +21,15 @@ fun ${SCREEN}Screen(
     uiEffect: Flow<UiEffect>,
     onAction: (UiAction) -> Unit,
 ) {
+    uiEffect.collectWithLifecycle {
+
+    }
+
     when {
         uiState.isLoading -> LoadingBar()
         uiState.list.isNotEmpty() -> EmptyScreen()
         else -> ${SCREEN}Content()
-        }
+    }
 }
 
 @Composable

@@ -96,7 +96,7 @@ fun RecipeExecutor.composeProjectRecipe(
 
     if (dataDiDomainPresentationUiPackages) {
         if (isHiltEnable) {
-            addSrcFile(emptyMainApplication(packagePath, projectName), moduleData, "MainApplication.kt")
+            addSrcFile(emptyMainApplication(packagePath, projectName), moduleData, "MainApp.kt")
         }
 
         addSrcFile(emptyConstants(packagePath), moduleData, "common/Constants.kt")

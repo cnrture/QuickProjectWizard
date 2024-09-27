@@ -145,11 +145,11 @@ android {
 <#if IS_DESKTOP_ENABLE>
 compose.desktop {
     application {
-        mainClass = "MainKt"
+        mainClass = "${PACKAGE_NAME}.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "com.canerture.valorantcmp"
+            packageName = "${PACKAGE_NAME}"
             packageVersion = "1.0.0"
         }
     }
