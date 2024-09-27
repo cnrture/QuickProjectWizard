@@ -116,7 +116,7 @@ val composeTemplate = template {
         PackageNameWidget(packageName),
     )
 
-    thumb = { Thumb { URL("https://canerture.com/qpw_compose.png") } }
+    thumb = { Thumb { URL("https://raw.githubusercontent.com/cnrture/QuickProjectWizard/refs/heads/main/images/compose_template.png") } }
 
     recipe = { data: TemplateData ->
         composeProjectRecipe(

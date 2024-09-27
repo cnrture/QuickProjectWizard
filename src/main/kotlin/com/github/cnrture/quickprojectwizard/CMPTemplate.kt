@@ -9,7 +9,7 @@ import kotlinx.coroutines.runBlocking
 import java.net.URL
 
 val composeMultiplatformTemplate = template {
-    name = "QuickProjectWizard - Compose Multiplatform"
+    name = "QuickProjectWizard - CMP"
     description = "Quickly create a new project with libraries, tools and screens you want."
     minApi = 23
     category = Category.Other
@@ -96,7 +96,7 @@ val composeMultiplatformTemplate = template {
         PackageNameWidget(packageName)
     )
 
-    thumb = { Thumb { URL("https://canerture.com/qpw_compose.png") } }
+    thumb = { Thumb { URL("https://raw.githubusercontent.com/cnrture/QuickProjectWizard/refs/heads/main/images/cmp_template.png") } }
 
     recipe = { data: TemplateData ->
         composeMultiplatformProjectRecipe(

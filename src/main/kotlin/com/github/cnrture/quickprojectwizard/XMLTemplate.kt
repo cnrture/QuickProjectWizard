@@ -116,7 +116,7 @@ val xmlTemplate = template {
         PackageNameWidget(packageName),
     )
 
-    thumb = { Thumb { URL("https://canerture.com/qpw_xml.png") } }
+    thumb = { Thumb { URL("https://raw.githubusercontent.com/cnrture/QuickProjectWizard/refs/heads/main/images/xml_template.png") } }
 
     recipe = { data: TemplateData ->
         xmlProjectRecipe(
