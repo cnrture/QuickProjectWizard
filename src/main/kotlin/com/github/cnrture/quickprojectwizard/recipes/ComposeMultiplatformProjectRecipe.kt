@@ -51,6 +51,7 @@ fun composeMultiplatformProjectRecipe(
             else append("        }\n")
         }
     }.toString()
+
     val screensImportsString = StringBuilder().apply {
         screenList.forEachIndexed { index, it ->
             append("import $packagePath.ui.${it.lowercase()}.${it}Screen\n")
@@ -65,6 +66,18 @@ fun composeMultiplatformProjectRecipe(
             append("    @Serializable\n")
             if (index == screenList.lastIndex) append("    data object $it : Screen")
             else append("    data object $it : Screen\n")
+        }
+    }.toString()
+
+    val viewModelImports = StringBuilder().apply {
+        screenList.forEach {
+            append("import $packagePath.ui.${it.lowercase()}.${it}ViewModel\n")
+        }
+    }.toString()
+
+    val viewModelModule = StringBuilder().apply {
+        screenList.forEach {
+            append("    factoryOf(::${it}ViewModel)\n")
         }
     }.toString()
 
@@ -126,6 +139,8 @@ fun composeMultiplatformProjectRecipe(
         "SCREENS_IMPORTS" to screensImportsString,
         "NAVIGATION_SCREENS" to navigationScreens,
         "START_DESTINATION" to screenList.first(),
+        "VIEW_MODEL_IMPORTS" to viewModelImports,
+        "VIEW_MODEL_MODULE" to viewModelModule,
     )
 
     projectData.rootDir.toVirtualFile()?.apply {

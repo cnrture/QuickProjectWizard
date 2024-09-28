@@ -6,6 +6,7 @@ import ${PACKAGE_NAME}.data.repository.MainRepositoryImpl
 import ${PACKAGE_NAME}.data.source.remote.MainService
 </#if>
 import ${PACKAGE_NAME}.domain.repository.MainRepository
+${VIEW_MODEL_IMPORTS}
 <#if IS_KTOR_ENABLE>
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -46,6 +47,10 @@ val dataModule = module {
     single<MainRepository> { MainRepositoryImpl() }
 </#if>
     single { SavedStateHandle() }
+}
+
+val viewModelModule = module {
+${VIEW_MODEL_MODULE}
 }
 
 fun initKoin() {
