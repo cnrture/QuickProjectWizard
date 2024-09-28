@@ -130,7 +130,7 @@ fun composeMultiplatformProjectRecipe(
     projectData.rootDir.toVirtualFile()?.apply {
         val fileTemplateManager = FileTemplateManager.getDefaultInstance()
         val assets = mutableListOf<GeneratorAsset>()
-        val platforms: List<FileGenerator> = listOfNotNull(
+        val platforms: List<FileGenerator<CMPConfigModel>> = listOfNotNull(
             CommonFileGenerator(config, dataModel, this),
             if (config.isAndroidEnable) AndroidFileGenerator(config) else null,
             if (config.isIOSEnable) IOSFileGenerator(config) else null,

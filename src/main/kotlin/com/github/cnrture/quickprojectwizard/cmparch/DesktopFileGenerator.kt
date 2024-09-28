@@ -4,7 +4,7 @@ import com.intellij.ide.fileTemplates.FileTemplateManager
 import com.intellij.ide.starters.local.GeneratorAsset
 import com.intellij.ide.starters.local.GeneratorTemplateFile
 
-class DesktopFileGenerator(params: CMPConfigModel) : FileGenerator(params) {
+class DesktopFileGenerator(params: CMPConfigModel) : FileGenerator<CMPConfigModel>(params) {
     override fun generate(ftManager: FileTemplateManager, packageName: String): List<GeneratorAsset> {
         return listOf(
             GeneratorTemplateFile(

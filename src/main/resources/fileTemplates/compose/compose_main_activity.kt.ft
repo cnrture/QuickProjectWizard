@@ -1,0 +1,46 @@
+package ${PACKAGE_NAME}.ui
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+<#if IS_NAVIGATION_ENABLE>
+import androidx.navigation.compose.rememberNavController
+</#if>
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.ui.Modifier
+<#if IS_NAVIGATION_ENABLE>
+import $packageName.ui.navigation.NavigationGraph
+</#if>
+<#if IS_HILT_ENABLE>
+import dagger.hilt.android.AndroidEntryPoint
+</#if>
+import $packageName.ui.theme.${APP_NAME}Theme
+
+<#if IS_HILT_ENABLE>
+@AndroidEntryPoint
+</#if>
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            ${APP_NAME}Theme {
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+<#if IS_NAVIGATION_ENABLE>
+                    val navController = rememberNavController()
+                    NavigationGraph(
+                        navController = navController,
+                        startDestination = ${START_DESTINATION},
+                        modifier = Modifier.padding(innerPadding)
+                    )
+<#else>
+                    Text(text = "Hello, World!", modifier = Modifier.padding(innerPadding))
+</#if>
+                }
+            }
+        }
+    }
+}

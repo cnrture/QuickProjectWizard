@@ -16,9 +16,10 @@ object FileUtils {
         dataModel: Map<String, Any>,
         outputDir: VirtualFile,
         asset: GeneratorTemplateFile,
+        ftPath: String = "cmp"
     ) {
         Configuration(Configuration.VERSION_2_3_33).apply {
-            setClassLoaderForTemplateLoading(this::class.java.classLoader, "fileTemplates/code")
+            setClassLoaderForTemplateLoading(this::class.java.classLoader, "fileTemplates/$ftPath")
             val outputFilePathParts = asset.relativePath.split('/')
             val dirPath = outputFilePathParts.dropLast(1).joinToString("/")
             val targetDir = VfsUtil.createDirectoryIfMissing(outputDir, dirPath)

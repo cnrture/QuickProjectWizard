@@ -1,0 +1,21 @@
+package ${PACKAGE_NAME}.ui.${SCREEN_LOWERCASE}
+
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+
+class ${SCREEN}ScreenPreviewProvider : PreviewParameterProvider<${SCREEN}Contract.UiState> {
+    override val values: Sequence<${SCREEN}Contract.UiState>
+        get() = sequenceOf(
+            ${SCREEN}Contract.UiState(
+                isLoading = true,
+                list = emptyList(),
+            ),
+            ${SCREEN}Contract.UiState(
+                isLoading = false,
+                list = emptyList(),
+            ),
+            ${SCREEN}Contract.UiState(
+                isLoading = false,
+                list = listOf("Item 1", "Item 2", "Item 3")
+            ),
+        )
+}

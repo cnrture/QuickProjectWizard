@@ -4,7 +4,7 @@ import com.intellij.ide.fileTemplates.FileTemplateManager
 import com.intellij.ide.starters.local.GeneratorAsset
 import com.intellij.ide.starters.local.GeneratorTemplateFile
 
-class AndroidFileGenerator(params: CMPConfigModel) : FileGenerator(params) {
+class AndroidFileGenerator(params: CMPConfigModel) : FileGenerator<CMPConfigModel>(params) {
     override fun generate(ftManager: FileTemplateManager, packageName: String): List<GeneratorAsset> {
         val list = mutableListOf<GeneratorAsset>()
         return list.apply {

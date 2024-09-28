@@ -1,0 +1,9 @@
+package ${PACKAGE_NAME}.data.source.remote
+
+<#if IS_RETROFIT_ENABLE>
+interface MainService
+<#else>
+import ${PACKAGE_NAME}.data.remote.KtorApi
+
+class MainService : KtorApi()
+</#if>

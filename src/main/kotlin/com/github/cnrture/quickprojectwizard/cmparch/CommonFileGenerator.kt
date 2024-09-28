@@ -10,7 +10,7 @@ class CommonFileGenerator(
     params: CMPConfigModel,
     private val dataModel: MutableMap<String, Any>,
     private val virtualFile: VirtualFile,
-) : FileGenerator(params) {
+) : FileGenerator<CMPConfigModel>(params) {
     override fun generate(ftManager: FileTemplateManager, packageName: String): List<GeneratorAsset> {
         val list = mutableListOf<GeneratorAsset>()
         return list.apply {
@@ -88,10 +88,6 @@ class CommonFileGenerator(
                 addAll(
                     listOf(
                         GeneratorTemplateFile(
-                            "composeApp/src/commonMain/kotlin/$packageName/navigation/Screen.kt",
-                            ftManager.getCodeTemplate(Template.NAVIGATION_SCREENS)
-                        ),
-                        GeneratorTemplateFile(
                             "composeApp/src/commonMain/kotlin/$packageName/delegation/MVI.kt",
                             ftManager.getCodeTemplate(Template.MVI)
                         ),
@@ -145,6 +141,12 @@ class CommonFileGenerator(
                 }
 
                 if (params.isNavigationEnable) {
+                    add(
+                        GeneratorTemplateFile(
+                            "composeApp/src/commonMain/kotlin/$packageName/navigation/Screen.kt",
+                            ftManager.getCodeTemplate(Template.NAVIGATION_SCREENS)
+                        )
+                    )
                     add(
                         GeneratorTemplateFile(
                             "composeApp/src/commonMain/kotlin/$packageName/navigation/NavigationGraph.kt",

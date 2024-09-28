@@ -5,7 +5,7 @@ import com.intellij.ide.starters.local.GeneratorAsset
 import com.intellij.ide.starters.local.GeneratorEmptyDirectory
 import com.intellij.ide.starters.local.GeneratorTemplateFile
 
-class IOSFileGenerator(params: CMPConfigModel) : FileGenerator(params) {
+class IOSFileGenerator(params: CMPConfigModel) : FileGenerator<CMPConfigModel>(params) {
     override fun generate(ftManager: FileTemplateManager, packageName: String): List<GeneratorAsset> {
         return listOf(
             GeneratorTemplateFile(
