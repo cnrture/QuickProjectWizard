@@ -8,6 +8,7 @@ import ${PACKAGE_NAME}.data.source.remote.MainService
 </#if>
 import ${PACKAGE_NAME}.domain.repository.MainRepository
 
+<#if IS_KTOR_ENABLE || IS_ROOM_ENABLE>
 class MainRepositoryImpl(
 <#if IS_KTOR_ENABLE>
     private val mainService: MainService<#if IS_ROOM_ENABLE>,</#if>
@@ -16,3 +17,6 @@ class MainRepositoryImpl(
     private val mainRoomDB: MainRoomDB,
 </#if>
 ) : MainRepository
+<#else>
+class MainRepositoryImpl : MainRepository
+</#if>

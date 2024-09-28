@@ -2,8 +2,11 @@ package ${PACKAGE_NAME}.di
 
 import androidx.lifecycle.SavedStateHandle
 import ${PACKAGE_NAME}.data.repository.MainRepositoryImpl
+<#if IS_KTOR_ENABLE>
 import ${PACKAGE_NAME}.data.source.remote.MainService
+</#if>
 import ${PACKAGE_NAME}.domain.repository.MainRepository
+<#if IS_KTOR_ENABLE>
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
@@ -12,10 +15,12 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+</#if>
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
 val dataModule = module {
+<#if IS_KTOR_ENABLE>
     single {
         HttpClient {
             defaultRequest {
@@ -33,9 +38,13 @@ val dataModule = module {
             }
         }
     }
-
     single<MainService> { MainService(get()) }
+</#if>
+<#if IS_KTOR_ENABLE>
     single<MainRepository> { MainRepositoryImpl(get()) }
+<#else>
+    single<MainRepository> { MainRepositoryImpl() }
+</#if>
     single { SavedStateHandle() }
 }
 

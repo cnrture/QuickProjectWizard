@@ -104,8 +104,10 @@ kotlin {
         <#if IS_DESKTOP_ENABLE>
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
-            implementation(libs.ktor.client.engine)
             implementation(libs.kotlinx.coroutines.swing)
+            <#if IS_KTOR_ENABLE>
+            implementation(libs.ktor.client.engine)
+            </#if>
         }
         </#if>
     }
