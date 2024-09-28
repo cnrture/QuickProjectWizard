@@ -70,14 +70,16 @@ fun composeMultiplatformProjectRecipe(
     }.toString()
 
     val viewModelImports = StringBuilder().apply {
-        screenList.forEach {
-            append("import $packagePath.ui.${it.lowercase()}.${it}ViewModel\n")
+        screenList.forEachIndexed { index, it ->
+            if (index == screenList.lastIndex) append("import $packagePath.ui.${it.lowercase()}.${it}ViewModel")
+            else append("import $packagePath.ui.${it.lowercase()}.${it}ViewModel\n")
         }
     }.toString()
 
     val viewModelModule = StringBuilder().apply {
-        screenList.forEach {
-            append("    factoryOf(::${it}ViewModel)\n")
+        screenList.forEachIndexed { index, it ->
+            if (index == screenList.lastIndex) append("    factoryOf(::${it}ViewModel)")
+            else append("    factoryOf(::${it}ViewModel),\n")
         }
     }.toString()
 

@@ -18,6 +18,7 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 </#if>
 import org.koin.core.context.startKoin
+import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
 val dataModule = module {
@@ -57,6 +58,7 @@ fun initKoin() {
     startKoin {
         modules(
             dataModule,
+            viewModelModule,
         )
     }
 }
