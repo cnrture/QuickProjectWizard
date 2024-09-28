@@ -3,7 +3,7 @@ import SwiftUI
 
 @main
 struct iOSApp: App {
-<#if IS_IOS_ENABLE>
+<#if IS_KOIN_ENABLE>
     init() {
         AppModuleKt.doInitKoin()
     }

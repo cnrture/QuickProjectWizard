@@ -7,7 +7,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+<#if IS_KOIN_ENABLE>
+import org.koin.compose.viewmodel.koinViewModel
+<#else>
 import androidx.lifecycle.viewmodel.compose.viewModel
+</#if>
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable

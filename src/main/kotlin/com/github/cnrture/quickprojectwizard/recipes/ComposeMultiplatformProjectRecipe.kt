@@ -38,7 +38,8 @@ fun composeMultiplatformProjectRecipe(
     val screenListString = StringBuilder().apply {
         screenList.forEachIndexed { index, it ->
             append("        composable<$it> {\n")
-            append("            val viewModel = viewModel<${it}ViewModel>(it)\n")
+            if (isKoinEnable) append("            val viewModel = koinViewModel<${it}ViewModel>()\n")
+            else append("            val viewModel = viewModel<${it}ViewModel>(it)\n")
             append("            val uiState by viewModel.uiState.collectAsStateWithLifecycle()\n")
             append("            val uiEffect = viewModel.uiEffect\n")
             append("            ${it}Screen(\n")
