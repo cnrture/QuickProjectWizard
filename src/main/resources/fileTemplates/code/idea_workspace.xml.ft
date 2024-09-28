@@ -37,7 +37,8 @@
         &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
         }
         }</component>
-    <component name="RunManager" selected="Gradle.desktopApp">
+    <component name="RunManager" selected="Gradle.composeApp">
+        <#if IS_ANDROID_ENABLE>
         <configuration name="composeApp" type="AndroidRunConfigurationType" factoryName="Android App">
             <module name="MyApplication.composeApp.main" />
             <option name="DEPLOY" value="true" />
@@ -104,6 +105,8 @@
                 <option name="Android.Gradle.BeforeRunTask" enabled="true" />
             </method>
         </configuration>
+        </#if>
+        <#if IS_DESKTOP_ENABLE>
         <configuration name="desktopApp" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
             <ExternalSystemSettings>
                 <option name="executionName" />
@@ -126,11 +129,14 @@
             <RunAsTest>false</RunAsTest>
             <method v="2" />
         </configuration>
+        </#if>
+        <#if IS_IOS_ENABLE>
         <configuration name="iosApp" type="KmmRunConfiguration" factoryName="iOS Application" CONFIG_VERSION="1" EXEC_TARGET_ID="00008130-000E0954218B803A" XCODE_PROJECT="$PROJECT_DIR$/iosApp/iosApp.xcodeproj" XCODE_CONFIGURATION="Debug" XCODE_SCHEME="iosApp">
             <method v="2">
                 <option name="com.jetbrains.kmm.ios.BuildIOSAppTask" enabled="true" />
             </method>
         </configuration>
+        </#if>
         <recent_temporary>
             <list>
                 <item itemvalue="Gradle.desktopApp" />
