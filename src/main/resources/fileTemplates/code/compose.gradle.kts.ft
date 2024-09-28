@@ -24,8 +24,8 @@ kotlin {
 
 <#if IS_DESKTOP_ENABLE>
     jvm("desktop")
-</#if>
 
+</#if>
     listOf(
         iosX64(),
         iosArm64(),
@@ -45,12 +45,11 @@ kotlin {
         kotlin.srcDir("build/generated/ksp/metadata")
     }
     </#if>
-
     sourceSets {
 <#if IS_DESKTOP_ENABLE>
         val desktopMain by getting
-</#if>
 
+</#if>
         <#if IS_ANDROID_ENABLE>
         androidMain.dependencies {
             implementation(libs.androidx.compose.ui.tooling.preview)
@@ -58,13 +57,6 @@ kotlin {
             implementation(libs.kotlinx.coroutines.android)
             <#if IS_KTOR_ENABLE>
             implementation(libs.ktor.client.okhttp)
-            </#if>
-        }
-        </#if>
-        <#if IS_IOS_ENABLE>
-        iosMain.dependencies {
-            <#if IS_KTOR_ENABLE>
-            implementation(libs.ktor.client.darwin)
             </#if>
         }
         </#if>
@@ -77,6 +69,7 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.kotlinx.serialization)
             <#if IS_KTOR_ENABLE>
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
@@ -101,6 +94,13 @@ kotlin {
             implementation(libs.sqlite.bundled)
             </#if>
         }
+        <#if IS_IOS_ENABLE>
+        iosMain.dependencies {
+        <#if IS_KTOR_ENABLE>
+            implementation(libs.ktor.client.darwin)
+        </#if>
+        }
+        </#if>
         <#if IS_DESKTOP_ENABLE>
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

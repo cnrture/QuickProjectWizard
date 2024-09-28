@@ -36,10 +36,9 @@ fun composeMultiplatformProjectRecipe(
     }
 
     val screenListString = StringBuilder().apply {
-        screenList.forEach {
-            append("        composable(\"$it\") {\n")
-            if (isKoinEnable) append("            val viewModel: ${it}ViewModel = koinInject()\n")
-            else append("            val viewModel = viewModel<${it}ViewModel>(it)\n")
+        screenList.forEachIndexed { index, it ->
+            append("        composable<$it> {\n")
+            append("            val viewModel = viewModel<${it}ViewModel>(it)\n")
             append("            val uiState by viewModel.uiState.collectAsStateWithLifecycle()\n")
             append("            val uiEffect = viewModel.uiEffect\n")
             append("            ${it}Screen(\n")
@@ -47,13 +46,24 @@ fun composeMultiplatformProjectRecipe(
             append("                uiEffect = uiEffect,\n")
             append("                onAction = viewModel::onAction\n")
             append("            )\n")
-            append("        }\n")
+            if (index == screenList.lastIndex) append("        }")
+            else append("        }\n")
         }
     }.toString()
     val screensImportsString = StringBuilder().apply {
-        screenList.forEach {
+        screenList.forEachIndexed { index, it ->
             append("import $packagePath.ui.${it.lowercase()}.${it}Screen\n")
             append("import $packagePath.ui.${it.lowercase()}.${it}ViewModel\n")
+            if (index == screenList.lastIndex) append("import $packagePath.navigation.Screen.$it")
+            else append("import $packagePath.navigation.Screen.$it\n")
+        }
+    }.toString()
+
+    val navigationScreens = StringBuilder().apply {
+        screenList.forEachIndexed { index, it ->
+            append("    @Serializable\n")
+            if (index == screenList.lastIndex) append("    data object $it : Screen")
+            else append("    data object $it : Screen\n")
         }
     }.toString()
 
@@ -110,8 +120,11 @@ fun composeMultiplatformProjectRecipe(
         "CMP_KSP" to Versions.versionList["cmp-ksp"].orEmpty(),
         "CMP_ROOM" to Versions.versionList["cmp-room"].orEmpty(),
         "CMP_SQLITE" to Versions.versionList["cmp-sqlite"].orEmpty(),
+        "CMP_KOTLINX_SERIALIZATION" to Versions.versionList["cmp-kotlinx-serialization"].orEmpty(),
         "SCREENS" to screenListString,
         "SCREENS_IMPORTS" to screensImportsString,
+        "NAVIGATION_SCREENS" to navigationScreens,
+        "START_DESTINATION" to screenList.first(),
     )
 
     projectData.rootDir.toVirtualFile()?.apply {

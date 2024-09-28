@@ -1,5 +1,16 @@
 package ${PACKAGE_NAME}
 
+<#if IS_NAVIGATION_ENABLE && IS_DATA_DOMAIN_DI_UI_ENABLE>
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
+import ${PACKAGE_NAME}.navigation.NavigationGraph
+import ${PACKAGE_NAME}.navigation.Screen.${START_DESTINATION}
+import org.jetbrains.compose.ui.tooling.preview.Preview
+<#else>
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -14,10 +25,25 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import ${APP_NAME_LOWERCASE}.composeapp.generated.resources.Res
 import ${APP_NAME_LOWERCASE}.composeapp.generated.resources.compose_multiplatform
+</#if>
 
 @Composable
 @Preview
 fun App() {
+<#if IS_NAVIGATION_ENABLE && IS_DATA_DOMAIN_DI_UI_ENABLE>
+    val navController = rememberNavController()
+    MaterialTheme {
+        Scaffold(
+            containerColor = MaterialTheme.colorScheme.onPrimary
+        ) {
+            NavigationGraph(
+                modifier = Modifier.padding(it),
+                navController = navController,
+                startDestination = ${START_DESTINATION}
+            )
+        }
+    }
+<#else>
     MaterialTheme {
         var showContent by remember { mutableStateOf(false) }
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -32,4 +58,5 @@ fun App() {
             }
         }
     }
+</#if>
 }

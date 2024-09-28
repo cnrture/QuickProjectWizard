@@ -30,6 +30,7 @@ object Template {
     const val APP_MODULE = "app_module.kt"
     const val APPLICATION = "application.kt"
     const val NAVIGATION_GRAPH = "navigation_graph.kt"
+    const val NAVIGATION_SCREENS = "navigation_screens.kt"
     const val COMPOSE_SCREEN = "compose_screen.kt"
     const val COMPOSE_VIEW_MODEL = "compose_view_model.kt"
     const val CONTRACT = "contract.kt"

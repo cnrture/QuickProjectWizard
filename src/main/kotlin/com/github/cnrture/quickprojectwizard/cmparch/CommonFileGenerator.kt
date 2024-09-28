@@ -1,6 +1,6 @@
 package com.github.cnrture.quickprojectwizard.cmparch
 
-import com.github.cnrture.quickprojectwizard.recipes.FileUtils
+import com.github.cnrture.quickprojectwizard.util.FileUtils
 import com.intellij.ide.fileTemplates.FileTemplateManager
 import com.intellij.ide.starters.local.GeneratorAsset
 import com.intellij.ide.starters.local.GeneratorTemplateFile
@@ -52,10 +52,6 @@ class CommonFileGenerator(
                         "composeApp/build.gradle.kts",
                         ftManager.getCodeTemplate(Template.COMPOSE_GRADLE_KTS)
                     ),
-                    GeneratorTemplateFile(
-                        "composeApp/src/commonMain/kotlin/$packageName/common/CollectExtension.kt",
-                        ftManager.getCodeTemplate(Template.COLLECT_EXTENSION)
-                    ),
                 )
             )
 
@@ -88,25 +84,25 @@ class CommonFileGenerator(
                             ftManager.getCodeTemplate(Template.CONTRACT)
                         )
                     )
-                    FileUtils.generateFileFromTemplate(
-                        dataModel,
-                        virtualFile,
-                        GeneratorTemplateFile(
-                            "composeApp/src/commonMain/kotlin/$packageName/delegation/MVI.kt",
-                            ftManager.getCodeTemplate(Template.MVI)
-                        )
-                    )
-                    FileUtils.generateFileFromTemplate(
-                        dataModel,
-                        virtualFile,
-                        GeneratorTemplateFile(
-                            "composeApp/src/commonMain/kotlin/$packageName/delegation/MVIDelegate.kt",
-                            ftManager.getCodeTemplate(Template.MVI_DELEGATE)
-                        )
-                    )
                 }
                 addAll(
                     listOf(
+                        GeneratorTemplateFile(
+                            "composeApp/src/commonMain/kotlin/$packageName/navigation/Screen.kt",
+                            ftManager.getCodeTemplate(Template.NAVIGATION_SCREENS)
+                        ),
+                        GeneratorTemplateFile(
+                            "composeApp/src/commonMain/kotlin/$packageName/delegation/MVI.kt",
+                            ftManager.getCodeTemplate(Template.MVI)
+                        ),
+                        GeneratorTemplateFile(
+                            "composeApp/src/commonMain/kotlin/$packageName/delegation/MVIDelegate.kt",
+                            ftManager.getCodeTemplate(Template.MVI_DELEGATE)
+                        ),
+                        GeneratorTemplateFile(
+                            "composeApp/src/commonMain/kotlin/$packageName/common/CollectExtension.kt",
+                            ftManager.getCodeTemplate(Template.COLLECT_EXTENSION)
+                        ),
                         GeneratorTemplateFile(
                             "composeApp/src/commonMain/kotlin/$packageName/common/Constants.kt",
                             ftManager.getCodeTemplate(Template.CONSTANTS)

@@ -7,17 +7,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import org.koin.compose.koinInject
 ${SCREENS_IMPORTS}
+
 private const val DURATION = 1000
 
 @Composable
 fun NavigationGraph(
     navController: NavHostController,
-    startDestination: String,
+    startDestination: Screen,
     modifier: Modifier = Modifier,
 ) {
     val enterAnim = fadeIn(tween(DURATION))
@@ -27,6 +28,10 @@ fun NavigationGraph(
         modifier = Modifier.then(modifier),
         navController = navController,
         startDestination = startDestination,
+        enterTransition = { enterAnim },
+        exitTransition = { exitAnim },
+        popEnterTransition = { enterAnim },
+        popExitTransition = { exitAnim },
     ) {
 ${SCREENS}
     }

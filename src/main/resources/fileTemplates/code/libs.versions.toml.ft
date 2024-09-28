@@ -4,6 +4,7 @@ kotlin = "${CMP_KOTLIN}"
 androidx-activityCompose = "${CMP_ACTIVITY_COMPOSE}"
 androidx-ui-tooling = "${CMP_UI_TOOLING}"
 compose-multiplatform = "${CMP_MULTIPLATFORM}"
+serialization = "${CMP_KOTLINX_SERIALIZATION}"
 <#if IS_KOIN_ENABLE>
 koin = "${CMP_KOIN}"
 </#if>
@@ -29,6 +30,14 @@ ksp = "${CMP_KSP}"
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "androidx-ui-tooling" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+<#if IS_ANDROID_ENABLE>
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
+</#if>
+<#if IS_DESKTOP_ENABLE>
+kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
+</#if>
 <#if IS_KOIN_ENABLE>
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }
@@ -40,9 +49,6 @@ ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "kto
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-client-engine = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
-kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
-kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
-kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 </#if>
 <#if IS_NAVIGATION_ENABLE>
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
