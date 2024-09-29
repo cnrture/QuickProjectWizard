@@ -8,10 +8,10 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinxSerialization)
-    <#if IS_ROOM_ENABLE>
-alias(libs.plugins.ksp)
+<#if IS_ROOM_ENABLE>
+    alias(libs.plugins.ksp)
     alias(libs.plugins.room.plugin)
-    </#if>
+</#if>
 }
 
 kotlin {
