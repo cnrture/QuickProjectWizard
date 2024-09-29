@@ -79,7 +79,7 @@ fun composeMultiplatformProjectRecipe(
     val viewModelModule = StringBuilder().apply {
         screenList.forEachIndexed { index, it ->
             if (index == screenList.lastIndex) append("    factoryOf(::${it}ViewModel)")
-            else append("    factoryOf(::${it}ViewModel),\n")
+            else append("    factoryOf(::${it}ViewModel)\n")
         }
     }.toString()
 

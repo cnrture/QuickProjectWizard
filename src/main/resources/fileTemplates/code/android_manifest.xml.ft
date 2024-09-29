@@ -6,9 +6,9 @@
     <application
         android:allowBackup="true"
         android:label="@string/app_name"
-        <#if IS_KOIN_ENABLE>
+<#if IS_KOIN_ENABLE && IS_DATA_DOMAIN_DI_UI_ENABLE>
         android:name=".MainApp"
-        </#if>
+</#if>
         android:supportsRtl="true"
         android:theme="@android:style/Theme.Material.Light.NoActionBar">
         <activity

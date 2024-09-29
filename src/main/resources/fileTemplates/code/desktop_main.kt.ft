@@ -2,10 +2,12 @@ package ${PACKAGE_NAME}
 
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+<#if IS_KOIN_ENABLE>
 import ${PACKAGE_NAME}.di.initKoin
+</#if>
 
 fun main() = application {
-<#if IS_IOS_ENABLE>
+<#if IS_KOIN_ENABLE>
     initKoin()
 </#if>
     Window(
