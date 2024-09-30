@@ -4,11 +4,12 @@
 
 ## [Unreleased]
 
-## [0.0.3]
+## [0.0.4]
 
 ### Added
 
-- Added Compose Multiplatform support
+- Added Compose Multiplatform project template
+
 - Bugs fixed
 
 [Unreleased]: https://github.com/cnrture/QuickProjectWizard/compare/v0.0.3...HEAD
