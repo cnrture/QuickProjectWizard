@@ -36,7 +36,7 @@ dependencies {
     implementation(libs.ktor.core)
     implementation(libs.ktor.cio)
     implementation(libs.kotlinx.serialization)
-    implementation("org.freemarker:freemarker:2.3.33")
+    implementation(libs.freemarker)
 
     // IntelliJ Platform Gradle Plugin Dependencies Extension - read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-dependencies-extension.html
     intellijPlatform {
