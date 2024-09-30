@@ -95,6 +95,7 @@ fun StringBuilder.addAndroidBlock(packageName: String, minApi: Int, javaJvmVersi
     append("android {\n")
     append("    namespace = \"${packageName}\"\n")
     append("    compileSdk = 34\n\n")
+    append("    android.buildFeatures.buildConfig = true\n\n")
     append("    defaultConfig {\n")
     append("        applicationId = \"${packageName}\"\n")
     append("        minSdk = $minApi\n")
