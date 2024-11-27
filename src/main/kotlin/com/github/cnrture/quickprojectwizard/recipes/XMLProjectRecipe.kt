@@ -182,7 +182,7 @@ private fun RecipeExecutor.addActivity(
         "ui/MainActivity.kt"
     )
     addRootFile(
-        emptyActivityLayout(isNavigationEnable),
+        emptyActivityLayout(isNavigationEnable, dataDiDomainPresentationUiPackages),
         moduleData,
         "app/src/main/res/layout/activity_main.xml"
     )
