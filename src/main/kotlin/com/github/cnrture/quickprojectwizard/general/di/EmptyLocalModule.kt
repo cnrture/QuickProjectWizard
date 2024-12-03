@@ -5,7 +5,6 @@ package $packageName.di
 
 import android.content.Context
 import androidx.room.Room
-import androidx.room.RoomDatabase
 import $packageName.data.source.local.MainDao
 import $packageName.data.source.local.MainRoomDB
 import dagger.Module
@@ -19,7 +18,7 @@ import dagger.hilt.components.SingletonComponent
 object LocalModule {
 
     @Provides
-    fun provideRoomDatabase(@ApplicationContext context: Context): RoomDatabase {
+    fun provideRoomDatabase(@ApplicationContext context: Context): MainRoomDB {
         return Room.databaseBuilder(
             context,
             MainRoomDB::class.java,
