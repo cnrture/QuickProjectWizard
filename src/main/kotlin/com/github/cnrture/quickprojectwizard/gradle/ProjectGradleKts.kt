@@ -10,6 +10,7 @@ fun getProjectGradleKts(
     isKtLintEnable: Boolean,
     isDetektEnable: Boolean,
     isFirebaseEnable: Boolean,
+    isNavigationEnable: Boolean,
     selectedImageLibrary: ImageLibrary,
 ) = StringBuilder().apply {
     append("// Top-level build file where you can add configuration options common to all sub-projects/modules.\n")
@@ -22,5 +23,6 @@ fun getProjectGradleKts(
     if (isKtLintEnable) addGradlePlugin(Plugin.KtLint, true)
     if (isDetektEnable) addGradlePlugin(Plugin.Detekt, true)
     if (isFirebaseEnable) addGradlePlugin(Plugin.GoogleServices, true)
-    append("}\n\n")
+    if (!isCompose && isNavigationEnable) addGradlePlugin(Plugin.NavigationSafeArgs, true)
+    append("}")
 }

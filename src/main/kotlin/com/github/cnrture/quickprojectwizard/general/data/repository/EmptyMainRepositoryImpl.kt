@@ -21,50 +21,50 @@ fun emptyMainRepositoryImpl(
 private fun serviceRoomHilt(packageName: String) = """
     package $packageName.data.repository
             
-    import $packageName.data.source.local.MainRoomDB
+    import $packageName.data.source.local.MainDao
     import $packageName.data.source.remote.MainService
     import $packageName.domain.repository.MainRepository
     import javax.inject.Inject
             
     class MainRepositoryImpl @Inject constructor(
         private val mainService: MainService,
-        private val mainRoomDB: MainRoomDB,
+        private val mainDao: MainDao,
     ) : MainRepository
 """.trimIndent()
 
 private fun serviceRoom(packageName: String) = """
     package $packageName.data.repository
             
-    import $packageName.data.source.local.MainRoomDB
+    import $packageName.data.source.local.MainDao
     import $packageName.data.source.remote.MainService
     import $packageName.domain.repository.MainRepository
             
     class MainRepositoryImpl(
         private val mainService: MainService,
-        private val mainRoomDB: MainRoomDB,
+        private val mainDao: MainDao,
     ) : MainRepository
 """.trimIndent()
 
 private fun roomHilt(packageName: String) = """
     package $packageName.data.repository
             
-    import $packageName.data.local.MainRoomDB
+    import $packageName.data.local.MainDao
     import $packageName.domain.repository.MainRepository
     import javax.inject.Inject
             
     class MainRepositoryImpl @Inject constructor(
-        private val mainRoomDB: MainRoomDB,
+        private val mainDao: MainDao,
     ) : MainRepository
 """.trimIndent()
 
 private fun room(packageName: String) = """
     package $packageName.data.repository
             
-    import $packageName.data.local.MainRoomDB
+    import $packageName.data.local.MainDao
     import $packageName.domain.repository.MainRepository
             
     class MainRepositoryImpl(
-        private val mainRoomDB: MainRoomDB,
+        private val mainDao: MainDao,
     ) : MainRepository
 """.trimIndent()
 
