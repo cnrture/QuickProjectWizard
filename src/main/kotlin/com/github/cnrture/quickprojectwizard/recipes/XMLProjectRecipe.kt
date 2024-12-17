@@ -292,6 +292,7 @@ private fun addDependenciesAndGradle(
             isKtLintEnable,
             isDetektEnable,
             isFirebaseEnable,
+            isNavigationEnable,
             selectedImageLibrary,
         )
 

@@ -28,6 +28,7 @@ fun getGradleKts(
     if (isKtLintEnable) addGradlePlugin(Plugin.KtLint)
     if (isDetektEnable) addGradlePlugin(Plugin.Detekt)
     if (isFirebaseEnable) addGradlePlugin(Plugin.GoogleServices)
+    if (!isCompose && isNavigationEnable) addGradlePlugin(Plugin.NavigationSafeArgs)
     append("}\n\n")
 
     addAndroidBlock(packagePath, minApi, javaJvmVersion, isCompose)
