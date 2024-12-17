@@ -14,7 +14,7 @@ fun emptyNavigationGraph(
 }
 
 fun hilt(packageName: String, screenListString: String, screensImports: String) = """
-package $packageName.ui.navigation
+package $packageName.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,11 +29,11 @@ $screensImports
 @Composable
 fun NavigationGraph(
     navController: NavHostController,
-    startDestination: String,
+    startDestination: Screen,
     modifier: Modifier = Modifier,
 ) {
     NavHost(
-        modifier = Modifier.then(modifier),
+        modifier = modifier,
         navController = navController,
         startDestination = startDestination,
     ) {
@@ -43,7 +43,7 @@ fun NavigationGraph(
 """
 
 fun withoutHilt(packageName: String, screenListString: String, screensImports: String) = """
-package $packageName.ui.navigation
+package $packageName.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -58,11 +58,11 @@ $screensImports
 @Composable
 fun NavigationGraph(
     navController: NavHostController,
-    startDestination: String,
+    startDestination: Screen,
     modifier: Modifier = Modifier,
 ) {
     NavHost(
-        modifier = Modifier.then(modifier),
+        modifier = modifier,
         navController = navController,
         startDestination = startDestination,
     ) {

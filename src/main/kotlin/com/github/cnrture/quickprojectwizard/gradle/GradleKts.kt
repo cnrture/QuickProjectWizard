@@ -29,6 +29,7 @@ fun getGradleKts(
     if (isDetektEnable) addGradlePlugin(Plugin.Detekt)
     if (isFirebaseEnable) addGradlePlugin(Plugin.GoogleServices)
     if (!isCompose && isNavigationEnable) addGradlePlugin(Plugin.NavigationSafeArgs)
+    if (isNavigationEnable && isCompose) addGradlePlugin(Plugin.KotlinxSerialization)
     append("}\n\n")
 
     addAndroidBlock(packagePath, minApi, javaJvmVersion, isCompose)
@@ -88,6 +89,11 @@ fun getGradleKts(
         else {
             addGradleImplementation(Library.NavigationFragment)
             addGradleImplementation(Library.NavigationUi)
+        }
+        if (isCompose) {
+            append("\n")
+            append("    // Kotlinx Serialization\n")
+            addGradleImplementation(Library.KotlinxSerialization)
         }
     }
 

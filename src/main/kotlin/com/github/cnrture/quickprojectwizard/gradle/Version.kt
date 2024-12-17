@@ -25,6 +25,7 @@ object Versions {
         "hilt" to "2.52",
         "hiltNavigationCompose" to "1.2.0",
         "navigation" to "2.7.7",
+        "kotlinXSerialization" to "1.7.3",
         "ktlint" to "11.3.2",
         "detekt" to "1.23.5",
         "googleServices" to "4.4.2",
@@ -76,4 +77,5 @@ sealed class Version(val name: String, val value: String) {
     data object GoogleServices : Version("googleServices", Versions.versionList["googleServices"] ?: "4.4.2")
     data object Firebase : Version("firebase", Versions.versionList["firebase"] ?: "33.2.0")
     data object WorkManager : Version("workManagerVersion", Versions.versionList["workManagerVersion"] ?: "2.9.1")
+    data object KotlinxSerialization : Version("kotlinxSerialization", Versions.versionList["kotlinxSerialization"] ?: "1.7.3")
 }

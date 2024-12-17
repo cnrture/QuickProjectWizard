@@ -61,6 +61,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import $packageName.ui.navigation.NavigationGraph
+import $packageName.ui.navigation.Screen.${startDest}
 import dagger.hilt.android.AndroidEntryPoint
 import $packageName.ui.theme.${projectName}Theme
 
@@ -73,7 +74,7 @@ class MainActivity : ComponentActivity() {
             ${projectName}Theme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     val navController = rememberNavController()
-                    val startDestination = "$startDest"
+                    val startDestination = $startDest
                     NavigationGraph(
                         navController = navController,
                         startDestination = startDestination,
@@ -99,6 +100,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import $packageName.ui.navigation.NavigationGraph
+import $packageName.ui.navigation.Screen.${startDest}
 import $packageName.ui.theme.${projectName}Theme
 
 class MainActivity : ComponentActivity() {
@@ -109,7 +111,7 @@ class MainActivity : ComponentActivity() {
             ${projectName}Theme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     val navController = rememberNavController()
-                    val startDestination = "$startDest"
+                    val startDestination = $startDest
                     NavigationGraph(
                         navController = navController,
                         startDestination = startDestination,

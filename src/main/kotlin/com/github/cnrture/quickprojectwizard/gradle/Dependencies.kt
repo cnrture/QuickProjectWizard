@@ -44,6 +44,7 @@ fun getDependencies(
         addLibsVersion(Version.Firebase)
     }
     if (isWorkManagerEnable) addLibsVersion(Version.WorkManager)
+    if (isNavigationEnable && isCompose) addLibsVersion(Version.KotlinxSerialization)
 
     append("\n[libraries]\n")
     addDefaultDependencies()
@@ -81,6 +82,7 @@ fun getDependencies(
     if (isDetektEnable) addLibsPlugin(Plugin.Detekt)
     if (isFirebaseEnable) addLibsPlugin(Plugin.GoogleServices)
     if (!isCompose && isNavigationEnable) addLibsPlugin(Plugin.NavigationSafeArgs)
+    if (isNavigationEnable && isCompose) addLibsPlugin(Plugin.KotlinxSerialization)
 }
 
 private fun StringBuilder.addDefaultVersions() {
@@ -155,7 +157,10 @@ private fun StringBuilder.addNetworkLibraryDependencies(selectedNetworkLibrary: 
 
 private fun StringBuilder.addNavigationLibrary(isCompose: Boolean, isNavigationEnable: Boolean) {
     when {
-        isCompose && isNavigationEnable -> addLibsDependency(Library.NavigationCompose)
+        isCompose && isNavigationEnable -> {
+            addLibsDependency(Library.NavigationCompose)
+            addLibsDependency(Library.KotlinxSerialization)
+        }
         !isCompose && isNavigationEnable -> {
             addLibsDependency(Library.NavigationFragment)
             addLibsDependency(Library.NavigationUi)

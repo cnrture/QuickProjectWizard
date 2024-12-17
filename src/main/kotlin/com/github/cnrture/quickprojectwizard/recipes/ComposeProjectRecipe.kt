@@ -16,6 +16,7 @@ import com.github.cnrture.quickprojectwizard.composearch.ui.main.emptyMainScreen
 import com.github.cnrture.quickprojectwizard.composearch.ui.main.emptyMainScreenPreviewProvider
 import com.github.cnrture.quickprojectwizard.composearch.ui.main.emptyMainViewModel
 import com.github.cnrture.quickprojectwizard.composearch.ui.navigation.emptyNavigationGraph
+import com.github.cnrture.quickprojectwizard.composearch.ui.navigation.emptyNavigationScreen
 import com.github.cnrture.quickprojectwizard.composearch.ui.theme.emptyColor
 import com.github.cnrture.quickprojectwizard.composearch.ui.theme.emptyTheme
 import com.github.cnrture.quickprojectwizard.composearch.ui.theme.emptyType
@@ -221,7 +222,7 @@ private fun RecipeExecutor.addNavigation(
         isNavigationEnable -> {
             val screenListString = StringBuilder().apply {
                 screenList.forEach {
-                    append("        composable(\"$it\") {\n")
+                    append("        composable<$it> {\n")
                     if (isHiltEnable) append("            val viewModel: ${it}ViewModel = hiltViewModel()\n")
                     else append("            val viewModel = viewModel<${it}ViewModel>(it)\n")
                     append("            val uiState by viewModel.uiState.collectAsStateWithLifecycle()\n")
@@ -236,14 +237,29 @@ private fun RecipeExecutor.addNavigation(
             }.toString()
             val screensImportsString = StringBuilder().apply {
                 screenList.forEach {
+                    append("import $packagePath.ui.navigation.Screen.$it\n")
+                }
+                screenList.forEach {
                     append("import $packagePath.ui.${it.lowercase()}.${it}Screen\n")
                     append("import $packagePath.ui.${it.lowercase()}.${it}ViewModel\n")
+                }
+            }.toString()
+            val navScreenListString = StringBuilder().apply {
+                screenList.forEachIndexed { index, screen ->
+                    append("    @Serializable")
+                    if (index == screenList.lastIndex) append("    data object $screen : Screen")
+                    else append("    data object $screen : Screen\n\n")
                 }
             }.toString()
             addSrcFile(
                 emptyNavigationGraph(packagePath, screenListString, screensImportsString, isHiltEnable),
                 moduleData,
-                "ui/navigation/NavigationGraph.kt"
+                "navigation/NavigationGraph.kt"
+            )
+            addSrcFile(
+                emptyNavigationScreen(packagePath, navScreenListString),
+                moduleData,
+                "navigation/Screen.kt"
             )
         }
     }

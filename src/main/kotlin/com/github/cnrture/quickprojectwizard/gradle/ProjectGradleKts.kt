@@ -24,5 +24,6 @@ fun getProjectGradleKts(
     if (isDetektEnable) addGradlePlugin(Plugin.Detekt, true)
     if (isFirebaseEnable) addGradlePlugin(Plugin.GoogleServices, true)
     if (!isCompose && isNavigationEnable) addGradlePlugin(Plugin.NavigationSafeArgs, true)
+    if (isNavigationEnable && isCompose) addGradlePlugin(Plugin.KotlinxSerialization, true)
     append("}")
 }
