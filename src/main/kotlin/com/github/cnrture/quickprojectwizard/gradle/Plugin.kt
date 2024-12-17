@@ -9,4 +9,5 @@ sealed class Plugin(val name: String, val id: String, val verRef: String) {
     data object KtLint : Plugin("ktlint", "org.jlleitschuh.gradle.ktlint", "ktlint")
     data object Detekt : Plugin("detekt-plugin", "io.gitlab.arturbosch.detekt", "detekt")
     data object GoogleServices : Plugin("google-services", "com.google.gms.google-services", "googleServices")
+    data object NavigationSafeArgs : Plugin("navigation-safe-args", "androidx.navigation.safeargs.kotlin", "navigation")
 }

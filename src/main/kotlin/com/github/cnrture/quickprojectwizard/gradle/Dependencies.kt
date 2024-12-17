@@ -80,6 +80,7 @@ fun getDependencies(
     if (isKtLintEnable) addLibsPlugin(Plugin.KtLint)
     if (isDetektEnable) addLibsPlugin(Plugin.Detekt)
     if (isFirebaseEnable) addLibsPlugin(Plugin.GoogleServices)
+    if (!isCompose && isNavigationEnable) addLibsPlugin(Plugin.NavigationSafeArgs)
 }
 
 private fun StringBuilder.addDefaultVersions() {
