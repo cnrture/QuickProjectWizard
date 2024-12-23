@@ -10,7 +10,7 @@ kover = "0.9.0"
 qodana = "2024.3.3"
 ktorVersion = "3.0.3"
 kotlinxSerialization = "1.7.3"
-freeMarker = "2.3.33"
+freeMarker = "2.3.34"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
