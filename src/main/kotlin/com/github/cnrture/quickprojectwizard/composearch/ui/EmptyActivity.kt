@@ -27,10 +27,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.ui.Modifier
-import dagger.hilt.android.AndroidEntryPoint
-import $packageName.ui.theme.${projectName}Theme
 import androidx.compose.material3.Text
+import androidx.compose.ui.Modifier
+import $packageName.ui.theme.${projectName}Theme
+import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -54,16 +54,16 @@ package $packageName.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.navigation.compose.rememberNavController
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
 import $packageName.navigation.NavigationGraph
 import $packageName.navigation.Screen.${startDest}
-import dagger.hilt.android.AndroidEntryPoint
 import $packageName.ui.theme.${projectName}Theme
+import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -87,18 +87,47 @@ class MainActivity : ComponentActivity() {
 }
 """.trimIndent()
 
+
+private fun emptyActivity(packageName: String, projectName: String) = """
+package $packageName.ui
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.ui.Modifier
+import $packageName.ui.theme.${projectName}Theme
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            ${projectName}Theme {
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    Text(text = "Hello, World!", modifier = Modifier.padding(innerPadding))
+                }
+            }
+        }
+    }
+}
+""".trimIndent()
 private fun navigation(packageName: String, projectName: String, startDest: String) = """
 package $packageName.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.navigation.compose.rememberNavController
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
 import $packageName.navigation.NavigationGraph
 import $packageName.navigation.Screen.${startDest}
 import $packageName.ui.theme.${projectName}Theme
@@ -117,35 +146,6 @@ class MainActivity : ComponentActivity() {
                         startDestination = startDestination,
                         modifier = Modifier.padding(innerPadding)
                     )
-                }
-            }
-        }
-    }
-}
-""".trimIndent()
-
-private fun emptyActivity(packageName: String, projectName: String) = """
-package $packageName.ui
-
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.ui.Modifier
-import $packageName.ui.theme.${projectName}Theme
-import androidx.compose.material3.Text
-
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            ${projectName}Theme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Text(text = "Hello, World!", modifier = Modifier.padding(innerPadding))
                 }
             }
         }

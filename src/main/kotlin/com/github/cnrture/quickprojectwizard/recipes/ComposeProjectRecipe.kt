@@ -221,18 +221,18 @@ private fun RecipeExecutor.addNavigation(
     when {
         isNavigationEnable -> {
             val screenListString = StringBuilder().apply {
-                screenList.forEach {
-                    append("        composable<$it> {\n")
-                    if (isHiltEnable) append("            val viewModel: ${it}ViewModel = hiltViewModel()\n")
-                    else append("            val viewModel = viewModel<${it}ViewModel>(it)\n")
+                screenList.forEachIndexed { index, screen ->
+                    append("        composable<$screen> {\n")
+                    if (isHiltEnable) append("            val viewModel: ${screen}ViewModel = hiltViewModel()\n")
+                    else append("            val viewModel = viewModel<${screen}ViewModel>(it)\n")
                     append("            val uiState by viewModel.uiState.collectAsStateWithLifecycle()\n")
                     append("            val uiEffect = viewModel.uiEffect\n")
-                    append("            ${it}Screen(\n")
+                    append("            ${screen}Screen(\n")
                     append("                uiState = uiState,\n")
                     append("                uiEffect = uiEffect,\n")
                     append("                onAction = viewModel::onAction\n")
                     append("            )\n")
-                    append("        }\n")
+                    if (index != screenList.lastIndex) append("        }\n") else append("        }")
                 }
             }.toString()
             val screensImportsString = StringBuilder().apply {

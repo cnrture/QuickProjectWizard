@@ -58,7 +58,7 @@ sealed class Library(val libName: String, val group: String, val name: String, v
     data object NavigationFragment :
         Library("navigation-fragment", "androidx.navigation", "navigation-fragment-ktx", "navigation")
     data object NavigationUi : Library("navigation-ui", "androidx.navigation", "navigation-ui-ktx", "navigation")
-    data object Detekt : Library("detekt-formatting", "io.gitlab.arturbosch", "detekt-formatting", "detekt")
+    data object Detekt : Library("detekt-formatting", "io.gitlab.arturbosch.detekt", "detekt-formatting", "detekt")
     data object Firebase : Library("firebase", "com.google.firebase", "firebase-bom", "firebase")
     data object WorkManager : Library("workManager", "androidx.work", "work-runtime-ktx", "workManagerVersion")
     data object KotlinxSerialization : Library("kotlinx-serialization", "org.jetbrains.kotlinx", "kotlinx-serialization-json", "kotlinxSerialization")
