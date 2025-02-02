@@ -13,6 +13,7 @@
 - Target SDK 35
 - Bug fixes
 
-[Unreleased]: https://github.com/cnrture/QuickProjectWizard/compare/v0.0.4...HEAD
+[Unreleased]: https://github.com/cnrture/QuickProjectWizard/compare/v0.0.5...HEAD
+[0.0.5]: https://github.com/cnrture/QuickProjectWizard/commits/v0.0.5
 [0.0.4]: https://github.com/cnrture/QuickProjectWizard/commits/v0.0.4
 [0.0.3]: https://github.com/cnrture/QuickProjectWizard/commits/v0.0.3
