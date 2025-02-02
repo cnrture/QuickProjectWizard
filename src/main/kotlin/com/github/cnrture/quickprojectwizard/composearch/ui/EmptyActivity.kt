@@ -116,6 +116,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 """.trimIndent()
+
 private fun navigation(packageName: String, projectName: String, startDest: String) = """
 package $packageName.ui
 

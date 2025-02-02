@@ -47,10 +47,10 @@ val composeMultiplatformTemplate = template {
         default = false
     }
 
-/*    val isRoomEnable = booleanParameter {
-        name = "Room"
-        default = false
-    }*/
+    /*    val isRoomEnable = booleanParameter {
+            name = "Room"
+            default = false
+        }*/
 
     val selectedImageLibrary = enumParameter<CMPImageLibrary> {
         name = "Image Library"
@@ -96,7 +96,8 @@ val composeMultiplatformTemplate = template {
         PackageNameWidget(packageName)
     )
 
-    thumb = { Thumb { URL("https://raw.githubusercontent.com/cnrture/QuickProjectWizard/refs/heads/main/images/cmp_template.png") } }
+    thumb =
+        { Thumb { URL("https://raw.githubusercontent.com/cnrture/QuickProjectWizard/refs/heads/main/images/cmp_template.png") } }
 
     recipe = { data: TemplateData ->
         composeMultiplatformProjectRecipe(

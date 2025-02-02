@@ -161,6 +161,7 @@ private fun StringBuilder.addNavigationLibrary(isCompose: Boolean, isNavigationE
             addLibsDependency(Library.NavigationCompose)
             addLibsDependency(Library.KotlinxSerialization)
         }
+
         !isCompose && isNavigationEnable -> {
             addLibsDependency(Library.NavigationFragment)
             addLibsDependency(Library.NavigationUi)
