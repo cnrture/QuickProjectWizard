@@ -237,7 +237,7 @@ private fun RecipeExecutor.addNavigation(
             }.toString()
             val screensImportsString = StringBuilder().apply {
                 screenList.forEach {
-                    append("import $packagePath.ui.navigation.Screen.$it\n")
+                    append("import $packagePath.navigation.Screen.$it\n")
                 }
                 screenList.forEach {
                     append("import $packagePath.ui.${it.lowercase()}.${it}Screen\n")
