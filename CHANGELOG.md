@@ -4,13 +4,10 @@
 
 ## [Unreleased]
 
-## [0.0.5]
+## [0.0.6]
 
 ### Added
 
-- Compose type safe navigation
-- Kotlin serialization
-- Target SDK 35
 - Bug fixes
 
 [Unreleased]: https://github.com/cnrture/QuickProjectWizard/compare/v0.0.5...HEAD
