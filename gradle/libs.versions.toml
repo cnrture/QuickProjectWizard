@@ -8,7 +8,7 @@ intelliJPlatform = "2.4.0"
 kotlin = "2.1.10"
 kover = "0.9.1"
 qodana = "2024.3.4"
-ktorVersion = "3.1.1"
+ktorVersion = "3.1.2"
 kotlinxSerialization = "1.8.0"
 freeMarker = "2.3.34"
 
