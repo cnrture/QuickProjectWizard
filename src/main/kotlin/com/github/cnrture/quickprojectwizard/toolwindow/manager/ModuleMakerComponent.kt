@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -73,6 +74,9 @@ fun ModuleMakerComponent(
 
     var showFileTreeDialog by remember { mutableStateOf(false) }
 
+    var selectedTab by remember { mutableStateOf(0) }
+    val tabs = listOf("Create New Module", "Move Existing Files to Module")
+
     loadExistingModules(
         project = project,
         onExistingModulesLoaded = { existingModules = it },
@@ -102,7 +106,7 @@ fun ModuleMakerComponent(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(24.dp),
+                .padding(vertical = 24.dp),
         ) {
             QPWText(
                 modifier = Modifier.fillMaxWidth(),
@@ -115,27 +119,104 @@ fun ModuleMakerComponent(
                 )
             )
             Spacer(modifier = Modifier.size(24.dp))
-            Row {
-                AnimatedVisibility(
+            TabRow(
+                selectedTabIndex = selectedTab,
+                backgroundColor = QPWTheme.colors.black,
+                contentColor = QPWTheme.colors.white,
+            ) {
+                Box(
                     modifier = Modifier
-                        .fillMaxHeight()
-                        .weight(0.3f),
-                    visible = showFileTreeDialog,
-                    enter = slideInHorizontally(initialOffsetX = { -it }),
-                    exit = slideOutHorizontally(targetOffsetX = { -it }),
+                        .then(
+                            if (selectedTab == 0) {
+                                Modifier.background(
+                                    brush = Brush.verticalGradient(
+                                        colors = listOf(
+                                            QPWTheme.colors.black,
+                                            QPWTheme.colors.red.copy(alpha = 0.3f),
+                                        )
+                                    )
+                                )
+                            } else {
+                                Modifier.background(QPWTheme.colors.black)
+                            }
+                        )
                 ) {
-                    FileTreePanel(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .weight(0.3f),
-                        project = project,
-                        onSelectedSrc = { selectedSrc.value = it }
+                    Tab(
+                        selected = selectedTab == 0,
+                        onClick = { selectedTab = 0 },
+                        text = {
+                            QPWText(
+                                text = tabs[0],
+                                color = QPWTheme.colors.white,
+                            )
+                        }
                     )
                 }
-                ConfigurationPanel(
+                Box(
                     modifier = Modifier
-                        .fillMaxHeight()
-                        .weight(0.7f),
+                        .then(
+                            if (selectedTab == 1) {
+                                Modifier.background(
+                                    brush = Brush.verticalGradient(
+                                        colors = listOf(
+                                            QPWTheme.colors.black,
+                                            QPWTheme.colors.red.copy(alpha = 0.3f),
+                                        )
+                                    )
+                                )
+                            } else {
+                                Modifier.background(QPWTheme.colors.black)
+                            }
+                        )
+                ) {
+                    Tab(
+                        selected = selectedTab == 1,
+                        onClick = { selectedTab = 1 },
+                        text = {
+                            QPWText(
+                                text = tabs[1],
+                                color = QPWTheme.colors.white,
+                            )
+                        }
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.size(24.dp))
+            when (selectedTab) {
+                0 -> CreateNewModuleConfigurationPanel(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(24.dp),
+                    project = project,
+                    fileWriter = fileWriter,
+                    selectedSrc = selectedSrc.value,
+                    libraryDependencyFinder = libraryDependencyFinder,
+                    moduleType = moduleType.value,
+                    packageName = packageName.value,
+                    onPackageNameChanged = { packageName.value = it },
+                    moduleNameState = moduleName.value,
+                    onModuleNameChanged = { moduleName.value = it },
+                    onModuleTypeSelected = { moduleType.value = it },
+                    availableLibraries = availableLibraries,
+                    selectedLibraries = selectedLibraries,
+                    onLibrarySelected = {
+                        if (it in selectedLibraries) {
+                            selectedLibraries.remove(it)
+                        } else {
+                            selectedLibraries.add(it)
+                        }
+                    },
+                    libraryGroups = libraryGroups,
+                    expandedGroups = expandedGroups,
+                    onGroupExpandToggle = { group ->
+                        expandedGroups[group] = !(expandedGroups[group] ?: false)
+                    },
+                )
+
+                1 -> MoveExistingFilesToModuleContent(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(24.dp),
                     project = project,
                     fileWriter = fileWriter,
                     isAnalyzingState = isAnalyzing.value,
@@ -160,33 +241,134 @@ fun ModuleMakerComponent(
                     onModuleTypeSelected = { moduleType.value = it },
                     existingModules = existingModules,
                     selectedModules = selectedModules,
-                    onCheckedModule = { module ->
-                        if (selectedModules.contains(module)) {
-                            selectedModules.remove(module)
+                    onCheckedModule = {
+                        if (it in selectedModules) {
+                            selectedModules.remove(it)
                         } else {
-                            selectedModules.add(module)
+                            selectedModules.add(it)
                         }
                     },
                     availableLibraries = availableLibraries,
                     selectedLibraries = selectedLibraries,
-                    onLibrarySelected = { library ->
-                        if (selectedLibraries.contains(library)) {
-                            selectedLibraries.remove(library)
+                    onLibrarySelected = {
+                        if (it in selectedLibraries) {
+                            selectedLibraries.remove(it)
                         } else {
-                            selectedLibraries.add(library)
+                            selectedLibraries.add(it)
                         }
                     },
                     libraryGroups = libraryGroups,
                     expandedGroups = expandedGroups,
-                    onGroupExpandToggle = { groupName ->
-                        expandedGroups[groupName] = expandedGroups[groupName]?.not() ?: true
-                    },
                     detectedLibraries = detectedLibraries,
+                    onGroupExpandToggle = { group ->
+                        expandedGroups[group] = !(expandedGroups[group] ?: false)
+                    },
                     showFileTreeDialog = showFileTreeDialog,
                     onFileTreeDialogStateChange = { showFileTreeDialog = !showFileTreeDialog },
+                    onSelectedSrc = { selectedSrc.value = it },
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun MoveExistingFilesToModuleContent(
+    modifier: Modifier = Modifier,
+    project: Project,
+    fileWriter: FileWriter,
+    isAnalyzingState: Boolean,
+    analysisResultState: String?,
+    selectedSrc: String,
+    libraryDependencyFinder: LibraryDependencyFinder,
+    onAnalysisResultChange: (String?) -> Unit,
+    onAnalyzingChange: (Boolean) -> Unit,
+    analyzeLibraries: Boolean,
+    onDetectLibrariesLoaded: (List<String>) -> Unit,
+    onDetectedModulesLoaded: (List<String>) -> Unit,
+    onSelectedModulesLoaded: (List<String>) -> Unit,
+    detectedModules: List<String>,
+    isMoveFiles: Boolean,
+    onMoveFilesChange: (Boolean) -> Unit,
+    onAnalyzeLibrariesChange: (Boolean) -> Unit,
+    moduleType: String,
+    packageName: String,
+    onPackageNameChanged: (String) -> Unit,
+    moduleNameState: String,
+    onModuleNameChanged: (String) -> Unit,
+    onModuleTypeSelected: (String) -> Unit,
+    existingModules: List<String>,
+    selectedModules: List<String>,
+    onCheckedModule: (String) -> Unit,
+    availableLibraries: List<String>,
+    selectedLibraries: List<String>,
+    onLibrarySelected: (String) -> Unit,
+    libraryGroups: Map<String, List<String>>,
+    expandedGroups: Map<String, Boolean>,
+    detectedLibraries: List<String>,
+    onGroupExpandToggle: (String) -> Unit,
+    showFileTreeDialog: Boolean,
+    onFileTreeDialogStateChange: () -> Unit,
+    onSelectedSrc: (String) -> Unit,
+) {
+    Row(
+        modifier = modifier,
+    ) {
+        AnimatedVisibility(
+            modifier = Modifier
+                .fillMaxHeight()
+                .weight(0.3f),
+            visible = showFileTreeDialog,
+            enter = slideInHorizontally(initialOffsetX = { -it }),
+            exit = slideOutHorizontally(targetOffsetX = { -it }),
+        ) {
+            FileTreePanel(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .weight(0.3f),
+                project = project,
+                onSelectedSrc = { onSelectedSrc(it) }
+            )
+        }
+        MoveExistingFilesToModuleConfigurationPanel(
+            modifier = Modifier
+                .fillMaxHeight()
+                .weight(0.7f),
+            project = project,
+            fileWriter = fileWriter,
+            isAnalyzingState = isAnalyzingState,
+            analysisResultState = analysisResultState,
+            selectedSrc = selectedSrc,
+            libraryDependencyFinder = libraryDependencyFinder,
+            onAnalysisResultChange = onAnalysisResultChange,
+            onAnalyzingChange = onAnalyzingChange,
+            analyzeLibraries = analyzeLibraries,
+            onDetectLibrariesLoaded = onDetectLibrariesLoaded,
+            onDetectedModulesLoaded = onDetectedModulesLoaded,
+            onSelectedModulesLoaded = onSelectedModulesLoaded,
+            detectedModules = detectedModules,
+            isMoveFiles = isMoveFiles,
+            onMoveFilesChange = onMoveFilesChange,
+            onAnalyzeLibrariesChange = onAnalyzeLibrariesChange,
+            moduleType = moduleType,
+            packageName = packageName,
+            onPackageNameChanged = onPackageNameChanged,
+            moduleNameState = moduleNameState,
+            onModuleNameChanged = onModuleNameChanged,
+            onModuleTypeSelected = onModuleTypeSelected,
+            existingModules = existingModules,
+            selectedModules = selectedModules,
+            onCheckedModule = onCheckedModule,
+            availableLibraries = availableLibraries,
+            selectedLibraries = selectedLibraries,
+            onLibrarySelected = onLibrarySelected,
+            libraryGroups = libraryGroups,
+            expandedGroups = expandedGroups,
+            onGroupExpandToggle = onGroupExpandToggle,
+            detectedLibraries = detectedLibraries,
+            showFileTreeDialog = showFileTreeDialog,
+            onFileTreeDialogStateChange = onFileTreeDialogStateChange,
+        )
     }
 }
 
@@ -432,7 +614,90 @@ private fun RootSelectionContent(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun ConfigurationPanel(
+private fun CreateNewModuleConfigurationPanel(
+    modifier: Modifier = Modifier,
+    project: Project,
+    fileWriter: FileWriter,
+    selectedSrc: String,
+    libraryDependencyFinder: LibraryDependencyFinder,
+    moduleType: String,
+    packageName: String,
+    onPackageNameChanged: (String) -> Unit,
+    moduleNameState: String,
+    onModuleNameChanged: (String) -> Unit,
+    onModuleTypeSelected: (String) -> Unit,
+    availableLibraries: List<String>,
+    selectedLibraries: List<String>,
+    onLibrarySelected: (String) -> Unit,
+    libraryGroups: Map<String, List<String>>,
+    expandedGroups: Map<String, Boolean>,
+    onGroupExpandToggle: (String) -> Unit,
+) {
+    val radioOptions = listOf(Constants.ANDROID, Constants.KOTLIN)
+
+    Scaffold(
+        modifier = modifier,
+        backgroundColor = QPWTheme.colors.black,
+        bottomBar = {
+            QPWDialogActions(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(QPWTheme.colors.black),
+                onCreateClick = {
+                    if (validateInput(packageName, moduleNameState) && selectedSrc.isNotEmpty()) {
+                        createModule(
+                            project = project,
+                            fileWriter = fileWriter,
+                            selectedSrc = selectedSrc,
+                            packageName = packageName,
+                            moduleName = moduleNameState,
+                            moduleType = moduleType,
+                            isMoveFiles = false,
+                            analyzeLibraries = false,
+                            libraryDependencyFinder = libraryDependencyFinder,
+                            selectedModules = emptyList(),
+                            selectedLibraries = selectedLibraries,
+                            detectedLibraries = emptyList(),
+                        )
+                    } else {
+                        MessageDialogWrapper("Please fill out required values").show()
+                    }
+                },
+                color = QPWTheme.colors.red,
+            )
+        }
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .verticalScroll(rememberScrollState()),
+        ) {
+            ModuleTypeNameContent(
+                moduleTypeSelectionState = moduleType,
+                packageName = packageName,
+                moduleNameState = moduleNameState,
+                radioOptions = radioOptions,
+                onPackageNameChanged = onPackageNameChanged,
+                onModuleTypeSelected = onModuleTypeSelected,
+                onModuleNameChanged = onModuleNameChanged,
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            LibrarySelectionContent(
+                availableLibraries = availableLibraries,
+                selectedLibraries = selectedLibraries,
+                onLibrarySelected = onLibrarySelected,
+                libraryGroups = libraryGroups,
+                expandedGroups = expandedGroups,
+                onGroupExpandToggle = onGroupExpandToggle,
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun MoveExistingFilesToModuleConfigurationPanel(
     modifier: Modifier = Modifier,
     project: Project,
     fileWriter: FileWriter,
