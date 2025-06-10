@@ -12,8 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.sp
-import $packageName.ui.components.EmptyScreen
-import $packageName.ui.components.LoadingBar
 import $packageName.ui.${screen.lowercase()}.${screen}Contract.UiAction
 import $packageName.ui.${screen.lowercase()}.${screen}Contract.UiEffect
 import $packageName.ui.${screen.lowercase()}.${screen}Contract.UiState
@@ -26,11 +24,7 @@ fun ${screen}Screen(
     uiEffect: Flow<UiEffect>,
     onAction: (UiAction) -> Unit,
 ) {
-    when {
-        uiState.isLoading -> LoadingBar()
-        uiState.list.isNotEmpty() -> EmptyScreen()
-        else -> ${screen}Content()
-    }
+    ${screen}Content()
 }
 
 @Composable

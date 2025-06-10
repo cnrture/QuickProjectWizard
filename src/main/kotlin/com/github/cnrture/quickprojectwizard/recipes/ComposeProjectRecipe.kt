@@ -20,6 +20,7 @@ import com.github.cnrture.quickprojectwizard.composearch.ui.navigation.emptyNavi
 import com.github.cnrture.quickprojectwizard.composearch.ui.theme.emptyColor
 import com.github.cnrture.quickprojectwizard.composearch.ui.theme.emptyTheme
 import com.github.cnrture.quickprojectwizard.composearch.ui.theme.emptyType
+import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.general.*
 import com.github.cnrture.quickprojectwizard.general.data.model.emptyMainEntityModel
 import com.github.cnrture.quickprojectwizard.general.data.repository.emptyMainRepositoryImpl
@@ -36,6 +37,7 @@ import com.github.cnrture.quickprojectwizard.gradle.getDependencies
 import com.github.cnrture.quickprojectwizard.gradle.getGradleKts
 import com.github.cnrture.quickprojectwizard.gradle.getProjectGradleKts
 import com.github.cnrture.quickprojectwizard.util.NotificationUtil
+import com.intellij.openapi.components.ServiceManager.getService
 import java.io.File
 
 fun RecipeExecutor.composeProjectRecipe(
@@ -56,6 +58,15 @@ fun RecipeExecutor.composeProjectRecipe(
     projectName: String,
 ) {
     val packagePath = escapeKotlinIdentifier(packageName)
+
+    val settings = getService(SettingsService::class.java)
+    settings.loadState(
+        settings.state.copy(
+            isHiltEnable = isHiltEnable,
+            isCompose = true,
+            defaultPackageName = packagePath,
+        )
+    )
 
     generateManifest(hasApplicationBlock = true)
 
@@ -106,7 +117,7 @@ fun RecipeExecutor.composeProjectRecipe(
 
         addNavigation(moduleData, packagePath, isNavigationEnable, screenList, isHiltEnable)
 
-        addScreens(moduleData, packagePath, isHiltEnable, screenList)
+        addScreens(moduleData, packagePath.plus(".ui"), isHiltEnable, screenList)
 
         addSrcFile(emptyEmptyScreen(packagePath), moduleData, "ui/components/EmptyScreen.kt")
         addSrcFile(emptyLoadingBar(packagePath), moduleData, "ui/components/LoadingBar.kt")

@@ -7,6 +7,7 @@ import com.android.tools.idea.wizard.template.RecipeExecutor
 import com.android.tools.idea.wizard.template.escapeKotlinIdentifier
 import com.github.cnrture.quickprojectwizard.addRootFile
 import com.github.cnrture.quickprojectwizard.addSrcFile
+import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.general.*
 import com.github.cnrture.quickprojectwizard.general.data.model.emptyMainEntityModel
 import com.github.cnrture.quickprojectwizard.general.data.repository.emptyMainRepositoryImpl
@@ -25,6 +26,7 @@ import com.github.cnrture.quickprojectwizard.gradle.getProjectGradleKts
 import com.github.cnrture.quickprojectwizard.util.NotificationUtil
 import com.github.cnrture.quickprojectwizard.xmlarch.common.emptyCollectExtension
 import com.github.cnrture.quickprojectwizard.xmlarch.ui.*
+import com.intellij.openapi.components.ServiceManager.getService
 import java.io.File
 
 fun RecipeExecutor.xmlProjectRecipe(
@@ -45,6 +47,15 @@ fun RecipeExecutor.xmlProjectRecipe(
     projectName: String,
 ) {
     val packagePath = escapeKotlinIdentifier(packageName)
+
+    val settings = getService(SettingsService::class.java)
+    settings.loadState(
+        settings.state.copy(
+            isHiltEnable = isHiltEnable,
+            isCompose = false,
+            defaultPackageName = packagePath,
+        )
+    )
 
     generateManifest(hasApplicationBlock = true)
 

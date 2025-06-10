@@ -9,8 +9,8 @@ object ${screen}Contract {
         val list: List<String> = emptyList(),
     )
 
-    sealed class UiAction
+    sealed interface UiAction
 
-    sealed class UiEffect
+    sealed interface UiEffect
 }
 """
