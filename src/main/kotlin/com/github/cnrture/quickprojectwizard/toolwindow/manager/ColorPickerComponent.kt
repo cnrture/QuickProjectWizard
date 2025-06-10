@@ -31,6 +31,8 @@ import java.awt.*
 import java.awt.datatransfer.StringSelection
 import java.awt.event.MouseEvent
 import java.awt.event.MouseListener
+import java.awt.event.MouseMotionAdapter
+import java.awt.geom.Ellipse2D
 import javax.swing.JFrame
 import javax.swing.JPanel
 import javax.swing.SwingUtilities
@@ -296,12 +298,113 @@ private fun startColorPicking(onColorPicked: (Color) -> Unit) {
                         g?.drawLine(pos.x - 10, pos.y, pos.x + 10, pos.y)
                         g?.drawLine(pos.x, pos.y - 10, pos.x, pos.y + 10)
 
-                        // Black outline for visibility
                         g?.color = JBColor.BLACK
                         g?.drawLine(pos.x - 11, pos.y - 1, pos.x + 11, pos.y - 1)
                         g?.drawLine(pos.x - 11, pos.y + 1, pos.x + 11, pos.y + 1)
                         g?.drawLine(pos.x - 1, pos.y - 11, pos.x - 1, pos.y + 11)
                         g?.drawLine(pos.x + 1, pos.y - 11, pos.x + 1, pos.y + 11)
+
+                        drawZoomPreview(g, pos, screenCapture, screenRect)
+                    }
+                }
+
+                private fun drawZoomPreview(
+                    g: Graphics?,
+                    mousePos: Point,
+                    screenCapture: java.awt.image.BufferedImage,
+                    screenRect: Rectangle,
+                ) {
+                    g?.let { graphics ->
+                        try {
+                            val screenX = (mousePos.x.toFloat() / width * screenRect.width).toInt()
+                            val screenY = (mousePos.y.toFloat() / height * screenRect.height).toInt()
+
+                            val zoomSize = 120
+                            val zoomRadius = zoomSize / 2
+                            val captureSize = 20
+
+                            val previewX = mousePos.x + 20
+                            val previewY = mousePos.y - zoomSize - 10
+
+                            val finalPreviewX = when {
+                                previewX + zoomSize > width -> mousePos.x - zoomSize - 20
+                                else -> previewX
+                            }
+                            val finalPreviewY = when {
+                                previewY < 0 -> mousePos.y + 20
+                                else -> previewY
+                            }
+
+                            val zoomX = (screenX - captureSize / 2).coerceIn(0, screenCapture.width - captureSize)
+                            val zoomY = (screenY - captureSize / 2).coerceIn(0, screenCapture.height - captureSize)
+
+                            val zoomArea = screenCapture.getSubimage(zoomX, zoomY, captureSize, captureSize)
+
+                            // Create circular clip for zoom preview
+                            val originalClip = graphics.clip
+                            val circularShape = Ellipse2D.Double(
+                                finalPreviewX.toDouble(),
+                                finalPreviewY.toDouble(),
+                                zoomSize.toDouble(),
+                                zoomSize.toDouble()
+                            )
+                            (graphics as Graphics2D).clip(circularShape)
+
+                            // Draw black circular background
+                            graphics.color = JBColor.BLACK
+                            graphics.fillOval(finalPreviewX, finalPreviewY, zoomSize, zoomSize)
+
+                            // Draw zoomed image (will be clipped to circle)
+                            graphics.drawImage(
+                                zoomArea,
+                                finalPreviewX, finalPreviewY,
+                                zoomSize, zoomSize,
+                                null
+                            )
+
+                            // Draw center crosshair in zoom preview
+                            graphics.color = JBColor.RED
+                            val centerX = finalPreviewX + zoomRadius
+                            val centerY = finalPreviewY + zoomRadius
+                            graphics.drawLine(centerX - 5, centerY, centerX + 5, centerY)
+                            graphics.drawLine(centerX, centerY - 5, centerX, centerY + 5)
+
+                            // Restore original clip
+                            graphics.clip = originalClip
+
+                            // Draw circle border
+                            graphics.color = JBColor.WHITE
+                            graphics.drawOval(finalPreviewX, finalPreviewY, zoomSize, zoomSize)
+                            graphics.color = JBColor.BLACK
+                            graphics.drawOval(finalPreviewX - 1, finalPreviewY - 1, zoomSize + 2, zoomSize + 2)
+
+                            val currentPixelColor = java.awt.Color(screenCapture.getRGB(screenX, screenY))
+                            val hexColor = "#%02X%02X%02X".format(
+                                currentPixelColor.red,
+                                currentPixelColor.green,
+                                currentPixelColor.blue
+                            )
+
+                            // Draw text with better outline
+                            graphics.font = Font("Arial", Font.BOLD, 14)
+                            val textY = finalPreviewY + zoomSize + 20
+
+                            // Draw black outline (shadow effect)
+                            graphics.color = JBColor.BLACK
+                            for (dx in -1..1) {
+                                for (dy in -1..1) {
+                                    if (dx != 0 || dy != 0) {
+                                        graphics.drawString(hexColor, finalPreviewX + dx, textY + dy)
+                                    }
+                                }
+                            }
+
+                            // Draw white text on top
+                            graphics.color = JBColor.WHITE
+                            graphics.drawString(hexColor, finalPreviewX, textY)
+
+                        } catch (e: Exception) {
+                        }
                     }
                 }
             }
