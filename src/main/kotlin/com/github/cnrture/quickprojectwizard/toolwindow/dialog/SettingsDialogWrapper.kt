@@ -14,8 +14,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -23,11 +21,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.common.Constants
-import com.github.cnrture.quickprojectwizard.toolwindow.components.*
 import com.github.cnrture.quickprojectwizard.composearch.ui.main.emptyMainContract
 import com.github.cnrture.quickprojectwizard.composearch.ui.main.emptyMainScreen
 import com.github.cnrture.quickprojectwizard.composearch.ui.main.emptyMainScreenPreviewProvider
 import com.github.cnrture.quickprojectwizard.composearch.ui.main.emptyMainViewModel
+import com.github.cnrture.quickprojectwizard.toolwindow.components.*
 import com.github.cnrture.quickprojectwizard.toolwindow.data.SettingsService
 import com.github.cnrture.quickprojectwizard.toolwindow.template.GradleTemplate
 import com.github.cnrture.quickprojectwizard.toolwindow.template.ManifestTemplate
@@ -69,7 +67,8 @@ class SettingsDialogWrapper(project: Project) : QPWDialogWrapper(
                     onCreateClick = {
                         settings.loadState(currentSettings)
                         close(0)
-                    }
+                    },
+                    color = QPWTheme.colors.red,
                 )
             }
         ) { padding ->
@@ -82,13 +81,7 @@ class SettingsDialogWrapper(project: Project) : QPWDialogWrapper(
                     modifier = Modifier.fillMaxWidth(),
                     text = "Settings",
                     style = TextStyle(
-                        brush = Brush.horizontalGradient(
-                            colors = listOf(
-                                QPWTheme.colors.blue,
-                                QPWTheme.colors.purple,
-                            ),
-                            tileMode = TileMode.Mirror,
-                        ),
+                        color = QPWTheme.colors.green,
                         fontSize = 36.sp,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center,
@@ -171,6 +164,7 @@ class SettingsDialogWrapper(project: Project) : QPWDialogWrapper(
                         text = Constants.ANDROID,
                         selected = currentSettings.preferredModuleType == Constants.ANDROID,
                         isBackgroundEnable = true,
+                        color = QPWTheme.colors.red,
                         onClick = {
                             currentSettings = currentSettings.copy(preferredModuleType = Constants.ANDROID)
                         },
@@ -182,6 +176,7 @@ class SettingsDialogWrapper(project: Project) : QPWDialogWrapper(
                         text = Constants.KOTLIN,
                         selected = currentSettings.preferredModuleType == Constants.KOTLIN,
                         isBackgroundEnable = true,
+                        color = QPWTheme.colors.red,
                         onClick = {
                             currentSettings = currentSettings.copy(preferredModuleType = Constants.KOTLIN)
                         },
@@ -210,6 +205,7 @@ class SettingsDialogWrapper(project: Project) : QPWDialogWrapper(
                             text = templateType,
                             selected = selectedTemplateType == templateType,
                             isBackgroundEnable = true,
+                            color = QPWTheme.colors.red,
                             onClick = {
                                 selectedTemplateType = templateType
                                 loadTemplateContent()
@@ -243,7 +239,7 @@ class SettingsDialogWrapper(project: Project) : QPWDialogWrapper(
                         Icon(
                             imageVector = Icons.Filled.Add,
                             contentDescription = "New Template",
-                            tint = QPWTheme.colors.blue,
+                            tint = QPWTheme.colors.red,
                             modifier = Modifier
                                 .clickable { createNewTemplate() }
                                 .padding(8.dp)
@@ -252,7 +248,7 @@ class SettingsDialogWrapper(project: Project) : QPWDialogWrapper(
                         Icon(
                             imageVector = Icons.Filled.Delete,
                             contentDescription = "Delete Template",
-                            tint = QPWTheme.colors.orange,
+                            tint = QPWTheme.colors.green,
                             modifier = Modifier
                                 .clickable { deleteCurrentTemplate() }
                                 .padding(8.dp)
@@ -266,6 +262,7 @@ class SettingsDialogWrapper(project: Project) : QPWDialogWrapper(
                     text = template,
                     selected = selectedTemplateName == template,
                     isBackgroundEnable = true,
+                    color = QPWTheme.colors.red,
                     onClick = {
                         selectedTemplateName = template
                         loadTemplateContent()
@@ -297,7 +294,7 @@ class SettingsDialogWrapper(project: Project) : QPWDialogWrapper(
             ) {
                 QPWButton(
                     text = "Save Template",
-                    backgroundColor = QPWTheme.colors.blue,
+                    backgroundColor = QPWTheme.colors.red,
                     onClick = { saveCurrentTemplate() }
                 )
             }

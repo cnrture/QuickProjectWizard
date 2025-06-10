@@ -37,7 +37,7 @@ class MessageDialogWrapper(private val message: String) : QPWDialogWrapper() {
             QPWButton(
                 text = "Okay",
                 onClick = { close(Constants.DEFAULT_EXIT_CODE) },
-                backgroundColor = QPWTheme.colors.blue,
+                backgroundColor = QPWTheme.colors.red,
             )
         }
     }

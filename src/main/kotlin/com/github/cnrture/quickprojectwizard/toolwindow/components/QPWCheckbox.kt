@@ -16,6 +16,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -29,6 +30,7 @@ fun QPWCheckbox(
     label: String,
     checked: Boolean,
     isBackgroundEnable: Boolean = false,
+    color: Color = QPWTheme.colors.red,
     onCheckedChange: (Boolean) -> Unit = {},
 ) {
     Row(
@@ -41,7 +43,7 @@ fun QPWCheckbox(
             .then(
                 if (isBackgroundEnable && checked) {
                     Modifier.background(
-                        color = QPWTheme.colors.blue,
+                        color = color,
                         shape = RoundedCornerShape(12.dp)
                     )
                 } else {
@@ -62,11 +64,11 @@ fun QPWCheckbox(
                     checkedColor = if (isBackgroundEnable && checked) {
                         QPWTheme.colors.white
                     } else {
-                        QPWTheme.colors.blue
+                        color
                     },
                     uncheckedColor = QPWTheme.colors.white,
                     checkmarkColor = if (isBackgroundEnable && checked) {
-                        QPWTheme.colors.blue
+                        color
                     } else {
                         QPWTheme.colors.white
                     },

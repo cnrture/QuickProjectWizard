@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.github.cnrture.quickprojectwizard.toolwindow.theme.QPWTheme
 
@@ -13,6 +14,7 @@ fun QPWDialogActions(
     modifier: Modifier = Modifier,
     positiveText: String = "Create",
     negativeText: String = "Cancel",
+    color: Color,
     onCancelClick: () -> Unit,
     onCreateClick: () -> Unit,
 ) {
@@ -22,12 +24,12 @@ fun QPWDialogActions(
     ) {
         QPWOutlinedButton(
             text = negativeText,
-            backgroundColor = QPWTheme.colors.blue,
+            backgroundColor = color,
             onClick = onCancelClick,
         )
         QPWButton(
             text = positiveText,
-            backgroundColor = QPWTheme.colors.blue,
+            backgroundColor = color,
             onClick = onCreateClick,
         )
     }

@@ -8,8 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -63,13 +61,7 @@ class FeatureMakerDialogWrapper(
                     modifier = Modifier.fillMaxWidth(),
                     text = "Feature Creator",
                     style = TextStyle(
-                        brush = Brush.horizontalGradient(
-                            colors = listOf(
-                                QPWTheme.colors.blue,
-                                QPWTheme.colors.purple,
-                            ),
-                            tileMode = TileMode.Mirror,
-                        ),
+                        color = QPWTheme.colors.purple,
                         fontSize = 36.sp,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center,
@@ -104,6 +96,7 @@ class FeatureMakerDialogWrapper(
         QPWFileTree(
             modifier = modifier,
             model = FileTree(root = File(project.rootDirectoryString()).toProjectFile()),
+            titleColor = QPWTheme.colors.purple,
             onClick = { fileTreeNode ->
                 val absolutePathAtNode = fileTreeNode.file.absolutePath
                 val relativePath = absolutePathAtNode.removePrefix(project.rootDirectoryStringDropLast())
@@ -134,7 +127,8 @@ class FeatureMakerDialogWrapper(
                         } else {
                             MessageDialogWrapper("Please fill out required values").show()
                         }
-                    }
+                    },
+                    color = QPWTheme.colors.purple,
                 )
             }
         ) { padding ->
@@ -143,7 +137,7 @@ class FeatureMakerDialogWrapper(
             ) {
                 QPWText(
                     text = "Selected root: ${selectedSrc.value}",
-                    color = QPWTheme.colors.orange,
+                    color = QPWTheme.colors.purple,
                     style = TextStyle(
                         fontSize = 16.sp,
                         fontWeight = FontWeight.SemiBold,

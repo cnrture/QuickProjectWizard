@@ -16,6 +16,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -28,6 +29,7 @@ fun QPWRadioButton(
     text: String,
     selected: Boolean,
     isBackgroundEnable: Boolean = false,
+    color: Color = QPWTheme.colors.red,
     onClick: () -> Unit,
 ) {
     Row(
@@ -40,7 +42,7 @@ fun QPWRadioButton(
             .then(
                 if (isBackgroundEnable && selected) {
                     Modifier.background(
-                        color = QPWTheme.colors.blue,
+                        color = color,
                         shape = RoundedCornerShape(12.dp)
                     )
                 } else {

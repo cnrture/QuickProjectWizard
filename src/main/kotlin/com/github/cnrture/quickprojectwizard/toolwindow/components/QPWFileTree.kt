@@ -35,6 +35,7 @@ import com.github.cnrture.quickprojectwizard.toolwindow.theme.QPWTheme
 fun QPWFileTree(
     modifier: Modifier = Modifier,
     model: FileTree,
+    titleColor: Color,
     onClick: (ExpandableFile) -> Unit,
 ) {
     Surface(
@@ -44,7 +45,7 @@ fun QPWFileTree(
         Column {
             QPWText(
                 text = "Project File Tree",
-                color = QPWTheme.colors.orange,
+                color = titleColor,
                 style = TextStyle(
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold,

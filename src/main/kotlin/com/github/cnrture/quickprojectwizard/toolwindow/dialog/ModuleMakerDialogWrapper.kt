@@ -12,8 +12,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -266,13 +264,7 @@ class ModuleMakerDialogWrapper(
                     modifier = Modifier.fillMaxWidth(),
                     text = "Module Creator",
                     style = TextStyle(
-                        brush = Brush.horizontalGradient(
-                            colors = listOf(
-                                QPWTheme.colors.blue,
-                                QPWTheme.colors.purple,
-                            ),
-                            tileMode = TileMode.Mirror,
-                        ),
+                        color = QPWTheme.colors.red,
                         fontSize = 36.sp,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center,
@@ -314,6 +306,7 @@ class ModuleMakerDialogWrapper(
         QPWFileTree(
             modifier = modifier,
             model = FileTree(root = File(project.rootDirectoryString()).toProjectFile()),
+            titleColor = QPWTheme.colors.red,
             onClick = { fileTreeNode ->
                 val absolutePathAtNode = fileTreeNode.file.absolutePath
                 val relativePath = absolutePathAtNode.removePrefix(project.rootDirectoryStringDropLast())
@@ -354,7 +347,8 @@ class ModuleMakerDialogWrapper(
                         } else {
                             MessageDialogWrapper("Please fill out required values").show()
                         }
-                    }
+                    },
+                    color = QPWTheme.colors.red,
                 )
             }
         ) { padding ->
@@ -367,7 +361,7 @@ class ModuleMakerDialogWrapper(
             ) {
                 QPWText(
                     text = "Selected root: $selectedSrc",
-                    color = QPWTheme.colors.orange,
+                    color = QPWTheme.colors.red,
                     style = TextStyle(
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 16.sp,
@@ -472,7 +466,7 @@ class ModuleMakerDialogWrapper(
                     if (isAnalyzingState) {
                         CircularProgressIndicator(
                             modifier = Modifier.size(24.dp),
-                            color = QPWTheme.colors.orange,
+                            color = QPWTheme.colors.red,
                             strokeWidth = 2.dp,
                         )
                     } else {
@@ -486,7 +480,7 @@ class ModuleMakerDialogWrapper(
                                     }
                                 },
                             imageVector = Icons.Rounded.PlayArrow,
-                            tint = QPWTheme.colors.orange,
+                            tint = QPWTheme.colors.red,
                             contentDescription = null,
                         )
                     }
@@ -501,7 +495,7 @@ class ModuleMakerDialogWrapper(
             analysisResultState?.let { result ->
                 Text(
                     text = result,
-                    color = QPWTheme.colors.orange,
+                    color = QPWTheme.colors.red,
                 )
             }
         }
@@ -530,6 +524,7 @@ class ModuleMakerDialogWrapper(
             QPWCheckbox(
                 label = "Move selected files to new module",
                 checked = isChecked,
+                color = QPWTheme.colors.red,
                 onCheckedChange = { onCheckedChange(it) },
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -544,6 +539,7 @@ class ModuleMakerDialogWrapper(
                 QPWCheckbox(
                     label = "Analyze and include library dependencies",
                     checked = analyzeLibraries,
+                    color = QPWTheme.colors.red,
                     onCheckedChange = { onAnalyzeLibrariesChange(it) },
                 )
                 Spacer(modifier = Modifier.height(4.dp))
@@ -596,6 +592,7 @@ class ModuleMakerDialogWrapper(
                             text = text,
                             selected = text == moduleTypeSelectionState,
                             isBackgroundEnable = true,
+                            color = QPWTheme.colors.red,
                             onClick = { onModuleTypeSelected(text) },
                         )
                         if (text != radioOptions.last()) {
@@ -674,6 +671,7 @@ class ModuleMakerDialogWrapper(
                             checked = isChecked,
                             label = module,
                             isBackgroundEnable = true,
+                            color = QPWTheme.colors.red,
                             onCheckedChange = { onCheckedModule(module) },
                         )
                     }
@@ -736,7 +734,7 @@ class ModuleMakerDialogWrapper(
                         ) {
                             Text(
                                 text = groupName,
-                                color = QPWTheme.colors.orange,
+                                color = QPWTheme.colors.red,
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 18.sp,
                             )
@@ -744,7 +742,7 @@ class ModuleMakerDialogWrapper(
                             Icon(
                                 imageVector = Icons.Rounded.ExpandMore,
                                 contentDescription = null,
-                                tint = QPWTheme.colors.orange,
+                                tint = QPWTheme.colors.red,
                                 modifier = Modifier
                                     .size(24.dp)
                                     .rotate(if (isExpanded) 180f else 0f)
@@ -764,6 +762,7 @@ class ModuleMakerDialogWrapper(
                                         checked = isChecked,
                                         label = library,
                                         isBackgroundEnable = true,
+                                        color = QPWTheme.colors.red,
                                         onCheckedChange = { onLibrarySelected(library) },
                                     )
                                 }

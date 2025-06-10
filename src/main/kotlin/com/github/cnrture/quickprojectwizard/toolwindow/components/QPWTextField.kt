@@ -33,7 +33,7 @@ fun QPWTextField(
             cursorColor = QPWTheme.colors.white,
             textColor = QPWTheme.colors.white,
             unfocusedBorderColor = QPWTheme.colors.white,
-            focusedBorderColor = QPWTheme.colors.blue,
+            focusedBorderColor = QPWTheme.colors.red,
             placeholderColor = QPWTheme.colors.white,
         )
     )

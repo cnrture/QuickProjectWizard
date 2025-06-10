@@ -1,12 +1,7 @@
 package com.github.cnrture.quickprojectwizard.toolwindow
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
@@ -14,8 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.ComposePanel
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -65,19 +58,13 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                             modifier = Modifier.Companion
                                 .fillMaxWidth()
                                 .padding(24.dp),
-                            text = "QPW DevTools",
+                            text = "Quick Project Wizard",
                             style = TextStyle(
-                                brush = Brush.Companion.horizontalGradient(
-                                    colors = listOf(
-                                        QPWTheme.colors.blue,
-                                        QPWTheme.colors.purple,
-                                    ),
-                                    tileMode = TileMode.Companion.Mirror,
-                                ),
                                 fontSize = 30.sp,
                                 fontWeight = FontWeight.Companion.Bold,
                                 textAlign = TextAlign.Companion.Center,
-                            )
+                            ),
+                            color = QPWTheme.colors.green,
                         )
                     }
                 }
@@ -140,7 +127,7 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                 modifier = Modifier.Companion.weight(1f),
                 title = "Module",
                 icon = Icons.Rounded.Add,
-                actionColor = QPWTheme.colors.orange,
+                actionColor = QPWTheme.colors.red,
                 onClick = { ModuleMakerDialogWrapper(project, null).apply { showAndGet() } },
             )
 
@@ -154,7 +141,7 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
 
             /*ActionCard(
                 icon = Icons.Rounded.Settings,
-                actionColor = QPWTheme.colors.lightGray,
+                actionColor = QPWTheme.colors.red,
                 onClick = { SettingsDialogWrapper(project).apply { showAndGet() } },
             )*/
         }
