@@ -1,5 +1,8 @@
 package com.github.cnrture.quickprojectwizard.toolwindow.manager
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -59,7 +62,14 @@ fun FeatureMakerComponent(project: Project) {
             )
             Spacer(modifier = Modifier.size(24.dp))
             Row {
-                if (showFileTreeDialog) {
+                AnimatedVisibility(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .weight(0.3f),
+                    visible = showFileTreeDialog,
+                    enter = slideInHorizontally(initialOffsetX = { -it }),
+                    exit = slideOutHorizontally(targetOffsetX = { -it }),
+                ) {
                     FileTreePanel(
                         modifier = Modifier
                             .fillMaxHeight()
@@ -67,7 +77,6 @@ fun FeatureMakerComponent(project: Project) {
                         project = project,
                         onSelectedSrc = { selectedSrc.value = it }
                     )
-                    Spacer(modifier = Modifier.width(16.dp))
                 }
                 ConfigurationPanel(
                     modifier = Modifier
