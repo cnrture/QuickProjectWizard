@@ -21,7 +21,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow
-                factoryClass="com.github.cnrture.quickprojectwizard.QuickProjectWizardToolWindowFactory"
+                factoryClass="com.github.cnrture.quickprojectwizard.toolwindow.QuickProjectWizardToolWindowFactory"
                 id="QuickProjectWizard DevTools"
                 anchor="right"
                 icon="/icons/pluginIcon.svg"/>
@@ -29,7 +29,7 @@
 
     <actions>
         <action id="QuickProjectWizard.NewFeature"
-                class="com.github.cnrture.quickprojectwizard.action.CreateFeatureAction"
+                class="com.github.cnrture.quickprojectwizard.toolwindow.action.CreateFeatureAction"
                 text="Add Feature"
                 description="Create a new feature"
                 icon="/icons/pluginIcon.svg">

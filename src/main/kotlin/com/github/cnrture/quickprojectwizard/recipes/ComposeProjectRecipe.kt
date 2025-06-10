@@ -20,7 +20,7 @@ import com.github.cnrture.quickprojectwizard.composearch.ui.navigation.emptyNavi
 import com.github.cnrture.quickprojectwizard.composearch.ui.theme.emptyColor
 import com.github.cnrture.quickprojectwizard.composearch.ui.theme.emptyTheme
 import com.github.cnrture.quickprojectwizard.composearch.ui.theme.emptyType
-import com.github.cnrture.quickprojectwizard.data.SettingsService
+import com.github.cnrture.quickprojectwizard.toolwindow.data.SettingsService
 import com.github.cnrture.quickprojectwizard.general.*
 import com.github.cnrture.quickprojectwizard.general.data.model.emptyMainEntityModel
 import com.github.cnrture.quickprojectwizard.general.data.repository.emptyMainRepositoryImpl

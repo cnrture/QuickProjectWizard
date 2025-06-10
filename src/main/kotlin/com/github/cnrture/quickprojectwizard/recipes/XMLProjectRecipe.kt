@@ -7,7 +7,7 @@ import com.android.tools.idea.wizard.template.RecipeExecutor
 import com.android.tools.idea.wizard.template.escapeKotlinIdentifier
 import com.github.cnrture.quickprojectwizard.addRootFile
 import com.github.cnrture.quickprojectwizard.addSrcFile
-import com.github.cnrture.quickprojectwizard.data.SettingsService
+import com.github.cnrture.quickprojectwizard.toolwindow.data.SettingsService
 import com.github.cnrture.quickprojectwizard.general.*
 import com.github.cnrture.quickprojectwizard.general.data.model.emptyMainEntityModel
 import com.github.cnrture.quickprojectwizard.general.data.repository.emptyMainRepositoryImpl
