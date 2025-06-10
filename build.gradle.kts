@@ -10,6 +10,8 @@ plugins {
     alias(libs.plugins.qodana) // Gradle Qodana Plugin
     alias(libs.plugins.kover) // Gradle Kover Plugin
     alias(libs.plugins.kotlinxSerialization) // Kotlinx Serialization Plugin
+    id("org.jetbrains.compose")
+    alias(libs.plugins.compose)
 }
 
 group = providers.gradleProperty("pluginGroup").get()
@@ -20,15 +22,27 @@ kotlin {
     jvmToolchain(17)
 }
 
-// Configure project's dependencies
+buildscript {
+    repositories {
+        mavenCentral()
+        google()
+        maven { url = uri("https://plugins.gradle.org/m2/") }
+        maven {
+            url = uri("https://www.jetbrains.com/intellij-repository/releases")
+        }
+    }
+}
+
 repositories {
     mavenCentral()
-
-    // IntelliJ Platform Gradle Plugin Repositories Extension - read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-repositories-extension.html
+    google()
+    maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+    maven { url = uri("https://maven.pkg.jetbrains.space/public/p/compose/dev") }
     intellijPlatform {
         defaultRepositories()
     }
 }
+
 
 // Dependencies are managed with Gradle version catalog - read more: https://docs.gradle.org/current/userguide/platforms.html#sub:version-catalog
 dependencies {
@@ -37,6 +51,8 @@ dependencies {
     implementation(libs.ktor.cio)
     implementation(libs.kotlinx.serialization)
     implementation(libs.freemarker)
+    implementation(compose.desktop.currentOs)
+    implementation(compose.materialIconsExtended)
 
     // IntelliJ Platform Gradle Plugin Dependencies Extension - read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-dependencies-extension.html
     intellijPlatform {
@@ -48,7 +64,6 @@ dependencies {
         // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file for plugin from JetBrains Marketplace.
         plugins(providers.gradleProperty("platformPlugins").map { it.split(',') })
 
-        instrumentationTools()
         pluginVerifier()
         zipSigner()
         testFramework(TestFrameworkType.Platform)
