@@ -18,4 +18,23 @@
                            displayType="BALLOON"
                            key="notification.group.qpw"/>
     </extensions>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <toolWindow
+                factoryClass="com.github.cnrture.quickprojectwizard.QuickProjectWizardToolWindowFactory"
+                id="QuickProjectWizard DevTools"
+                anchor="right"
+                icon="/icons/pluginIcon.svg"/>
+    </extensions>
+
+    <actions>
+        <action id="QuickProjectWizard.NewFeature"
+                class="com.github.cnrture.quickprojectwizard.action.CreateFeatureAction"
+                text="Add Feature"
+                description="Create a new feature"
+                icon="/icons/pluginIcon.svg">
+            <add-to-group group-id="NewGroup" anchor="after" relative-to-action="NewDir"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="control shift Q"/>
+        </action>
+    </actions>
 </idea-plugin>
