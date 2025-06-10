@@ -2,12 +2,10 @@ package com.github.cnrture.quickprojectwizard.toolwindow.manager
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ColorLens
@@ -24,6 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.toolwindow.components.QPWActionCard
+import com.github.cnrture.quickprojectwizard.toolwindow.components.QPWActionCardType
 import com.github.cnrture.quickprojectwizard.toolwindow.components.QPWText
 import com.github.cnrture.quickprojectwizard.toolwindow.theme.QPWTheme
 import com.intellij.ui.JBColor
@@ -31,7 +30,6 @@ import java.awt.*
 import java.awt.datatransfer.StringSelection
 import java.awt.event.MouseEvent
 import java.awt.event.MouseListener
-import java.awt.event.MouseMotionAdapter
 import java.awt.geom.Ellipse2D
 import javax.swing.JFrame
 import javax.swing.JPanel
@@ -46,9 +44,7 @@ data class ColorInfo(
 
 @Composable
 fun ColorPickerComponent() {
-    var currentColor by remember { mutableStateOf(Color.White) }
     var colorHistory by remember { mutableStateOf(emptyList<ColorInfo>()) }
-    var pickedColorInfo by remember { mutableStateOf<ColorInfo?>(null) }
 
     Column(
         modifier = Modifier
@@ -69,51 +65,6 @@ fun ColorPickerComponent() {
 
         Spacer(modifier = Modifier.size(24.dp))
 
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(120.dp),
-            shape = RoundedCornerShape(8.dp),
-            backgroundColor = QPWTheme.colors.gray,
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(80.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(currentColor)
-                        .border(2.dp, QPWTheme.colors.white, RoundedCornerShape(8.dp))
-                )
-
-                Spacer(modifier = Modifier.width(16.dp))
-
-                Column {
-                    pickedColorInfo?.let { colorInfo ->
-                        ColorInfoRow("HEX:", colorInfo.hex)
-                        ColorInfoRow("RGB:", colorInfo.rgb)
-                        QPWText(
-                            text = "Picked: ${colorInfo.timestamp}",
-                            color = QPWTheme.colors.white,
-                            style = TextStyle(fontSize = 12.sp)
-                        )
-                    } ?: run {
-                        QPWText(
-                            text = "Click 'Pick Color' to select from screen",
-                            color = QPWTheme.colors.white,
-                            style = TextStyle(fontSize = 14.sp)
-                        )
-                    }
-                }
-            }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -126,21 +77,10 @@ fun ColorPickerComponent() {
                 onClick = {
                     startColorPicking { color ->
                         val colorInfo = createColorInfo(color)
-                        currentColor = color
-                        pickedColorInfo = colorInfo
                         colorHistory = listOf(colorInfo) + colorHistory.take(9)
                     }
                 }
             )
-
-            pickedColorInfo?.let {
-                QPWActionCard(
-                    title = "Copy HEX",
-                    icon = Icons.Rounded.ContentCopy,
-                    actionColor = QPWTheme.colors.green,
-                    onClick = { copyToClipboard(it.hex) }
-                )
-            }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -162,10 +102,6 @@ fun ColorPickerComponent() {
                         colorInfo = colorInfo,
                         onCopyHex = { copyToClipboard(colorInfo.hex) },
                         onCopyRgb = { copyToClipboard(colorInfo.rgb) },
-                        onSelect = {
-                            currentColor = colorInfo.color
-                            pickedColorInfo = colorInfo
-                        }
                     )
                 }
             }
@@ -181,13 +117,19 @@ private fun ColorInfoRow(label: String, value: String) {
         QPWText(
             text = label,
             color = QPWTheme.colors.white,
-            style = TextStyle(fontSize = 12.sp, fontWeight = FontWeight.Bold)
+            style = TextStyle(
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold,
+            )
         )
         Spacer(modifier = Modifier.width(8.dp))
         QPWText(
             text = value,
             color = QPWTheme.colors.green,
-            style = TextStyle(fontSize = 12.sp, fontFamily = FontFamily.Monospace)
+            style = TextStyle(
+                fontSize = 12.sp,
+                fontFamily = FontFamily.Monospace,
+            )
         )
     }
 }
@@ -197,24 +139,21 @@ private fun ColorHistoryItem(
     colorInfo: ColorInfo,
     onCopyHex: () -> Unit,
     onCopyRgb: () -> Unit,
-    onSelect: () -> Unit,
 ) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onSelect() },
+        modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(8.dp),
         backgroundColor = QPWTheme.colors.gray,
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(12.dp),
+                .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
                 modifier = Modifier
-                    .size(40.dp)
+                    .size(56.dp)
                     .clip(RoundedCornerShape(6.dp))
                     .background(colorInfo.color)
                     .border(1.dp, QPWTheme.colors.white, RoundedCornerShape(6.dp))
@@ -225,48 +164,29 @@ private fun ColorHistoryItem(
             Column(
                 modifier = Modifier.weight(1f)
             ) {
-                QPWText(
-                    text = colorInfo.hex,
-                    color = QPWTheme.colors.white,
-                    style = TextStyle(fontSize = 14.sp, fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Bold)
-                )
-                QPWText(
-                    text = colorInfo.rgb,
-                    color = QPWTheme.colors.gray,
-                    style = TextStyle(fontSize = 12.sp, fontFamily = FontFamily.Monospace)
-                )
+                ColorInfoRow(label = "HEX:", value = colorInfo.hex)
+                Spacer(modifier = Modifier.height(8.dp))
+                ColorInfoRow(label = "RGB:", value = colorInfo.rgb)
             }
 
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                Button(
-                    onClick = onCopyHex,
-                    modifier = Modifier.size(width = 60.dp, height = 32.dp),
-                    colors = androidx.compose.material.ButtonDefaults.buttonColors(
-                        backgroundColor = QPWTheme.colors.green
-                    )
-                ) {
-                    QPWText(
-                        text = "HEX",
-                        color = QPWTheme.colors.black,
-                        style = TextStyle(fontSize = 10.sp, fontWeight = FontWeight.Bold)
-                    )
-                }
-
-                Button(
-                    onClick = onCopyRgb,
-                    modifier = Modifier.size(width = 60.dp, height = 32.dp),
-                    colors = androidx.compose.material.ButtonDefaults.buttonColors(
-                        backgroundColor = QPWTheme.colors.green
-                    )
-                ) {
-                    QPWText(
-                        text = "RGB",
-                        color = QPWTheme.colors.white,
-                        style = TextStyle(fontSize = 10.sp, fontWeight = FontWeight.Bold)
-                    )
-                }
+            Column {
+                QPWActionCard(
+                    modifier = Modifier,
+                    title = "HEX",
+                    icon = Icons.Rounded.ContentCopy,
+                    actionColor = QPWTheme.colors.green,
+                    type = QPWActionCardType.SMALL,
+                    onClick = { onCopyHex() }
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                QPWActionCard(
+                    modifier = Modifier,
+                    title = "RGB",
+                    icon = Icons.Rounded.ContentCopy,
+                    actionColor = QPWTheme.colors.green,
+                    type = QPWActionCardType.SMALL,
+                    onClick = { onCopyRgb() }
+                )
             }
         }
     }

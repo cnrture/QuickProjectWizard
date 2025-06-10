@@ -18,14 +18,37 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.toolwindow.theme.QPWTheme
 
+enum class QPWActionCardType { SMALL, LARGE }
+
 @Composable
 fun QPWActionCard(
     modifier: Modifier = Modifier,
     title: String? = null,
     icon: ImageVector,
     actionColor: Color,
+    type: QPWActionCardType = QPWActionCardType.LARGE,
     onClick: () -> Unit,
 ) {
+    val fontSize = when (type) {
+        QPWActionCardType.SMALL -> 14.sp
+        QPWActionCardType.LARGE -> 20.sp
+    }
+    val iconBoxSize = when (type) {
+        QPWActionCardType.SMALL -> 24.dp
+        QPWActionCardType.LARGE -> 32.dp
+    }
+    val iconSize = when (type) {
+        QPWActionCardType.SMALL -> 16.dp
+        QPWActionCardType.LARGE -> 24.dp
+    }
+    val borderSize = when (type) {
+        QPWActionCardType.SMALL -> 1.dp
+        QPWActionCardType.LARGE -> 3.dp
+    }
+    val padding = when (type) {
+        QPWActionCardType.SMALL -> 8.dp
+        QPWActionCardType.LARGE -> 16.dp
+    }
     Row(
         modifier = modifier
             .background(
@@ -33,27 +56,36 @@ fun QPWActionCard(
                 shape = RoundedCornerShape(12.dp),
             )
             .border(
-                width = 3.dp,
+                width = borderSize,
                 color = actionColor,
                 shape = RoundedCornerShape(12.dp)
             )
             .clickable { onClick() }
-            .padding(16.dp),
+            .padding(padding),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
     ) {
-        Box(
-            modifier = Modifier
-                .size(32.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .background(actionColor),
-            contentAlignment = Alignment.Center
-        ) {
+        if (type == QPWActionCardType.LARGE) {
+            Box(
+                modifier = Modifier
+                    .size(iconBoxSize)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(actionColor),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = QPWTheme.colors.white,
+                    modifier = Modifier.size(iconSize)
+                )
+            }
+        } else {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = QPWTheme.colors.white,
-                modifier = Modifier.size(24.dp)
+                tint = actionColor,
+                modifier = Modifier.size(iconSize)
             )
         }
 
@@ -63,8 +95,8 @@ fun QPWActionCard(
             QPWText(
                 text = it,
                 style = TextStyle(
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = fontSize,
                     color = QPWTheme.colors.white,
                 ),
             )

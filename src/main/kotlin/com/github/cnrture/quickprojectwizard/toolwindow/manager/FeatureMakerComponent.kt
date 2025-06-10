@@ -7,11 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.TextStyle
@@ -20,11 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.common.*
-import com.github.cnrture.quickprojectwizard.toolwindow.components.QPWButton
-import com.github.cnrture.quickprojectwizard.toolwindow.components.QPWDialogActions
-import com.github.cnrture.quickprojectwizard.toolwindow.components.QPWFileTree
-import com.github.cnrture.quickprojectwizard.toolwindow.components.QPWText
-import com.github.cnrture.quickprojectwizard.toolwindow.components.QPWTextField
+import com.github.cnrture.quickprojectwizard.toolwindow.components.*
 import com.github.cnrture.quickprojectwizard.toolwindow.dialog.MessageDialogWrapper
 import com.github.cnrture.quickprojectwizard.toolwindow.file.FileTree
 import com.github.cnrture.quickprojectwizard.toolwindow.file.FileWriter
@@ -153,7 +145,10 @@ private fun ConfigurationPanel(
         }
     ) { padding ->
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(16.dp),
         ) {
             RootSelectionContent(
                 modifier = Modifier.fillMaxWidth(),
@@ -202,7 +197,7 @@ private fun RootSelectionContent(
     ) {
         QPWText(
             text = "Selected: $selectedSrc",
-            color = QPWTheme.colors.red,
+            color = QPWTheme.colors.purple,
             softWrap = true,
             style = TextStyle(
                 fontSize = 14.sp,
@@ -217,7 +212,7 @@ private fun RootSelectionContent(
         Spacer(modifier = Modifier.size(8.dp))
         QPWButton(
             text = if (showFileTreeDialog) "Close File Tree" else "Open File Tree",
-            backgroundColor = QPWTheme.colors.red,
+            backgroundColor = QPWTheme.colors.purple,
             onClick = onChooseRootClick,
         )
     }
