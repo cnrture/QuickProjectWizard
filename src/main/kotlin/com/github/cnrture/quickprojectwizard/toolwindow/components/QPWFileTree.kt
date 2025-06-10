@@ -36,11 +36,12 @@ fun QPWFileTree(
     modifier: Modifier = Modifier,
     model: FileTree,
     titleColor: Color,
+    containerColor: Color = QPWTheme.colors.gray,
     onClick: (ExpandableFile) -> Unit,
 ) {
     Surface(
         modifier = modifier,
-        color = QPWTheme.colors.gray,
+        color = containerColor,
     ) {
         Column {
             QPWText(

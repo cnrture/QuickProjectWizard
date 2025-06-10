@@ -378,6 +378,7 @@ private fun FileTreePanel(
         modifier = modifier,
         model = FileTree(root = File(project.rootDirectoryString()).toProjectFile()),
         titleColor = QPWTheme.colors.red,
+        containerColor = QPWTheme.colors.black,
         onClick = { fileTreeNode ->
             val absolutePathAtNode = fileTreeNode.file.absolutePath
             val relativePath = absolutePathAtNode.removePrefix(project.rootDirectoryStringDropLast())
@@ -430,12 +431,12 @@ private fun ConfigurationPanel(
 
     Scaffold(
         modifier = modifier,
-        backgroundColor = QPWTheme.colors.gray,
+        backgroundColor = QPWTheme.colors.black,
         bottomBar = {
             QPWDialogActions(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(QPWTheme.colors.gray),
+                    .background(QPWTheme.colors.black),
                 onCreateClick = {
                     if (validateInput(packageName, moduleNameState) && selectedSrc.isNotEmpty()) {
                         createModule(

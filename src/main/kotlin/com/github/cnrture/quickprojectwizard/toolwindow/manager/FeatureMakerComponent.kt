@@ -97,6 +97,7 @@ private fun FileTreePanel(
         modifier = modifier,
         model = FileTree(root = File(project.rootDirectoryString()).toProjectFile()),
         titleColor = QPWTheme.colors.purple,
+        containerColor = QPWTheme.colors.black,
         onClick = { fileTreeNode ->
             val absolutePathAtNode = fileTreeNode.file.absolutePath
             val relativePath = absolutePathAtNode.removePrefix(project.rootDirectoryStringDropLast())
@@ -125,7 +126,7 @@ private fun ConfigurationPanel(
             QPWDialogActions(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(QPWTheme.colors.gray),
+                    .background(QPWTheme.colors.black),
                 onCreateClick = {
                     if (validateInput(featureName, selectedSrc)) {
                         createFeature(
