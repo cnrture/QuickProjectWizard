@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.toolwindow.components.QPWActionCard
@@ -54,21 +55,24 @@ fun ColorPickerComponent() {
             .padding(24.dp)
     ) {
         QPWText(
+            modifier = Modifier.fillMaxWidth(),
             text = "Color Picker",
             style = TextStyle(
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            ),
-            color = QPWTheme.colors.white,
-            modifier = Modifier.padding(bottom = 16.dp)
+                color = QPWTheme.colors.green,
+                fontSize = 28.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+            )
         )
+
+        Spacer(modifier = Modifier.size(24.dp))
 
         Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(120.dp),
             shape = RoundedCornerShape(8.dp),
-            backgroundColor = QPWTheme.colors.green
+            backgroundColor = QPWTheme.colors.gray,
         ) {
             Row(
                 modifier = Modifier
@@ -92,13 +96,13 @@ fun ColorPickerComponent() {
                         ColorInfoRow("RGB:", colorInfo.rgb)
                         QPWText(
                             text = "Picked: ${colorInfo.timestamp}",
-                            color = QPWTheme.colors.gray,
+                            color = QPWTheme.colors.white,
                             style = TextStyle(fontSize = 12.sp)
                         )
                     } ?: run {
                         QPWText(
                             text = "Click 'Pick Color' to select from screen",
-                            color = QPWTheme.colors.gray,
+                            color = QPWTheme.colors.white,
                             style = TextStyle(fontSize = 14.sp)
                         )
                     }
@@ -198,7 +202,7 @@ private fun ColorHistoryItem(
             .fillMaxWidth()
             .clickable { onSelect() },
         shape = RoundedCornerShape(8.dp),
-        backgroundColor = QPWTheme.colors.green
+        backgroundColor = QPWTheme.colors.gray,
     ) {
         Row(
             modifier = Modifier

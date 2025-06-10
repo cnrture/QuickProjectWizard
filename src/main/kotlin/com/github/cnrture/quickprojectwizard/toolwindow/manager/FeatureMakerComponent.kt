@@ -1,19 +1,26 @@
 package com.github.cnrture.quickprojectwizard.toolwindow.manager
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.common.*
+import com.github.cnrture.quickprojectwizard.toolwindow.components.QPWButton
 import com.github.cnrture.quickprojectwizard.toolwindow.components.QPWDialogActions
 import com.github.cnrture.quickprojectwizard.toolwindow.components.QPWFileTree
 import com.github.cnrture.quickprojectwizard.toolwindow.components.QPWText
@@ -33,6 +40,8 @@ fun FeatureMakerComponent(project: Project) {
     val selectedSrc = mutableStateOf(Constants.DEFAULT_SRC_VALUE)
     val featureName = mutableStateOf(Constants.EMPTY)
 
+    var showFileTreeDialog by remember { mutableStateOf(false) }
+
     selectedSrc.value =
         File(project.rootDirectoryString()).absolutePath.removePrefix(project.rootDirectoryStringDropLast())
             .removePrefix(File.separator)
@@ -51,36 +60,34 @@ fun FeatureMakerComponent(project: Project) {
                 text = "Feature Creator",
                 style = TextStyle(
                     color = QPWTheme.colors.purple,
-                    fontSize = 36.sp,
+                    fontSize = 28.sp,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,
                 ),
             )
             Spacer(modifier = Modifier.size(24.dp))
             Row {
-                FileTreePanel(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .weight(0.5f),
-                    project = project,
-                    onSelectedSrc = { selectedSrc.value = it }
-                )
-                Box(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .padding(end = 32.dp)
-                        .background(QPWTheme.colors.white)
-                        .width(2.dp)
-                )
+                if (showFileTreeDialog) {
+                    FileTreePanel(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .weight(0.3f),
+                        project = project,
+                        onSelectedSrc = { selectedSrc.value = it }
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
+                }
                 ConfigurationPanel(
                     modifier = Modifier
                         .fillMaxHeight()
-                        .weight(0.5f),
+                        .weight(0.7f),
                     project = project,
                     fileWriter = fileWriter,
                     selectedSrc = selectedSrc.value,
                     featureName = featureName.value,
-                    onFeatureNameChange = { featureName.value = it }
+                    onFeatureNameChange = { featureName.value = it },
+                    showFileTreeDialog = showFileTreeDialog,
+                    onFileTreeDialogStateChange = { showFileTreeDialog = !showFileTreeDialog },
                 )
             }
         }
@@ -118,6 +125,8 @@ private fun ConfigurationPanel(
     selectedSrc: String,
     featureName: String,
     onFeatureNameChange: (String) -> Unit,
+    showFileTreeDialog: Boolean,
+    onFileTreeDialogStateChange: () -> Unit,
 ) {
     Scaffold(
         modifier = modifier,
@@ -146,21 +155,19 @@ private fun ConfigurationPanel(
         Column(
             modifier = Modifier.fillMaxSize(),
         ) {
-            QPWText(
-                text = "Selected root: $selectedSrc",
-                color = QPWTheme.colors.purple,
-                style = TextStyle(
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.SemiBold,
-                ),
-                softWrap = true,
+            RootSelectionContent(
+                modifier = Modifier.fillMaxWidth(),
+                selectedSrc = selectedSrc,
+                showFileTreeDialog = showFileTreeDialog,
+                onChooseRootClick = { onFileTreeDialogStateChange() }
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             QPWTextField(
                 modifier = Modifier.fillMaxWidth(),
-                placeholder = "Enter feature name",
+                label = "Feature Name",
+                placeholder = "feature name",
                 value = featureName,
                 onValueChange = onFeatureNameChange,
             )
@@ -176,6 +183,43 @@ private fun ConfigurationPanel(
                 softWrap = true,
             )
         }
+    }
+}
+
+@Composable
+private fun RootSelectionContent(
+    modifier: Modifier = Modifier,
+    selectedSrc: String,
+    showFileTreeDialog: Boolean,
+    onChooseRootClick: () -> Unit,
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(8.dp))
+            .border(2.dp, QPWTheme.colors.white, RoundedCornerShape(8.dp))
+            .padding(16.dp),
+    ) {
+        QPWText(
+            text = "Selected: $selectedSrc",
+            color = QPWTheme.colors.red,
+            softWrap = true,
+            style = TextStyle(
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium,
+            ),
+        )
+        Spacer(modifier = Modifier.size(4.dp))
+        Text(
+            text = "Choose the root directory for your new module.",
+            color = QPWTheme.colors.lightGray,
+        )
+        Spacer(modifier = Modifier.size(8.dp))
+        QPWButton(
+            text = if (showFileTreeDialog) "Close File Tree" else "Open File Tree",
+            backgroundColor = QPWTheme.colors.red,
+            onClick = onChooseRootClick,
+        )
     }
 }
 

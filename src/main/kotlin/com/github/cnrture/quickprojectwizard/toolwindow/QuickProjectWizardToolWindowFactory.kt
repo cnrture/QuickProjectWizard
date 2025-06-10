@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.ComposePanel
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -59,8 +60,15 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                                 fontSize = 30.sp,
                                 fontWeight = FontWeight.Bold,
                                 textAlign = TextAlign.Center,
+                                brush = Brush.horizontalGradient(
+                                    colors = listOf(
+                                        QPWTheme.colors.red,
+                                        QPWTheme.colors.purple,
+                                        QPWTheme.colors.green,
+                                    ),
+                                    tileMode = TileMode.Mirror,
+                                ),
                             ),
-                            color = QPWTheme.colors.green,
                         )
                     }
                 }

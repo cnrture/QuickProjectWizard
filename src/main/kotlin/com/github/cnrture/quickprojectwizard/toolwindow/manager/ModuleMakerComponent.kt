@@ -7,10 +7,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.material.icons.rounded.PlayArrow
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -71,6 +68,8 @@ fun ModuleMakerComponent(
     val isAnalyzing = mutableStateOf(false)
     val analysisResult = mutableStateOf<String?>(null)
 
+    var showFileTreeDialog by remember { mutableStateOf(false) }
+
     loadExistingModules(
         project = project,
         onExistingModulesLoaded = { existingModules = it },
@@ -107,30 +106,23 @@ fun ModuleMakerComponent(
                 text = "Module Creator",
                 style = TextStyle(
                     color = QPWTheme.colors.red,
-                    fontSize = 36.sp,
+                    fontSize = 28.sp,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,
                 )
             )
             Spacer(modifier = Modifier.size(24.dp))
-            Row(
-                modifier = Modifier.fillMaxSize(),
-            ) {
-                FileTreePanel(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .weight(0.3f)
-                        .padding(16.dp),
-                    project = project,
-                    onSelectedSrcChange = { selectedSrc.value = it }
-                )
-                Box(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .padding(horizontal = 16.dp)
-                        .background(QPWTheme.colors.white)
-                        .width(2.dp)
-                )
+            Row {
+                if (showFileTreeDialog) {
+                    FileTreePanel(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .weight(0.3f),
+                        project = project,
+                        onSelectedSrc = { selectedSrc.value = it }
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
+                }
                 ConfigurationPanel(
                     modifier = Modifier
                         .fillMaxHeight()
@@ -181,10 +173,34 @@ fun ModuleMakerComponent(
                         expandedGroups[groupName] = expandedGroups[groupName]?.not() ?: true
                     },
                     detectedLibraries = detectedLibraries,
+                    showFileTreeDialog = showFileTreeDialog,
+                    onFileTreeDialogStateChange = { showFileTreeDialog = !showFileTreeDialog },
                 )
             }
         }
     }
+}
+
+@Composable
+private fun FileTreePanel(
+    modifier: Modifier = Modifier,
+    project: Project,
+    onSelectedSrc: (String) -> Unit = {},
+) {
+    QPWFileTree(
+        modifier = modifier,
+        model = FileTree(root = File(project.rootDirectoryString()).toProjectFile()),
+        titleColor = QPWTheme.colors.red,
+        containerColor = QPWTheme.colors.black,
+        onClick = { fileTreeNode ->
+            val absolutePathAtNode = fileTreeNode.file.absolutePath
+            val relativePath = absolutePathAtNode.removePrefix(project.rootDirectoryStringDropLast())
+                .removePrefix(File.separator)
+            if (fileTreeNode.file.isDirectory) {
+                onSelectedSrc(relativePath)
+            }
+        }
+    )
 }
 
 private fun loadAvailableLibraries(
@@ -369,25 +385,40 @@ private fun validateInput(packageName: String, moduleName: String): Boolean {
 }
 
 @Composable
-private fun FileTreePanel(
+private fun RootSelectionContent(
     modifier: Modifier = Modifier,
-    project: Project,
-    onSelectedSrcChange: (String) -> Unit,
+    selectedSrc: String,
+    showFileTreeDialog: Boolean,
+    onChooseRootClick: () -> Unit,
 ) {
-    QPWFileTree(
-        modifier = modifier,
-        model = FileTree(root = File(project.rootDirectoryString()).toProjectFile()),
-        titleColor = QPWTheme.colors.red,
-        containerColor = QPWTheme.colors.black,
-        onClick = { fileTreeNode ->
-            val absolutePathAtNode = fileTreeNode.file.absolutePath
-            val relativePath = absolutePathAtNode.removePrefix(project.rootDirectoryStringDropLast())
-                .removePrefix(File.separator)
-            if (fileTreeNode.file.isDirectory) {
-                onSelectedSrcChange(relativePath)
-            }
-        }
-    )
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(8.dp))
+            .border(2.dp, QPWTheme.colors.white, RoundedCornerShape(8.dp))
+            .padding(16.dp),
+    ) {
+        QPWText(
+            text = "Selected: $selectedSrc",
+            color = QPWTheme.colors.red,
+            softWrap = true,
+            style = TextStyle(
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium,
+            ),
+        )
+        Spacer(modifier = Modifier.size(4.dp))
+        Text(
+            text = "Choose the root directory for your new module.",
+            color = QPWTheme.colors.lightGray,
+        )
+        Spacer(modifier = Modifier.size(8.dp))
+        QPWButton(
+            text = if (showFileTreeDialog) "Close File Tree" else "Open File Tree",
+            backgroundColor = QPWTheme.colors.red,
+            onClick = onChooseRootClick,
+        )
+    }
 }
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -426,6 +457,8 @@ private fun ConfigurationPanel(
     expandedGroups: Map<String, Boolean>,
     detectedLibraries: List<String>,
     onGroupExpandToggle: (String) -> Unit,
+    showFileTreeDialog: Boolean,
+    onFileTreeDialogStateChange: () -> Unit,
 ) {
     val radioOptions = listOf(Constants.ANDROID, Constants.KOTLIN)
 
@@ -468,14 +501,11 @@ private fun ConfigurationPanel(
                 .padding(16.dp)
                 .verticalScroll(rememberScrollState()),
         ) {
-            QPWText(
-                text = "Selected root: $selectedSrc",
-                color = QPWTheme.colors.red,
-                style = TextStyle(
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 16.sp,
-                ),
-                softWrap = true,
+            RootSelectionContent(
+                modifier = Modifier.fillMaxWidth(),
+                selectedSrc = selectedSrc,
+                showFileTreeDialog = showFileTreeDialog,
+                onChooseRootClick = { onFileTreeDialogStateChange() }
             )
 
             Spacer(modifier = Modifier.height(16.dp))
