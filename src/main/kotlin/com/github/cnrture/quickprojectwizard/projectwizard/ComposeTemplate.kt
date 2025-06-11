@@ -117,12 +117,13 @@ val composeTemplate = template {
     )
 
     thumb = {
-        val pluginClassLoader = Class.forName("com.github.cnrture.quickprojectwizard.ComposeTemplateKt").classLoader
+        val pluginClassLoader =
+            Class.forName("com.github.cnrture.quickprojectwizard.projectwizard.ComposeTemplateKt").classLoader
         val imageUrl = pluginClassLoader?.getResource("images/qpw-compose.png")
         if (imageUrl != null) {
             Thumb { imageUrl }
         } else {
-            Thumb { URL("https://raw.githubusercontent.com/cnrture/QuickProjectWizard/refs/heads/main/images/compose_template.png") }
+            Thumb { URL("https://canerture.com/qpw-compose.png") }
         }
     }
 

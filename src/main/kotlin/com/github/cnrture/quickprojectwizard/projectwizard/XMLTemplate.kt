@@ -114,12 +114,13 @@ val xmlTemplate = template {
     )
 
     thumb = {
-        val pluginClassLoader = Class.forName("com.github.cnrture.quickprojectwizard.XMLTemplateKt").classLoader
+        val pluginClassLoader =
+            Class.forName("com.github.cnrture.quickprojectwizard.projectwizard.XMLTemplateKt").classLoader
         val imageUrl = pluginClassLoader?.getResource("images/qpw-xml.png")
         if (imageUrl != null) {
             Thumb { imageUrl }
         } else {
-            Thumb { URL("https://raw.githubusercontent.com/cnrture/QuickProjectWizard/refs/heads/main/images/xml_template.png") }
+            Thumb { URL("https://canerture.com/qpw-xml.png") }
         }
     }
 
