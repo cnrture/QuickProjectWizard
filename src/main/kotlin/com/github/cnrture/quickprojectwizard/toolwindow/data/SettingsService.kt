@@ -9,7 +9,7 @@ import com.intellij.openapi.components.Storage
     name = "QuickProjectWizardSettings",
     storages = [Storage("quickProjectWizard.xml")]
 )
-@Service(Service.Level.PROJECT)
+@Service(Service.Level.APP)
 class SettingsService : PersistentStateComponent<SettingsState> {
     private var myState = SettingsState()
 

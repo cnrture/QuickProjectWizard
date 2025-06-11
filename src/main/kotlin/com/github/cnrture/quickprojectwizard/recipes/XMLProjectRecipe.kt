@@ -26,7 +26,8 @@ import com.github.cnrture.quickprojectwizard.toolwindow.data.SettingsService
 import com.github.cnrture.quickprojectwizard.util.NotificationUtil
 import com.github.cnrture.quickprojectwizard.xmlarch.common.emptyCollectExtension
 import com.github.cnrture.quickprojectwizard.xmlarch.ui.*
-import com.intellij.openapi.components.ServiceManager.getService
+import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.components.service
 import java.io.File
 
 fun RecipeExecutor.xmlProjectRecipe(
@@ -48,7 +49,7 @@ fun RecipeExecutor.xmlProjectRecipe(
 ) {
     val packagePath = escapeKotlinIdentifier(packageName)
 
-    val settings = getService(SettingsService::class.java)
+    val settings = ApplicationManager.getApplication().service<SettingsService>()
     settings.loadState(
         settings.state.copy(
             isHiltEnable = isHiltEnable,

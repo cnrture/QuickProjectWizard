@@ -37,7 +37,8 @@ import com.github.cnrture.quickprojectwizard.gradle.getGradleKts
 import com.github.cnrture.quickprojectwizard.gradle.getProjectGradleKts
 import com.github.cnrture.quickprojectwizard.toolwindow.data.SettingsService
 import com.github.cnrture.quickprojectwizard.util.NotificationUtil
-import com.intellij.openapi.components.ServiceManager.getService
+import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.components.service
 import java.io.File
 
 fun RecipeExecutor.composeProjectRecipe(
@@ -59,7 +60,7 @@ fun RecipeExecutor.composeProjectRecipe(
 ) {
     val packagePath = escapeKotlinIdentifier(packageName)
 
-    val settings = getService(SettingsService::class.java)
+    val settings = ApplicationManager.getApplication().service<SettingsService>()
     settings.loadState(
         settings.state.copy(
             isHiltEnable = isHiltEnable,
