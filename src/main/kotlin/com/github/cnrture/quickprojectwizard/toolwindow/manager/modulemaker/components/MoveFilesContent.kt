@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.github.cnrture.quickprojectwizard.toolwindow.components.QPWCheckbox
+import com.github.cnrture.quickprojectwizard.toolwindow.components.QPWText
 import com.github.cnrture.quickprojectwizard.toolwindow.theme.QPWTheme
 
 @Composable
@@ -38,7 +39,7 @@ fun MoveFilesContent(
             onCheckedChange = { onCheckedChange(it) },
         )
         Spacer(modifier = Modifier.height(8.dp))
-        Text(
+        QPWText(
             modifier = Modifier.padding(start = 8.dp, bottom = 8.dp),
             text = "This will move files from the selected directory to the new module.",
             color = QPWTheme.colors.lightGray,
@@ -53,7 +54,7 @@ fun MoveFilesContent(
                 onCheckedChange = { onAnalyzeLibrariesChange(it) },
             )
             Spacer(modifier = Modifier.height(4.dp))
-            Text(
+            QPWText(
                 modifier = Modifier.padding(start = 8.dp, bottom = 8.dp),
                 text = "Parse libs.versions.toml and include relevant library dependencies.",
                 color = QPWTheme.colors.lightGray,

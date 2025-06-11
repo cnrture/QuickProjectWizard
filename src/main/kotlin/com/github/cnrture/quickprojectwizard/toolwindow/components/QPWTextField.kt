@@ -20,8 +20,8 @@ fun QPWTextField(
 ) {
     OutlinedTextField(
         modifier = modifier,
-        label = { label?.let { Text(it) } },
-        placeholder = { placeholder?.let { Text(it) } },
+        label = { label?.let { QPWText(text = it) } },
+        placeholder = { placeholder?.let { QPWText(text = it) } },
         value = value,
         onValueChange = { onValueChange(it) },
         textStyle = textStyle,

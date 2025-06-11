@@ -100,13 +100,13 @@ fun DetectModulesContent(
             }
         }
         Spacer(modifier = Modifier.size(8.dp))
-        Text(
+        QPWText(
             text = "These modules will be added to the new module's build.gradle file.",
             color = QPWTheme.colors.lightGray,
         )
         Spacer(modifier = Modifier.size(8.dp))
         analysisResultState?.let { result ->
-            Text(
+            QPWText(
                 text = result,
                 color = QPWTheme.colors.red,
             )

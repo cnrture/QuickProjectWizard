@@ -487,13 +487,13 @@ class ModuleMakerDialogWrapper(
                 }
             }
             Spacer(modifier = Modifier.size(8.dp))
-            Text(
+            QPWText(
                 text = "These modules will be added to the new module's build.gradle file.",
                 color = QPWTheme.colors.lightGray,
             )
             Spacer(modifier = Modifier.size(8.dp))
             analysisResultState?.let { result ->
-                Text(
+                QPWText(
                     text = result,
                     color = QPWTheme.colors.red,
                 )
@@ -528,7 +528,7 @@ class ModuleMakerDialogWrapper(
                 onCheckedChange = { onCheckedChange(it) },
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Text(
+            QPWText(
                 modifier = Modifier.padding(start = 8.dp, bottom = 8.dp),
                 text = "This will move files from the selected directory to the new module.",
                 color = QPWTheme.colors.lightGray,
@@ -543,7 +543,7 @@ class ModuleMakerDialogWrapper(
                     onCheckedChange = { onAnalyzeLibrariesChange(it) },
                 )
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(
+                QPWText(
                     modifier = Modifier.padding(start = 8.dp, bottom = 8.dp),
                     text = "Parse libs.versions.toml and include relevant library dependencies.",
                     color = QPWTheme.colors.lightGray,
@@ -644,17 +644,18 @@ class ModuleMakerDialogWrapper(
                     )
                     .padding(16.dp)
             ) {
-                Text(
+                QPWText(
                     text = "Module Dependencies",
                     color = QPWTheme.colors.white,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.SemiBold,
+                    style = TextStyle(
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold,
+                    ),
                 )
                 Spacer(modifier = Modifier.size(8.dp))
-                Text(
+                QPWText(
                     text = "Select modules that your new module will depend on:",
                     color = QPWTheme.colors.lightGray,
-                    fontSize = 14.sp,
                 )
                 Divider(
                     color = QPWTheme.colors.lightGray,
@@ -704,17 +705,18 @@ class ModuleMakerDialogWrapper(
                     )
                     .padding(16.dp)
             ) {
-                Text(
+                QPWText(
                     text = "Library Dependencies",
                     color = QPWTheme.colors.white,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.SemiBold,
+                    style = TextStyle(
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold,
+                    ),
                 )
                 Spacer(modifier = Modifier.size(8.dp))
-                Text(
+                QPWText(
                     text = "Select libraries that your new module will depend on:",
                     color = QPWTheme.colors.lightGray,
-                    fontSize = 14.sp,
                 )
                 Divider(
                     color = QPWTheme.colors.lightGray,
@@ -732,11 +734,13 @@ class ModuleMakerDialogWrapper(
                                 .padding(vertical = 4.dp),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            Text(
+                            QPWText(
                                 text = groupName,
                                 color = QPWTheme.colors.red,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 18.sp,
+                                style = TextStyle(
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.Bold,
+                                ),
                             )
                             Spacer(modifier = Modifier.size(8.dp))
                             Icon(

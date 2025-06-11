@@ -39,7 +39,7 @@ fun RootSelectionContent(
             ),
         )
         Spacer(modifier = Modifier.size(4.dp))
-        Text(
+        QPWText(
             text = "Choose the root directory for your new module.",
             color = QPWTheme.colors.lightGray,
         )

@@ -14,10 +14,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.toolwindow.components.QPWCheckbox
+import com.github.cnrture.quickprojectwizard.toolwindow.components.QPWText
 import com.github.cnrture.quickprojectwizard.toolwindow.theme.QPWTheme
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -44,17 +46,18 @@ fun LibrarySelectionContent(
                 )
                 .padding(16.dp)
         ) {
-            Text(
+            QPWText(
                 text = "Library Dependencies",
                 color = QPWTheme.colors.white,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.SemiBold,
+                style = TextStyle(
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.SemiBold,
+                ),
             )
             Spacer(modifier = Modifier.size(8.dp))
-            Text(
+            QPWText(
                 text = "Select libraries that your new module will depend on:",
                 color = QPWTheme.colors.lightGray,
-                fontSize = 14.sp,
             )
             Divider(
                 color = QPWTheme.colors.lightGray,
@@ -72,11 +75,13 @@ fun LibrarySelectionContent(
                             .padding(vertical = 4.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Text(
+                        QPWText(
                             text = groupName,
                             color = QPWTheme.colors.red,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp,
+                            style = TextStyle(
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold,
+                            ),
                         )
                         Spacer(modifier = Modifier.size(8.dp))
                         Icon(

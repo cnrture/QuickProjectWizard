@@ -96,7 +96,7 @@ class SettingsDialogWrapper(project: Project) : QPWDialogWrapper(
                     tabs.forEachIndexed { index, title ->
                         Tab(
                             text = {
-                                Text(
+                                QPWText(
                                     text = title,
                                     style = TextStyle(
                                         fontSize = 16.sp,
