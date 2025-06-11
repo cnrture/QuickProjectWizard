@@ -34,7 +34,7 @@ fun MoveFilesContent(
         QPWCheckbox(
             label = "Move selected files to new module",
             checked = isChecked,
-            color = QPWTheme.colors.red,
+            color = QPWTheme.colors.green,
             onCheckedChange = { onCheckedChange(it) },
         )
         Spacer(modifier = Modifier.height(8.dp))
@@ -49,7 +49,7 @@ fun MoveFilesContent(
             QPWCheckbox(
                 label = "Analyze and include library dependencies",
                 checked = analyzeLibraries,
-                color = QPWTheme.colors.red,
+                color = QPWTheme.colors.green,
                 onCheckedChange = { onAnalyzeLibrariesChange(it) },
             )
             Spacer(modifier = Modifier.height(4.dp))

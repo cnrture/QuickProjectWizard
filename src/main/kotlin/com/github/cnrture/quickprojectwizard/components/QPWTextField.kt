@@ -4,6 +4,7 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 
@@ -14,6 +15,7 @@ fun QPWTextField(
     onValueChange: (String) -> Unit,
     label: String? = null,
     placeholder: String? = null,
+    color: Color = QPWTheme.colors.white,
     textStyle: TextStyle = TextStyle.Default,
     isSingleLine: Boolean = true,
 ) {
@@ -32,7 +34,7 @@ fun QPWTextField(
             cursorColor = QPWTheme.colors.white,
             textColor = QPWTheme.colors.white,
             unfocusedBorderColor = QPWTheme.colors.white,
-            focusedBorderColor = QPWTheme.colors.red,
+            focusedBorderColor = color,
             placeholderColor = QPWTheme.colors.white,
         )
     )

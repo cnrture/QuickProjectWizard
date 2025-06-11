@@ -65,7 +65,7 @@ fun ExistingModulesContent(
                         checked = isChecked,
                         label = module,
                         isBackgroundEnable = true,
-                        color = QPWTheme.colors.red,
+                        color = QPWTheme.colors.green,
                         onCheckedChange = { onCheckedModule(module) },
                     )
                 }

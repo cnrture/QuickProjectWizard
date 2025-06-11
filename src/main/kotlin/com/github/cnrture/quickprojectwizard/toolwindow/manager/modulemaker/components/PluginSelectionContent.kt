@@ -76,9 +76,8 @@ fun PluginSelectionContent(
                     ) {
                         QPWText(
                             text = groupName,
-                            color = QPWTheme.colors.red,
+                            color = QPWTheme.colors.green,
                             style = TextStyle(
-                                fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold,
                             ),
                         )
@@ -86,7 +85,7 @@ fun PluginSelectionContent(
                         Icon(
                             imageVector = Icons.Rounded.ExpandMore,
                             contentDescription = null,
-                            tint = QPWTheme.colors.red,
+                            tint = QPWTheme.colors.green,
                             modifier = Modifier
                                 .size(24.dp)
                                 .rotate(if (isExpanded) 180f else 0f)
@@ -106,7 +105,7 @@ fun PluginSelectionContent(
                                     checked = isChecked,
                                     label = plugin,
                                     isBackgroundEnable = true,
-                                    color = QPWTheme.colors.red,
+                                    color = QPWTheme.colors.green,
                                     onCheckedChange = { onPluginSelected(plugin) },
                                 )
                             }

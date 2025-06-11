@@ -66,9 +66,8 @@ fun MoveExistingFilesToModuleContent(
     expandedPluginGroups: Map<String, Boolean>,
     onPluginGroupExpandToggle: (String) -> Unit,
 ) {
-    Row(
-        modifier = modifier,
-    ) {
+    val radioOptions = listOf(Constants.ANDROID, Constants.KOTLIN)
+    Row(modifier = modifier) {
         AnimatedVisibility(
             modifier = Modifier
                 .fillMaxHeight()
@@ -85,8 +84,6 @@ fun MoveExistingFilesToModuleContent(
                 onSelectedSrc = { onSelectedSrc(it) }
             )
         }
-        val radioOptions = listOf(Constants.ANDROID, Constants.KOTLIN)
-
         Scaffold(
             modifier = Modifier
                 .fillMaxSize()
@@ -118,7 +115,7 @@ fun MoveExistingFilesToModuleContent(
                             MessageDialogWrapper("Please fill out required values").show()
                         }
                     },
-                    color = QPWTheme.colors.red,
+                    color = QPWTheme.colors.green,
                 )
             }
         ) { padding ->
@@ -126,7 +123,6 @@ fun MoveExistingFilesToModuleContent(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
-                    .padding(16.dp)
                     .verticalScroll(rememberScrollState()),
             ) {
                 RootSelectionContent(

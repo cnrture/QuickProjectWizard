@@ -2,13 +2,11 @@ package com.github.cnrture.quickprojectwizard.toolwindow
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.ComposePanel
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -16,6 +14,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.common.Constants
+import com.github.cnrture.quickprojectwizard.components.QPWTabRow
 import com.github.cnrture.quickprojectwizard.components.QPWText
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.colorpicker.ColorPickerComponent
@@ -96,21 +95,21 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                 backgroundColor = QPWTheme.colors.black,
                 contentColor = QPWTheme.colors.white,
             ) {
-                MainTabRow(
+                QPWTabRow(
                     text = tabs[0],
-                    color = QPWTheme.colors.red,
+                    color = QPWTheme.colors.green,
                     isSelected = selectedTab == 0,
                     onTabSelected = { selectedTab = 0 }
                 )
-                MainTabRow(
+                QPWTabRow(
                     text = tabs[1],
-                    color = QPWTheme.colors.purple,
+                    color = QPWTheme.colors.red,
                     isSelected = selectedTab == 1,
                     onTabSelected = { selectedTab = 1 }
                 )
-                MainTabRow(
+                QPWTabRow(
                     text = tabs[2],
-                    color = QPWTheme.colors.green,
+                    color = QPWTheme.colors.purple,
                     isSelected = selectedTab == 2,
                     onTabSelected = { selectedTab = 2 }
                 )
@@ -122,31 +121,5 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                 2 -> ColorPickerComponent()
             }
         }
-    }
-}
-
-@Composable
-private fun MainTabRow(text: String, color: Color, isSelected: Boolean, onTabSelected: () -> Unit) {
-    Box(
-        modifier = Modifier.then(
-            if (isSelected) {
-                Modifier.background(
-                    brush = Brush.verticalGradient(listOf(QPWTheme.colors.black, color.copy(alpha = 0.3f)))
-                )
-            } else {
-                Modifier.background(QPWTheme.colors.black)
-            }
-        )
-    ) {
-        Tab(
-            selected = isSelected,
-            onClick = onTabSelected,
-            text = {
-                QPWText(
-                    text = text,
-                    color = QPWTheme.colors.white,
-                )
-            }
-        )
     }
 }

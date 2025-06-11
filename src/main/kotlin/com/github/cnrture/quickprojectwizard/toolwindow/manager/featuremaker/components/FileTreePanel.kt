@@ -20,7 +20,7 @@ fun FileTreePanel(
     QPWFileTree(
         modifier = modifier,
         model = FileTree(root = File(project.rootDirectoryString()).toProjectFile()),
-        titleColor = QPWTheme.colors.purple,
+        titleColor = QPWTheme.colors.red,
         containerColor = QPWTheme.colors.black,
         onClick = { fileTreeNode ->
             val absolutePathAtNode = fileTreeNode.file.absolutePath

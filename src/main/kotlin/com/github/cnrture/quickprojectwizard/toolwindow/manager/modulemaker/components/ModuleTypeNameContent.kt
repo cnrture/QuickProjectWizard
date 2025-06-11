@@ -56,7 +56,7 @@ fun ModuleTypeNameContent(
                     QPWRadioButton(
                         text = text,
                         selected = text == moduleTypeSelectionState,
-                        color = QPWTheme.colors.red,
+                        color = QPWTheme.colors.green,
                         onClick = { onModuleTypeSelected(text) },
                     )
                     if (text != radioOptions.last()) {
@@ -71,6 +71,7 @@ fun ModuleTypeNameContent(
                 modifier = Modifier.fillMaxWidth(),
                 label = "Package Name",
                 placeholder = "Package Name",
+                color = QPWTheme.colors.green,
                 value = packageName,
                 onValueChange = { onPackageNameChanged(it) },
             )
@@ -78,6 +79,7 @@ fun ModuleTypeNameContent(
             QPWTextField(
                 modifier = Modifier.fillMaxWidth(),
                 label = "Module Name",
+                color = QPWTheme.colors.green,
                 placeholder = Constants.DEFAULT_MODULE_NAME,
                 value = moduleNameState,
                 onValueChange = { onModuleNameChanged(it) },

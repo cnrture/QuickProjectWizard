@@ -30,7 +30,7 @@ fun RootSelectionContent(
     ) {
         QPWText(
             text = "Selected: $selectedSrc",
-            color = QPWTheme.colors.red,
+            color = QPWTheme.colors.green,
             softWrap = true,
             style = TextStyle(
                 fontSize = 14.sp,
@@ -45,7 +45,7 @@ fun RootSelectionContent(
         Spacer(modifier = Modifier.size(8.dp))
         QPWButton(
             text = if (showFileTreeDialog) "Close File Tree" else "Open File Tree",
-            backgroundColor = QPWTheme.colors.red,
+            backgroundColor = QPWTheme.colors.green,
             onClick = onChooseRootClick,
         )
     }

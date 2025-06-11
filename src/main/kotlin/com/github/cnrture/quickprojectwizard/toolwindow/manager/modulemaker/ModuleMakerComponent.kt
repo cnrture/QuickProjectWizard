@@ -1,13 +1,10 @@
 package com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Surface
-import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -19,6 +16,7 @@ import com.github.cnrture.quickprojectwizard.common.file.FileWriter
 import com.github.cnrture.quickprojectwizard.common.file.LibraryDependencyFinder
 import com.github.cnrture.quickprojectwizard.common.rootDirectoryString
 import com.github.cnrture.quickprojectwizard.common.rootDirectoryStringDropLast
+import com.github.cnrture.quickprojectwizard.components.QPWTabRow
 import com.github.cnrture.quickprojectwizard.components.QPWText
 import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
@@ -114,7 +112,7 @@ fun ModuleMakerComponent(project: Project) {
                 modifier = Modifier.fillMaxWidth(),
                 text = "Module Creator",
                 style = TextStyle(
-                    color = QPWTheme.colors.red,
+                    color = QPWTheme.colors.green,
                     fontSize = 28.sp,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,
@@ -126,69 +124,25 @@ fun ModuleMakerComponent(project: Project) {
                 backgroundColor = QPWTheme.colors.black,
                 contentColor = QPWTheme.colors.white,
             ) {
-                Box(
-                    modifier = Modifier
-                        .then(
-                            if (selectedTab == 0) {
-                                Modifier.background(
-                                    brush = Brush.verticalGradient(
-                                        colors = listOf(
-                                            QPWTheme.colors.black,
-                                            QPWTheme.colors.red.copy(alpha = 0.3f),
-                                        )
-                                    )
-                                )
-                            } else {
-                                Modifier.background(QPWTheme.colors.black)
-                            }
-                        )
-                ) {
-                    Tab(
-                        selected = selectedTab == 0,
-                        onClick = { selectedTab = 0 },
-                        text = {
-                            QPWText(
-                                text = tabs[0],
-                                color = QPWTheme.colors.white,
-                            )
-                        }
-                    )
-                }
-                Box(
-                    modifier = Modifier
-                        .then(
-                            if (selectedTab == 1) {
-                                Modifier.background(
-                                    brush = Brush.verticalGradient(
-                                        colors = listOf(
-                                            QPWTheme.colors.black,
-                                            QPWTheme.colors.red.copy(alpha = 0.3f),
-                                        )
-                                    )
-                                )
-                            } else {
-                                Modifier.background(QPWTheme.colors.black)
-                            }
-                        )
-                ) {
-                    Tab(
-                        selected = selectedTab == 1,
-                        onClick = { selectedTab = 1 },
-                        text = {
-                            QPWText(
-                                text = tabs[1],
-                                color = QPWTheme.colors.white,
-                            )
-                        }
-                    )
-                }
+                QPWTabRow(
+                    text = tabs[0],
+                    color = QPWTheme.colors.green,
+                    isSelected = selectedTab == 0,
+                    onTabSelected = { selectedTab = 0 }
+                )
+                QPWTabRow(
+                    text = tabs[1],
+                    color = QPWTheme.colors.green,
+                    isSelected = selectedTab == 1,
+                    onTabSelected = { selectedTab = 1 }
+                )
             }
             Spacer(modifier = Modifier.size(24.dp))
             when (selectedTab) {
                 0 -> CreateNewModuleConfigurationPanel(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(24.dp),
+                        .padding(horizontal = 40.dp, vertical = 16.dp),
                     project = project,
                     fileWriter = fileWriter,
                     selectedSrc = selectedSrc.value,
@@ -202,38 +156,25 @@ fun ModuleMakerComponent(project: Project) {
                     availableLibraries = availableLibraries,
                     selectedLibraries = selectedLibraries,
                     onLibrarySelected = {
-                        if (it in selectedLibraries) {
-                            selectedLibraries.remove(it)
-                        } else {
-                            selectedLibraries.add(it)
-                        }
+                        if (it in selectedLibraries) selectedLibraries.remove(it) else selectedLibraries.add(it)
                     },
                     libraryGroups = libraryGroups,
                     expandedGroups = expandedGroups,
-                    onGroupExpandToggle = { group ->
-                        expandedGroups[group] = !(expandedGroups[group] ?: false)
-                    },
+                    onGroupExpandToggle = { expandedGroups[it] = !(expandedGroups[it] ?: false) },
                     availablePlugins = availablePlugins,
                     selectedPlugins = selectedPlugins,
                     onPluginSelected = {
-                        if (it in selectedPlugins) {
-                            selectedPlugins.remove(it)
-                        } else {
-                            selectedPlugins.add(it)
-                        }
+                        if (it in selectedPlugins) selectedPlugins.remove(it) else selectedPlugins.add(it)
                     },
                     pluginGroups = pluginGroups,
                     expandedPluginGroups = expandedPluginGroups,
-                    onPluginGroupExpandToggle = { group ->
-                        expandedPluginGroups[group] = !(expandedPluginGroups[group] ?: false)
-                    },
-
-                    )
+                    onPluginGroupExpandToggle = { expandedPluginGroups[it] = !(expandedPluginGroups[it] ?: false) },
+                )
 
                 1 -> MoveExistingFilesToModuleContent(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(24.dp),
+                        .padding(horizontal = 40.dp, vertical = 16.dp),
                     project = project,
                     fileWriter = fileWriter,
                     isAnalyzingState = isAnalyzing.value,
@@ -259,38 +200,24 @@ fun ModuleMakerComponent(project: Project) {
                     existingModules = existingModules,
                     selectedModules = selectedModules,
                     onCheckedModule = {
-                        if (it in selectedModules) {
-                            selectedModules.remove(it)
-                        } else {
-                            selectedModules.add(it)
-                        }
+                        if (it in selectedModules) selectedModules.remove(it) else selectedModules.add(it)
                     },
                     availableLibraries = availableLibraries,
                     selectedLibraries = selectedLibraries,
                     onLibrarySelected = {
-                        if (it in selectedLibraries) {
-                            selectedLibraries.remove(it)
-                        } else {
-                            selectedLibraries.add(it)
-                        }
+                        if (it in selectedLibraries) selectedLibraries.remove(it) else selectedLibraries.add(it)
                     },
                     libraryGroups = libraryGroups,
                     expandedGroups = expandedGroups,
                     detectedLibraries = detectedLibraries,
-                    onGroupExpandToggle = { group ->
-                        expandedGroups[group] = !(expandedGroups[group] ?: false)
-                    },
+                    onGroupExpandToggle = { expandedGroups[it] = !(expandedGroups[it] ?: false) },
                     showFileTreeDialog = showFileTreeDialog,
                     onFileTreeDialogStateChange = { showFileTreeDialog = !showFileTreeDialog },
                     onSelectedSrc = { selectedSrc.value = it },
                     availablePlugins = availablePlugins,
                     selectedPlugins = selectedPlugins,
                     onPluginSelected = {
-                        if (it in selectedPlugins) {
-                            selectedPlugins.remove(it)
-                        } else {
-                            selectedPlugins.add(it)
-                        }
+                        if (it in selectedPlugins) selectedPlugins.remove(it) else selectedPlugins.add(it)
                     },
                     pluginGroups = pluginGroups,
                     expandedPluginGroups = expandedPluginGroups,

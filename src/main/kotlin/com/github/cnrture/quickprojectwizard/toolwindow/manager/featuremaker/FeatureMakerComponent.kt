@@ -49,7 +49,7 @@ fun FeatureMakerComponent(project: Project) {
                 modifier = Modifier.fillMaxWidth(),
                 text = "Feature Creator",
                 style = TextStyle(
-                    color = QPWTheme.colors.purple,
+                    color = QPWTheme.colors.red,
                     fontSize = 28.sp,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,

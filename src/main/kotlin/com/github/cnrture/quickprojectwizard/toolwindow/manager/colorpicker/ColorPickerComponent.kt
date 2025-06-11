@@ -57,7 +57,7 @@ fun ColorPickerComponent() {
             modifier = Modifier.fillMaxWidth(),
             text = "Color Picker",
             style = TextStyle(
-                color = QPWTheme.colors.green,
+                color = QPWTheme.colors.purple,
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
@@ -74,7 +74,7 @@ fun ColorPickerComponent() {
                 modifier = Modifier.weight(1f),
                 title = "Pick Color",
                 icon = Icons.Rounded.ColorLens,
-                actionColor = QPWTheme.colors.green,
+                actionColor = QPWTheme.colors.purple,
                 onClick = {
                     startColorPicking { color ->
                         val colorInfo = createColorInfo(color)
@@ -126,7 +126,7 @@ private fun ColorInfoRow(label: String, value: String) {
         Spacer(modifier = Modifier.width(8.dp))
         QPWText(
             text = value,
-            color = QPWTheme.colors.green,
+            color = QPWTheme.colors.purple,
             style = TextStyle(
                 fontSize = 12.sp,
                 fontFamily = FontFamily.Monospace,
@@ -175,7 +175,7 @@ private fun ColorHistoryItem(
                     modifier = Modifier,
                     title = "HEX",
                     icon = Icons.Rounded.ContentCopy,
-                    actionColor = QPWTheme.colors.green,
+                    actionColor = QPWTheme.colors.purple,
                     type = QPWActionCardType.SMALL,
                     onClick = { onCopyHex() }
                 )
@@ -184,7 +184,7 @@ private fun ColorHistoryItem(
                     modifier = Modifier,
                     title = "RGB",
                     icon = Icons.Rounded.ContentCopy,
-                    actionColor = QPWTheme.colors.green,
+                    actionColor = QPWTheme.colors.purple,
                     type = QPWActionCardType.SMALL,
                     onClick = { onCopyRgb() }
                 )

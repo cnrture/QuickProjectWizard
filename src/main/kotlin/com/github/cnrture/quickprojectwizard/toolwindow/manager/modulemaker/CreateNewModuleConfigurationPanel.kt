@@ -78,7 +78,7 @@ fun CreateNewModuleConfigurationPanel(
                         MessageDialogWrapper("Please fill out required values").show()
                     }
                 },
-                color = QPWTheme.colors.red,
+                color = QPWTheme.colors.green,
             )
         }
     ) { padding ->

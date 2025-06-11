@@ -67,7 +67,7 @@ fun DetectModulesContent(
                 if (isAnalyzingState) {
                     CircularProgressIndicator(
                         modifier = Modifier.size(24.dp),
-                        color = QPWTheme.colors.red,
+                        color = QPWTheme.colors.green,
                         strokeWidth = 2.dp,
                     )
                 } else {
@@ -92,7 +92,7 @@ fun DetectModulesContent(
                                 }
                             },
                         imageVector = Icons.Rounded.PlayArrow,
-                        tint = QPWTheme.colors.red,
+                        tint = QPWTheme.colors.green,
                         contentDescription = null,
                     )
                 }
@@ -107,7 +107,7 @@ fun DetectModulesContent(
         analysisResultState?.let { result ->
             QPWText(
                 text = result,
-                color = QPWTheme.colors.red,
+                color = QPWTheme.colors.green,
             )
         }
     }

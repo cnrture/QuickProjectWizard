@@ -49,7 +49,7 @@ fun ConfigurationPanel(
                         MessageDialogWrapper("Please fill out required values").show()
                     }
                 },
-                color = QPWTheme.colors.purple,
+                color = QPWTheme.colors.red,
             )
         }
     ) { padding ->
@@ -71,7 +71,8 @@ fun ConfigurationPanel(
             QPWTextField(
                 modifier = Modifier.fillMaxWidth(),
                 label = "Feature Name",
-                placeholder = "feature name",
+                placeholder = "Feature name",
+                color = QPWTheme.colors.red,
                 value = featureName,
                 onValueChange = onFeatureNameChange,
             )

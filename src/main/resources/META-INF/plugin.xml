@@ -22,7 +22,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow
                 factoryClass="com.github.cnrture.quickprojectwizard.toolwindow.QuickProjectWizardToolWindowFactory"
-                id="QuickProjectWizard DevTools"
+                id="QuickProjectWizard"
                 anchor="right"
                 icon="/icons/pluginIcon.svg"/>
     </extensions>

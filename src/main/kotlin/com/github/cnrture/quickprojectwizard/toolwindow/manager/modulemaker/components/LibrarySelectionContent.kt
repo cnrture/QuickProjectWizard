@@ -76,9 +76,8 @@ fun LibrarySelectionContent(
                     ) {
                         QPWText(
                             text = groupName,
-                            color = QPWTheme.colors.red,
+                            color = QPWTheme.colors.green,
                             style = TextStyle(
-                                fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold,
                             ),
                         )
@@ -86,7 +85,7 @@ fun LibrarySelectionContent(
                         Icon(
                             imageVector = Icons.Rounded.ExpandMore,
                             contentDescription = null,
-                            tint = QPWTheme.colors.red,
+                            tint = QPWTheme.colors.green,
                             modifier = Modifier
                                 .size(24.dp)
                                 .rotate(if (isExpanded) 180f else 0f)
@@ -106,7 +105,7 @@ fun LibrarySelectionContent(
                                     checked = isChecked,
                                     label = library,
                                     isBackgroundEnable = true,
-                                    color = QPWTheme.colors.red,
+                                    color = QPWTheme.colors.green,
                                     onCheckedChange = { onLibrarySelected(library) },
                                 )
                             }
