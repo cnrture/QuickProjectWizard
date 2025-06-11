@@ -43,7 +43,7 @@ fun FeatureMakerComponent(project: Project) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(24.dp),
+                .padding(vertical = 24.dp),
         ) {
             QPWText(
                 modifier = Modifier.fillMaxWidth(),
@@ -56,7 +56,11 @@ fun FeatureMakerComponent(project: Project) {
                 ),
             )
             Spacer(modifier = Modifier.size(24.dp))
-            Row {
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 40.dp, vertical = 16.dp),
+            ) {
                 AnimatedVisibility(
                     modifier = Modifier
                         .fillMaxHeight()

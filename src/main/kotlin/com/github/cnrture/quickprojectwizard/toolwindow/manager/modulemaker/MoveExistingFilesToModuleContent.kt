@@ -3,19 +3,21 @@ package com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Create
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.github.cnrture.quickprojectwizard.common.Constants
 import com.github.cnrture.quickprojectwizard.common.Utils
 import com.github.cnrture.quickprojectwizard.common.file.FileWriter
 import com.github.cnrture.quickprojectwizard.common.file.LibraryDependencyFinder
-import com.github.cnrture.quickprojectwizard.components.QPWDialogActions
+import com.github.cnrture.quickprojectwizard.components.QPWActionCard
 import com.github.cnrture.quickprojectwizard.dialog.MessageDialogWrapper
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.components.*
@@ -90,33 +92,39 @@ fun MoveExistingFilesToModuleContent(
                 .weight(0.7f),
             backgroundColor = QPWTheme.colors.black,
             bottomBar = {
-                QPWDialogActions(
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(QPWTheme.colors.black),
-                    onCreateClick = {
-                        if (Utils.validateModuleInput(packageName, moduleNameState) && selectedSrc.isNotEmpty()) {
-                            Utils.createModule(
-                                project = project,
-                                fileWriter = fileWriter,
-                                selectedSrc = selectedSrc,
-                                packageName = packageName,
-                                moduleName = moduleNameState,
-                                moduleType = moduleType,
-                                isMoveFiles = isMoveFiles,
-                                analyzeLibraries = analyzeLibraries,
-                                libraryDependencyFinder = libraryDependencyFinder,
-                                selectedModules = selectedModules,
-                                selectedLibraries = selectedLibraries,
-                                detectedLibraries = detectedLibraries,
-                                selectedPlugins = selectedPlugins,
-                            )
-                        } else {
-                            MessageDialogWrapper("Please fill out required values").show()
+                        .padding(top = 16.dp),
+                    contentAlignment = Alignment.CenterEnd,
+                ) {
+                    QPWActionCard(
+                        title = "Create",
+                        icon = Icons.Default.Create,
+                        actionColor = QPWTheme.colors.green,
+                        onClick = {
+                            if (Utils.validateModuleInput(packageName, moduleNameState) && selectedSrc.isNotEmpty()) {
+                                Utils.createModule(
+                                    project = project,
+                                    fileWriter = fileWriter,
+                                    selectedSrc = selectedSrc,
+                                    packageName = packageName,
+                                    moduleName = moduleNameState,
+                                    moduleType = moduleType,
+                                    isMoveFiles = isMoveFiles,
+                                    analyzeLibraries = analyzeLibraries,
+                                    libraryDependencyFinder = libraryDependencyFinder,
+                                    selectedModules = selectedModules,
+                                    selectedLibraries = selectedLibraries,
+                                    detectedLibraries = detectedLibraries,
+                                    selectedPlugins = selectedPlugins,
+                                )
+                            } else {
+                                MessageDialogWrapper("Please fill out required values").show()
+                            }
                         }
-                    },
-                    color = QPWTheme.colors.green,
-                )
+                    )
+                }
             }
         ) { padding ->
             Column(

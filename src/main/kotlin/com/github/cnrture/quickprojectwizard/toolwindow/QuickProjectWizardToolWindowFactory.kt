@@ -3,19 +3,24 @@ package com.github.cnrture.quickprojectwizard.toolwindow
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.TabRow
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.ComposePanel
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.common.Constants
+import com.github.cnrture.quickprojectwizard.components.QPWActionCard
+import com.github.cnrture.quickprojectwizard.components.QPWActionCardType
 import com.github.cnrture.quickprojectwizard.components.QPWTabRow
 import com.github.cnrture.quickprojectwizard.components.QPWText
+import com.github.cnrture.quickprojectwizard.dialog.SettingsDialogWrapper
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.colorpicker.ColorPickerComponent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.featuremaker.FeatureMakerComponent
@@ -45,25 +50,33 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
         ComposePanel().apply {
             setContent {
                 QPWTheme {
-                    Box(
+                    Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(QPWTheme.colors.black),
+                            .background(QPWTheme.colors.black)
+                            .padding(24.dp),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         QPWText(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(24.dp),
+                            modifier = Modifier.weight(1f),
                             text = "Quick Project Wizard",
                             style = TextStyle(
                                 fontSize = 30.sp,
                                 fontWeight = FontWeight.Bold,
-                                textAlign = TextAlign.Center,
                                 brush = Brush.horizontalGradient(
                                     colors = listOf(QPWTheme.colors.red, QPWTheme.colors.purple, QPWTheme.colors.green),
                                     tileMode = TileMode.Mirror,
                                 ),
                             ),
+                        )
+                        Spacer(modifier = Modifier.width(16.dp))
+                        QPWActionCard(
+                            modifier = Modifier.padding(),
+                            title = "Settings",
+                            type = QPWActionCardType.MEDIUM,
+                            icon = Icons.Default.Settings,
+                            actionColor = QPWTheme.colors.lightGray,
+                            onClick = { SettingsDialogWrapper().apply { show() } },
                         )
                     }
                 }
