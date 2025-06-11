@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.awt.ComposePanel
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.intellij.openapi.ui.DialogWrapper
+import com.intellij.ui.JBColor
 import com.intellij.util.ui.JBUI
 import java.awt.Color
 import javax.swing.Action
@@ -17,7 +18,10 @@ abstract class QPWDialogWrapper(
     height: Int = 0,
 ) : DialogWrapper(true) {
 
-    private val color = Color(0xFF18181B.toInt())
+    private val color = JBColor(
+        Color(0xFF18181B.toInt()),
+        Color(0xFF18181B.toInt())
+    )
 
     init {
         init()

@@ -303,7 +303,10 @@ private fun startColorPicking(onColorPicked: (Color) -> Unit) {
                             graphics.color = JBColor.BLACK
                             graphics.drawOval(finalPreviewX - 1, finalPreviewY - 1, zoomSize + 2, zoomSize + 2)
 
-                            val currentPixelColor = java.awt.Color(screenCapture.getRGB(screenX, screenY))
+                            val currentPixelColor = JBColor(
+                                screenCapture.getRGB(screenX, screenY),
+                                    screenCapture.getRGB(screenX, screenY)
+                            )
                             val hexColor = "#%02X%02X%02X".format(
                                 currentPixelColor.red,
                                 currentPixelColor.green,
