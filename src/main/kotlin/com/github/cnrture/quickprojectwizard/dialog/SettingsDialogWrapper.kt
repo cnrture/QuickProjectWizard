@@ -30,13 +30,15 @@ import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.toolwindow.template.GradleTemplate
 import com.github.cnrture.quickprojectwizard.toolwindow.template.ManifestTemplate
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
+import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 
 class SettingsDialogWrapper(project: Project) : QPWDialogWrapper(
     width = Constants.SETTINGS_WINDOW_WIDTH,
     height = Constants.SETTINGS_WINDOW_HEIGHT
 ) {
-    private val settings = project.getService(SettingsService::class.java)
+    private val settings = ApplicationManager.getApplication().service<SettingsService>()
     private var currentSettings by mutableStateOf(settings.state.copy())
 
     private val tabs = listOf("General", "Templates")

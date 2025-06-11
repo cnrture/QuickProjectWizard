@@ -22,6 +22,8 @@ import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.toolwindow.file.FileWriter
 import com.github.cnrture.quickprojectwizard.toolwindow.file.LibraryDependencyFinder
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
+import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import java.io.File
 
@@ -30,7 +32,7 @@ fun ModuleMakerComponent(
     project: Project,
 ) {
     val fileWriter = FileWriter(project)
-    val settings = project.getService(SettingsService::class.java)
+    val settings = ApplicationManager.getApplication().service<SettingsService>()
     val libraryDependencyFinder = LibraryDependencyFinder()
 
     var existingModules = listOf<String>()

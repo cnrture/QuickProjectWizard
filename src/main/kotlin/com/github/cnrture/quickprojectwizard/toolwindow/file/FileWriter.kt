@@ -2,14 +2,16 @@ package com.github.cnrture.quickprojectwizard.toolwindow.file
 
 import com.github.cnrture.quickprojectwizard.common.Constants
 import com.github.cnrture.quickprojectwizard.data.SettingsService
-import com.github.cnrture.quickprojectwizard.toolwindow.template.FeatureTemplate
-import com.github.cnrture.quickprojectwizard.toolwindow.template.GitIgnoreTemplate
-import com.github.cnrture.quickprojectwizard.toolwindow.template.ManifestTemplate
-import com.github.cnrture.quickprojectwizard.toolwindow.template.TemplateWriter
 import com.github.cnrture.quickprojectwizard.projectwizard.xmlarch.ui.emptyFragmentLayout
 import com.github.cnrture.quickprojectwizard.projectwizard.xmlarch.ui.emptyMainFragment
 import com.github.cnrture.quickprojectwizard.projectwizard.xmlarch.ui.emptyMainUIState
 import com.github.cnrture.quickprojectwizard.projectwizard.xmlarch.ui.emptyMainViewModelXML
+import com.github.cnrture.quickprojectwizard.toolwindow.template.FeatureTemplate
+import com.github.cnrture.quickprojectwizard.toolwindow.template.GitIgnoreTemplate
+import com.github.cnrture.quickprojectwizard.toolwindow.template.ManifestTemplate
+import com.github.cnrture.quickprojectwizard.toolwindow.template.TemplateWriter
+import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import java.io.File
 import java.io.FileWriter
@@ -21,7 +23,7 @@ import kotlin.io.path.absolutePathString
 
 class FileWriter(project: Project) {
     private val templateWriter = TemplateWriter()
-    private val settings = project.getService(SettingsService::class.java)
+    private val settings = ApplicationManager.getApplication().service<SettingsService>()
 
     fun createModule(
         packageName: String,

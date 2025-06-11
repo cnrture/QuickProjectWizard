@@ -1,6 +1,6 @@
 package com.github.cnrture.quickprojectwizard.projectwizard.general
 
-fun emptyMainApplication(packageName: String, projectName: String) = """
+fun emptyMainApplication(packageName: String) = """
 package $packageName
 
 import android.app.Application
