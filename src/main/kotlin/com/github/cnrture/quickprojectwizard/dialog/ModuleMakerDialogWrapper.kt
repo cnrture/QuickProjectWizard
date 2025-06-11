@@ -87,28 +87,24 @@ class ModuleMakerDialogWrapper(
 
     private fun loadAvailableLibraries() {
         thread {
-            try {
-                val projectRoot = File(project.basePath.orEmpty())
-                if (projectRoot.exists()) {
-                    val libraries = libraryDependencyFinder.parseLibsVersionsToml(projectRoot)
-                    val libraryAliases = libraries.map { it.alias }
+            val projectRoot = File(project.basePath.orEmpty())
+            if (projectRoot.exists()) {
+                val libraries = libraryDependencyFinder.parseLibsVersionsToml(projectRoot)
+                val libraryAliases = libraries.map { it.alias }
 
-                    // Group libraries by prefix (like room-, retrofit-, etc.)
-                    val grouped = groupLibraries(libraryAliases)
+                // Group libraries by prefix (like room-, retrofit-, etc.)
+                val grouped = groupLibraries(libraryAliases)
 
-                    SwingUtilities.invokeLater {
-                        availableLibraries.clear()
-                        availableLibraries.addAll(libraryAliases)
+                SwingUtilities.invokeLater {
+                    availableLibraries.clear()
+                    availableLibraries.addAll(libraryAliases)
 
-                        libraryGroups.clear()
-                        libraryGroups.putAll(grouped)
+                    libraryGroups.clear()
+                    libraryGroups.putAll(grouped)
 
-                        expandedGroups.clear()
-                        grouped.keys.forEach { expandedGroups[it] = false }
-                    }
+                    expandedGroups.clear()
+                    grouped.keys.forEach { expandedGroups[it] = false }
                 }
-            } catch (e: Exception) {
-                // Silently fail
             }
         }
     }

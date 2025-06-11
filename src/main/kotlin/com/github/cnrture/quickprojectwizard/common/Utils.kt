@@ -502,25 +502,20 @@ object Utils {
         expandedGroups: MutableMap<String, Boolean>,
     ) {
         thread {
-            try {
-                val projectRoot = File(project.basePath.orEmpty())
-                if (projectRoot.exists()) {
-                    val libraries = libraryDependencyFinder.parseLibsVersionsToml(projectRoot)
-                    val libraryAliases = libraries.map { it.alias }
+            val projectRoot = File(project.basePath.orEmpty())
+            if (projectRoot.exists()) {
+                val libraries = libraryDependencyFinder.parseLibsVersionsToml(projectRoot)
+                val libraryAliases = libraries.map { it.alias }
 
-                    // Group libraries by prefix (like room-, retrofit-, etc.)
-                    val grouped = groupLibraries(libraryAliases)
+                val grouped = groupLibraries(libraryAliases)
 
-                    SwingUtilities.invokeLater {
-                        onAvailableLibrariesLoaded(libraryAliases)
-                        onLibraryGroupsLoaded(grouped)
+                SwingUtilities.invokeLater {
+                    onAvailableLibrariesLoaded(libraryAliases)
+                    onLibraryGroupsLoaded(grouped)
 
-                        expandedGroups.clear()
-                        grouped.keys.forEach { expandedGroups[it] = false }
-                    }
+                    expandedGroups.clear()
+                    grouped.keys.forEach { expandedGroups[it] = false }
                 }
-            } catch (e: Exception) {
-                // Silently fail
             }
         }
     }
@@ -561,25 +556,20 @@ object Utils {
         expandedPluginGroups: MutableMap<String, Boolean>,
     ) {
         thread {
-            try {
-                val projectRoot = File(project.basePath.orEmpty())
-                if (projectRoot.exists()) {
-                    val plugins = libraryDependencyFinder.parsePluginsFromToml(projectRoot)
-                    val pluginAliases = plugins.map { it.alias }
+            val projectRoot = File(project.basePath.orEmpty())
+            if (projectRoot.exists()) {
+                val plugins = libraryDependencyFinder.parsePluginsFromToml(projectRoot)
+                val pluginAliases = plugins.map { it.alias }
 
-                    // Group plugins by prefix (like kotlin-, compose-, etc.)
-                    val grouped = groupPlugins(pluginAliases)
+                val grouped = groupPlugins(pluginAliases)
 
-                    SwingUtilities.invokeLater {
-                        onAvailablePluginsLoaded(pluginAliases)
-                        onPluginGroupsLoaded(grouped)
+                SwingUtilities.invokeLater {
+                    onAvailablePluginsLoaded(pluginAliases)
+                    onPluginGroupsLoaded(grouped)
 
-                        expandedPluginGroups.clear()
-                        grouped.keys.forEach { expandedPluginGroups[it] = false }
-                    }
+                    expandedPluginGroups.clear()
+                    grouped.keys.forEach { expandedPluginGroups[it] = false }
                 }
-            } catch (e: Exception) {
-                // Silently fail
             }
         }
     }
