@@ -8,7 +8,7 @@ import androidx.compose.ui.graphics.Color
 
 fun lightColors(
     white: Color = Color(0xffecedee),
-    black: Color = Color(0xff000000),
+    black: Color = Color(0xFF131313),
     gray: Color = Color(0xff18181b),
     lightGray: Color = Color(0xffa1a1aa),
     purple: Color = Color(0xff7F52FF),
