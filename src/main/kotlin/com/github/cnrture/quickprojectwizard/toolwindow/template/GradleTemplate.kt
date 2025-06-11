@@ -1,12 +1,21 @@
 package com.github.cnrture.quickprojectwizard.toolwindow.template
 
 object GradleTemplate {
-    fun getAndroidModuleGradleTemplate(packageName: String, dependencies: String): String {
-        return """
-plugins {
+    fun getAndroidModuleGradleTemplate(packageName: String, dependencies: String, plugins: String = ""): String {
+        val defaultPlugins = """
     id 'com.android.library'
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.compose.compiler)"""
+
+        val finalPlugins = if (plugins.isNotEmpty()) {
+            "$defaultPlugins\n$plugins"
+        } else {
+            defaultPlugins
+        }
+
+        return """
+plugins {
+$finalPlugins
 }
 
 android {
@@ -33,10 +42,10 @@ dependencies {
 }""".trimIndent()
     }
 
-    fun getKotlinModuleGradleTemplate() = """
+    fun getKotlinModuleGradleTemplate(plugins: String = "") = """
 plugins {
     id 'java-library'
-    id 'org.jetbrains.kotlin.jvm'
+    id 'org.jetbrains.kotlin.jvm'${if (plugins.isNotEmpty()) "\n$plugins" else ""}
 }
 
 java {

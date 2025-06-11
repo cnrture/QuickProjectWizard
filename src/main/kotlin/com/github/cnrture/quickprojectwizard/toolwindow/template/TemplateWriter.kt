@@ -22,6 +22,7 @@ class TemplateWriter {
         moduleType: String,
         dependencies: List<String> = emptyList(),
         libraryDependencies: String = Constants.EMPTY,
+        pluginDependencies: String = Constants.EMPTY,
     ): List<File> {
         try {
             val data: MutableMap<String, Any> = HashMap()
@@ -31,9 +32,10 @@ class TemplateWriter {
                 Constants.ANDROID -> GradleTemplate.getAndroidModuleGradleTemplate(
                     packageName = packageName,
                     dependencies = buildDependenciesBlock(dependencies, libraryDependencies),
+                    plugins = pluginDependencies,
                 )
 
-                else -> GradleTemplate.getKotlinModuleGradleTemplate()
+                else -> GradleTemplate.getKotlinModuleGradleTemplate(plugins = pluginDependencies)
             }
 
             val fileName = "build.gradle"

@@ -33,6 +33,7 @@ class FileWriter(project: Project) {
         showSuccessDialog: () -> Unit,
         dependencies: List<String> = emptyList(),
         libraryDependencies: String = Constants.EMPTY,
+        pluginDependencies: String = Constants.EMPTY,
     ): List<File> {
         val filesCreated = mutableListOf<File>()
 
@@ -61,6 +62,7 @@ class FileWriter(project: Project) {
             moduleType = moduleType,
             dependencies = dependencies,
             libraryDependencies = libraryDependencies,
+            pluginDependencies = pluginDependencies,
         )
 
         showSuccessDialog()
@@ -75,6 +77,7 @@ class FileWriter(project: Project) {
         moduleType: String,
         dependencies: List<String> = emptyList(),
         libraryDependencies: String = Constants.EMPTY,
+        pluginDependencies: String = Constants.EMPTY,
     ): List<File> {
         val filesCreated = mutableListOf<File>()
 
@@ -84,6 +87,7 @@ class FileWriter(project: Project) {
             moduleType = moduleType,
             dependencies = dependencies,
             libraryDependencies = libraryDependencies,
+            pluginDependencies = pluginDependencies,
         )
 
         if (moduleType == Constants.ANDROID) {

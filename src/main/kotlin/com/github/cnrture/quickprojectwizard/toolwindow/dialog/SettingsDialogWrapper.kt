@@ -324,8 +324,9 @@ class SettingsDialogWrapper(project: Project) : QPWDialogWrapper(
             "Gradle" -> {
                 when (selectedTemplateName) {
                     "Android Module" -> GradleTemplate.getAndroidModuleGradleTemplate(
-                        "com.example",
-                        "// Add dependencies here",
+                        packageName = "com.example",
+                        dependencies = "// Add dependencies here",
+                        plugins = "id 'com.android.application'",
                     )
 
                     "Kotlin Module" -> GradleTemplate.getKotlinModuleGradleTemplate()

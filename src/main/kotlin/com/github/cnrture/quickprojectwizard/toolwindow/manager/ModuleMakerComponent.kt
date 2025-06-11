@@ -61,6 +61,12 @@ fun ModuleMakerComponent(
     val libraryGroups = mutableStateMapOf<String, List<String>>()
     val expandedGroups = mutableStateMapOf<String, Boolean>()
 
+    // Plugin selection
+    val availablePlugins = mutableStateListOf<String>()
+    val selectedPlugins = mutableStateListOf<String>()
+    val pluginGroups = mutableStateMapOf<String, List<String>>()
+    val expandedPluginGroups = mutableStateMapOf<String, Boolean>()
+
     val isMoveFiles = mutableStateOf(false)
     val analyzeLibraries = mutableStateOf(false)
 
@@ -93,6 +99,20 @@ fun ModuleMakerComponent(
             libraryGroups.putAll(it)
         },
         expandedGroups = expandedGroups,
+    )
+
+    loadAvailablePlugins(
+        project = project,
+        libraryDependencyFinder = libraryDependencyFinder,
+        onAvailablePluginsLoaded = {
+            availablePlugins.clear()
+            availablePlugins.addAll(it)
+        },
+        onPluginGroupsLoaded = {
+            pluginGroups.clear()
+            pluginGroups.putAll(it)
+        },
+        expandedPluginGroups = expandedPluginGroups,
     )
 
     selectedSrc.value =
@@ -211,7 +231,22 @@ fun ModuleMakerComponent(
                     onGroupExpandToggle = { group ->
                         expandedGroups[group] = !(expandedGroups[group] ?: false)
                     },
-                )
+                    availablePlugins = availablePlugins,
+                    selectedPlugins = selectedPlugins,
+                    onPluginSelected = {
+                        if (it in selectedPlugins) {
+                            selectedPlugins.remove(it)
+                        } else {
+                            selectedPlugins.add(it)
+                        }
+                    },
+                    pluginGroups = pluginGroups,
+                    expandedPluginGroups = expandedPluginGroups,
+                    onPluginGroupExpandToggle = { group ->
+                        expandedPluginGroups[group] = !(expandedPluginGroups[group] ?: false)
+                    },
+
+                    )
 
                 1 -> MoveExistingFilesToModuleContent(
                     modifier = Modifier
@@ -266,6 +301,20 @@ fun ModuleMakerComponent(
                     showFileTreeDialog = showFileTreeDialog,
                     onFileTreeDialogStateChange = { showFileTreeDialog = !showFileTreeDialog },
                     onSelectedSrc = { selectedSrc.value = it },
+                    availablePlugins = availablePlugins,
+                    selectedPlugins = selectedPlugins,
+                    onPluginSelected = {
+                        if (it in selectedPlugins) {
+                            selectedPlugins.remove(it)
+                        } else {
+                            selectedPlugins.add(it)
+                        }
+                    },
+                    pluginGroups = pluginGroups,
+                    expandedPluginGroups = expandedPluginGroups,
+                    onPluginGroupExpandToggle = { group ->
+                        expandedPluginGroups[group] = !(expandedPluginGroups[group] ?: false)
+                    },
                 )
             }
         }
@@ -310,6 +359,12 @@ private fun MoveExistingFilesToModuleContent(
     showFileTreeDialog: Boolean,
     onFileTreeDialogStateChange: () -> Unit,
     onSelectedSrc: (String) -> Unit,
+    availablePlugins: List<String>,
+    selectedPlugins: List<String>,
+    onPluginSelected: (String) -> Unit,
+    pluginGroups: Map<String, List<String>>,
+    expandedPluginGroups: Map<String, Boolean>,
+    onPluginGroupExpandToggle: (String) -> Unit,
 ) {
     Row(
         modifier = modifier,
@@ -368,6 +423,12 @@ private fun MoveExistingFilesToModuleContent(
             detectedLibraries = detectedLibraries,
             showFileTreeDialog = showFileTreeDialog,
             onFileTreeDialogStateChange = onFileTreeDialogStateChange,
+            availablePlugins = availablePlugins,
+            selectedPlugins = selectedPlugins,
+            onPluginSelected = onPluginSelected,
+            pluginGroups = pluginGroups,
+            expandedPluginGroups = expandedPluginGroups,
+            onPluginGroupExpandToggle = onPluginGroupExpandToggle,
         )
     }
 }
@@ -446,6 +507,65 @@ private fun groupLibraries(libraries: List<String>): Map<String, List<String>> {
     }
 
     // Add ungrouped libraries as individual items
+    if (ungrouped.isNotEmpty()) {
+        grouped["Other"] = ungrouped.toMutableList()
+    }
+
+    return grouped.mapValues { it.value.sorted() }
+}
+
+private fun loadAvailablePlugins(
+    project: Project,
+    libraryDependencyFinder: LibraryDependencyFinder,
+    onAvailablePluginsLoaded: (List<String>) -> Unit,
+    onPluginGroupsLoaded: (Map<String, List<String>>) -> Unit,
+    expandedPluginGroups: MutableMap<String, Boolean>,
+) {
+    thread {
+        try {
+            val projectRoot = File(project.basePath.orEmpty())
+            if (projectRoot.exists()) {
+                val plugins = libraryDependencyFinder.parsePluginsFromToml(projectRoot)
+                val pluginAliases = plugins.map { it.alias }
+
+                // Group plugins by prefix (like kotlin-, compose-, etc.)
+                val grouped = groupPlugins(pluginAliases)
+
+                SwingUtilities.invokeLater {
+                    onAvailablePluginsLoaded(pluginAliases)
+                    onPluginGroupsLoaded(grouped)
+
+                    expandedPluginGroups.clear()
+                    grouped.keys.forEach { expandedPluginGroups[it] = false }
+                }
+            }
+        } catch (e: Exception) {
+            // Silently fail
+        }
+    }
+}
+
+private fun groupPlugins(plugins: List<String>): Map<String, List<String>> {
+    val grouped = mutableMapOf<String, MutableList<String>>()
+    val ungrouped = mutableListOf<String>()
+
+    plugins.forEach { plugin ->
+        val parts = plugin.split("-")
+        if (parts.size > 1) {
+            val prefix = parts[0]
+            // Only group if there are multiple plugins with the same prefix
+            val relatedPlugins = plugins.filter { it.startsWith("$prefix-") }
+            if (relatedPlugins.size > 1) {
+                grouped.getOrPut(prefix) { mutableListOf() }.add(plugin)
+            } else {
+                ungrouped.add(plugin)
+            }
+        } else {
+            ungrouped.add(plugin)
+        }
+    }
+
+    // Add ungrouped plugins as individual items
     if (ungrouped.isNotEmpty()) {
         grouped["Other"] = ungrouped.toMutableList()
     }
@@ -632,6 +752,12 @@ private fun CreateNewModuleConfigurationPanel(
     libraryGroups: Map<String, List<String>>,
     expandedGroups: Map<String, Boolean>,
     onGroupExpandToggle: (String) -> Unit,
+    availablePlugins: List<String>,
+    selectedPlugins: List<String>,
+    onPluginSelected: (String) -> Unit,
+    pluginGroups: Map<String, List<String>>,
+    expandedPluginGroups: Map<String, Boolean>,
+    onPluginGroupExpandToggle: (String) -> Unit,
 ) {
     val radioOptions = listOf(Constants.ANDROID, Constants.KOTLIN)
 
@@ -658,6 +784,7 @@ private fun CreateNewModuleConfigurationPanel(
                             selectedModules = emptyList(),
                             selectedLibraries = selectedLibraries,
                             detectedLibraries = emptyList(),
+                            selectedPlugins = selectedPlugins,
                         )
                     } else {
                         MessageDialogWrapper("Please fill out required values").show()
@@ -690,6 +817,15 @@ private fun CreateNewModuleConfigurationPanel(
                 libraryGroups = libraryGroups,
                 expandedGroups = expandedGroups,
                 onGroupExpandToggle = onGroupExpandToggle,
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            PluginSelectionContent(
+                availablePlugins = availablePlugins,
+                selectedPlugins = selectedPlugins,
+                onPluginSelected = onPluginSelected,
+                pluginGroups = pluginGroups,
+                expandedPluginGroups = expandedPluginGroups,
+                onPluginGroupExpandToggle = onPluginGroupExpandToggle,
             )
         }
     }
@@ -733,6 +869,12 @@ private fun MoveExistingFilesToModuleConfigurationPanel(
     onGroupExpandToggle: (String) -> Unit,
     showFileTreeDialog: Boolean,
     onFileTreeDialogStateChange: () -> Unit,
+    availablePlugins: List<String>,
+    selectedPlugins: List<String>,
+    onPluginSelected: (String) -> Unit,
+    pluginGroups: Map<String, List<String>>,
+    expandedPluginGroups: Map<String, Boolean>,
+    onPluginGroupExpandToggle: (String) -> Unit,
 ) {
     val radioOptions = listOf(Constants.ANDROID, Constants.KOTLIN)
 
@@ -759,6 +901,7 @@ private fun MoveExistingFilesToModuleConfigurationPanel(
                             selectedModules = selectedModules,
                             selectedLibraries = selectedLibraries,
                             detectedLibraries = detectedLibraries,
+                            selectedPlugins = selectedPlugins,
                         )
                     } else {
                         MessageDialogWrapper("Please fill out required values").show()
@@ -835,6 +978,17 @@ private fun MoveExistingFilesToModuleConfigurationPanel(
                 libraryGroups = libraryGroups,
                 expandedGroups = expandedGroups,
                 onGroupExpandToggle = onGroupExpandToggle,
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            PluginSelectionContent(
+                availablePlugins = availablePlugins,
+                selectedPlugins = selectedPlugins,
+                onPluginSelected = onPluginSelected,
+                pluginGroups = pluginGroups,
+                expandedPluginGroups = expandedPluginGroups,
+                onPluginGroupExpandToggle = onPluginGroupExpandToggle,
             )
         }
     }
@@ -1203,6 +1357,100 @@ private fun LibrarySelectionContent(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun PluginSelectionContent(
+    availablePlugins: List<String>,
+    selectedPlugins: List<String>,
+    onPluginSelected: (String) -> Unit,
+    pluginGroups: Map<String, List<String>>,
+    expandedPluginGroups: Map<String, Boolean>,
+    onPluginGroupExpandToggle: (String) -> Unit,
+) {
+    if (availablePlugins.isNotEmpty()) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(
+                    shape = RoundedCornerShape(8.dp)
+                )
+                .border(
+                    width = 2.dp,
+                    color = QPWTheme.colors.white,
+                    shape = RoundedCornerShape(8.dp)
+                )
+                .padding(16.dp)
+        ) {
+            Text(
+                text = "Plugins",
+                color = QPWTheme.colors.white,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold,
+            )
+            Spacer(modifier = Modifier.size(8.dp))
+            Text(
+                text = "Select plugins that your new module will use:",
+                color = QPWTheme.colors.lightGray,
+                fontSize = 14.sp,
+            )
+            Divider(
+                color = QPWTheme.colors.lightGray,
+                modifier = Modifier.padding(vertical = 16.dp)
+            )
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                pluginGroups.forEach { (groupName, groupPlugins) ->
+                    val isExpanded = expandedPluginGroups[groupName] ?: false
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onPluginGroupExpandToggle(groupName) }
+                            .padding(vertical = 4.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = groupName,
+                            color = QPWTheme.colors.red,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp,
+                        )
+                        Spacer(modifier = Modifier.size(8.dp))
+                        Icon(
+                            imageVector = Icons.Rounded.ExpandMore,
+                            contentDescription = null,
+                            tint = QPWTheme.colors.red,
+                            modifier = Modifier
+                                .size(24.dp)
+                                .rotate(if (isExpanded) 180f else 0f)
+                        )
+                    }
+                    if (isExpanded) {
+                        FlowRow(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        ) {
+                            groupPlugins.forEach { plugin ->
+                                val isChecked = plugin in selectedPlugins
+                                QPWCheckbox(
+                                    checked = isChecked,
+                                    label = plugin,
+                                    isBackgroundEnable = true,
+                                    color = QPWTheme.colors.red,
+                                    onCheckedChange = { onPluginSelected(plugin) },
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 private fun moveFilesToNewModule(
     project: Project,
     sourceDir: File,
@@ -1328,8 +1576,8 @@ private fun openNewModule(
     try {
         val moduleRootDir = VfsUtil.findFileByIoFile(modulePath, true)
         if (moduleRootDir != null) {
-            val buildGradleFile = moduleRootDir.findChild("build.gradle")
-                ?: moduleRootDir.findChild("build.gradle.kts")
+            val buildGradleFile = moduleRootDir.findChild("build.gradle.kts")
+                ?: moduleRootDir.findChild("build.gradle")
 
             if (buildGradleFile != null) {
                 FileEditorManager.getInstance(project).openFile(buildGradleFile, true)
@@ -1371,6 +1619,7 @@ private fun createModule(
     detectedLibraries: List<String>,
     selectedLibraries: List<String>,
     selectedModules: List<String>,
+    selectedPlugins: List<String> = emptyList(),
 ): List<File> {
     try {
         val settingsGradleFile = getSettingsGradleFile(project)
@@ -1401,6 +1650,8 @@ private fun createModule(
             val combinedLibraryDependencies = listOf(libraryDependenciesString, manualLibraryDependenciesString)
                 .filter { it.isNotEmpty() }
                 .joinToString("\n")
+
+            val pluginDependenciesString = libraryDependencyFinder.formatPluginDependencies(selectedPlugins)
 
             val filesCreated = fileWriter.createModule(
                 packageName = finalPackageName,
@@ -1437,7 +1688,8 @@ private fun createModule(
                 },
                 workingDirectory = File(project.basePath.orEmpty()),
                 dependencies = selectedModules,
-                libraryDependencies = combinedLibraryDependencies
+                libraryDependencies = combinedLibraryDependencies,
+                pluginDependencies = pluginDependenciesString,
             )
             return filesCreated
         } else {
