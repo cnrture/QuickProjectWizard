@@ -16,9 +16,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.common.Constants
 import com.github.cnrture.quickprojectwizard.toolwindow.components.QPWText
-import com.github.cnrture.quickprojectwizard.toolwindow.manager.ColorPickerComponent
-import com.github.cnrture.quickprojectwizard.toolwindow.manager.FeatureMakerComponent
-import com.github.cnrture.quickprojectwizard.toolwindow.manager.ModuleMakerComponent
+import com.github.cnrture.quickprojectwizard.toolwindow.manager.colorpicker.ColorPickerComponent
+import com.github.cnrture.quickprojectwizard.toolwindow.manager.featuremaker.FeatureMakerComponent
+import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.ModuleMakerComponent
 import com.github.cnrture.quickprojectwizard.toolwindow.theme.QPWTheme
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow

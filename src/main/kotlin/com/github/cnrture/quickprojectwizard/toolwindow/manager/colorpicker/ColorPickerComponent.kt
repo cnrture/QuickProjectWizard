@@ -1,4 +1,4 @@
-package com.github.cnrture.quickprojectwizard.toolwindow.manager
+package com.github.cnrture.quickprojectwizard.toolwindow.manager.colorpicker
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -28,9 +28,14 @@ import com.github.cnrture.quickprojectwizard.toolwindow.theme.QPWTheme
 import com.intellij.ui.JBColor
 import java.awt.*
 import java.awt.datatransfer.StringSelection
+import java.awt.event.KeyAdapter
+import java.awt.event.KeyEvent
 import java.awt.event.MouseEvent
 import java.awt.event.MouseListener
+import java.awt.event.MouseMotionAdapter
 import java.awt.geom.Ellipse2D
+import java.awt.image.BufferedImage
+import java.time.LocalTime
 import javax.swing.JFrame
 import javax.swing.JPanel
 import javax.swing.SwingUtilities
@@ -231,7 +236,7 @@ private fun startColorPicking(onColorPicked: (Color) -> Unit) {
                 private fun drawZoomPreview(
                     g: Graphics?,
                     mousePos: Point,
-                    screenCapture: java.awt.image.BufferedImage,
+                    screenCapture: BufferedImage,
                     screenRect: Rectangle,
                 ) {
                     g?.let { graphics ->
@@ -353,15 +358,15 @@ private fun startColorPicking(onColorPicked: (Color) -> Unit) {
                 override fun mouseExited(e: MouseEvent?) {}
             })
 
-            panel.addMouseMotionListener(object : java.awt.event.MouseMotionAdapter() {
+            panel.addMouseMotionListener(object : MouseMotionAdapter() {
                 override fun mouseMoved(e: MouseEvent?) {
                     panel.repaint()
                 }
             })
 
-            panel.addKeyListener(object : java.awt.event.KeyAdapter() {
-                override fun keyPressed(e: java.awt.event.KeyEvent?) {
-                    if (e?.keyCode == java.awt.event.KeyEvent.VK_ESCAPE) {
+            panel.addKeyListener(object : KeyAdapter() {
+                override fun keyPressed(e: KeyEvent?) {
+                    if (e?.keyCode == KeyEvent.VK_ESCAPE) {
                         frame.dispose()
                     }
                 }
@@ -385,7 +390,7 @@ private fun createColorInfo(color: Color): ColorInfo {
 
     val hex = "#%02X%02X%02X".format(r, g, b)
     val rgb = "rgb($r, $g, $b)"
-    val timestamp = java.time.LocalTime.now().toString().substring(0, 8)
+    val timestamp = LocalTime.now().toString().substring(0, 8)
 
     return ColorInfo(color, hex, rgb, timestamp)
 }

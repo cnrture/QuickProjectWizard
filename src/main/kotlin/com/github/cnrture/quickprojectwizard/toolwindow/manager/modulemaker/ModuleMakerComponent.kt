@@ -1,4 +1,4 @@
-package com.github.cnrture.quickprojectwizard.toolwindow.manager
+package com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -20,9 +20,6 @@ import com.github.cnrture.quickprojectwizard.toolwindow.components.QPWText
 import com.github.cnrture.quickprojectwizard.toolwindow.data.SettingsService
 import com.github.cnrture.quickprojectwizard.toolwindow.file.FileWriter
 import com.github.cnrture.quickprojectwizard.toolwindow.file.LibraryDependencyFinder
-import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.CreateNewModuleConfigurationPanel
-import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.MoveExistingFilesToModuleContent
-import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.Utils
 import com.github.cnrture.quickprojectwizard.toolwindow.theme.QPWTheme
 import com.intellij.openapi.project.Project
 import java.io.File
