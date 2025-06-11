@@ -46,7 +46,7 @@ class QPWColor(
     private var _lightGray: Color by mutableStateOf(lightGray)
     val lightGray: Color = _lightGray
 
-    private var _red : Color by mutableStateOf(red)
+    private var _red: Color by mutableStateOf(red)
     val red: Color = _red
 
     private var _purple: Color by mutableStateOf(purple)

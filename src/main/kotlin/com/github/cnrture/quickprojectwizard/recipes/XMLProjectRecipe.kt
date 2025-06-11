@@ -7,7 +7,6 @@ import com.android.tools.idea.wizard.template.RecipeExecutor
 import com.android.tools.idea.wizard.template.escapeKotlinIdentifier
 import com.github.cnrture.quickprojectwizard.addRootFile
 import com.github.cnrture.quickprojectwizard.addSrcFile
-import com.github.cnrture.quickprojectwizard.toolwindow.data.SettingsService
 import com.github.cnrture.quickprojectwizard.general.*
 import com.github.cnrture.quickprojectwizard.general.data.model.emptyMainEntityModel
 import com.github.cnrture.quickprojectwizard.general.data.repository.emptyMainRepositoryImpl
@@ -23,6 +22,7 @@ import com.github.cnrture.quickprojectwizard.general.domain.emptyMainRepository
 import com.github.cnrture.quickprojectwizard.gradle.getDependencies
 import com.github.cnrture.quickprojectwizard.gradle.getGradleKts
 import com.github.cnrture.quickprojectwizard.gradle.getProjectGradleKts
+import com.github.cnrture.quickprojectwizard.toolwindow.data.SettingsService
 import com.github.cnrture.quickprojectwizard.util.NotificationUtil
 import com.github.cnrture.quickprojectwizard.xmlarch.common.emptyCollectExtension
 import com.github.cnrture.quickprojectwizard.xmlarch.ui.*

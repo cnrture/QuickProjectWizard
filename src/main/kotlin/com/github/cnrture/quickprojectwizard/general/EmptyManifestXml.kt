@@ -4,7 +4,7 @@ fun emptyManifestXml(
     styleName: String,
     isHiltEnable: Boolean,
     dataDiDomainPresentationUiPackages: Boolean,
-    projectName: String
+    projectName: String,
 ): String {
     return if (isHiltEnable && dataDiDomainPresentationUiPackages) {
         hilt(styleName, projectName)

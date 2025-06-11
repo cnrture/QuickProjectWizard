@@ -90,7 +90,7 @@ val composeMultiplatformTemplate = template {
         TextFieldWidget(screens),
         LabelWidget(
             "Please enter the screens you want to create. (e.g. Home, Detail, Profile)" +
-                    "\nNote: First item is start destination"
+                "\nNote: First item is start destination"
         ),
         UrlLinkWidget("Created by Caner Ture", "https://bento.me/canerture"),
         PackageNameWidget(packageName)
