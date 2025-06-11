@@ -8,13 +8,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.github.cnrture.quickprojectwizard.toolwindow.components.QPWDialogActions
-import com.github.cnrture.quickprojectwizard.toolwindow.components.QPWText
-import com.github.cnrture.quickprojectwizard.toolwindow.components.QPWTextField
-import com.github.cnrture.quickprojectwizard.toolwindow.dialog.MessageDialogWrapper
+import com.github.cnrture.quickprojectwizard.common.Utils
+import com.github.cnrture.quickprojectwizard.components.QPWDialogActions
+import com.github.cnrture.quickprojectwizard.components.QPWText
+import com.github.cnrture.quickprojectwizard.components.QPWTextField
+import com.github.cnrture.quickprojectwizard.dialog.MessageDialogWrapper
+import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.github.cnrture.quickprojectwizard.toolwindow.file.FileWriter
-import com.github.cnrture.quickprojectwizard.toolwindow.manager.featuremaker.Utils
-import com.github.cnrture.quickprojectwizard.toolwindow.theme.QPWTheme
 import com.intellij.openapi.project.Project
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -38,7 +38,7 @@ fun ConfigurationPanel(
                     .fillMaxWidth()
                     .background(QPWTheme.colors.black),
                 onCreateClick = {
-                    if (Utils.validateInput(featureName, selectedSrc)) {
+                    if (Utils.validateFeatureInput(featureName, selectedSrc)) {
                         Utils.createFeature(
                             project = project,
                             selectedSrc = selectedSrc,

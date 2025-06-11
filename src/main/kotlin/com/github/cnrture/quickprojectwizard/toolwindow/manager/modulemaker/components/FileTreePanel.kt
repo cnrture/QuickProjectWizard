@@ -4,10 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.github.cnrture.quickprojectwizard.common.rootDirectoryString
 import com.github.cnrture.quickprojectwizard.common.rootDirectoryStringDropLast
-import com.github.cnrture.quickprojectwizard.toolwindow.components.QPWFileTree
+import com.github.cnrture.quickprojectwizard.common.toProjectFile
+import com.github.cnrture.quickprojectwizard.components.QPWFileTree
+import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.github.cnrture.quickprojectwizard.toolwindow.file.FileTree
-import com.github.cnrture.quickprojectwizard.toolwindow.file.toProjectFile
-import com.github.cnrture.quickprojectwizard.toolwindow.theme.QPWTheme
 import com.intellij.openapi.project.Project
 import java.io.File
 

@@ -7,9 +7,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.github.cnrture.quickprojectwizard.toolwindow.components.QPWCheckbox
-import com.github.cnrture.quickprojectwizard.toolwindow.components.QPWText
-import com.github.cnrture.quickprojectwizard.toolwindow.theme.QPWTheme
+import com.github.cnrture.quickprojectwizard.components.QPWCheckbox
+import com.github.cnrture.quickprojectwizard.components.QPWText
+import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 
 @Composable
 fun MoveFilesContent(

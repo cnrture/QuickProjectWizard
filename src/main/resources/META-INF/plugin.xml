@@ -10,7 +10,7 @@
     <depends>com.intellij.modules.java</depends>
 
     <extensions defaultExtensionNs="com.android.tools.idea.wizard.template">
-        <wizardTemplateProvider implementation="com.github.cnrture.quickprojectwizard.AndroidStudioTemplateProvider"/>
+        <wizardTemplateProvider implementation="com.github.cnrture.quickprojectwizard.projectwizard.AndroidStudioTemplateProvider"/>
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij">
@@ -29,7 +29,7 @@
 
     <actions>
         <action id="QuickProjectWizard.NewFeature"
-                class="com.github.cnrture.quickprojectwizard.toolwindow.action.CreateFeatureAction"
+                class="com.github.cnrture.quickprojectwizard.action.CreateFeatureAction"
                 text="Add Feature"
                 description="Create a new feature"
                 icon="/icons/pluginIcon.svg">

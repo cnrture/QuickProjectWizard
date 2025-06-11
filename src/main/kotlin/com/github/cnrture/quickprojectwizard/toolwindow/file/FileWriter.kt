@@ -1,15 +1,15 @@
 package com.github.cnrture.quickprojectwizard.toolwindow.file
 
 import com.github.cnrture.quickprojectwizard.common.Constants
-import com.github.cnrture.quickprojectwizard.toolwindow.data.SettingsService
+import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.toolwindow.template.FeatureTemplate
 import com.github.cnrture.quickprojectwizard.toolwindow.template.GitIgnoreTemplate
 import com.github.cnrture.quickprojectwizard.toolwindow.template.ManifestTemplate
 import com.github.cnrture.quickprojectwizard.toolwindow.template.TemplateWriter
-import com.github.cnrture.quickprojectwizard.xmlarch.ui.emptyFragmentLayout
-import com.github.cnrture.quickprojectwizard.xmlarch.ui.emptyMainFragment
-import com.github.cnrture.quickprojectwizard.xmlarch.ui.emptyMainUIState
-import com.github.cnrture.quickprojectwizard.xmlarch.ui.emptyMainViewModelXML
+import com.github.cnrture.quickprojectwizard.projectwizard.xmlarch.ui.emptyFragmentLayout
+import com.github.cnrture.quickprojectwizard.projectwizard.xmlarch.ui.emptyMainFragment
+import com.github.cnrture.quickprojectwizard.projectwizard.xmlarch.ui.emptyMainUIState
+import com.github.cnrture.quickprojectwizard.projectwizard.xmlarch.ui.emptyMainViewModelXML
 import com.intellij.openapi.project.Project
 import java.io.File
 import java.io.FileWriter

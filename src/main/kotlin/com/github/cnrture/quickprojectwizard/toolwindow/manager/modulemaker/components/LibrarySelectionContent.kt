@@ -17,9 +17,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.github.cnrture.quickprojectwizard.toolwindow.components.QPWCheckbox
-import com.github.cnrture.quickprojectwizard.toolwindow.components.QPWText
-import com.github.cnrture.quickprojectwizard.toolwindow.theme.QPWTheme
+import com.github.cnrture.quickprojectwizard.components.QPWCheckbox
+import com.github.cnrture.quickprojectwizard.components.QPWText
+import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable

@@ -9,14 +9,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.github.cnrture.quickprojectwizard.common.Constants
-import com.github.cnrture.quickprojectwizard.toolwindow.components.QPWDialogActions
-import com.github.cnrture.quickprojectwizard.toolwindow.dialog.MessageDialogWrapper
+import com.github.cnrture.quickprojectwizard.common.Utils
+import com.github.cnrture.quickprojectwizard.components.QPWDialogActions
+import com.github.cnrture.quickprojectwizard.dialog.MessageDialogWrapper
+import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.github.cnrture.quickprojectwizard.toolwindow.file.FileWriter
 import com.github.cnrture.quickprojectwizard.toolwindow.file.LibraryDependencyFinder
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.components.LibrarySelectionContent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.components.ModuleTypeNameContent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.components.PluginSelectionContent
-import com.github.cnrture.quickprojectwizard.toolwindow.theme.QPWTheme
 import com.intellij.openapi.project.Project
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -57,7 +58,7 @@ fun CreateNewModuleConfigurationPanel(
                     .fillMaxWidth()
                     .background(QPWTheme.colors.black),
                 onCreateClick = {
-                    if (Utils.validateInput(packageName, moduleNameState) && selectedSrc.isNotEmpty()) {
+                    if (Utils.validateModuleInput(packageName, moduleNameState) && selectedSrc.isNotEmpty()) {
                         Utils.createModule(
                             project = project,
                             fileWriter = fileWriter,

@@ -12,10 +12,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.common.Constants
-import com.github.cnrture.quickprojectwizard.toolwindow.components.QPWRadioButton
-import com.github.cnrture.quickprojectwizard.toolwindow.components.QPWText
-import com.github.cnrture.quickprojectwizard.toolwindow.components.QPWTextField
-import com.github.cnrture.quickprojectwizard.toolwindow.theme.QPWTheme
+import com.github.cnrture.quickprojectwizard.components.QPWRadioButton
+import com.github.cnrture.quickprojectwizard.components.QPWText
+import com.github.cnrture.quickprojectwizard.components.QPWTextField
+import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 
 @Composable
 fun ModuleTypeNameContent(
