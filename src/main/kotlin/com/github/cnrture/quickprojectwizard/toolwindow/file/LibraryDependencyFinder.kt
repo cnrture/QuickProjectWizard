@@ -49,10 +49,10 @@ class LibraryDependencyFinder {
         val librariesContent = librariesSection[1].split("[").first()
 
         val modulePattern =
-            """(\w+(?:-\w+)*)\s*=\s*\{\s*module\s*=\s*["']([^:"']+):([^"']+)["']\s*(?:,\s*version\.ref\s*=\s*["']([^"']+)["'])?\s*(?:,\s*version\s*=\s*["']([^"']+)["'])?\s*\}""".toRegex()
+            """(\w+(?:-\w+)*)\s*=\s*\{\s*module\s*=\s*["']([^:"']+):([^"']+)["']\s*(?:,\s*version\.ref\s*=\s*["']([^"']+)["'])?\s*(?:,\s*version\s*=\s*["']([^"']+)["'])?\s*}""".toRegex()
 
         val groupNamePattern =
-            """(\w+(?:-\w+)*)\s*=\s*\{\s*group\s*=\s*["']([^"']+)["']\s*,\s*name\s*=\s*["']([^"']+)["']\s*(?:,\s*version\.ref\s*=\s*["']([^"']+)["'])?\s*(?:,\s*version\s*=\s*["']([^"']+)["'])?\s*\}""".toRegex()
+            """(\w+(?:-\w+)*)\s*=\s*\{\s*group\s*=\s*["']([^"']+)["']\s*,\s*name\s*=\s*["']([^"']+)["']\s*(?:,\s*version\.ref\s*=\s*["']([^"']+)["'])?\s*(?:,\s*version\s*=\s*["']([^"']+)["'])?\s*}""".toRegex()
 
         val moduleMatches = modulePattern.findAll(librariesContent)
         moduleMatches.forEach { match ->
@@ -126,7 +126,7 @@ class LibraryDependencyFinder {
         // kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
         // compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
         val pluginPattern =
-            """(\w+(?:-\w+)*)\s*=\s*\{\s*id\s*=\s*["']([^"']+)["']\s*(?:,\s*version\.ref\s*=\s*["']([^"']+)["'])?\s*(?:,\s*version\s*=\s*["']([^"']+)["'])?\s*\}""".toRegex()
+            """(\w+(?:-\w+)*)\s*=\s*\{\s*id\s*=\s*["']([^"']+)["']\s*(?:,\s*version\.ref\s*=\s*["']([^"']+)["'])?\s*(?:,\s*version\s*=\s*["']([^"']+)["'])?\s*}""".toRegex()
 
         val pluginMatches = pluginPattern.findAll(pluginsContent)
         pluginMatches.forEach { match ->
@@ -154,7 +154,7 @@ class LibraryDependencyFinder {
         }
 
         val usedLibraries = mutableSetOf<String>()
-        val importRegex = """import\s+([\w.]+(?:\*)?)\s*""".toRegex()
+        val importRegex = """import\s+([\w.]+\*?)\s*""".toRegex()
 
         println("LibraryDependencyFinder: Scanning for imports in ${sourceDir.absolutePath}")
 

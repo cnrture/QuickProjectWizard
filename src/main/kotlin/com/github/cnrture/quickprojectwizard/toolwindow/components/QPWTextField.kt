@@ -1,7 +1,6 @@
 package com.github.cnrture.quickprojectwizard.toolwindow.components
 
 import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

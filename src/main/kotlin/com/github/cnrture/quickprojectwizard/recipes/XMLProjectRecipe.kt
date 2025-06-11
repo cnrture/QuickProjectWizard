@@ -80,7 +80,6 @@ fun RecipeExecutor.xmlProjectRecipe(
             "@style/${moduleData.themesData.main.name}",
             isHiltEnable,
             dataDiDomainPresentationUiPackages,
-            projectName
         ),
         manifestOut.resolve("AndroidManifest.xml")
     )

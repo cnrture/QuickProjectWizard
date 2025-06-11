@@ -4,16 +4,15 @@ fun emptyManifestXml(
     styleName: String,
     isHiltEnable: Boolean,
     dataDiDomainPresentationUiPackages: Boolean,
-    projectName: String,
 ): String {
     return if (isHiltEnable && dataDiDomainPresentationUiPackages) {
-        hilt(styleName, projectName)
+        hilt(styleName)
     } else {
         withoutHilt(styleName)
     }
 }
 
-fun hilt(styleName: String, projectName: String) = """
+fun hilt(styleName: String) = """
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 

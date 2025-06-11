@@ -14,7 +14,6 @@ fun lightColors(
     purple: Color = Color(0xff7F52FF),
     green: Color = Color(0xff339e48),
     red: Color = Color(0xffE44857),
-    lightRed: Color = Color(0xffEF9A9A9),
 ): QPWColor = QPWColor(
     white = white,
     black = black,
