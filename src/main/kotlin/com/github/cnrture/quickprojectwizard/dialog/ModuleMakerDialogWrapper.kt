@@ -46,7 +46,7 @@ class ModuleMakerDialogWrapper(
     height = Constants.MODULE_MAKER_WINDOW_HEIGHT,
 ) {
 
-    private val fileWriter = FileWriter(project)
+    private val fileWriter = FileWriter()
     private val settings = ApplicationManager.getApplication().service<SettingsService>()
     private val libraryDependencyFinder = LibraryDependencyFinder()
 

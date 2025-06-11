@@ -12,7 +12,6 @@ import com.github.cnrture.quickprojectwizard.toolwindow.template.ManifestTemplat
 import com.github.cnrture.quickprojectwizard.toolwindow.template.TemplateWriter
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
-import com.intellij.openapi.project.Project
 import java.io.File
 import java.io.FileWriter
 import java.io.IOException
@@ -21,7 +20,7 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import kotlin.io.path.absolutePathString
 
-class FileWriter(project: Project) {
+class FileWriter() {
     private val templateWriter = TemplateWriter()
     private val settings = ApplicationManager.getApplication().service<SettingsService>()
 

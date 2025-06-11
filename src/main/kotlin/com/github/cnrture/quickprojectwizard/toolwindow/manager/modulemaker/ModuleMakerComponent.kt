@@ -31,7 +31,7 @@ import java.io.File
 fun ModuleMakerComponent(
     project: Project,
 ) {
-    val fileWriter = FileWriter(project)
+    val fileWriter = FileWriter()
     val settings = ApplicationManager.getApplication().service<SettingsService>()
     val libraryDependencyFinder = LibraryDependencyFinder()
 

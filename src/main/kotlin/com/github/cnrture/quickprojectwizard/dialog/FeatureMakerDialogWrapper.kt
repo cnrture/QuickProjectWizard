@@ -35,7 +35,7 @@ class FeatureMakerDialogWrapper(
     height = Constants.FEATURE_MAKER_WINDOW_HEIGHT,
 ) {
 
-    private val fileWriter = FileWriter(project)
+    private val fileWriter = FileWriter()
 
     private var selectedSrc = mutableStateOf(Constants.DEFAULT_SRC_VALUE)
     private var featureName = mutableStateOf(Constants.EMPTY)

@@ -32,9 +32,8 @@ import com.github.cnrture.quickprojectwizard.toolwindow.template.ManifestTemplat
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
-import com.intellij.openapi.project.Project
 
-class SettingsDialogWrapper(project: Project) : QPWDialogWrapper(
+class SettingsDialogWrapper() : QPWDialogWrapper(
     width = Constants.SETTINGS_WINDOW_WIDTH,
     height = Constants.SETTINGS_WINDOW_HEIGHT
 ) {

@@ -8,7 +8,6 @@ import com.github.cnrture.quickprojectwizard.projectwizard.gradle.network.getVer
 import com.github.cnrture.quickprojectwizard.projectwizard.recipes.xmlProjectRecipe
 import kotlinx.coroutines.runBlocking
 import java.net.URL
-import java.util.*
 
 val xmlTemplate = template {
     name = "QuickProjectWizard - XML"
@@ -29,8 +28,6 @@ val xmlTemplate = template {
     }
 
     val packageName = defaultPackageNameParameter
-    val projectName = packageName.value.split(".").last()
-        .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
 
     val selectedNetworkLibrary = enumParameter<NetworkLibrary> {
         name = "Network Library"
@@ -142,7 +139,6 @@ val xmlTemplate = template {
             dataDiDomainPresentationUiPackages = dataDiDomainPresentationUiPackages.value,
             screens = screens.value,
             javaJvmVersion = javaJvmVersion.value,
-            projectName = projectName
         )
     }
 }

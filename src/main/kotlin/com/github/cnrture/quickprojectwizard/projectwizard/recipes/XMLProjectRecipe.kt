@@ -45,7 +45,6 @@ fun RecipeExecutor.xmlProjectRecipe(
     dataDiDomainPresentationUiPackages: Boolean,
     screens: String,
     javaJvmVersion: String,
-    projectName: String,
 ) {
     val packagePath = escapeKotlinIdentifier(packageName)
 

@@ -25,7 +25,7 @@ import java.io.File
 
 @Composable
 fun FeatureMakerComponent(project: Project) {
-    val fileWriter = FileWriter(project)
+    val fileWriter = FileWriter()
 
     val selectedSrc = mutableStateOf(Constants.DEFAULT_SRC_VALUE)
     val featureName = mutableStateOf(Constants.EMPTY)
