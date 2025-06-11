@@ -123,6 +123,8 @@ fun ModuleMakerComponent(project: Project) {
                 selectedTabIndex = selectedTab,
                 backgroundColor = QPWTheme.colors.black,
                 contentColor = QPWTheme.colors.white,
+                divider = {},
+                indicator = {},
             ) {
                 QPWTabRow(
                     text = tabs[0],

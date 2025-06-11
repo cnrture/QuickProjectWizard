@@ -53,7 +53,7 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(QPWTheme.colors.black)
+                            .background(QPWTheme.colors.gray)
                             .padding(24.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
@@ -107,6 +107,8 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                 selectedTabIndex = selectedTab,
                 backgroundColor = QPWTheme.colors.black,
                 contentColor = QPWTheme.colors.white,
+                divider = {},
+                indicator = {},
             ) {
                 QPWTabRow(
                     text = tabs[0],
