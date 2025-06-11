@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 
-enum class QPWActionCardType { SMALL, LARGE }
+enum class QPWActionCardType { SMALL, MEDIUM, LARGE }
 
 @Composable
 fun QPWActionCard(
@@ -31,22 +31,27 @@ fun QPWActionCard(
 ) {
     val fontSize = when (type) {
         QPWActionCardType.SMALL -> 14.sp
+        QPWActionCardType.MEDIUM -> 16.sp
         QPWActionCardType.LARGE -> 20.sp
     }
     val iconBoxSize = when (type) {
         QPWActionCardType.SMALL -> 24.dp
+        QPWActionCardType.MEDIUM -> 28.dp
         QPWActionCardType.LARGE -> 32.dp
     }
     val iconSize = when (type) {
         QPWActionCardType.SMALL -> 16.dp
+        QPWActionCardType.MEDIUM -> 20.dp
         QPWActionCardType.LARGE -> 24.dp
     }
     val borderSize = when (type) {
         QPWActionCardType.SMALL -> 1.dp
+        QPWActionCardType.MEDIUM -> 2.dp
         QPWActionCardType.LARGE -> 3.dp
     }
     val padding = when (type) {
         QPWActionCardType.SMALL -> 8.dp
+        QPWActionCardType.MEDIUM -> 12.dp
         QPWActionCardType.LARGE -> 16.dp
     }
     Row(
