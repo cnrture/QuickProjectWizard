@@ -130,7 +130,7 @@ object Utils {
                                 sourceDir = sourceFile,
                                 targetModulePath = moduleName,
                                 packageName = finalPackageName,
-                                isMoveFiles = isMoveFiles
+                                isMoveFiles = true,
                             )
                         } else {
                             val modulePath = File(project.basePath, moduleName.replace(":", "/"))

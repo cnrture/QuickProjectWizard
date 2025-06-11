@@ -56,7 +56,6 @@ fun ModuleTypeNameContent(
                     QPWRadioButton(
                         text = text,
                         selected = text == moduleTypeSelectionState,
-                        isBackgroundEnable = true,
                         color = QPWTheme.colors.red,
                         onClick = { onModuleTypeSelected(text) },
                     )

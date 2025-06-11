@@ -164,7 +164,6 @@ class SettingsDialogWrapper() : QPWDialogWrapper(
                     QPWRadioButton(
                         text = Constants.ANDROID,
                         selected = currentSettings.preferredModuleType == Constants.ANDROID,
-                        isBackgroundEnable = true,
                         color = QPWTheme.colors.red,
                         onClick = {
                             currentSettings = currentSettings.copy(preferredModuleType = Constants.ANDROID)
@@ -176,7 +175,6 @@ class SettingsDialogWrapper() : QPWDialogWrapper(
                     QPWRadioButton(
                         text = Constants.KOTLIN,
                         selected = currentSettings.preferredModuleType == Constants.KOTLIN,
-                        isBackgroundEnable = true,
                         color = QPWTheme.colors.red,
                         onClick = {
                             currentSettings = currentSettings.copy(preferredModuleType = Constants.KOTLIN)
@@ -205,7 +203,6 @@ class SettingsDialogWrapper() : QPWDialogWrapper(
                         QPWRadioButton(
                             text = templateType,
                             selected = selectedTemplateType == templateType,
-                            isBackgroundEnable = true,
                             color = QPWTheme.colors.red,
                             onClick = {
                                 selectedTemplateType = templateType
@@ -262,7 +259,6 @@ class SettingsDialogWrapper() : QPWDialogWrapper(
                 QPWRadioButton(
                     text = template,
                     selected = selectedTemplateName == template,
-                    isBackgroundEnable = true,
                     color = QPWTheme.colors.red,
                     onClick = {
                         selectedTemplateName = template

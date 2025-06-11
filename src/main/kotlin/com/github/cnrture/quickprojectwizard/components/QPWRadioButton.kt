@@ -28,7 +28,6 @@ import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 fun QPWRadioButton(
     text: String,
     selected: Boolean,
-    isBackgroundEnable: Boolean = false,
     color: Color = QPWTheme.colors.red,
     onClick: () -> Unit,
 ) {
@@ -40,7 +39,7 @@ fun QPWRadioButton(
                 onClick = onClick,
             )
             .then(
-                if (isBackgroundEnable && selected) {
+                if (selected) {
                     Modifier.background(
                         color = color,
                         shape = RoundedCornerShape(12.dp)
