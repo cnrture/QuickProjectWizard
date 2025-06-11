@@ -1,4 +1,4 @@
-package com.github.cnrture.quickprojectwizard.toolwindow.file
+package com.github.cnrture.quickprojectwizard.common.file
 
 interface File {
     val name: String

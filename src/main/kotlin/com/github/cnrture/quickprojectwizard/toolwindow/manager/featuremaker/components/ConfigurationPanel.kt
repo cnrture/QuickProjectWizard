@@ -14,7 +14,7 @@ import com.github.cnrture.quickprojectwizard.components.QPWText
 import com.github.cnrture.quickprojectwizard.components.QPWTextField
 import com.github.cnrture.quickprojectwizard.dialog.MessageDialogWrapper
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
-import com.github.cnrture.quickprojectwizard.toolwindow.file.FileWriter
+import com.github.cnrture.quickprojectwizard.common.file.FileWriter
 import com.intellij.openapi.project.Project
 
 @OptIn(ExperimentalLayoutApi::class)

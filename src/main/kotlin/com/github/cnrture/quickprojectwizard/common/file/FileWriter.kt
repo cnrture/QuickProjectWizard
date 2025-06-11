@@ -1,4 +1,4 @@
-package com.github.cnrture.quickprojectwizard.toolwindow.file
+package com.github.cnrture.quickprojectwizard.common.file
 
 import com.github.cnrture.quickprojectwizard.common.Constants
 import com.github.cnrture.quickprojectwizard.data.SettingsService

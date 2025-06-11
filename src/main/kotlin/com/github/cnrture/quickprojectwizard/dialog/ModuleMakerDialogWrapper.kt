@@ -21,10 +21,10 @@ import com.github.cnrture.quickprojectwizard.common.*
 import com.github.cnrture.quickprojectwizard.components.*
 import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
-import com.github.cnrture.quickprojectwizard.toolwindow.file.FileTree
-import com.github.cnrture.quickprojectwizard.toolwindow.file.FileWriter
-import com.github.cnrture.quickprojectwizard.toolwindow.file.ImportAnalyzer
-import com.github.cnrture.quickprojectwizard.toolwindow.file.LibraryDependencyFinder
+import com.github.cnrture.quickprojectwizard.common.file.FileTree
+import com.github.cnrture.quickprojectwizard.common.file.FileWriter
+import com.github.cnrture.quickprojectwizard.common.file.ImportAnalyzer
+import com.github.cnrture.quickprojectwizard.common.file.LibraryDependencyFinder
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
 import com.intellij.openapi.externalSystem.model.ProjectSystemId

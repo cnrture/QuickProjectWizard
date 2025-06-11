@@ -3,7 +3,7 @@ package com.github.cnrture.quickprojectwizard.common
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VfsUtil
 import java.io.File
-import com.github.cnrture.quickprojectwizard.toolwindow.file.File as ProjectFile
+import com.github.cnrture.quickprojectwizard.common.file.File as ProjectFile
 
 fun Project.getCurrentlySelectedFile(selectedSrc: String): File {
     return File(rootDirectoryStringDropLast() + File.separator + selectedSrc)

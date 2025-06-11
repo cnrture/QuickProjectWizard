@@ -1,9 +1,9 @@
 package com.github.cnrture.quickprojectwizard.common
 
 import com.github.cnrture.quickprojectwizard.dialog.MessageDialogWrapper
-import com.github.cnrture.quickprojectwizard.toolwindow.file.FileWriter
-import com.github.cnrture.quickprojectwizard.toolwindow.file.ImportAnalyzer
-import com.github.cnrture.quickprojectwizard.toolwindow.file.LibraryDependencyFinder
+import com.github.cnrture.quickprojectwizard.common.file.FileWriter
+import com.github.cnrture.quickprojectwizard.common.file.ImportAnalyzer
+import com.github.cnrture.quickprojectwizard.common.file.LibraryDependencyFinder
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.externalSystem.model.ProjectSystemId
 import com.intellij.openapi.externalSystem.service.execution.ProgressExecutionMode

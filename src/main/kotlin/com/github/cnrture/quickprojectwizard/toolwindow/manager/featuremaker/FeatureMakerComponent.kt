@@ -16,7 +16,7 @@ import com.github.cnrture.quickprojectwizard.common.Constants
 import com.github.cnrture.quickprojectwizard.common.rootDirectoryString
 import com.github.cnrture.quickprojectwizard.common.rootDirectoryStringDropLast
 import com.github.cnrture.quickprojectwizard.components.QPWText
-import com.github.cnrture.quickprojectwizard.toolwindow.file.FileWriter
+import com.github.cnrture.quickprojectwizard.common.file.FileWriter
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.featuremaker.components.ConfigurationPanel
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.featuremaker.components.FileTreePanel
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme

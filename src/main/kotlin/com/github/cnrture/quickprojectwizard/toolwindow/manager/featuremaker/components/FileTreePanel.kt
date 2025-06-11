@@ -6,7 +6,7 @@ import com.github.cnrture.quickprojectwizard.common.rootDirectoryString
 import com.github.cnrture.quickprojectwizard.common.rootDirectoryStringDropLast
 import com.github.cnrture.quickprojectwizard.common.toProjectFile
 import com.github.cnrture.quickprojectwizard.components.QPWFileTree
-import com.github.cnrture.quickprojectwizard.toolwindow.file.FileTree
+import com.github.cnrture.quickprojectwizard.common.file.FileTree
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.intellij.openapi.project.Project
 import java.io.File

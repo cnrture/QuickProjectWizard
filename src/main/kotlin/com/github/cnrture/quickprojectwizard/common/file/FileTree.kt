@@ -1,4 +1,4 @@
-package com.github.cnrture.quickprojectwizard.toolwindow.file
+package com.github.cnrture.quickprojectwizard.common.file
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

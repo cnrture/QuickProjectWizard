@@ -13,8 +13,8 @@ import com.github.cnrture.quickprojectwizard.common.Utils
 import com.github.cnrture.quickprojectwizard.components.QPWDialogActions
 import com.github.cnrture.quickprojectwizard.dialog.MessageDialogWrapper
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
-import com.github.cnrture.quickprojectwizard.toolwindow.file.FileWriter
-import com.github.cnrture.quickprojectwizard.toolwindow.file.LibraryDependencyFinder
+import com.github.cnrture.quickprojectwizard.common.file.FileWriter
+import com.github.cnrture.quickprojectwizard.common.file.LibraryDependencyFinder
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.components.LibrarySelectionContent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.components.ModuleTypeNameContent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.components.PluginSelectionContent

@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.common.getCurrentlySelectedFile
 import com.github.cnrture.quickprojectwizard.components.QPWText
-import com.github.cnrture.quickprojectwizard.toolwindow.file.LibraryDependencyFinder
+import com.github.cnrture.quickprojectwizard.common.file.LibraryDependencyFinder
 import com.github.cnrture.quickprojectwizard.common.Utils.analyzeSelectedDirectory
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.intellij.openapi.project.Project
