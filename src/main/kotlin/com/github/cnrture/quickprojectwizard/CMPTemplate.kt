@@ -96,8 +96,15 @@ val composeMultiplatformTemplate = template {
         PackageNameWidget(packageName)
     )
 
-    thumb =
-        { Thumb { URL("https://raw.githubusercontent.com/cnrture/QuickProjectWizard/refs/heads/main/images/cmp_template.png") } }
+    thumb = {
+        val pluginClassLoader = Class.forName("com.github.cnrture.quickprojectwizard.CMPTemplateKt").classLoader
+        val imageUrl = pluginClassLoader?.getResource("images/qpw-cmp.png")
+        if (imageUrl != null) {
+            Thumb { imageUrl }
+        } else {
+            Thumb { URL("https://raw.githubusercontent.com/cnrture/QuickProjectWizard/refs/heads/main/images/cmp_template.png") }
+        }
+    }
 
     recipe = { data: TemplateData ->
         composeMultiplatformProjectRecipe(

@@ -7,6 +7,7 @@ import com.github.cnrture.quickprojectwizard.general.NetworkLibrary
 import com.github.cnrture.quickprojectwizard.gradle.network.getVersions
 import com.github.cnrture.quickprojectwizard.recipes.composeProjectRecipe
 import kotlinx.coroutines.runBlocking
+import java.io.File
 import java.net.URL
 import java.util.*
 
@@ -116,8 +117,15 @@ val composeTemplate = template {
         PackageNameWidget(packageName),
     )
 
-    thumb =
-        { Thumb { URL("https://raw.githubusercontent.com/cnrture/QuickProjectWizard/refs/heads/main/images/compose_template.png") } }
+    thumb = {
+        val pluginClassLoader = Class.forName("com.github.cnrture.quickprojectwizard.ComposeTemplateKt").classLoader
+        val imageUrl = pluginClassLoader?.getResource("images/qpw-compose.png")
+        if (imageUrl != null) {
+            Thumb { imageUrl }
+        } else {
+            Thumb { URL("https://raw.githubusercontent.com/cnrture/QuickProjectWizard/refs/heads/main/images/compose_template.png") }
+        }
+    }
 
     recipe = { data: TemplateData ->
         composeProjectRecipe(
