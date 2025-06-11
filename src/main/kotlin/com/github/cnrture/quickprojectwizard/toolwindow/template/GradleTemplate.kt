@@ -2,20 +2,9 @@ package com.github.cnrture.quickprojectwizard.toolwindow.template
 
 object GradleTemplate {
     fun getAndroidModuleGradleTemplate(packageName: String, dependencies: String, plugins: String = ""): String {
-        val defaultPlugins = """
-    id 'com.android.library'
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.compose.compiler)"""
-
-        val finalPlugins = if (plugins.isNotEmpty()) {
-            "$defaultPlugins\n$plugins"
-        } else {
-            defaultPlugins
-        }
-
         return """
 plugins {
-$finalPlugins
+$plugins
 }
 
 android {
