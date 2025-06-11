@@ -22,14 +22,12 @@ val composeTemplate = template {
     runBlocking {
         try {
             getVersions()
-            println("Versions fetched successfully")
         } catch (e: Exception) {
             println("Failed to fetch versions: ${e.message}")
         }
     }
 
-    val packageName = defaultPackageNameParameter
-    val projectName = packageName.value.split(".").last()
+    val projectName = defaultPackageNameParameter.value.split(".").last()
         .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
 
     val selectedNetworkLibrary = enumParameter<NetworkLibrary> {
@@ -113,7 +111,7 @@ val composeTemplate = template {
         LabelWidget("8 or 11 or 17 etc."),
         LabelWidget(" "),
         UrlLinkWidget("Created by Caner Ture", "https://bento.me/canerture"),
-        PackageNameWidget(packageName),
+        PackageNameWidget(defaultPackageNameParameter),
     )
 
     thumb = {
@@ -130,7 +128,7 @@ val composeTemplate = template {
     recipe = { data: TemplateData ->
         composeProjectRecipe(
             moduleData = data as ModuleTemplateData,
-            packageName = packageName.value,
+            packageName = defaultPackageNameParameter.value,
             isRoomEnable = isRoomEnable.value,
             isWorkManagerEnable = isWorkManagerEnable.value,
             selectedNetworkLibrary = selectedNetworkLibrary.value,

@@ -18,18 +18,12 @@ abstract class QPWDialogWrapper(
     height: Int = 0,
 ) : DialogWrapper(true) {
 
-    private val color = JBColor(
-        Color(0xFF18181B.toInt()),
-        Color(0xFF18181B.toInt())
-    )
+    private val color = JBColor(Color(0xFF18181B.toInt()), Color(0xFF18181B.toInt()))
 
     init {
         init()
         UIManager.put("Panel.background", color)
-
-        if (width > 0 && height > 0) {
-            setSize(width, height)
-        }
+        if (width > 0 && height > 0) setSize(width, height)
         window?.setLocationRelativeTo(null)
     }
 
@@ -51,14 +45,10 @@ abstract class QPWDialogWrapper(
     override fun createSouthPanel(): JComponent {
         val southPanel = super.createSouthPanel()
         southPanel.background = color
-
         for (component in southPanel.components) {
             component.background = color
-            if (component is JComponent) {
-                component.isOpaque = true
-            }
+            if (component is JComponent) component.isOpaque = true
         }
-
         return southPanel
     }
 
@@ -68,7 +58,5 @@ abstract class QPWDialogWrapper(
         return rootPane
     }
 
-    override fun createContentPaneBorder(): Border {
-        return JBUI.Borders.empty()
-    }
+    override fun createContentPaneBorder(): Border = JBUI.Borders.empty()
 }

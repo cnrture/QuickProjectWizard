@@ -6,19 +6,11 @@ import com.github.cnrture.quickprojectwizard.projectwizard.gradle.Library
 import com.github.cnrture.quickprojectwizard.projectwizard.gradle.Plugin
 import com.github.cnrture.quickprojectwizard.projectwizard.gradle.Version
 
-fun RecipeExecutor.addRootFile(
-    data: String,
-    moduleData: ModuleTemplateData,
-    dirPath: String,
-) {
+fun RecipeExecutor.addRootFile(data: String, moduleData: ModuleTemplateData, dirPath: String) {
     save(data, moduleData.rootDir.parentFile.resolve(dirPath))
 }
 
-fun RecipeExecutor.addSrcFile(
-    data: String,
-    moduleData: ModuleTemplateData,
-    filePath: String,
-) {
+fun RecipeExecutor.addSrcFile(data: String, moduleData: ModuleTemplateData, filePath: String) {
     save(data, moduleData.srcDir.resolve(filePath))
 }
 

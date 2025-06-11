@@ -1,16 +1,6 @@
 package com.github.cnrture.quickprojectwizard.projectwizard.gradle
 
-import com.github.cnrture.quickprojectwizard.projectwizard.addAndroidBlock
-import com.github.cnrture.quickprojectwizard.projectwizard.addDetektBlock
-import com.github.cnrture.quickprojectwizard.projectwizard.addGradleAndroidTestImplementation
-import com.github.cnrture.quickprojectwizard.projectwizard.addGradleAndroidTestPlatformImplementation
-import com.github.cnrture.quickprojectwizard.projectwizard.addGradleDebugImplementation
-import com.github.cnrture.quickprojectwizard.projectwizard.addGradleDetektImplementation
-import com.github.cnrture.quickprojectwizard.projectwizard.addGradleImplementation
-import com.github.cnrture.quickprojectwizard.projectwizard.addGradlePlatformImplementation
-import com.github.cnrture.quickprojectwizard.projectwizard.addGradlePlugin
-import com.github.cnrture.quickprojectwizard.projectwizard.addGradleTestImplementation
-import com.github.cnrture.quickprojectwizard.projectwizard.addKspImplementation
+import com.github.cnrture.quickprojectwizard.projectwizard.*
 import com.github.cnrture.quickprojectwizard.projectwizard.general.ImageLibrary
 import com.github.cnrture.quickprojectwizard.projectwizard.general.NetworkLibrary
 

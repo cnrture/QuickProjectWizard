@@ -19,13 +19,10 @@ val composeMultiplatformTemplate = template {
     runBlocking {
         try {
             getVersions()
-            println("Versions fetched successfully")
         } catch (e: Exception) {
             println("Failed to fetch versions: ${e.message}")
         }
     }
-
-    val packageName = defaultPackageNameParameter
 
     val isAndroidEnable = booleanParameter {
         name = "Android"
@@ -46,11 +43,6 @@ val composeMultiplatformTemplate = template {
         name = "Ktor Service"
         default = false
     }
-
-    /*    val isRoomEnable = booleanParameter {
-            name = "Room"
-            default = false
-        }*/
 
     val selectedImageLibrary = enumParameter<CMPImageLibrary> {
         name = "Image Library"
@@ -82,7 +74,6 @@ val composeMultiplatformTemplate = template {
         CheckBoxWidget(isIosEnable),
         CheckBoxWidget(isDesktopEnable),
         CheckBoxWidget(isKtorServiceEnable),
-        //CheckBoxWidget(isRoomEnable),
         EnumWidget(selectedImageLibrary),
         CheckBoxWidget(isKoinEnable),
         CheckBoxWidget(isNavigationEnable),
@@ -93,7 +84,7 @@ val composeMultiplatformTemplate = template {
                 "\nNote: First item is start destination"
         ),
         UrlLinkWidget("Created by Caner Ture", "https://bento.me/canerture"),
-        PackageNameWidget(packageName)
+        PackageNameWidget(defaultPackageNameParameter)
     )
 
     thumb = {
@@ -110,7 +101,7 @@ val composeMultiplatformTemplate = template {
     recipe = { data: TemplateData ->
         composeMultiplatformProjectRecipe(
             moduleData = data as ModuleTemplateData,
-            packageName = packageName.value,
+            packageName = defaultPackageNameParameter.value,
             isAndroidEnable = isAndroidEnable.value,
             isIosEnable = isIosEnable.value,
             isDesktopEnable = isDesktopEnable.value,

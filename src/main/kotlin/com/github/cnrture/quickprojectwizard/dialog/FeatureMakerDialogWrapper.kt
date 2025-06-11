@@ -13,15 +13,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.github.cnrture.quickprojectwizard.common.Constants
-import com.github.cnrture.quickprojectwizard.common.getCurrentlySelectedFile
-import com.github.cnrture.quickprojectwizard.common.refreshFileSystem
-import com.github.cnrture.quickprojectwizard.common.rootDirectoryString
-import com.github.cnrture.quickprojectwizard.common.rootDirectoryStringDropLast
-import com.github.cnrture.quickprojectwizard.common.toProjectFile
-import com.github.cnrture.quickprojectwizard.components.*
+import com.github.cnrture.quickprojectwizard.common.*
 import com.github.cnrture.quickprojectwizard.common.file.FileTree
 import com.github.cnrture.quickprojectwizard.common.file.FileWriter
+import com.github.cnrture.quickprojectwizard.components.*
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
@@ -42,10 +37,12 @@ class FeatureMakerDialogWrapper(
 
     init {
         selectedSrc.value = if (startingLocation != null) {
-            File(startingLocation.path).absolutePath.removePrefix(project.rootDirectoryStringDropLast())
+            File(startingLocation.path).absolutePath
+                .removePrefix(project.rootDirectoryStringDropLast())
                 .removePrefix(File.separator)
         } else {
-            File(project.rootDirectoryString()).absolutePath.removePrefix(project.rootDirectoryStringDropLast())
+            File(project.rootDirectoryString()).absolutePath
+                .removePrefix(project.rootDirectoryStringDropLast())
                 .removePrefix(File.separator)
         }
     }

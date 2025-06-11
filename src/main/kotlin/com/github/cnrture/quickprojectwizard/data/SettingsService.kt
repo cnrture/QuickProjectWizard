@@ -5,16 +5,11 @@ import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 
-@State(
-    name = "QuickProjectWizardSettings",
-    storages = [Storage("quickProjectWizard.xml")]
-)
+@State(name = "QuickProjectWizardSettings", storages = [Storage("quickProjectWizard.xml")])
 @Service(Service.Level.APP)
 class SettingsService : PersistentStateComponent<SettingsState> {
     private var myState = SettingsState()
-
     override fun getState(): SettingsState = myState
-
     override fun loadState(state: SettingsState) {
         myState = state
     }

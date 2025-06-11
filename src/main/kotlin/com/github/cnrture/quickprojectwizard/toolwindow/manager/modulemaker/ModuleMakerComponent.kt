@@ -15,12 +15,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.common.Constants
 import com.github.cnrture.quickprojectwizard.common.Utils
+import com.github.cnrture.quickprojectwizard.common.file.FileWriter
+import com.github.cnrture.quickprojectwizard.common.file.LibraryDependencyFinder
 import com.github.cnrture.quickprojectwizard.common.rootDirectoryString
 import com.github.cnrture.quickprojectwizard.common.rootDirectoryStringDropLast
 import com.github.cnrture.quickprojectwizard.components.QPWText
 import com.github.cnrture.quickprojectwizard.data.SettingsService
-import com.github.cnrture.quickprojectwizard.common.file.FileWriter
-import com.github.cnrture.quickprojectwizard.common.file.LibraryDependencyFinder
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
@@ -28,9 +28,7 @@ import com.intellij.openapi.project.Project
 import java.io.File
 
 @Composable
-fun ModuleMakerComponent(
-    project: Project,
-) {
+fun ModuleMakerComponent(project: Project) {
     val fileWriter = FileWriter()
     val settings = ApplicationManager.getApplication().service<SettingsService>()
     val libraryDependencyFinder = LibraryDependencyFinder()
@@ -40,13 +38,11 @@ fun ModuleMakerComponent(
     val detectedModules = mutableStateListOf<String>()
     val detectedLibraries = mutableStateListOf<String>()
 
-    // Library selection
     val availableLibraries = mutableStateListOf<String>()
     val selectedLibraries = mutableStateListOf<String>()
     val libraryGroups = mutableStateMapOf<String, List<String>>()
     val expandedGroups = mutableStateMapOf<String, Boolean>()
 
-    // Plugin selection
     val availablePlugins = mutableStateListOf<String>()
     val selectedPlugins = mutableStateListOf<String>()
     val pluginGroups = mutableStateMapOf<String, List<String>>()
@@ -101,9 +97,9 @@ fun ModuleMakerComponent(
         expandedPluginGroups = expandedPluginGroups,
     )
 
-    selectedSrc.value =
-        File(project.rootDirectoryString()).absolutePath.removePrefix(project.rootDirectoryStringDropLast())
-            .removePrefix(File.separator)
+    selectedSrc.value = File(project.rootDirectoryString()).absolutePath
+        .removePrefix(project.rootDirectoryStringDropLast())
+        .removePrefix(File.separator)
 
     Surface(
         modifier = Modifier.fillMaxSize(),

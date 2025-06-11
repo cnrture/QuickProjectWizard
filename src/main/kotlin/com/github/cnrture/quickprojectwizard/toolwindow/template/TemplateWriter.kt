@@ -44,7 +44,6 @@ class TemplateWriter {
             file.write(gradleTemplate)
             file.flush()
             file.close()
-
             return listOf(filePath)
         } catch (e: IOException) {
             e.printStackTrace()
@@ -58,9 +57,7 @@ class TemplateWriter {
     private fun buildDependenciesBlock(dependencies: List<String>, libraryDependencies: String = ""): String {
         val hasDeps = dependencies.isNotEmpty()
         val hasLibDeps = libraryDependencies.isNotEmpty()
-
         if (!hasDeps && !hasLibDeps) return Constants.EMPTY
-
         return StringBuilder().apply {
             if (hasDeps) {
                 append("// Module Dependencies\n")
@@ -69,7 +66,6 @@ class TemplateWriter {
                     append("    implementation(projects.$moduleName)\n")
                 }
             }
-
             if (hasLibDeps) {
                 if (hasDeps) append("\n")
                 append(libraryDependencies)
@@ -97,7 +93,6 @@ class TemplateWriter {
         } catch (e: TemplateException) {
             e.printStackTrace()
         }
-
         return emptyList()
     }
 }

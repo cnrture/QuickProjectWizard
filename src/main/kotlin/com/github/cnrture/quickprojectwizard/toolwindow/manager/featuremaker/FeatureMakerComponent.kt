@@ -13,13 +13,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.common.Constants
+import com.github.cnrture.quickprojectwizard.common.file.FileWriter
 import com.github.cnrture.quickprojectwizard.common.rootDirectoryString
 import com.github.cnrture.quickprojectwizard.common.rootDirectoryStringDropLast
 import com.github.cnrture.quickprojectwizard.components.QPWText
-import com.github.cnrture.quickprojectwizard.common.file.FileWriter
+import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.featuremaker.components.ConfigurationPanel
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.featuremaker.components.FileTreePanel
-import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.intellij.openapi.project.Project
 import java.io.File
 
@@ -32,9 +32,9 @@ fun FeatureMakerComponent(project: Project) {
 
     var showFileTreeDialog by remember { mutableStateOf(false) }
 
-    selectedSrc.value =
-        File(project.rootDirectoryString()).absolutePath.removePrefix(project.rootDirectoryStringDropLast())
-            .removePrefix(File.separator)
+    selectedSrc.value = File(project.rootDirectoryString()).absolutePath
+        .removePrefix(project.rootDirectoryStringDropLast())
+        .removePrefix(File.separator)
 
     Surface(
         modifier = Modifier.fillMaxSize(),

@@ -28,11 +28,7 @@ import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.intellij.ui.JBColor
 import java.awt.*
 import java.awt.datatransfer.StringSelection
-import java.awt.event.KeyAdapter
-import java.awt.event.KeyEvent
-import java.awt.event.MouseEvent
-import java.awt.event.MouseListener
-import java.awt.event.MouseMotionAdapter
+import java.awt.event.*
 import java.awt.geom.Ellipse2D
 import java.awt.image.BufferedImage
 import java.time.LocalTime
@@ -264,7 +260,6 @@ private fun startColorPicking(onColorPicked: (Color) -> Unit) {
 
                         val zoomArea = screenCapture.getSubimage(zoomX, zoomY, captureSize, captureSize)
 
-                        // Create circular clip for zoom preview
                         val originalClip = graphics.clip
                         val circularShape = Ellipse2D.Double(
                             finalPreviewX.toDouble(),
@@ -274,11 +269,9 @@ private fun startColorPicking(onColorPicked: (Color) -> Unit) {
                         )
                         (graphics as Graphics2D).clip(circularShape)
 
-                        // Draw black circular background
                         graphics.color = JBColor.BLACK
                         graphics.fillOval(finalPreviewX, finalPreviewY, zoomSize, zoomSize)
 
-                        // Draw zoomed image (will be clipped to circle)
                         graphics.drawImage(
                             zoomArea,
                             finalPreviewX, finalPreviewY,
@@ -286,17 +279,14 @@ private fun startColorPicking(onColorPicked: (Color) -> Unit) {
                             null
                         )
 
-                        // Draw center crosshair in zoom preview
                         graphics.color = JBColor.RED
                         val centerX = finalPreviewX + zoomRadius
                         val centerY = finalPreviewY + zoomRadius
                         graphics.drawLine(centerX - 5, centerY, centerX + 5, centerY)
                         graphics.drawLine(centerX, centerY - 5, centerX, centerY + 5)
 
-                        // Restore original clip
                         graphics.clip = originalClip
 
-                        // Draw circle border
                         graphics.color = JBColor.WHITE
                         graphics.drawOval(finalPreviewX, finalPreviewY, zoomSize, zoomSize)
                         graphics.color = JBColor.BLACK
@@ -312,11 +302,9 @@ private fun startColorPicking(onColorPicked: (Color) -> Unit) {
                             currentPixelColor.blue
                         )
 
-                        // Draw text with better outline
                         graphics.font = Font("Arial", Font.BOLD, 14)
                         val textY = finalPreviewY + zoomSize + 20
 
-                        // Draw black outline (shadow effect)
                         graphics.color = JBColor.BLACK
                         for (dx in -1..1) {
                             for (dy in -1..1) {
@@ -326,7 +314,6 @@ private fun startColorPicking(onColorPicked: (Color) -> Unit) {
                             }
                         }
 
-                        // Draw white text on top
                         graphics.color = JBColor.WHITE
                         graphics.drawString(hexColor, finalPreviewX, textY)
                     }

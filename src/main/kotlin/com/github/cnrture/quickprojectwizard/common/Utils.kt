@@ -1,9 +1,9 @@
 package com.github.cnrture.quickprojectwizard.common
 
-import com.github.cnrture.quickprojectwizard.dialog.MessageDialogWrapper
 import com.github.cnrture.quickprojectwizard.common.file.FileWriter
 import com.github.cnrture.quickprojectwizard.common.file.ImportAnalyzer
 import com.github.cnrture.quickprojectwizard.common.file.LibraryDependencyFinder
+import com.github.cnrture.quickprojectwizard.dialog.MessageDialogWrapper
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.externalSystem.model.ProjectSystemId
 import com.intellij.openapi.externalSystem.service.execution.ProgressExecutionMode
@@ -15,13 +15,10 @@ import com.intellij.openapi.vfs.VirtualFile
 import java.io.File
 import javax.swing.SwingUtilities
 import kotlin.concurrent.thread
-import kotlin.io.readText
-import kotlin.io.writeText
 
 object Utils {
-    fun validateFeatureInput(featureName: String, selectedSrc: String): Boolean {
-        return featureName.isNotEmpty() && selectedSrc != Constants.DEFAULT_SRC_VALUE
-    }
+    fun validateFeatureInput(featureName: String, selectedSrc: String): Boolean =
+        featureName.isNotEmpty() && selectedSrc != Constants.DEFAULT_SRC_VALUE
 
     fun createFeature(project: Project, selectedSrc: String, featureName: String, fileWriter: FileWriter) {
         try {
@@ -37,10 +34,7 @@ object Utils {
             }
 
             val packagePath = cleanSelectedPath
-                .replace(
-                    Regex("^.*?(/src/main/java/|/src/main/kotlin/)"),
-                    Constants.EMPTY,
-                )
+                .replace(Regex("^.*?(/src/main/java/|/src/main/kotlin/)"), Constants.EMPTY)
                 .replace("/", ".")
 
             fileWriter.createFeatureFiles(
@@ -56,14 +50,11 @@ object Utils {
             )
         } catch (e: Exception) {
             MessageDialogWrapper("Error: ${e.message}").show()
-        } finally {
-
         }
     }
 
-    fun validateModuleInput(packageName: String, moduleName: String): Boolean {
-        return packageName.isNotEmpty() && moduleName.isNotEmpty() && moduleName != Constants.DEFAULT_MODULE_NAME
-    }
+    fun validateModuleInput(packageName: String, moduleName: String): Boolean =
+        packageName.isNotEmpty() && moduleName.isNotEmpty() && moduleName != Constants.DEFAULT_MODULE_NAME
 
     fun createModule(
         project: Project,
@@ -82,8 +73,6 @@ object Utils {
     ): List<File> {
         try {
             val settingsGradleFile = getSettingsGradleFile(project)
-            val moduleType = moduleType
-
             val selectedSrcPath = selectedSrc
             val sourceFile = getSourceDirectoryFromSelected(project, selectedSrcPath)
 
@@ -139,10 +128,7 @@ object Utils {
                             }
                         }
 
-                        addDependencyToAppModule(
-                            project = project,
-                            modulePathAsString = moduleName,
-                        )
+                        addDependencyToAppModule(project, moduleName)
                         syncProject(project)
                     },
                     workingDirectory = File(project.basePath.orEmpty()),
@@ -158,8 +144,6 @@ object Utils {
         } catch (e: Exception) {
             MessageDialogWrapper("Error: ${e.message}").show()
             return emptyList()
-        } finally {
-
         }
     }
 
@@ -186,9 +170,9 @@ object Utils {
             val targetPackageDir = File(targetSrcDir, packagePath)
             targetPackageDir.mkdirs()
 
-            val sourceFiles = sourceDir.walkTopDown()
-                .filter { it.isFile && (it.extension == "kt" || it.extension == "java") }
-                .toList()
+            val sourceFiles = sourceDir.walkTopDown().filter {
+                it.isFile && (it.extension == "kt" || it.extension == "java")
+            }.toList()
 
             if (sourceFiles.isEmpty()) {
                 MessageDialogWrapper("No source files found to move in ${sourceDir.absolutePath}").show()
@@ -202,10 +186,8 @@ object Utils {
             sourceFiles.forEach { sourceFile ->
                 try {
                     val relativePath = getRelativePath(sourceFile, sourceDir)
-
                     val targetFile = File(targetPackageDir, relativePath)
                     targetFile.parentFile.mkdirs()
-
                     sourceFile.copyTo(targetFile, overwrite = true)
 
                     val relativeDir = targetFile.parentFile.absolutePath
@@ -219,27 +201,20 @@ object Utils {
                     }
 
                     val fullPackageName = packageName + subPackage
-
                     val content = targetFile.readText()
                     val packagePattern = """package\s+([a-zA-Z0-9_.]+)""".toRegex()
                     val packageMatch = packagePattern.find(content)
                     val originalPackage = packageMatch?.groupValues?.get(1).orEmpty()
 
-                    if (originalPackage.isNotEmpty()) {
-                        packageMappings[originalPackage] = fullPackageName
-                    }
+                    if (originalPackage.isNotEmpty()) packageMappings[originalPackage] = fullPackageName
 
                     val updatedContent = packagePattern.replace(content, "package $fullPackageName")
 
-                    if (content != updatedContent) {
-                        targetFile.writeText(updatedContent)
-                    }
+                    if (content != updatedContent) targetFile.writeText(updatedContent)
 
                     filePathMappings[sourceFile.absolutePath] = targetFile
 
-                    VfsUtil.findFileByIoFile(targetFile, true)?.let { vFile ->
-                        movedFiles.add(vFile)
-                    }
+                    VfsUtil.findFileByIoFile(targetFile, true)?.let { movedFiles.add(it) }
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -258,9 +233,7 @@ object Utils {
                         }
                     }
 
-                    if (content != updatedContent) {
-                        targetFile.writeText(updatedContent)
-                    }
+                    if (content != updatedContent) targetFile.writeText(updatedContent)
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -280,11 +253,7 @@ object Utils {
         }
     }
 
-    fun openNewModule(
-        project: Project,
-        modulePath: File,
-        filesToOpen: List<VirtualFile>,
-    ) {
+    fun openNewModule(project: Project, modulePath: File, filesToOpen: List<VirtualFile>) {
         try {
             val moduleRootDir = VfsUtil.findFileByIoFile(modulePath, true)
             if (moduleRootDir != null) {
@@ -304,18 +273,16 @@ object Utils {
         }
     }
 
-    fun getSettingsGradleFile(
-        project: Project,
-    ): File? {
+    fun getSettingsGradleFile(project: Project): File? {
         val settingsGradleKtsPath = File(project.basePath, "settings.gradle.kts")
         val settingsGradlePath = File(project.basePath, "settings.gradle")
 
-        return listOf(settingsGradleKtsPath, settingsGradlePath)
-            .firstOrNull { it.exists() }
-            ?: run {
-                MessageDialogWrapper("Can't find settings.gradle(.kts) file")
-                null
-            }
+        return listOf(settingsGradleKtsPath, settingsGradlePath).firstOrNull {
+            it.exists()
+        } ?: run {
+            MessageDialogWrapper("Can't find settings.gradle(.kts) file")
+            null
+        }
     }
 
     fun syncProject(project: Project) {
@@ -333,28 +300,17 @@ object Utils {
     fun getRelativePath(sourceFile: File, sourceDir: File): String {
         val sourceFilePath = sourceFile.absolutePath
         val sourceDirPath = sourceDir.absolutePath
-
         if (sourceFilePath.startsWith(sourceDirPath)) {
             val relPath = sourceFilePath.substring(sourceDirPath.length)
             return if (relPath.startsWith(File.separator)) relPath.substring(1) else relPath
         }
-
         return sourceFile.name
     }
 
-    fun getSourceDirectoryFromSelected(
-        project: Project,
-        selectedPath: String,
-    ): File {
-        if (selectedPath.isBlank()) {
-            val projectRoot = File(project.basePath.orEmpty())
-            return projectRoot
-        }
-
+    fun getSourceDirectoryFromSelected(project: Project, selectedPath: String): File {
+        if (selectedPath.isBlank()) return File(project.basePath.orEmpty())
         val projectBasePath = project.basePath.orEmpty()
-
         val pathOptions = mutableListOf<File>()
-
         pathOptions.add(File(projectBasePath, selectedPath))
         pathOptions.add(File(selectedPath))
 
@@ -365,25 +321,17 @@ object Utils {
         }
 
         for (option in pathOptions) {
-            if (option.exists() && option.isDirectory) {
-                return option
-            }
+            if (option.exists() && option.isDirectory) return option
         }
         return pathOptions.first()
     }
 
-    fun addDependencyToAppModule(
-        project: Project,
-        modulePathAsString: String,
-    ) {
+    fun addDependencyToAppModule(project: Project, modulePathAsString: String) {
         try {
             val appGradleFile = findAppGradleFile(project)
-            if (appGradleFile == null || !appGradleFile.exists()) {
-                return
-            }
+            if (appGradleFile == null || !appGradleFile.exists()) return
 
             val content = appGradleFile.readText()
-
             val dependenciesPattern = """dependencies\s*\{([^}]*)}""".toRegex(RegexOption.DOT_MATCHES_ALL)
             val dependenciesMatch = dependenciesPattern.find(content)
 
@@ -391,18 +339,13 @@ object Utils {
                 val dependenciesBlock = dependenciesMatch.groupValues[1]
                 val moduleName = modulePathAsString.removePrefix(":").replace(":", ".")
                 val dependencyLine = "    implementation(projects.$moduleName)"
-
-                if (dependenciesBlock.contains(dependencyLine)) {
-                    return
-                }
-
+                if (dependenciesBlock.contains(dependencyLine)) return
                 val newDependenciesBlock = "$dependenciesBlock\n$dependencyLine\n"
                 val newContent =
                     content.replace(dependenciesMatch.groupValues[0], "dependencies {$newDependenciesBlock}")
 
                 appGradleFile.writeText(newContent)
             }
-
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -422,36 +365,27 @@ object Utils {
 
         for (location in possibleAppLocations) {
             val file = File(projectBasePath, location)
-            if (file.exists()) {
-                return file
-            }
+            if (file.exists()) return file
         }
 
-        val rootDir = File(projectBasePath)
-        val appDir = rootDir.listFiles()?.firstOrNull {
+        val appDir = File(projectBasePath).listFiles()?.firstOrNull {
             it.isDirectory && (it.name == "app" || it.name == "mobile" || it.name == "androidApp")
         }
 
         if (appDir != null) {
             val gradleFile = File(appDir, "build.gradle")
             val ktsFile = File(appDir, "build.gradle.kts")
-
             if (gradleFile.exists()) return gradleFile
             if (ktsFile.exists()) return ktsFile
         }
-
         return null
     }
 
-    fun loadExistingModules(
-        project: Project,
-        onExistingModulesLoaded: (List<String>) -> Unit,
-    ) {
+    fun loadExistingModules(project: Project, onExistingModulesLoaded: (List<String>) -> Unit) {
         val settingsFile = getSettingsGradleFile(project)
         if (settingsFile != null) {
             try {
                 val content = settingsFile.readText()
-
                 val patterns = listOf(
                     """include\s*\(\s*["']([^"']+)["']\s*\)""".toRegex(),
                     """include\s+['"]([^"']+)["']""".toRegex(),
@@ -460,7 +394,6 @@ object Utils {
                 )
 
                 val modulesSet = mutableSetOf<String>()
-
                 patterns.forEach { pattern ->
                     val matches = pattern.findAll(content)
                     matches.forEach { matchResult ->
@@ -506,13 +439,10 @@ object Utils {
             if (projectRoot.exists()) {
                 val libraries = libraryDependencyFinder.parseLibsVersionsToml(projectRoot)
                 val libraryAliases = libraries.map { it.alias }
-
                 val grouped = groupLibraries(libraryAliases)
-
                 SwingUtilities.invokeLater {
                     onAvailableLibrariesLoaded(libraryAliases)
                     onLibraryGroupsLoaded(grouped)
-
                     expandedGroups.clear()
                     grouped.keys.forEach { expandedGroups[it] = false }
                 }
@@ -523,12 +453,10 @@ object Utils {
     fun groupLibraries(libraries: List<String>): Map<String, List<String>> {
         val grouped = mutableMapOf<String, MutableList<String>>()
         val ungrouped = mutableListOf<String>()
-
         libraries.forEach { library ->
             val parts = library.split("-")
             if (parts.size > 1) {
                 val prefix = parts[0]
-                // Only group if there are multiple libraries with the same prefix
                 val relatedLibs = libraries.filter { it.startsWith("$prefix-") }
                 if (relatedLibs.size > 1) {
                     grouped.getOrPut(prefix) { mutableListOf() }.add(library)
@@ -539,12 +467,7 @@ object Utils {
                 ungrouped.add(library)
             }
         }
-
-        // Add ungrouped libraries as individual items
-        if (ungrouped.isNotEmpty()) {
-            grouped["Other"] = ungrouped.toMutableList()
-        }
-
+        if (ungrouped.isNotEmpty()) grouped["Other"] = ungrouped.toMutableList()
         return grouped.mapValues { it.value.sorted() }
     }
 
@@ -558,15 +481,11 @@ object Utils {
         thread {
             val projectRoot = File(project.basePath.orEmpty())
             if (projectRoot.exists()) {
-                val plugins = libraryDependencyFinder.parsePluginsFromToml(projectRoot)
-                val pluginAliases = plugins.map { it.alias }
-
+                val pluginAliases = libraryDependencyFinder.parsePluginsFromToml(projectRoot).map { it.alias }
                 val grouped = groupPlugins(pluginAliases)
-
                 SwingUtilities.invokeLater {
                     onAvailablePluginsLoaded(pluginAliases)
                     onPluginGroupsLoaded(grouped)
-
                     expandedPluginGroups.clear()
                     grouped.keys.forEach { expandedPluginGroups[it] = false }
                 }
@@ -577,12 +496,10 @@ object Utils {
     fun groupPlugins(plugins: List<String>): Map<String, List<String>> {
         val grouped = mutableMapOf<String, MutableList<String>>()
         val ungrouped = mutableListOf<String>()
-
         plugins.forEach { plugin ->
             val parts = plugin.split("-")
             if (parts.size > 1) {
                 val prefix = parts[0]
-                // Only group if there are multiple plugins with the same prefix
                 val relatedPlugins = plugins.filter { it.startsWith("$prefix-") }
                 if (relatedPlugins.size > 1) {
                     grouped.getOrPut(prefix) { mutableListOf() }.add(plugin)
@@ -593,12 +510,7 @@ object Utils {
                 ungrouped.add(plugin)
             }
         }
-
-        // Add ungrouped plugins as individual items
-        if (ungrouped.isNotEmpty()) {
-            grouped["Other"] = ungrouped.toMutableList()
-        }
-
+        if (ungrouped.isNotEmpty()) grouped["Other"] = ungrouped.toMutableList()
         return grouped.mapValues { it.value.sorted() }
     }
 
@@ -619,10 +531,8 @@ object Utils {
                 onAnalysisResultChange("Directory does not exist or is not a directory")
                 return
             }
-
             onAnalyzingChange(true)
             onAnalysisResultChange(null)
-
             thread {
                 try {
                     val analyzer = ImportAnalyzer()
@@ -635,19 +545,12 @@ object Utils {
                     if (analyzeLibraries && projectRoot != null) {
                         val availableLibraries = libraryDependencyFinder.parseLibsVersionsToml(projectRoot)
                         val usedLibraries = libraryDependencyFinder.findImportedLibraries(directory, availableLibraries)
-
-                        println("Available libraries: $availableLibraries")
-                        println("Used libraries: $usedLibraries")
-
-                        SwingUtilities.invokeLater {
-                            onDetectLibrariesLoaded(usedLibraries)
-                        }
+                        SwingUtilities.invokeLater { onDetectLibrariesLoaded(usedLibraries) }
                     }
 
                     SwingUtilities.invokeLater {
                         onDetectedModulesLoaded(findModules)
                         onSelectedModulesLoaded(findModules)
-
                         if (detectedModules.isEmpty()) {
                             onAnalysisResultChange("No dependencies detected")
                         } else {
@@ -662,7 +565,6 @@ object Utils {
                     }
                 }
             }
-
         } catch (e: Exception) {
             onAnalysisResultChange("Error analyzing directory: ${e.message}")
             onAnalyzingChange(false)

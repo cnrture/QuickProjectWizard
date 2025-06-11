@@ -5,6 +5,7 @@ import com.android.tools.idea.wizard.template.ModuleTemplateData
 import com.android.tools.idea.wizard.template.PackageName
 import com.android.tools.idea.wizard.template.RecipeExecutor
 import com.android.tools.idea.wizard.template.escapeKotlinIdentifier
+import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.projectwizard.addRootFile
 import com.github.cnrture.quickprojectwizard.projectwizard.addSrcFile
 import com.github.cnrture.quickprojectwizard.projectwizard.composearch.common.emptyCollectExtension
@@ -35,7 +36,6 @@ import com.github.cnrture.quickprojectwizard.projectwizard.general.domain.emptyM
 import com.github.cnrture.quickprojectwizard.projectwizard.gradle.getDependencies
 import com.github.cnrture.quickprojectwizard.projectwizard.gradle.getGradleKts
 import com.github.cnrture.quickprojectwizard.projectwizard.gradle.getProjectGradleKts
-import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.projectwizard.util.NotificationUtil
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
@@ -102,9 +102,7 @@ fun RecipeExecutor.composeProjectRecipe(
         manifestOut.resolve("AndroidManifest.xml")
     )
 
-    if (isDetektEnable) {
-        addRootFile(emptyDetektConfig(), moduleData, "detekt/detektConfig.yml")
-    }
+    if (isDetektEnable) addRootFile(emptyDetektConfig(), moduleData, "detekt/detektConfig.yml")
 
     if (dataDiDomainPresentationUiPackages) {
         if (isHiltEnable) {

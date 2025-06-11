@@ -15,10 +15,7 @@ class CreateFeatureAction : CreateElementActionBase(
     "Create a new feature",
     AllIcons.Nodes.Folder,
 ) {
-
-    override fun create(name: String, directory: PsiDirectory): Array<PsiElement> {
-        return emptyArray()
-    }
+    override fun create(name: String, directory: PsiDirectory): Array<PsiElement> = emptyArray()
 
     override fun invokeDialog(
         project: Project,

@@ -21,13 +21,10 @@ val xmlTemplate = template {
     runBlocking {
         try {
             getVersions()
-            println("Versions fetched successfully")
         } catch (e: Exception) {
             println("Failed to fetch versions: ${e.message}")
         }
     }
-
-    val packageName = defaultPackageNameParameter
 
     val selectedNetworkLibrary = enumParameter<NetworkLibrary> {
         name = "Network Library"
@@ -110,7 +107,7 @@ val xmlTemplate = template {
         LabelWidget("8 or 11 or 17 etc."),
         LabelWidget(" "),
         UrlLinkWidget("Created by Caner Ture", "https://bento.me/canerture"),
-        PackageNameWidget(packageName),
+        PackageNameWidget(defaultPackageNameParameter),
     )
 
     thumb = {
@@ -127,7 +124,7 @@ val xmlTemplate = template {
     recipe = { data: TemplateData ->
         xmlProjectRecipe(
             moduleData = data as ModuleTemplateData,
-            packageName = packageName.value,
+            packageName = defaultPackageNameParameter.value,
             isRoomEnable = isRoomEnable.value,
             isWorkManagerEnable = isWorkManagerEnable.value,
             selectedNetworkLibrary = selectedNetworkLibrary.value,

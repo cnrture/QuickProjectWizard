@@ -21,15 +21,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.common.Constants
+import com.github.cnrture.quickprojectwizard.components.*
+import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.projectwizard.composearch.ui.main.emptyMainContract
 import com.github.cnrture.quickprojectwizard.projectwizard.composearch.ui.main.emptyMainScreen
 import com.github.cnrture.quickprojectwizard.projectwizard.composearch.ui.main.emptyMainScreenPreviewProvider
 import com.github.cnrture.quickprojectwizard.projectwizard.composearch.ui.main.emptyMainViewModel
-import com.github.cnrture.quickprojectwizard.components.*
-import com.github.cnrture.quickprojectwizard.data.SettingsService
+import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.github.cnrture.quickprojectwizard.toolwindow.template.GradleTemplate
 import com.github.cnrture.quickprojectwizard.toolwindow.template.ManifestTemplate
-import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
 
