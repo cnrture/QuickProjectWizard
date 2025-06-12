@@ -416,7 +416,7 @@ private fun FileTemplateEditor(
             QPWTextField(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(120.dp),
+                    .wrapContentHeight(),
                 placeholder = "Enter file content here...\n\nExample:\ninterface {{MODULE_NAME}}Repository {\n    // Define methods here\n}",
                 color = QPWTheme.colors.white,
                 value = fileTemplate.fileContent,
