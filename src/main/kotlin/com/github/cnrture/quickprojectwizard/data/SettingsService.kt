@@ -33,8 +33,6 @@ data class SettingsState(
     var moduleTemplates: MutableList<ModuleTemplate> = mutableListOf(),
     var defaultPackageName: String = Constants.DEFAULT_BASE_PACKAGE_NAME,
     var preferredModuleType: String = Constants.ANDROID,
-    var webViewUrl: String = Constants.DEFAULT_WEB_VIEW_URL,
-
     var featureScreenTemplate: String = Constants.EMPTY,
     var featureViewModelTemplate: String = Constants.EMPTY,
     var featureContractTemplate: String = Constants.EMPTY,
@@ -52,9 +50,6 @@ data class SettingsState(
 data class ModuleTemplate(
     val id: String,
     val name: String,
-    val description: String,
-    val moduleType: String,
-    val packageStructure: List<String>,
     val fileTemplates: List<FileTemplate>,
     val isDefault: Boolean = false,
 )

@@ -24,7 +24,7 @@ enum class QPWActionCardType { SMALL, MEDIUM, LARGE }
 fun QPWActionCard(
     modifier: Modifier = Modifier,
     title: String? = null,
-    icon: ImageVector,
+    icon: ImageVector? = null,
     actionColor: Color,
     type: QPWActionCardType = QPWActionCardType.LARGE,
     onClick: () -> Unit,
@@ -70,33 +70,37 @@ fun QPWActionCard(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
     ) {
-        if (type == QPWActionCardType.LARGE) {
-            Box(
-                modifier = Modifier
-                    .size(iconBoxSize)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(actionColor),
-                contentAlignment = Alignment.Center
-            ) {
+        icon?.let {
+            if (type == QPWActionCardType.LARGE) {
+                Box(
+                    modifier = Modifier
+                        .size(iconBoxSize)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(actionColor),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = null,
+                        tint = QPWTheme.colors.white,
+                        modifier = Modifier.size(iconSize)
+                    )
+                }
+            } else {
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
-                    tint = QPWTheme.colors.white,
+                    tint = actionColor,
                     modifier = Modifier.size(iconSize)
                 )
             }
-        } else {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = actionColor,
-                modifier = Modifier.size(iconSize)
-            )
+        }
+
+        if (icon != null && title != null) {
+            Spacer(modifier = Modifier.width(8.dp))
         }
 
         title?.let {
-            Spacer(modifier = Modifier.width(8.dp))
-
             QPWText(
                 text = it,
                 style = TextStyle(

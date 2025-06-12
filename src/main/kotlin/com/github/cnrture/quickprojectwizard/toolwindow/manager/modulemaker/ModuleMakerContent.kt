@@ -10,7 +10,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.runtime.LaunchedEffect
 import com.github.cnrture.quickprojectwizard.common.Constants
 import com.github.cnrture.quickprojectwizard.common.Utils
 import com.github.cnrture.quickprojectwizard.common.file.FileWriter
@@ -19,8 +18,8 @@ import com.github.cnrture.quickprojectwizard.common.rootDirectoryString
 import com.github.cnrture.quickprojectwizard.common.rootDirectoryStringDropLast
 import com.github.cnrture.quickprojectwizard.components.QPWTabRow
 import com.github.cnrture.quickprojectwizard.components.QPWText
-import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
 import com.github.cnrture.quickprojectwizard.data.FileTemplate
+import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
 import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.intellij.openapi.application.ApplicationManager
@@ -51,7 +50,6 @@ fun ModuleMakerContent(project: Project) {
     val availableTemplates = remember {
         val currentTemplates = settings.state.moduleTemplates.toMutableList()
         if (currentTemplates.isEmpty()) {
-            // Add default templates if not present
             currentTemplates.addAll(getDefaultTemplates())
         }
         currentTemplates
@@ -71,14 +69,6 @@ fun ModuleMakerContent(project: Project) {
 
     var selectedTab by remember { mutableStateOf(0) }
     val tabs = listOf("New Module", "New Module with Existing Files")
-
-    // Auto-apply template when selected
-    LaunchedEffect(selectedTemplate) {
-        selectedTemplate?.let { template ->
-            // Set module type from template
-            moduleType.value = template.moduleType
-        }
-    }
 
     Utils.loadExistingModules(
         project = project,
@@ -239,20 +229,8 @@ fun ModuleMakerContent(project: Project) {
 private fun getDefaultTemplates(): List<ModuleTemplate> {
     return listOf(
         ModuleTemplate(
-            id = "clean_architecture",
-            name = "Clean Architecture",
-            description = "MVVM + Clean Architecture with Repository, UseCase, ViewModel",
-            moduleType = Constants.ANDROID,
-            packageStructure = listOf(
-                "data/local",
-                "data/remote",
-                "data/repository",
-                "domain/model",
-                "domain/repository",
-                "domain/usecase",
-                "presentation/viewmodel",
-                "presentation/ui"
-            ),
+            id = "candroid_template",
+            name = "Candroid's Template",
             fileTemplates = listOf(
                 FileTemplate(
                     fileName = "Repository.kt",
@@ -260,34 +238,8 @@ private fun getDefaultTemplates(): List<ModuleTemplate> {
                     fileContent = "interface {{MODULE_NAME}}Repository {\n    // Define methods here\n}",
                     fileType = "kt"
                 ),
-                FileTemplate(
-                    fileName = "ViewModel.kt",
-                    filePath = "presentation/viewmodel",
-                    fileContent = "@HiltViewModel\nclass {{MODULE_NAME}}ViewModel @Inject constructor() : ViewModel() {\n    // ViewModel implementation\n}",
-                    fileType = "kt"
-                )
             ),
-            isDefault = true
+            isDefault = true,
         ),
-        ModuleTemplate(
-            id = "simple_mvvm",
-            name = "Simple MVVM",
-            description = "Basic MVVM pattern with ViewModel and Repository",
-            moduleType = Constants.ANDROID,
-            packageStructure = listOf(
-                "data/repository",
-                "presentation/viewmodel",
-                "presentation/ui"
-            ),
-            fileTemplates = listOf(
-                FileTemplate(
-                    fileName = "Repository.kt",
-                    filePath = "data/repository",
-                    fileContent = "@Singleton\nclass {{MODULE_NAME}}Repository @Inject constructor() {\n    // Repository implementation\n}",
-                    fileType = "kt"
-                )
-            ),
-            isDefault = true
-        )
     )
 }

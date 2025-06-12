@@ -7,15 +7,16 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
-import androidx.compose.material.Divider
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Save
-import androidx.compose.runtime.*
-import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
@@ -24,16 +25,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.common.Constants
-import com.github.cnrture.quickprojectwizard.components.QPWActionCard
-import com.github.cnrture.quickprojectwizard.components.QPWActionCardType
-import com.github.cnrture.quickprojectwizard.components.QPWRadioButton
-import com.github.cnrture.quickprojectwizard.components.QPWTextField
-import com.github.cnrture.quickprojectwizard.components.QPWText
-import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
+import com.github.cnrture.quickprojectwizard.components.*
 import com.github.cnrture.quickprojectwizard.data.FileTemplate
+import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
 import com.github.cnrture.quickprojectwizard.data.SettingsService
-import com.github.cnrture.quickprojectwizard.dialog.TemplateCreatorDialog
-import com.github.cnrture.quickprojectwizard.dialog.TemplateEditorDialog
+import com.github.cnrture.quickprojectwizard.dialog.template.TemplateCreatorDialog
+import com.github.cnrture.quickprojectwizard.dialog.template.TemplateEditorDialog
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
@@ -43,19 +40,11 @@ fun SettingsContent() {
     val settings = ApplicationManager.getApplication().service<SettingsService>()
     var currentSettings by mutableStateOf(settings.state.copy())
     var selectedTab by mutableStateOf("general")
-    var refreshTrigger by remember { mutableIntStateOf(0) }
+    var selectedModuleType by mutableStateOf(currentSettings.preferredModuleType)
+    var packageName by mutableStateOf(currentSettings.defaultPackageName)
 
-    // Default template'ları ekle (ilk kez)
     if (currentSettings.moduleTemplates.isEmpty()) {
         currentSettings.moduleTemplates.addAll(getDefaultTemplates())
-    }
-
-    // Refresh settings when trigger changes
-    LaunchedEffect(refreshTrigger) {
-        currentSettings = settings.state.copy()
-        if (currentSettings.moduleTemplates.isEmpty()) {
-            currentSettings.moduleTemplates.addAll(getDefaultTemplates())
-        }
     }
 
     Scaffold(
@@ -76,8 +65,11 @@ fun SettingsContent() {
                     icon = Icons.Default.Save,
                     actionColor = QPWTheme.colors.lightGray,
                     onClick = {
+                        currentSettings = settings.state.copy(
+                            defaultPackageName = packageName,
+                            preferredModuleType = selectedModuleType,
+                        )
                         settings.loadState(currentSettings)
-                        refreshTrigger++ // UI'yi yenile
                     },
                 )
             }
@@ -128,14 +120,10 @@ fun SettingsContent() {
             ) {
                 when (selectedTab) {
                     "general" -> GeneralSettingsTab(
-                        defaultPackageName = currentSettings.defaultPackageName,
-                        preferredModuleType = currentSettings.preferredModuleType,
-                        onPackageNameChange = { newPackageName ->
-                            currentSettings = currentSettings.copy(defaultPackageName = newPackageName)
-                        },
-                        onModuleTypeChange = { newModuleType ->
-                            currentSettings = currentSettings.copy(preferredModuleType = newModuleType)
-                        }
+                        defaultPackageName = packageName,
+                        preferredModuleType = selectedModuleType,
+                        onPackageNameChange = { packageName = it },
+                        onModuleTypeChange = { selectedModuleType = it }
                     )
 
                     "templates" -> ModuleTemplatesTab(
@@ -143,16 +131,25 @@ fun SettingsContent() {
                         onTemplateDelete = { template ->
                             if (!template.isDefault) {
                                 settings.removeTemplate(template)
-                                refreshTrigger++ // UI'yi hemen yenile
+                                currentSettings = settings.state.copy()
+                                if (currentSettings.moduleTemplates.isEmpty()) {
+                                    currentSettings.moduleTemplates.addAll(getDefaultTemplates())
+                                }
                             }
                         },
                         onTemplateAdd = { newTemplate ->
                             settings.saveTemplate(newTemplate)
-                            refreshTrigger++ // UI'yi hemen yenile
+                            currentSettings = settings.state.copy()
+                            if (currentSettings.moduleTemplates.isEmpty()) {
+                                currentSettings.moduleTemplates.addAll(getDefaultTemplates())
+                            }
                         },
                         onTemplateEdit = { oldTemplate, updatedTemplate ->
                             settings.saveTemplate(updatedTemplate)
-                            refreshTrigger++ // UI'yi hemen yenile
+                            currentSettings = settings.state.copy()
+                            if (currentSettings.moduleTemplates.isEmpty()) {
+                                currentSettings.moduleTemplates.addAll(getDefaultTemplates())
+                            }
                         }
                     )
                 }
@@ -171,7 +168,7 @@ private fun SettingsTab(
         modifier = Modifier.clickable { onClick() },
         shape = RoundedCornerShape(8.dp),
         backgroundColor = if (isSelected) QPWTheme.colors.lightGray.copy(alpha = 0.2f) else QPWTheme.colors.gray,
-        elevation = if (isSelected) 4.dp else 0.dp
+        elevation = 0.dp
     ) {
         QPWText(
             text = title,
@@ -256,15 +253,14 @@ private fun ModuleTemplateCard(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         backgroundColor = QPWTheme.colors.gray,
-        elevation = 4.dp
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(24.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.Top
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -291,18 +287,6 @@ private fun ModuleTemplateCard(
                             }
                         }
                     }
-                    Spacer(modifier = Modifier.height(4.dp))
-                    QPWText(
-                        text = template.description,
-                        color = QPWTheme.colors.lightGray,
-                        style = TextStyle(fontSize = 13.sp)
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    QPWText(
-                        text = "Type: ${template.moduleType}",
-                        color = QPWTheme.colors.lightGray,
-                        style = TextStyle(fontSize = 11.sp)
-                    )
                 }
 
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -315,7 +299,7 @@ private fun ModuleTemplateCard(
                             onEdit()
                         }
                     )
-                    if (!template.isDefault) {
+                    if (!template.isDefault || template.id != "candroid_template") {
                         QPWActionCard(
                             title = "Delete",
                             icon = Icons.Default.Delete,
@@ -325,33 +309,6 @@ private fun ModuleTemplateCard(
                         )
                     }
                 }
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-            Divider(color = QPWTheme.colors.lightGray.copy(alpha = 0.3f))
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // Package Structure Preview
-            QPWText(
-                text = "Package Structure:",
-                color = QPWTheme.colors.lightGray,
-                style = TextStyle(fontSize = 11.sp, fontWeight = FontWeight.Bold)
-            )
-            template.packageStructure.take(3).forEach { packagePath ->
-                QPWText(
-                    text = "• $packagePath",
-                    color = QPWTheme.colors.lightGray,
-                    style = TextStyle(fontSize = 10.sp),
-                    modifier = Modifier.padding(start = 8.dp)
-                )
-            }
-            if (template.packageStructure.size > 3) {
-                QPWText(
-                    text = "... and ${template.packageStructure.size - 3} more",
-                    color = QPWTheme.colors.lightGray,
-                    style = TextStyle(fontSize = 10.sp),
-                    modifier = Modifier.padding(start = 8.dp)
-                )
             }
         }
     }
@@ -449,20 +406,8 @@ private fun SettingItem(
 private fun getDefaultTemplates(): List<ModuleTemplate> {
     return listOf(
         ModuleTemplate(
-            id = "clean_architecture",
-            name = "Clean Architecture",
-            description = "MVVM + Clean Architecture with Repository, UseCase, ViewModel",
-            moduleType = Constants.ANDROID,
-            packageStructure = listOf(
-                "data/local",
-                "data/remote",
-                "data/repository",
-                "domain/model",
-                "domain/repository",
-                "domain/usecase",
-                "presentation/viewmodel",
-                "presentation/ui"
-            ),
+            id = "candroid_template",
+            name = "Candroid's Template",
             fileTemplates = listOf(
                 FileTemplate(
                     fileName = "Repository.kt",
@@ -470,34 +415,8 @@ private fun getDefaultTemplates(): List<ModuleTemplate> {
                     fileContent = "interface {{MODULE_NAME}}Repository {\n    // Define methods here\n}",
                     fileType = "kt"
                 ),
-                FileTemplate(
-                    fileName = "ViewModel.kt",
-                    filePath = "presentation/viewmodel",
-                    fileContent = "@HiltViewModel\nclass {{MODULE_NAME}}ViewModel @Inject constructor() : ViewModel() {\n    // ViewModel implementation\n}",
-                    fileType = "kt"
-                )
             ),
-            isDefault = true
+            isDefault = true,
         ),
-        ModuleTemplate(
-            id = "simple_mvvm",
-            name = "Simple MVVM",
-            description = "Basic MVVM pattern with ViewModel and Repository",
-            moduleType = Constants.ANDROID,
-            packageStructure = listOf(
-                "data/repository",
-                "presentation/viewmodel",
-                "presentation/ui"
-            ),
-            fileTemplates = listOf(
-                FileTemplate(
-                    fileName = "Repository.kt",
-                    filePath = "data/repository",
-                    fileContent = "@Singleton\nclass {{MODULE_NAME}}Repository @Inject constructor() {\n    // Repository implementation\n}",
-                    fileType = "kt"
-                )
-            ),
-            isDefault = true
-        )
     )
 }

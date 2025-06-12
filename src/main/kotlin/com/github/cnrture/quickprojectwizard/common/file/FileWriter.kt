@@ -1,6 +1,7 @@
 package com.github.cnrture.quickprojectwizard.common.file
 
 import com.github.cnrture.quickprojectwizard.common.Constants
+import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
 import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.projectwizard.xmlarch.ui.emptyFragmentLayout
 import com.github.cnrture.quickprojectwizard.projectwizard.xmlarch.ui.emptyMainFragment
@@ -35,7 +36,7 @@ class FileWriter() {
         dependencies: List<String> = emptyList(),
         libraryDependencies: String = Constants.EMPTY,
         pluginDependencies: String = Constants.EMPTY,
-        template: com.github.cnrture.quickprojectwizard.data.ModuleTemplate? = null,
+        template: ModuleTemplate? = null,
     ): List<File> {
         val filesCreated = mutableListOf<File>()
 
@@ -81,7 +82,7 @@ class FileWriter() {
         dependencies: List<String> = emptyList(),
         libraryDependencies: String = Constants.EMPTY,
         pluginDependencies: String = Constants.EMPTY,
-        template: com.github.cnrture.quickprojectwizard.data.ModuleTemplate? = null,
+        template: ModuleTemplate? = null,
     ): List<File> {
         val filesCreated = mutableListOf<File>()
 
@@ -101,11 +102,10 @@ class FileWriter() {
 
         filesCreated += templateWriter.createReadmeFile(moduleFile, moduleName)
 
-        // Create package structure and files based on template
-        if (template != null) {
-            filesCreated += createTemplateBasedStructure(moduleFile, packageName, template)
+        filesCreated += if (template != null) {
+            createTemplateBasedStructure(moduleFile, packageName, template)
         } else {
-            filesCreated += createDefaultPackages(moduleFile, packageName)
+            createDefaultPackages(moduleFile, packageName)
         }
 
         filesCreated += createGitIgnore(moduleFile)
@@ -286,26 +286,13 @@ class FileWriter() {
     private fun createTemplateBasedStructure(
         moduleFile: File,
         packageName: String,
-        template: com.github.cnrture.quickprojectwizard.data.ModuleTemplate,
+        template: ModuleTemplate,
     ): List<File> {
         val filesCreated = mutableListOf<File>()
 
-        // Create base kotlin source directory
         val srcPath = Paths.get(moduleFile.absolutePath, "src/main/kotlin").toFile()
         srcPath.mkdirs()
 
-        // Create package structure from template
-        template.packageStructure.forEach { packagePath ->
-            val fullPackageName = "$packageName.$packagePath"
-            val packageDir = Paths.get(
-                srcPath.absolutePath,
-                fullPackageName.split(".").joinToString(File.separator)
-            ).toFile()
-            packageDir.mkdirs()
-            filesCreated.add(packageDir)
-        }
-
-        // Create file templates
         template.fileTemplates.forEach { fileTemplate ->
             val packagePath = if (fileTemplate.filePath.isNotEmpty()) {
                 "$packageName.${fileTemplate.filePath}"
@@ -321,15 +308,15 @@ class FileWriter() {
 
             val file = File(fileDir, fileTemplate.fileName)
 
-            // Replace placeholders in file content
             val moduleNameFromPath = moduleFile.name.removePrefix(":")
                 .split("-", "_", "/").joinToString("") { part ->
                     if (part.isNotEmpty()) part.replaceFirstChar { char -> char.uppercase() } else ""
                 }
 
             val content = fileTemplate.fileContent
-                .replace("{{MODULE_NAME}}", moduleNameFromPath)
-                .replace("{{PACKAGE_NAME}}", packagePath)
+                .replace("{NAME}", moduleNameFromPath)
+                .replace("{PACKAGE}", packageName)
+                .replace("{FILE_PACKAGE}", packagePath)
 
             try {
                 val writer: Writer = FileWriter(file)
@@ -338,7 +325,6 @@ class FileWriter() {
                 writer.close()
                 filesCreated.add(file)
             } catch (e: IOException) {
-                // Handle error silently for now
             }
         }
 

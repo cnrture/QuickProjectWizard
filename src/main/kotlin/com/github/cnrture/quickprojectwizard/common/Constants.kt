@@ -12,12 +12,10 @@ object Constants {
     const val ANDROID = "Android"
     const val KOTLIN = "Kotlin / JVM"
 
-    const val DEFAULT_MODULE_NAME = ":feature:home (as an example)"
+    const val DEFAULT_MODULE_NAME = ":feature:home"
     const val DEFAULT_SRC_VALUE = "EMPTY"
 
-    const val DEFAULT_BASE_PACKAGE_NAME = "app.example.quickprojectwizard"
-
-    const val DEFAULT_WEB_VIEW_URL = "https://candroid.dev/"
+    const val DEFAULT_BASE_PACKAGE_NAME = "app.example.app"
 
     const val DEFAULT_EXIT_CODE = 2
 

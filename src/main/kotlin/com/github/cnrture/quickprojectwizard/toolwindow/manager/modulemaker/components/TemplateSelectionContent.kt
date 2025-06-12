@@ -1,5 +1,6 @@
 package com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -14,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.components.QPWText
@@ -54,10 +54,8 @@ fun TemplateSelectionContent(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Manual/Custom option
         TemplateOption(
             title = "Custom Configuration",
-            description = "Manually configure packages, dependencies, and files",
             isSelected = selectedTemplate == null,
             onClick = { onTemplateSelected(null) },
             badge = "Manual",
@@ -66,11 +64,9 @@ fun TemplateSelectionContent(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // Template options
         templates.forEach { template ->
             TemplateOption(
                 title = template.name,
-                description = template.description,
                 isSelected = selectedTemplate?.id == template.id,
                 onClick = {
                     onTemplateSelected(template)
@@ -80,62 +76,12 @@ fun TemplateSelectionContent(
             )
             Spacer(modifier = Modifier.height(8.dp))
         }
-
-        // Template Preview
-        selectedTemplate?.let { template ->
-            Spacer(modifier = Modifier.height(16.dp))
-            TemplatePreview(template = template)
-        }
-    }
-}
-
-@Composable
-private fun TemplatePreview(template: ModuleTemplate) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(8.dp),
-        backgroundColor = QPWTheme.colors.black.copy(alpha = 0.4f),
-        elevation = 2.dp
-    ) {
-        Column(
-            modifier = Modifier.padding(12.dp)
-        ) {
-            QPWText(
-                text = "Package Structure Preview",
-                color = QPWTheme.colors.white,
-                style = TextStyle(
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            if (template.packageStructure.isNotEmpty()) {
-                template.packageStructure.forEach { packagePath ->
-                    QPWText(
-                        text = "📁 $packagePath",
-                        color = QPWTheme.colors.lightGray,
-                        style = TextStyle(fontSize = 11.sp),
-                        modifier = Modifier.padding(start = 8.dp, bottom = 2.dp)
-                    )
-                }
-            } else {
-                QPWText(
-                    text = "No package structure defined",
-                    color = QPWTheme.colors.lightGray.copy(alpha = 0.7f),
-                    style = TextStyle(fontSize = 11.sp, fontStyle = FontStyle.Italic),
-                    modifier = Modifier.padding(start = 8.dp)
-                )
-            }
-        }
     }
 }
 
 @Composable
 private fun TemplateOption(
     title: String,
-    description: String,
     isSelected: Boolean,
     onClick: () -> Unit,
     badge: String,
@@ -146,8 +92,12 @@ private fun TemplateOption(
             .fillMaxWidth()
             .clickable { onClick() },
         shape = RoundedCornerShape(8.dp),
-        backgroundColor = if (isSelected) QPWTheme.colors.black.copy(alpha = 0.6f) else QPWTheme.colors.black.copy(alpha = 0.3f),
-        elevation = if (isSelected) 4.dp else 2.dp
+        border = BorderStroke(
+            width = if (isSelected) 2.dp else 0.dp,
+            color = if (isSelected) QPWTheme.colors.green else Color.Transparent
+        ),
+        backgroundColor = QPWTheme.colors.gray,
+        elevation = 0.dp
     ) {
         Row(
             modifier = Modifier.padding(12.dp),
@@ -180,12 +130,6 @@ private fun TemplateOption(
                         )
                     }
                 }
-                Spacer(modifier = Modifier.height(4.dp))
-                QPWText(
-                    text = description,
-                    color = QPWTheme.colors.lightGray,
-                    style = TextStyle(fontSize = 11.sp)
-                )
             }
 
             if (isSelected) {
