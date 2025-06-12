@@ -24,7 +24,7 @@ import com.intellij.openapi.project.Project
 import java.io.File
 
 @Composable
-fun FeatureMakerComponent(project: Project) {
+fun FeatureMakerContent(project: Project) {
     val fileWriter = FileWriter()
 
     val selectedSrc = mutableStateOf(Constants.DEFAULT_SRC_VALUE)

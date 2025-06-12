@@ -38,7 +38,7 @@ fun QPWTabRow(text: String, color: Color, isSelected: Boolean, onTabSelected: ()
                 QPWText(
                     text = text,
                     style = TextStyle(
-                        fontSize = 18.sp,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                     ),
                     color = QPWTheme.colors.white,

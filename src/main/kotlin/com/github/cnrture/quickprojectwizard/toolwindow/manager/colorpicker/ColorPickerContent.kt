@@ -44,7 +44,7 @@ data class ColorInfo(
 )
 
 @Composable
-fun ColorPickerComponent() {
+fun ColorPickerContent() {
     var colorHistory by remember { mutableStateOf(emptyList<ColorInfo>()) }
 
     Column(
@@ -66,23 +66,20 @@ fun ColorPickerComponent() {
 
         Spacer(modifier = Modifier.size(24.dp))
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            QPWActionCard(
-                modifier = Modifier.weight(1f),
-                title = "Pick Color",
-                icon = Icons.Rounded.ColorLens,
-                actionColor = QPWTheme.colors.purple,
-                onClick = {
-                    startColorPicking { color ->
-                        val colorInfo = createColorInfo(color)
-                        colorHistory = listOf(colorInfo) + colorHistory.take(9)
-                    }
+        QPWActionCard(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            title = "Pick Color",
+            icon = Icons.Rounded.ColorLens,
+            actionColor = QPWTheme.colors.purple,
+            onClick = {
+                startColorPicking { color ->
+                    val colorInfo = createColorInfo(color)
+                    colorHistory = listOf(colorInfo) + colorHistory.take(9)
                 }
-            )
-        }
+            }
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
 

@@ -26,7 +26,7 @@ import com.intellij.openapi.project.Project
 import java.io.File
 
 @Composable
-fun ModuleMakerComponent(project: Project) {
+fun ModuleMakerContent(project: Project) {
     val fileWriter = FileWriter()
     val settings = ApplicationManager.getApplication().service<SettingsService>()
     val libraryDependencyFinder = LibraryDependencyFinder()
