@@ -7,10 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ColorLens
-import androidx.compose.material.icons.filled.FileOpen
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.ViewModule
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,6 +27,7 @@ import com.github.cnrture.quickprojectwizard.toolwindow.manager.colorpicker.Colo
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.featuremaker.FeatureMakerContent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.ModuleMakerContent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.SettingsContent
+import com.intellij.ide.BrowserUtil
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowFactory
@@ -99,56 +97,103 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
         ) {
             Card(
                 modifier = Modifier
-                    .width(160.dp)
+                    .width(180.dp)
                     .fillMaxHeight(),
                 backgroundColor = QPWTheme.colors.gray,
                 elevation = 8.dp
             ) {
                 Column(
-                    modifier = Modifier.padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    modifier = Modifier.fillMaxHeight()
                 ) {
-                    QPWText(
-                        text = "Quick Actions",
-                        color = QPWTheme.colors.white,
-                        style = TextStyle(
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold,
-                        ),
-                        modifier = Modifier.padding(bottom = 8.dp)
-                    )
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        QPWText(
+                            text = "Quick Actions",
+                            color = QPWTheme.colors.white,
+                            style = TextStyle(
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold,
+                            ),
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        )
 
-                    SidebarButton(
-                        title = "Module",
-                        icon = Icons.Default.ViewModule,
-                        isSelected = selectedSection == "module",
-                        color = QPWTheme.colors.green,
-                        onClick = { selectedSection = "module" }
-                    )
+                        SidebarButton(
+                            title = "Module",
+                            icon = Icons.Default.ViewModule,
+                            isSelected = selectedSection == "module",
+                            color = QPWTheme.colors.green,
+                            onClick = { selectedSection = "module" }
+                        )
 
-                    SidebarButton(
-                        title = "Feature",
-                        icon = Icons.Default.FileOpen,
-                        isSelected = selectedSection == "feature",
-                        color = QPWTheme.colors.red,
-                        onClick = { selectedSection = "feature" }
-                    )
+                        SidebarButton(
+                            title = "Feature",
+                            icon = Icons.Default.FileOpen,
+                            isSelected = selectedSection == "feature",
+                            color = QPWTheme.colors.red,
+                            onClick = { selectedSection = "feature" }
+                        )
 
-                    SidebarButton(
-                        title = "Picker",
-                        icon = Icons.Default.ColorLens,
-                        isSelected = selectedSection == "color",
-                        color = QPWTheme.colors.purple,
-                        onClick = { selectedSection = "color" }
-                    )
+                        SidebarButton(
+                            title = "Picker",
+                            icon = Icons.Default.ColorLens,
+                            isSelected = selectedSection == "color",
+                            color = QPWTheme.colors.purple,
+                            onClick = { selectedSection = "color" }
+                        )
 
-                    SidebarButton(
-                        title = "Settings",
-                        icon = Icons.Default.Settings,
-                        isSelected = selectedSection == "settings",
-                        color = QPWTheme.colors.lightGray,
-                        onClick = { selectedSection = "settings" }
-                    )
+                        SidebarButton(
+                            title = "Settings",
+                            icon = Icons.Default.Settings,
+                            isSelected = selectedSection == "settings",
+                            color = QPWTheme.colors.lightGray,
+                            onClick = { selectedSection = "settings" }
+                        )
+                    }
+
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        shape = RoundedCornerShape(12.dp),
+                        backgroundColor = QPWTheme.colors.black,
+                        elevation = 0.dp
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(8.dp),
+                            verticalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            ContactButton(
+                                title = "Website",
+                                icon = Icons.Default.Language,
+                                color = QPWTheme.colors.red,
+                                onClick = {
+                                    BrowserUtil.browse("https://candroid.dev")
+                                }
+                            )
+
+                            ContactButton(
+                                title = "Plugin Page",
+                                icon = Icons.Default.Language,
+                                color = QPWTheme.colors.green,
+                                onClick = {
+                                    BrowserUtil.browse("https://plugins.jetbrains.com/plugin/25221-quickprojectwizard/edit")
+                                }
+                            )
+
+                            ContactButton(
+                                title = "Source Code",
+                                icon = Icons.Default.Source,
+                                color = QPWTheme.colors.purple,
+                                onClick = {
+                                    BrowserUtil.browse("https://github.com/cnrture/QuickProjectWizard")
+                                },
+                            )
+                        }
+                    }
                 }
             }
 
@@ -204,6 +249,38 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                     )
                 )
             }
+        }
+    }
+
+    @Composable
+    private fun ContactButton(
+        title: String,
+        icon: ImageVector,
+        color: Color,
+        onClick: () -> Unit,
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onClick() }
+                .padding(horizontal = 8.dp, vertical = 4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = color,
+                modifier = Modifier.size(16.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            QPWText(
+                text = title,
+                color = QPWTheme.colors.lightGray,
+                style = TextStyle(
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Medium
+                )
+            )
         }
     }
 }
