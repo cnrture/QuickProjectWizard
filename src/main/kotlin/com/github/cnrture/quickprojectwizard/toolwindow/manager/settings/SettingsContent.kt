@@ -1,7 +1,6 @@
 package com.github.cnrture.quickprojectwizard.toolwindow.manager.settings
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -156,30 +155,6 @@ fun SettingsContent() {
                 }
             }
         }
-    }
-}
-
-@Composable
-private fun SettingsTab(
-    title: String,
-    isSelected: Boolean,
-    onClick: () -> Unit,
-) {
-    Card(
-        modifier = Modifier.clickable { onClick() },
-        shape = RoundedCornerShape(8.dp),
-        backgroundColor = if (isSelected) QPWTheme.colors.lightGray.copy(alpha = 0.2f) else QPWTheme.colors.gray,
-        elevation = 0.dp
-    ) {
-        QPWText(
-            text = title,
-            color = if (isSelected) QPWTheme.colors.white else QPWTheme.colors.lightGray,
-            style = TextStyle(
-                fontSize = 14.sp,
-                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
-            ),
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
-        )
     }
 }
 
