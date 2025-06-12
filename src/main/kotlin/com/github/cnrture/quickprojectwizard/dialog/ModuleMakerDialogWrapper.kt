@@ -55,7 +55,6 @@ class ModuleMakerDialogWrapper(
     private var detectedModules = mutableStateListOf<String>()
     private var detectedLibraries = mutableStateListOf<String>()
 
-    // Library selection
     private var availableLibraries = mutableStateListOf<String>()
     private var selectedLibraries = mutableStateListOf<String>()
     private var libraryGroups = mutableStateMapOf<String, List<String>>()
@@ -92,7 +91,6 @@ class ModuleMakerDialogWrapper(
                 val libraries = libraryDependencyFinder.parseLibsVersionsToml(projectRoot)
                 val libraryAliases = libraries.map { it.alias }
 
-                // Group libraries by prefix (like room-, retrofit-, etc.)
                 val grouped = groupLibraries(libraryAliases)
 
                 SwingUtilities.invokeLater {
@@ -117,7 +115,6 @@ class ModuleMakerDialogWrapper(
             val parts = library.split("-")
             if (parts.size > 1) {
                 val prefix = parts[0]
-                // Only group if there are multiple libraries with the same prefix
                 val relatedLibs = libraries.filter { it.startsWith("$prefix-") }
                 if (relatedLibs.size > 1) {
                     grouped.getOrPut(prefix) { mutableListOf() }.add(library)
@@ -129,7 +126,6 @@ class ModuleMakerDialogWrapper(
             }
         }
 
-        // Add ungrouped libraries as individual items
         if (ungrouped.isNotEmpty()) {
             grouped["Other"] = ungrouped.toMutableList()
         }

@@ -122,9 +122,6 @@ class LibraryDependencyFinder {
 
         val pluginsContent = pluginsSection[1].split("[").firstOrNull() ?: return emptyList()
 
-        // Parse plugin entries like:
-        // kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-        // compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
         val pluginPattern =
             """(\w+(?:-\w+)*)\s*=\s*\{\s*id\s*=\s*["']([^"']+)["']\s*(?:,\s*version\.ref\s*=\s*["']([^"']+)["'])?\s*(?:,\s*version\s*=\s*["']([^"']+)["'])?\s*}""".toRegex()
 
