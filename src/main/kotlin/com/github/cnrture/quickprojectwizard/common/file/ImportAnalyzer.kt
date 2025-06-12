@@ -3,7 +3,7 @@ package com.github.cnrture.quickprojectwizard.common.file
 import com.github.cnrture.quickprojectwizard.common.Constants
 import java.io.File
 
-class ImportAnalyzer() {
+class ImportAnalyzer {
 
     private val modulePackageMapping = mutableMapOf<String, List<String>>()
 
