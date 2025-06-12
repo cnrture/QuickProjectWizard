@@ -60,9 +60,6 @@ fun MoveExistingFilesToModuleContent(
     availablePlugins: List<String>,
     selectedPlugins: List<String>,
     onPluginSelected: (String) -> Unit,
-    pluginGroups: Map<String, List<String>>,
-    expandedPluginGroups: Map<String, Boolean>,
-    onPluginGroupExpandToggle: (String) -> Unit,
 ) {
     val radioOptions = listOf(Constants.ANDROID, Constants.KOTLIN)
     Row(modifier = modifier) {
@@ -188,9 +185,7 @@ fun MoveExistingFilesToModuleContent(
                         availablePlugins = availablePlugins,
                         selectedPlugins = selectedPlugins,
                         onPluginSelected = onPluginSelected,
-                        pluginGroups = pluginGroups,
-                        expandedPluginGroups = expandedPluginGroups,
-                        onPluginGroupExpandToggle = onPluginGroupExpandToggle,
+                        plugins = availablePlugins,
                     )
                 }
             }

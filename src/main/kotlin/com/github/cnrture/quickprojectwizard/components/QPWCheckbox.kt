@@ -28,8 +28,8 @@ import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 @Composable
 fun QPWCheckbox(
     modifier: Modifier = Modifier,
-    label: String,
     checked: Boolean,
+    label: String? = null,
     isBackgroundEnable: Boolean = false,
     color: Color = QPWTheme.colors.red,
     onCheckedChange: (Boolean) -> Unit = {},
@@ -77,13 +77,15 @@ fun QPWCheckbox(
                 )
             )
         }
-        Spacer(modifier = Modifier.size(8.dp))
-        QPWText(
-            text = label,
-            color = QPWTheme.colors.white,
-            style = TextStyle(
-                fontWeight = FontWeight.SemiBold,
-            ),
-        )
+        label?.let {
+            Spacer(modifier = Modifier.size(8.dp))
+            QPWText(
+                text = label,
+                color = QPWTheme.colors.white,
+                style = TextStyle(
+                    fontWeight = FontWeight.SemiBold,
+                ),
+            )
+        }
     }
 }

@@ -502,43 +502,16 @@ object Utils {
         project: Project,
         libraryDependencyFinder: LibraryDependencyFinder,
         onAvailablePluginsLoaded: (List<String>) -> Unit,
-        onPluginGroupsLoaded: (Map<String, List<String>>) -> Unit,
-        expandedPluginGroups: MutableMap<String, Boolean>,
     ) {
         thread {
             val projectRoot = File(project.basePath.orEmpty())
             if (projectRoot.exists()) {
                 val pluginAliases = libraryDependencyFinder.parsePluginsFromToml(projectRoot).map { it.alias }
-                val grouped = groupPlugins(pluginAliases)
                 SwingUtilities.invokeLater {
                     onAvailablePluginsLoaded(pluginAliases)
-                    onPluginGroupsLoaded(grouped)
-                    expandedPluginGroups.clear()
-                    grouped.keys.forEach { expandedPluginGroups[it] = false }
                 }
             }
         }
-    }
-
-    fun groupPlugins(plugins: List<String>): Map<String, List<String>> {
-        val grouped = mutableMapOf<String, MutableList<String>>()
-        val ungrouped = mutableListOf<String>()
-        plugins.forEach { plugin ->
-            val parts = plugin.split("-")
-            if (parts.size > 1) {
-                val prefix = parts[0]
-                val relatedPlugins = plugins.filter { it.startsWith("$prefix-") }
-                if (relatedPlugins.size > 1) {
-                    grouped.getOrPut(prefix) { mutableListOf() }.add(plugin)
-                } else {
-                    ungrouped.add(plugin)
-                }
-            } else {
-                ungrouped.add(plugin)
-            }
-        }
-        if (ungrouped.isNotEmpty()) grouped["Other"] = ungrouped.toMutableList()
-        return grouped.mapValues { it.value.sorted() }
     }
 
     fun analyzeSelectedDirectory(

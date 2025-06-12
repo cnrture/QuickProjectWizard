@@ -42,8 +42,6 @@ fun ModuleMakerComponent(project: Project) {
 
     val availablePlugins = mutableStateListOf<String>()
     val selectedPlugins = mutableStateListOf<String>()
-    val pluginGroups = mutableStateMapOf<String, List<String>>()
-    val expandedPluginGroups = mutableStateMapOf<String, Boolean>()
 
     val isMoveFiles = mutableStateOf(false)
 
@@ -86,11 +84,6 @@ fun ModuleMakerComponent(project: Project) {
             availablePlugins.clear()
             availablePlugins.addAll(it)
         },
-        onPluginGroupsLoaded = {
-            pluginGroups.clear()
-            pluginGroups.putAll(it)
-        },
-        expandedPluginGroups = expandedPluginGroups,
     )
 
     selectedSrc.value = File(project.rootDirectoryString()).absolutePath
@@ -166,9 +159,6 @@ fun ModuleMakerComponent(project: Project) {
                     onPluginSelected = {
                         if (it in selectedPlugins) selectedPlugins.remove(it) else selectedPlugins.add(it)
                     },
-                    pluginGroups = pluginGroups,
-                    expandedPluginGroups = expandedPluginGroups,
-                    onPluginGroupExpandToggle = { expandedPluginGroups[it] = !(expandedPluginGroups[it] ?: false) },
                 )
 
                 1 -> MoveExistingFilesToModuleContent(
@@ -214,11 +204,6 @@ fun ModuleMakerComponent(project: Project) {
                     selectedPlugins = selectedPlugins,
                     onPluginSelected = {
                         if (it in selectedPlugins) selectedPlugins.remove(it) else selectedPlugins.add(it)
-                    },
-                    pluginGroups = pluginGroups,
-                    expandedPluginGroups = expandedPluginGroups,
-                    onPluginGroupExpandToggle = { group ->
-                        expandedPluginGroups[group] = !(expandedPluginGroups[group] ?: false)
                     },
                 )
             }

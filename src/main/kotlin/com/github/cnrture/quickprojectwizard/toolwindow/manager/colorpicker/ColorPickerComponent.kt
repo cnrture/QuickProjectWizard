@@ -333,7 +333,6 @@ private fun startColorPicking(onColorPicked: (Color) -> Unit) {
                             onColorPicked(pixelColor)
                         } catch (ex: Exception) {
                             frame.dispose()
-                            println("Error picking color: ${ex.message}")
                         }
                     }
                 }

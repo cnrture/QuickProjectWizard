@@ -68,45 +68,82 @@ fun RowScope.LibrarySelectionContent(
             ) {
                 libraryGroups.forEach { (groupName, groupLibraries) ->
                     val isExpanded = expandedGroups[groupName] ?: false
-                    Row(
+                    val allGroupSelected = groupLibraries.all { it in selectedLibraries }
+
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { onGroupExpandToggle(groupName) }
-                            .padding(vertical = 4.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        QPWText(
-                            text = groupName,
-                            color = QPWTheme.colors.green,
-                            style = TextStyle(
-                                fontWeight = FontWeight.Bold,
+                            .padding(bottom = 8.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .border(
+                                width = 1.dp,
+                                color = QPWTheme.colors.green,
+                                shape = RoundedCornerShape(8.dp)
                             ),
-                        )
-                        Spacer(modifier = Modifier.size(8.dp))
-                        Icon(
-                            imageVector = Icons.Rounded.ExpandMore,
-                            contentDescription = null,
-                            tint = QPWTheme.colors.green,
-                            modifier = Modifier
-                                .size(24.dp)
-                                .rotate(if (isExpanded) 180f else 0f)
-                        )
-                    }
-                    if (isExpanded) {
-                        FlowRow(
+                    ) {
+                        Row(
                             modifier = Modifier.fillMaxWidth(),
-                            verticalArrangement = Arrangement.spacedBy(4.dp),
-                            horizontalArrangement = Arrangement.spacedBy(4.dp),
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            groupLibraries.forEach { library ->
-                                val isChecked = library in selectedLibraries
-                                QPWCheckbox(
-                                    checked = isChecked,
-                                    label = library,
-                                    isBackgroundEnable = true,
-                                    color = QPWTheme.colors.green,
-                                    onCheckedChange = { onLibrarySelected(library) },
+                            Row(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .clickable { onGroupExpandToggle(groupName) }
+                                    .padding(12.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                QPWText(
+                                    text = groupName.replaceFirstChar { it.uppercase() },
+                                    color = QPWTheme.colors.white,
+                                    style = TextStyle(
+                                        fontWeight = FontWeight.Bold,
+                                    ),
                                 )
+                                Spacer(modifier = Modifier.size(8.dp))
+                                Icon(
+                                    imageVector = Icons.Rounded.ExpandMore,
+                                    contentDescription = null,
+                                    tint = QPWTheme.colors.white,
+                                    modifier = Modifier
+                                        .size(24.dp)
+                                        .rotate(if (isExpanded) 180f else 0f)
+                                )
+                            }
+
+                            QPWCheckbox(
+                                checked = allGroupSelected,
+                                color = QPWTheme.colors.green,
+                                onCheckedChange = {
+                                    if (allGroupSelected) {
+                                        groupLibraries.forEach { library ->
+                                            if (library in selectedLibraries) onLibrarySelected(library)
+                                        }
+                                    } else {
+                                        groupLibraries.forEach { library ->
+                                            if (library !in selectedLibraries) onLibrarySelected(library)
+                                        }
+                                    }
+                                },
+                            )
+                        }
+                        if (isExpanded) {
+                            FlowRow(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(8.dp),
+                                verticalArrangement = Arrangement.spacedBy(4.dp),
+                                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                            ) {
+                                groupLibraries.forEach { library ->
+                                    val isChecked = library in selectedLibraries
+                                    QPWCheckbox(
+                                        checked = isChecked,
+                                        label = library,
+                                        isBackgroundEnable = true,
+                                        color = QPWTheme.colors.green,
+                                        onCheckedChange = { onLibrarySelected(library) },
+                                    )
+                                }
                             }
                         }
                     }

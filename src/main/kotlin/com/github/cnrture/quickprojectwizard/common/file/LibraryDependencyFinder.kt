@@ -35,16 +35,13 @@ class LibraryDependencyFinder {
         }
 
         if (!versionsToml.exists()) {
-            println("LibraryDependencyFinder: Could not find libs.versions.toml file")
             return emptyList()
         }
 
-        println("LibraryDependencyFinder: Found libs.versions.toml at ${versionsToml.absolutePath}")
         val content = versionsToml.readText()
 
         val librariesSection = content.split("[libraries]")
         if (librariesSection.size < 2) return emptyList()
-        println("Parsing libraries section: $librariesSection")
 
         val librariesContent = librariesSection[1].split("[").first()
 
@@ -86,11 +83,6 @@ class LibraryDependencyFinder {
             )
         }
 
-        println("LibraryDependencyFinder: Found ${libraries.size} libraries in libs.versions.toml")
-        libraries.forEach { library ->
-            println("  - ${library.alias}: ${library.group}:${library.artifact}")
-        }
-
         return libraries
     }
 
@@ -109,16 +101,13 @@ class LibraryDependencyFinder {
         }
 
         if (!versionsToml.exists()) {
-            println("LibraryDependencyFinder: Could not find libs.versions.toml file")
             return emptyList()
         }
 
-        println("LibraryDependencyFinder: Found libs.versions.toml at ${versionsToml.absolutePath}")
         val content = versionsToml.readText()
 
         val pluginsSection = content.split("[plugins]")
         if (pluginsSection.size < 2) return emptyList()
-        println("Parsing plugins section: $pluginsSection")
 
         val pluginsContent = pluginsSection[1].split("[").firstOrNull() ?: return emptyList()
 
@@ -134,11 +123,6 @@ class LibraryDependencyFinder {
             val version = if (matchGroups.size > 4 && matchGroups[4].isNotEmpty()) matchGroups[4] else null
 
             plugins.add(PluginInfo(alias, id, versionRef, version))
-        }
-
-        println("LibraryDependencyFinder: Found ${plugins.size} plugins in libs.versions.toml")
-        plugins.forEach { plugin ->
-            println("  - ${plugin.alias}: ${plugin.id}")
         }
 
         return plugins
