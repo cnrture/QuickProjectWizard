@@ -5,9 +5,9 @@ import com.android.tools.idea.wizard.template.ModuleTemplateData
 import com.android.tools.idea.wizard.template.PackageName
 import com.android.tools.idea.wizard.template.RecipeExecutor
 import com.android.tools.idea.wizard.template.escapeKotlinIdentifier
+import com.github.cnrture.quickprojectwizard.common.addRootFile
+import com.github.cnrture.quickprojectwizard.common.addSrcFile
 import com.github.cnrture.quickprojectwizard.data.SettingsService
-import com.github.cnrture.quickprojectwizard.projectwizard.addRootFile
-import com.github.cnrture.quickprojectwizard.projectwizard.addSrcFile
 import com.github.cnrture.quickprojectwizard.projectwizard.general.*
 import com.github.cnrture.quickprojectwizard.projectwizard.general.data.model.emptyMainEntityModel
 import com.github.cnrture.quickprojectwizard.projectwizard.general.data.repository.emptyMainRepositoryImpl

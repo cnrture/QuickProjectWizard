@@ -1,6 +1,6 @@
 package com.github.cnrture.quickprojectwizard.projectwizard.gradle
 
-import com.github.cnrture.quickprojectwizard.projectwizard.*
+import com.github.cnrture.quickprojectwizard.common.*
 import com.github.cnrture.quickprojectwizard.projectwizard.general.ImageLibrary
 import com.github.cnrture.quickprojectwizard.projectwizard.general.NetworkLibrary
 
