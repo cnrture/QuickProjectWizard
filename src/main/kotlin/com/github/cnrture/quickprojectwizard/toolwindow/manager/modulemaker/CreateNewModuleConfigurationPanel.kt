@@ -15,11 +15,13 @@ import com.github.cnrture.quickprojectwizard.common.Utils
 import com.github.cnrture.quickprojectwizard.common.file.FileWriter
 import com.github.cnrture.quickprojectwizard.common.file.LibraryDependencyFinder
 import com.github.cnrture.quickprojectwizard.components.QPWActionCard
+import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
 import com.github.cnrture.quickprojectwizard.dialog.MessageDialogWrapper
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.components.LibrarySelectionContent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.components.ModuleTypeNameContent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.components.PluginSelectionContent
+import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.components.TemplateSelectionContent
 import com.intellij.openapi.project.Project
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -45,6 +47,9 @@ fun CreateNewModuleConfigurationPanel(
     availablePlugins: List<String>,
     selectedPlugins: List<String>,
     onPluginSelected: (String) -> Unit,
+    templates: List<ModuleTemplate>,
+    selectedTemplate: ModuleTemplate?,
+    onTemplateSelected: (ModuleTemplate?) -> Unit,
 ) {
     val radioOptions = listOf(Constants.ANDROID, Constants.KOTLIN)
 
@@ -76,6 +81,7 @@ fun CreateNewModuleConfigurationPanel(
                                 selectedModules = emptyList(),
                                 selectedLibraries = selectedLibraries,
                                 selectedPlugins = selectedPlugins,
+                                template = selectedTemplate,
                             )
                         } else {
                             MessageDialogWrapper("Please fill out required values").show()
@@ -99,6 +105,12 @@ fun CreateNewModuleConfigurationPanel(
                 onPackageNameChanged = onPackageNameChanged,
                 onModuleTypeSelected = onModuleTypeSelected,
                 onModuleNameChanged = onModuleNameChanged,
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+            TemplateSelectionContent(
+                templates = templates,
+                selectedTemplate = selectedTemplate,
+                onTemplateSelected = onTemplateSelected
             )
             Spacer(modifier = Modifier.height(24.dp))
             Row(

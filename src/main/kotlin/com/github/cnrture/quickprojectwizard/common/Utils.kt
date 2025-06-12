@@ -3,6 +3,7 @@ package com.github.cnrture.quickprojectwizard.common
 import com.github.cnrture.quickprojectwizard.common.file.FileWriter
 import com.github.cnrture.quickprojectwizard.common.file.ImportAnalyzer
 import com.github.cnrture.quickprojectwizard.common.file.LibraryDependencyFinder
+import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
 import com.github.cnrture.quickprojectwizard.dialog.MessageDialogWrapper
 import com.intellij.ide.BrowserUtil
 import com.intellij.ide.starters.local.GeneratorTemplateFile
@@ -77,6 +78,7 @@ object Utils {
         selectedLibraries: List<String>,
         selectedModules: List<String>,
         selectedPlugins: List<String> = emptyList(),
+        template: ModuleTemplate? = null,
     ): List<File> {
         try {
             val settingsGradleFile = getSettingsGradleFile(project)
@@ -136,6 +138,7 @@ object Utils {
                     dependencies = selectedModules,
                     libraryDependencies = combinedLibraryDependencies,
                     pluginDependencies = pluginDependenciesString,
+                    template = template,
                 )
                 return filesCreated
             } else {
