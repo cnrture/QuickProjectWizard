@@ -2,10 +2,9 @@ package com.github.cnrture.quickprojectwizard.projectwizard.recipes
 
 import com.android.tools.idea.wizard.template.ModuleTemplateData
 import com.android.tools.idea.wizard.template.escapeKotlinIdentifier
+import com.github.cnrture.quickprojectwizard.common.Utils
 import com.github.cnrture.quickprojectwizard.projectwizard.cmparch.*
 import com.github.cnrture.quickprojectwizard.projectwizard.gradle.Versions
-import com.github.cnrture.quickprojectwizard.projectwizard.util.FileUtils
-import com.github.cnrture.quickprojectwizard.projectwizard.util.NotificationUtil
 import com.intellij.ide.fileTemplates.FileTemplateManager
 import com.intellij.ide.starters.local.GeneratorAsset
 import com.intellij.ide.starters.local.GeneratorEmptyDirectory
@@ -157,14 +156,14 @@ fun composeMultiplatformProjectRecipe(
         assets.addAll(platforms.flatMap { it.generate(fileTemplateManager, config.packageName) })
         assets.forEach { asset ->
             when (asset) {
-                is GeneratorEmptyDirectory -> FileUtils.createEmptyDirectory(this, asset.relativePath)
-                is GeneratorTemplateFile -> FileUtils.generateFileFromTemplate(dataModel, this, asset)
+                is GeneratorEmptyDirectory -> Utils.createEmptyDirectory(this, asset.relativePath)
+                is GeneratorTemplateFile -> Utils.generateFileFromTemplate(dataModel, this, asset)
                 else -> throw IllegalArgumentException("Unknown asset type: $asset")
             }
         }
     }
 
-    NotificationUtil.showInfo(
+    Utils.showInfo(
         title = "Quick Project Wizard",
         message = "Your project is ready! 🚀 If you like the plugin, please comment and rate it on the plugin page. 🙏",
     )

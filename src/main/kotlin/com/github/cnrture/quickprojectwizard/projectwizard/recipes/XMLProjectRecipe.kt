@@ -5,6 +5,7 @@ import com.android.tools.idea.wizard.template.ModuleTemplateData
 import com.android.tools.idea.wizard.template.PackageName
 import com.android.tools.idea.wizard.template.RecipeExecutor
 import com.android.tools.idea.wizard.template.escapeKotlinIdentifier
+import com.github.cnrture.quickprojectwizard.common.Utils
 import com.github.cnrture.quickprojectwizard.common.addRootFile
 import com.github.cnrture.quickprojectwizard.common.addSrcFile
 import com.github.cnrture.quickprojectwizard.data.SettingsService
@@ -23,7 +24,6 @@ import com.github.cnrture.quickprojectwizard.projectwizard.general.domain.emptyM
 import com.github.cnrture.quickprojectwizard.projectwizard.gradle.getDependencies
 import com.github.cnrture.quickprojectwizard.projectwizard.gradle.getGradleKts
 import com.github.cnrture.quickprojectwizard.projectwizard.gradle.getProjectGradleKts
-import com.github.cnrture.quickprojectwizard.projectwizard.util.NotificationUtil
 import com.github.cnrture.quickprojectwizard.projectwizard.xmlarch.common.emptyCollectExtension
 import com.github.cnrture.quickprojectwizard.projectwizard.xmlarch.ui.*
 import com.intellij.openapi.application.ApplicationManager
@@ -162,7 +162,7 @@ fun RecipeExecutor.xmlProjectRecipe(
         moduleData.themesData.main.name,
     )
 
-    NotificationUtil.showInfo(
+    Utils.showInfo(
         title = "Quick Project Wizard",
         message = "Your project is ready! 🚀 If you like the plugin, please comment and rate it on the plugin page. 🙏",
     )

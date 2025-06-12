@@ -4,6 +4,12 @@ import com.github.cnrture.quickprojectwizard.common.file.FileWriter
 import com.github.cnrture.quickprojectwizard.common.file.ImportAnalyzer
 import com.github.cnrture.quickprojectwizard.common.file.LibraryDependencyFinder
 import com.github.cnrture.quickprojectwizard.dialog.MessageDialogWrapper
+import com.intellij.ide.BrowserUtil
+import com.intellij.ide.starters.local.GeneratorTemplateFile
+import com.intellij.notification.NotificationGroupManager
+import com.intellij.notification.NotificationType
+import com.intellij.openapi.actionSystem.AnAction
+import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.externalSystem.model.ProjectSystemId
 import com.intellij.openapi.externalSystem.service.execution.ProgressExecutionMode
@@ -12,7 +18,10 @@ import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VfsUtil
 import com.intellij.openapi.vfs.VirtualFile
+import freemarker.template.Configuration
 import java.io.File
+import java.io.IOException
+import java.io.StringWriter
 import javax.swing.SwingUtilities
 import kotlin.concurrent.thread
 
@@ -552,5 +561,54 @@ object Utils {
             onAnalysisResultChange("Error analyzing directory: ${e.message}")
             onAnalyzingChange(false)
         }
+    }
+
+    fun createEmptyDirectory(parent: VirtualFile, path: String) {
+        VfsUtil.createDirectoryIfMissing(parent, path)
+    }
+
+    fun generateFileFromTemplate(
+        dataModel: Map<String, Any>,
+        outputDir: VirtualFile,
+        asset: GeneratorTemplateFile,
+    ) {
+        Configuration(Configuration.VERSION_2_3_33).apply {
+            setClassLoaderForTemplateLoading(this::class.java.classLoader, "fileTemplates/code")
+            val outputFilePathParts = asset.relativePath.split('/')
+            val dirPath = outputFilePathParts.dropLast(1).joinToString("/")
+            val targetDir = VfsUtil.createDirectoryIfMissing(outputDir, dirPath)
+                ?: throw IOException("Failed to create directory: $dirPath")
+            val outputFile = targetDir.createChildData(this, outputFilePathParts.last())
+            StringWriter().use { writer ->
+                val template = "${asset.template.name}.${asset.template.extension}"
+                getTemplate("${template}.ft").process(dataModel, writer)
+                VfsUtil.saveText(outputFile, writer.toString())
+            }
+        }
+    }
+
+    fun showInfo(title: String, message: String) {
+        val notification = NotificationGroupManager.getInstance()
+            .getNotificationGroup("QPW Notification Group")
+            .createNotification(
+                title = title,
+                content = message,
+                type = NotificationType.INFORMATION,
+            )
+        notification.addAction(
+            object : AnAction("Contact Developer") {
+                override fun actionPerformed(e: AnActionEvent) {
+                    BrowserUtil.browse("https://bento.me/canerture")
+                }
+            }
+        )
+        notification.addAction(
+            object : AnAction("Open Plugin Page") {
+                override fun actionPerformed(e: AnActionEvent) {
+                    BrowserUtil.browse("https://plugins.jetbrains.com/plugin/25221-quickprojectwizard?noRedirect=true")
+                }
+            }
+        )
+        notification.notify(null)
     }
 }

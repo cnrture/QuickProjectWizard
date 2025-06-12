@@ -1,6 +1,6 @@
 package com.github.cnrture.quickprojectwizard.projectwizard.cmparch
 
-import com.github.cnrture.quickprojectwizard.projectwizard.util.FileUtils
+import com.github.cnrture.quickprojectwizard.common.Utils
 import com.intellij.ide.fileTemplates.FileTemplateManager
 import com.intellij.ide.starters.local.GeneratorAsset
 import com.intellij.ide.starters.local.GeneratorTemplateFile
@@ -60,7 +60,7 @@ class CommonFileGenerator(
                     val screenLowerCase = it.lowercase()
                     dataModel["SCREEN"] = it
                     dataModel["SCREEN_LOWERCASE"] = screenLowerCase
-                    FileUtils.generateFileFromTemplate(
+                    Utils.generateFileFromTemplate(
                         dataModel,
                         virtualFile,
                         GeneratorTemplateFile(
@@ -68,7 +68,7 @@ class CommonFileGenerator(
                             ftManager.getCodeTemplate(Template.COMPOSE_SCREEN)
                         )
                     )
-                    FileUtils.generateFileFromTemplate(
+                    Utils.generateFileFromTemplate(
                         dataModel,
                         virtualFile,
                         GeneratorTemplateFile(
@@ -76,7 +76,7 @@ class CommonFileGenerator(
                             ftManager.getCodeTemplate(Template.COMPOSE_VIEW_MODEL)
                         )
                     )
-                    FileUtils.generateFileFromTemplate(
+                    Utils.generateFileFromTemplate(
                         dataModel,
                         virtualFile,
                         GeneratorTemplateFile(
