@@ -134,7 +134,7 @@ fun MoveExistingFilesToModuleContent(
                     onModuleNameChanged = onModuleNameChanged,
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
                 RootSelectionContent(
                     selectedSrc = selectedSrc,

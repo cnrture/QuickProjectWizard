@@ -100,7 +100,7 @@ fun CreateNewModuleConfigurationPanel(
                 onModuleTypeSelected = onModuleTypeSelected,
                 onModuleNameChanged = onModuleNameChanged,
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(24.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
