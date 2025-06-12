@@ -1,5 +1,6 @@
 package com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -35,12 +36,8 @@ fun RowScope.LibrarySelectionContent(
         Column(
             modifier = Modifier
                 .weight(1f)
-                .clip(
-                    shape = RoundedCornerShape(8.dp)
-                )
-                .border(
-                    width = 2.dp,
-                    color = QPWTheme.colors.white,
+                .background(
+                    color = QPWTheme.colors.gray,
                     shape = RoundedCornerShape(8.dp)
                 )
                 .padding(16.dp)

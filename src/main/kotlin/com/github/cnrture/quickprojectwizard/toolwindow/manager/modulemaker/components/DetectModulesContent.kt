@@ -1,6 +1,6 @@
 package com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.components
 
-import androidx.compose.foundation.border
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,7 +11,6 @@ import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -37,12 +36,8 @@ fun DetectModulesContent(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(
-                shape = RoundedCornerShape(8.dp)
-            )
-            .border(
-                width = 2.dp,
-                color = QPWTheme.colors.white,
+            .background(
+                color = QPWTheme.colors.gray,
                 shape = RoundedCornerShape(8.dp)
             )
             .padding(16.dp),

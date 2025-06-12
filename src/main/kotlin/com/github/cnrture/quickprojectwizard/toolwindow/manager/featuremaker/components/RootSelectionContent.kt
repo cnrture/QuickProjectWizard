@@ -1,11 +1,10 @@
 package com.github.cnrture.quickprojectwizard.toolwindow.manager.featuremaker.components
 
-import androidx.compose.foundation.border
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -24,8 +23,10 @@ fun RootSelectionContent(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(8.dp))
-            .border(2.dp, QPWTheme.colors.white, RoundedCornerShape(8.dp))
+            .background(
+                color = QPWTheme.colors.gray,
+                shape = RoundedCornerShape(8.dp)
+            )
             .padding(16.dp),
     ) {
         QPWText(

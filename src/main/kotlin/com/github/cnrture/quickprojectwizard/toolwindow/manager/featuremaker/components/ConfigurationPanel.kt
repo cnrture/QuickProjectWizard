@@ -66,15 +66,6 @@ fun ConfigurationPanel(
                 .fillMaxSize()
                 .padding(padding),
         ) {
-            RootSelectionContent(
-                modifier = Modifier.fillMaxWidth(),
-                selectedSrc = selectedSrc,
-                showFileTreeDialog = showFileTreeDialog,
-                onChooseRootClick = { onFileTreeDialogStateChange() }
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
             QPWTextField(
                 modifier = Modifier.fillMaxWidth(),
                 label = "Feature Name",
@@ -92,6 +83,15 @@ fun ConfigurationPanel(
                 style = TextStyle(
                     fontWeight = FontWeight.SemiBold,
                 ),
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            RootSelectionContent(
+                modifier = Modifier.fillMaxWidth(),
+                selectedSrc = selectedSrc,
+                showFileTreeDialog = showFileTreeDialog,
+                onChooseRootClick = { onFileTreeDialogStateChange() }
             )
         }
     }
