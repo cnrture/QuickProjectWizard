@@ -66,7 +66,7 @@ fun MoveExistingFilesToModuleContent(
         AnimatedVisibility(
             modifier = Modifier
                 .fillMaxHeight()
-                .weight(0.3f),
+                .weight(0.4f),
             visible = showFileTreeDialog,
             enter = slideInHorizontally(initialOffsetX = { -it }),
             exit = slideOutHorizontally(targetOffsetX = { -it }),
@@ -74,7 +74,7 @@ fun MoveExistingFilesToModuleContent(
             FileTreePanel(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .weight(0.3f),
+                    .weight(0.4f),
                 project = project,
                 onSelectedSrc = { onSelectedSrc(it) }
             )
@@ -82,7 +82,7 @@ fun MoveExistingFilesToModuleContent(
         Scaffold(
             modifier = Modifier
                 .fillMaxSize()
-                .weight(0.7f),
+                .weight(0.6f),
             backgroundColor = QPWTheme.colors.black,
             bottomBar = {
                 Box(
@@ -146,7 +146,7 @@ fun MoveExistingFilesToModuleContent(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                DetectModulesContent(
+                DetectedModulesContent(
                     project = project,
                     isAnalyzingState = isAnalyzingState,
                     analysisResultState = analysisResultState,
@@ -156,23 +156,23 @@ fun MoveExistingFilesToModuleContent(
                     onDetectedModulesLoaded = onDetectedModulesLoaded,
                     onSelectedModulesLoaded = onSelectedModulesLoaded,
                     detectedModules = detectedModules,
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                ExistingModulesContent(
                     existingModules = existingModules,
-                    selectedDependencies = selectedModules,
+                    selectedModules = selectedModules,
                     onCheckedModule = onCheckedModule,
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Row(
+                Column(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    verticalAlignment = Alignment.Top,
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
                 ) {
+                    PluginSelectionContent(
+                        availablePlugins = availablePlugins,
+                        selectedPlugins = selectedPlugins,
+                        onPluginSelected = onPluginSelected,
+                        plugins = availablePlugins,
+                    )
                     LibrarySelectionContent(
                         availableLibraries = availableLibraries,
                         selectedLibraries = selectedLibraries,
@@ -180,12 +180,6 @@ fun MoveExistingFilesToModuleContent(
                         libraryGroups = libraryGroups,
                         expandedGroups = expandedGroups,
                         onGroupExpandToggle = onGroupExpandToggle,
-                    )
-                    PluginSelectionContent(
-                        availablePlugins = availablePlugins,
-                        selectedPlugins = selectedPlugins,
-                        onPluginSelected = onPluginSelected,
-                        plugins = availablePlugins,
                     )
                 }
             }

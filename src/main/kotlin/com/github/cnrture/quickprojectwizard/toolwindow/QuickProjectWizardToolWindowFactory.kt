@@ -9,7 +9,9 @@ import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ColorLens
+import androidx.compose.material.icons.filled.FileOpen
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.ViewModule
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -98,14 +100,14 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
         ) {
             Card(
                 modifier = Modifier
-                    .width(200.dp)
+                    .width(160.dp)
                     .fillMaxHeight(),
                 backgroundColor = QPWTheme.colors.gray,
                 elevation = 8.dp
             ) {
                 Column(
                     modifier = Modifier.padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
                     QPWText(
                         text = "Quick Actions",
@@ -119,8 +121,7 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
 
                     SidebarButton(
                         title = "Module",
-                        description = "Create new modules",
-                        icon = Icons.Default.Add,
+                        icon = Icons.Default.ViewModule,
                         isSelected = selectedSection == "module",
                         color = QPWTheme.colors.green,
                         onClick = { selectedSection = "module" }
@@ -128,16 +129,14 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
 
                     SidebarButton(
                         title = "Feature",
-                        description = "Create new features",
-                        icon = Icons.Default.Add,
+                        icon = Icons.Default.FileOpen,
                         isSelected = selectedSection == "feature",
                         color = QPWTheme.colors.red,
                         onClick = { selectedSection = "feature" }
                     )
 
                     SidebarButton(
-                        title = "Color Picker",
-                        description = "Pick colors from your screen",
+                        title = "Picker",
                         icon = Icons.Default.ColorLens,
                         isSelected = selectedSection == "color",
                         color = QPWTheme.colors.purple,
@@ -146,7 +145,6 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
 
                     SidebarButton(
                         title = "Settings",
-                        description = "Configure Quick Project Wizard",
                         icon = Icons.Default.Settings,
                         isSelected = selectedSection == "settings",
                         color = QPWTheme.colors.lightGray,
@@ -173,7 +171,6 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
     @Composable
     private fun SidebarButton(
         title: String,
-        description: String,
         icon: ImageVector,
         isSelected: Boolean,
         color: Color,
@@ -188,8 +185,9 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
             elevation = 0.dp
         ) {
             Row(
-                modifier = Modifier.padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier.padding(12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
             ) {
                 Icon(
                     imageVector = icon,
@@ -197,23 +195,15 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                     tint = if (isSelected) color else QPWTheme.colors.lightGray,
                     modifier = Modifier.size(24.dp)
                 )
-                Spacer(modifier = Modifier.width(12.dp))
-                Column {
-                    QPWText(
-                        text = title,
-                        color = if (isSelected) QPWTheme.colors.white else QPWTheme.colors.lightGray,
-                        style = TextStyle(
-                            fontSize = 14.sp,
-                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
-                        )
+                Spacer(modifier = Modifier.width(8.dp))
+                QPWText(
+                    text = title,
+                    color = if (isSelected) QPWTheme.colors.white else QPWTheme.colors.lightGray,
+                    style = TextStyle(
+                        fontSize = 16.sp,
+                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
                     )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    QPWText(
-                        text = description,
-                        color = QPWTheme.colors.lightGray,
-                        style = TextStyle(fontSize = 11.sp)
-                    )
-                }
+                )
             }
         }
     }

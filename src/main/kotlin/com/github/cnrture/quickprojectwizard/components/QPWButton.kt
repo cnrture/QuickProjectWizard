@@ -7,9 +7,7 @@ import androidx.compose.material.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.common.NoRippleInteractionSource
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 
@@ -32,9 +30,6 @@ fun QPWButton(
             QPWText(
                 text = text,
                 color = QPWTheme.colors.white,
-                style = TextStyle(
-                    fontSize = 16.sp,
-                ),
             )
         },
     )
@@ -62,9 +57,6 @@ fun QPWOutlinedButton(
             QPWText(
                 text = text,
                 color = QPWTheme.colors.white,
-                style = TextStyle(
-                    fontSize = 16.sp,
-                ),
             )
         },
     )

@@ -56,7 +56,7 @@ fun RootSelectionContent(
                     backgroundColor = QPWTheme.colors.green,
                     onClick = onChooseRootClick,
                 )
-                Spacer(modifier = Modifier.weight(1f))
+                Spacer(modifier = Modifier.size(8.dp))
                 QPWCheckbox(
                     label = "Move selected files to new module",
                     checked = isMoveFiles,

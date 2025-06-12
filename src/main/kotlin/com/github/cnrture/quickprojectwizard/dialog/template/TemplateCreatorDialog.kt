@@ -117,7 +117,6 @@ private fun TemplateCreatorContent(
                         QPWTextField(
                             modifier = Modifier.fillMaxWidth(),
                             placeholder = "Template Name",
-                            label = "Enter template name",
                             color = QPWTheme.colors.white,
                             value = templateName,
                             onValueChange = { templateName = it }

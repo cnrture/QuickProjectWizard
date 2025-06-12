@@ -16,7 +16,7 @@ import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun RowScope.PluginSelectionContent(
+fun PluginSelectionContent(
     availablePlugins: List<String>,
     selectedPlugins: List<String>,
     onPluginSelected: (String) -> Unit,
@@ -25,7 +25,7 @@ fun RowScope.PluginSelectionContent(
     if (availablePlugins.isNotEmpty()) {
         Column(
             modifier = Modifier
-                .weight(1f)
+                .fillMaxWidth()
                 .background(
                     color = QPWTheme.colors.gray,
                     shape = RoundedCornerShape(8.dp)

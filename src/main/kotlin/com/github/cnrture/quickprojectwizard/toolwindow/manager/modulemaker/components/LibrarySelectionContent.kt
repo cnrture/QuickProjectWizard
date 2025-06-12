@@ -24,7 +24,7 @@ import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun RowScope.LibrarySelectionContent(
+fun LibrarySelectionContent(
     availableLibraries: List<String>,
     selectedLibraries: List<String>,
     onLibrarySelected: (String) -> Unit,
@@ -35,7 +35,7 @@ fun RowScope.LibrarySelectionContent(
     if (availableLibraries.isNotEmpty()) {
         Column(
             modifier = Modifier
-                .weight(1f)
+                .fillMaxWidth()
                 .background(
                     color = QPWTheme.colors.gray,
                     shape = RoundedCornerShape(8.dp)
@@ -93,6 +93,7 @@ fun RowScope.LibrarySelectionContent(
                                     text = groupName.replaceFirstChar { it.uppercase() },
                                     color = QPWTheme.colors.white,
                                     style = TextStyle(
+                                        fontSize = 13.sp,
                                         fontWeight = FontWeight.Bold,
                                     ),
                                 )

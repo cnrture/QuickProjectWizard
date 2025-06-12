@@ -68,8 +68,7 @@ fun ConfigurationPanel(
         ) {
             QPWTextField(
                 modifier = Modifier.fillMaxWidth(),
-                label = "Feature Name",
-                placeholder = "Feature name",
+                placeholder = "Feature Name",
                 color = QPWTheme.colors.red,
                 value = featureName,
                 onValueChange = onFeatureNameChange,

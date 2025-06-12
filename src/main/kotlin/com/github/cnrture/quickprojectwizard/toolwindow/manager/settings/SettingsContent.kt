@@ -93,20 +93,21 @@ fun SettingsContent() {
 
             Spacer(modifier = Modifier.size(24.dp))
 
-            // Tabs
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                SettingsTab(
-                    title = "General",
+                QPWTabRow(
+                    text = "General",
                     isSelected = selectedTab == "general",
-                    onClick = { selectedTab = "general" }
+                    color = QPWTheme.colors.lightGray,
+                    onTabSelected = { selectedTab = "general" }
                 )
-                SettingsTab(
-                    title = "Module Templates",
+                QPWTabRow(
+                    text = "Module Templates",
                     isSelected = selectedTab == "templates",
-                    onClick = { selectedTab = "templates" }
+                    color = QPWTheme.colors.lightGray,
+                    onTabSelected = { selectedTab = "templates" }
                 )
             }
 

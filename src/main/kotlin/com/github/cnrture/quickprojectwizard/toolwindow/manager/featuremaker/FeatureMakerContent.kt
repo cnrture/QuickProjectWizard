@@ -59,12 +59,12 @@ fun FeatureMakerContent(project: Project) {
             Row(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 40.dp, vertical = 16.dp),
+                    .padding(horizontal = 24.dp),
             ) {
                 AnimatedVisibility(
                     modifier = Modifier
                         .fillMaxHeight()
-                        .weight(0.3f),
+                        .weight(0.4f),
                     visible = showFileTreeDialog,
                     enter = slideInHorizontally(initialOffsetX = { -it }),
                     exit = slideOutHorizontally(targetOffsetX = { -it }),
@@ -72,7 +72,7 @@ fun FeatureMakerContent(project: Project) {
                     FileTreePanel(
                         modifier = Modifier
                             .fillMaxHeight()
-                            .weight(0.3f),
+                            .weight(0.4f),
                         project = project,
                         onSelectedSrc = { selectedSrc.value = it }
                     )
@@ -80,7 +80,7 @@ fun FeatureMakerContent(project: Project) {
                 ConfigurationPanel(
                     modifier = Modifier
                         .fillMaxHeight()
-                        .weight(0.7f),
+                        .weight(0.6f),
                     project = project,
                     fileWriter = fileWriter,
                     selectedSrc = selectedSrc.value,

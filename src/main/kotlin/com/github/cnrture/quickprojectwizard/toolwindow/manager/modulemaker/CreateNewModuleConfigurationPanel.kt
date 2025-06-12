@@ -15,9 +15,11 @@ import com.github.cnrture.quickprojectwizard.common.Utils
 import com.github.cnrture.quickprojectwizard.common.file.FileWriter
 import com.github.cnrture.quickprojectwizard.common.file.LibraryDependencyFinder
 import com.github.cnrture.quickprojectwizard.components.QPWActionCard
+import com.github.cnrture.quickprojectwizard.components.QPWActionCardType
 import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
 import com.github.cnrture.quickprojectwizard.dialog.MessageDialogWrapper
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
+import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.components.DetectedModulesContent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.components.LibrarySelectionContent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.components.ModuleTypeNameContent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.components.PluginSelectionContent
@@ -50,6 +52,16 @@ fun CreateNewModuleConfigurationPanel(
     templates: List<ModuleTemplate>,
     selectedTemplate: ModuleTemplate?,
     onTemplateSelected: (ModuleTemplate?) -> Unit,
+    isAnalyzingState: Boolean,
+    analysisResultState: String?,
+    onAnalysisResultChange: (String?) -> Unit,
+    onAnalyzingChange: (Boolean) -> Unit,
+    onDetectedModulesLoaded: (List<String>) -> Unit,
+    onSelectedModulesLoaded: (List<String>) -> Unit,
+    detectedModules: List<String>,
+    existingModules: List<String>,
+    selectedModules: List<String>,
+    onCheckedModule: (String) -> Unit,
 ) {
     val radioOptions = listOf(Constants.ANDROID, Constants.KOTLIN)
 
@@ -67,6 +79,7 @@ fun CreateNewModuleConfigurationPanel(
                     title = "Create",
                     icon = Icons.Default.Create,
                     actionColor = QPWTheme.colors.green,
+                    type = QPWActionCardType.MEDIUM,
                     onClick = {
                         if (Utils.validateModuleInput(packageName, moduleNameState) && selectedSrc.isNotEmpty()) {
                             Utils.createModule(
@@ -78,7 +91,7 @@ fun CreateNewModuleConfigurationPanel(
                                 moduleType = moduleType,
                                 isMoveFiles = false,
                                 libraryDependencyFinder = libraryDependencyFinder,
-                                selectedModules = emptyList(),
+                                selectedModules = selectedModules,
                                 selectedLibraries = selectedLibraries,
                                 selectedPlugins = selectedPlugins,
                                 template = selectedTemplate,
@@ -112,12 +125,32 @@ fun CreateNewModuleConfigurationPanel(
                 selectedTemplate = selectedTemplate,
                 onTemplateSelected = onTemplateSelected
             )
-            Spacer(modifier = Modifier.height(24.dp))
-            Row(
+            Spacer(modifier = Modifier.height(16.dp))
+            DetectedModulesContent(
+                project = project,
+                isAnalyzingState = isAnalyzingState,
+                analysisResultState = analysisResultState,
+                selectedSrc = selectedSrc,
+                onAnalysisResultChange = onAnalysisResultChange,
+                onAnalyzingChange = onAnalyzingChange,
+                onDetectedModulesLoaded = onDetectedModulesLoaded,
+                onSelectedModulesLoaded = onSelectedModulesLoaded,
+                detectedModules = detectedModules,
+                existingModules = existingModules,
+                selectedModules = selectedModules,
+                onCheckedModule = onCheckedModule,
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Column(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalAlignment = Alignment.Top,
+                verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
+                PluginSelectionContent(
+                    availablePlugins = availablePlugins,
+                    selectedPlugins = selectedPlugins,
+                    onPluginSelected = onPluginSelected,
+                    plugins = availablePlugins,
+                )
                 LibrarySelectionContent(
                     availableLibraries = availableLibraries,
                     selectedLibraries = selectedLibraries,
@@ -125,12 +158,6 @@ fun CreateNewModuleConfigurationPanel(
                     libraryGroups = libraryGroups,
                     expandedGroups = expandedGroups,
                     onGroupExpandToggle = onGroupExpandToggle,
-                )
-                PluginSelectionContent(
-                    availablePlugins = availablePlugins,
-                    selectedPlugins = selectedPlugins,
-                    onPluginSelected = onPluginSelected,
-                    plugins = availablePlugins,
                 )
             }
         }

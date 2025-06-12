@@ -2,7 +2,6 @@ package com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Surface
-import androidx.compose.material.TabRow
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
@@ -45,7 +44,6 @@ fun ModuleMakerContent(project: Project) {
     val availablePlugins = mutableStateListOf<String>()
     val selectedPlugins = mutableStateListOf<String>()
 
-    // Template states
     var selectedTemplate by remember { mutableStateOf<ModuleTemplate?>(null) }
     val availableTemplates = remember {
         val currentTemplates = settings.state.moduleTemplates.toMutableList()
@@ -116,26 +114,27 @@ fun ModuleMakerContent(project: Project) {
                 text = "Module Creator",
                 style = TextStyle(
                     color = QPWTheme.colors.green,
-                    fontSize = 28.sp,
+                    fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,
                 )
             )
             Spacer(modifier = Modifier.size(24.dp))
-            TabRow(
-                selectedTabIndex = selectedTab,
-                backgroundColor = QPWTheme.colors.black,
-                contentColor = QPWTheme.colors.white,
-                divider = {},
-                indicator = {},
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 QPWTabRow(
+                    modifier = Modifier.weight(1f),
                     text = tabs[0],
                     color = QPWTheme.colors.green,
                     isSelected = selectedTab == 0,
                     onTabSelected = { selectedTab = 0 }
                 )
                 QPWTabRow(
+                    modifier = Modifier.weight(1f),
                     text = tabs[1],
                     color = QPWTheme.colors.green,
                     isSelected = selectedTab == 1,
@@ -147,7 +146,7 @@ fun ModuleMakerContent(project: Project) {
                 0 -> CreateNewModuleConfigurationPanel(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = 40.dp, vertical = 16.dp),
+                        .padding(horizontal = 24.dp),
                     project = project,
                     fileWriter = fileWriter,
                     selectedSrc = selectedSrc.value,
@@ -174,12 +173,24 @@ fun ModuleMakerContent(project: Project) {
                     templates = availableTemplates,
                     selectedTemplate = selectedTemplate,
                     onTemplateSelected = { selectedTemplate = it },
+                    isAnalyzingState = isAnalyzing.value,
+                    analysisResultState = analysisResult.value,
+                    onAnalysisResultChange = { analysisResult.value = it },
+                    onAnalyzingChange = { isAnalyzing.value = it },
+                    onDetectedModulesLoaded = { detectedModules.clear(); detectedModules.addAll(it) },
+                    onSelectedModulesLoaded = { selectedModules.clear(); selectedModules.addAll(it) },
+                    detectedModules = detectedModules,
+                    existingModules = existingModules,
+                    selectedModules = selectedModules,
+                    onCheckedModule = {
+                        if (it in selectedModules) selectedModules.remove(it) else selectedModules.add(it)
+                    },
                 )
 
                 1 -> MoveExistingFilesToModuleContent(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = 40.dp, vertical = 16.dp),
+                        .padding(horizontal = 24.dp),
                     project = project,
                     fileWriter = fileWriter,
                     isAnalyzingState = isAnalyzing.value,
