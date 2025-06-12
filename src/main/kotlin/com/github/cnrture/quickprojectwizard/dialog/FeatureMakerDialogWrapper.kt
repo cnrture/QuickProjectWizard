@@ -143,7 +143,6 @@ class FeatureMakerDialogWrapper(
                         fontSize = 16.sp,
                         fontWeight = FontWeight.SemiBold,
                     ),
-                    softWrap = true,
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -163,7 +162,6 @@ class FeatureMakerDialogWrapper(
                     style = TextStyle(
                         fontWeight = FontWeight.SemiBold,
                     ),
-                    softWrap = true,
                 )
             }
         }

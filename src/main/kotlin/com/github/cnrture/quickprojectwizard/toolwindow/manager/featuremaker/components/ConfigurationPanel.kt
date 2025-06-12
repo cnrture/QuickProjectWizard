@@ -92,7 +92,6 @@ fun ConfigurationPanel(
                 style = TextStyle(
                     fontWeight = FontWeight.SemiBold,
                 ),
-                softWrap = true,
             )
         }
     }

@@ -137,7 +137,6 @@ private fun FileTreeItemView(
             style = TextStyle(
                 fontSize = 16.sp,
             ),
-            softWrap = true,
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,
         )

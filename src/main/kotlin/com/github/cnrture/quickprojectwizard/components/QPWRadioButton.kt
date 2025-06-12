@@ -21,6 +21,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.github.cnrture.quickprojectwizard.common.NoRippleInteractionSource
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -60,6 +61,7 @@ fun QPWRadioButton(
                     selectedColor = QPWTheme.colors.white,
                     unselectedColor = QPWTheme.colors.white,
                 ),
+                interactionSource = NoRippleInteractionSource(),
                 selected = selected,
                 onClick = onClick,
             )

@@ -34,7 +34,6 @@ fun ModuleMakerComponent(project: Project) {
     var existingModules = listOf<String>()
     val selectedModules = mutableStateListOf<String>()
     val detectedModules = mutableStateListOf<String>()
-    val detectedLibraries = mutableStateListOf<String>()
 
     val availableLibraries = mutableStateListOf<String>()
     val selectedLibraries = mutableStateListOf<String>()
@@ -47,7 +46,6 @@ fun ModuleMakerComponent(project: Project) {
     val expandedPluginGroups = mutableStateMapOf<String, Boolean>()
 
     val isMoveFiles = mutableStateOf(false)
-    val analyzeLibraries = mutableStateOf(false)
 
     val selectedSrc = mutableStateOf(Constants.DEFAULT_SRC_VALUE)
     val moduleType = mutableStateOf(settings.state.preferredModuleType)
@@ -60,7 +58,7 @@ fun ModuleMakerComponent(project: Project) {
     var showFileTreeDialog by remember { mutableStateOf(false) }
 
     var selectedTab by remember { mutableStateOf(0) }
-    val tabs = listOf("Create New Module", "Move Existing Files to Module")
+    val tabs = listOf("New Module", "New Module with Existing Files")
 
     Utils.loadExistingModules(
         project = project,
@@ -185,14 +183,11 @@ fun ModuleMakerComponent(project: Project) {
                     libraryDependencyFinder = libraryDependencyFinder,
                     onAnalysisResultChange = { analysisResult.value = it },
                     onAnalyzingChange = { isAnalyzing.value = it },
-                    analyzeLibraries = analyzeLibraries.value,
-                    onDetectLibrariesLoaded = { detectedLibraries.clear(); detectedLibraries.addAll(it) },
                     onDetectedModulesLoaded = { detectedModules.clear(); detectedModules.addAll(it) },
                     onSelectedModulesLoaded = { selectedModules.clear(); selectedModules.addAll(it) },
                     detectedModules = detectedModules,
                     isMoveFiles = isMoveFiles.value,
                     onMoveFilesChange = { isMoveFiles.value = it },
-                    onAnalyzeLibrariesChange = { analyzeLibraries.value = it },
                     moduleType = moduleType.value,
                     packageName = packageName.value,
                     onPackageNameChanged = { packageName.value = it },
@@ -211,7 +206,6 @@ fun ModuleMakerComponent(project: Project) {
                     },
                     libraryGroups = libraryGroups,
                     expandedGroups = expandedGroups,
-                    detectedLibraries = detectedLibraries,
                     onGroupExpandToggle = { expandedGroups[it] = !(expandedGroups[it] ?: false) },
                     showFileTreeDialog = showFileTreeDialog,
                     onFileTreeDialogStateChange = { showFileTreeDialog = !showFileTreeDialog },

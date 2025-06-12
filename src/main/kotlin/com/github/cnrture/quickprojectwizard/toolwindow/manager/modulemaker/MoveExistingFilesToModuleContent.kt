@@ -34,14 +34,11 @@ fun MoveExistingFilesToModuleContent(
     libraryDependencyFinder: LibraryDependencyFinder,
     onAnalysisResultChange: (String?) -> Unit,
     onAnalyzingChange: (Boolean) -> Unit,
-    analyzeLibraries: Boolean,
-    onDetectLibrariesLoaded: (List<String>) -> Unit,
     onDetectedModulesLoaded: (List<String>) -> Unit,
     onSelectedModulesLoaded: (List<String>) -> Unit,
     detectedModules: List<String>,
     isMoveFiles: Boolean,
     onMoveFilesChange: (Boolean) -> Unit,
-    onAnalyzeLibrariesChange: (Boolean) -> Unit,
     moduleType: String,
     packageName: String,
     onPackageNameChanged: (String) -> Unit,
@@ -56,7 +53,6 @@ fun MoveExistingFilesToModuleContent(
     onLibrarySelected: (String) -> Unit,
     libraryGroups: Map<String, List<String>>,
     expandedGroups: Map<String, Boolean>,
-    detectedLibraries: List<String>,
     onGroupExpandToggle: (String) -> Unit,
     showFileTreeDialog: Boolean,
     onFileTreeDialogStateChange: () -> Unit,
@@ -112,11 +108,9 @@ fun MoveExistingFilesToModuleContent(
                                     moduleName = moduleNameState,
                                     moduleType = moduleType,
                                     isMoveFiles = isMoveFiles,
-                                    analyzeLibraries = analyzeLibraries,
                                     libraryDependencyFinder = libraryDependencyFinder,
                                     selectedModules = selectedModules,
                                     selectedLibraries = selectedLibraries,
-                                    detectedLibraries = detectedLibraries,
                                     selectedPlugins = selectedPlugins,
                                 )
                             } else {
@@ -133,41 +127,6 @@ fun MoveExistingFilesToModuleContent(
                     .padding(padding)
                     .verticalScroll(rememberScrollState()),
             ) {
-                RootSelectionContent(
-                    modifier = Modifier.fillMaxWidth(),
-                    selectedSrc = selectedSrc,
-                    showFileTreeDialog = showFileTreeDialog,
-                    onChooseRootClick = { onFileTreeDialogStateChange() }
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                DetectModulesContent(
-                    project = project,
-                    isAnalyzingState = isAnalyzingState,
-                    analysisResultState = analysisResultState,
-                    selectedSrc = selectedSrc,
-                    libraryDependencyFinder = libraryDependencyFinder,
-                    onAnalysisResultChange = onAnalysisResultChange,
-                    onAnalyzingChange = onAnalyzingChange,
-                    analyzeLibraries = analyzeLibraries,
-                    onDetectLibrariesLoaded = onDetectLibrariesLoaded,
-                    onDetectedModulesLoaded = onDetectedModulesLoaded,
-                    onSelectedModulesLoaded = onSelectedModulesLoaded,
-                    detectedModules = detectedModules,
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                MoveFilesContent(
-                    isChecked = isMoveFiles,
-                    onCheckedChange = onMoveFilesChange,
-                    analyzeLibraries = analyzeLibraries,
-                    onAnalyzeLibrariesChange = onAnalyzeLibrariesChange,
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
                 ModuleTypeNameContent(
                     moduleTypeSelectionState = moduleType,
                     packageName = packageName,
@@ -178,6 +137,32 @@ fun MoveExistingFilesToModuleContent(
                     onModuleNameChanged = onModuleNameChanged,
                 )
 
+                Spacer(modifier = Modifier.height(16.dp))
+
+                RootSelectionContent(
+                    selectedSrc = selectedSrc,
+                    showFileTreeDialog = showFileTreeDialog,
+                    isMoveFiles = isMoveFiles,
+                    onMoveFilesChange = onMoveFilesChange,
+                    onChooseRootClick = { onFileTreeDialogStateChange() }
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                DetectModulesContent(
+                    project = project,
+                    isAnalyzingState = isAnalyzingState,
+                    analysisResultState = analysisResultState,
+                    selectedSrc = selectedSrc,
+                    onAnalysisResultChange = onAnalysisResultChange,
+                    onAnalyzingChange = onAnalyzingChange,
+                    onDetectedModulesLoaded = onDetectedModulesLoaded,
+                    onSelectedModulesLoaded = onSelectedModulesLoaded,
+                    detectedModules = detectedModules,
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
                 ExistingModulesContent(
                     existingModules = existingModules,
                     selectedDependencies = selectedModules,
@@ -186,25 +171,28 @@ fun MoveExistingFilesToModuleContent(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                LibrarySelectionContent(
-                    availableLibraries = availableLibraries,
-                    selectedLibraries = selectedLibraries,
-                    onLibrarySelected = onLibrarySelected,
-                    libraryGroups = libraryGroups,
-                    expandedGroups = expandedGroups,
-                    onGroupExpandToggle = onGroupExpandToggle,
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                PluginSelectionContent(
-                    availablePlugins = availablePlugins,
-                    selectedPlugins = selectedPlugins,
-                    onPluginSelected = onPluginSelected,
-                    pluginGroups = pluginGroups,
-                    expandedPluginGroups = expandedPluginGroups,
-                    onPluginGroupExpandToggle = onPluginGroupExpandToggle,
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalAlignment = Alignment.Top,
+                ) {
+                    LibrarySelectionContent(
+                        availableLibraries = availableLibraries,
+                        selectedLibraries = selectedLibraries,
+                        onLibrarySelected = onLibrarySelected,
+                        libraryGroups = libraryGroups,
+                        expandedGroups = expandedGroups,
+                        onGroupExpandToggle = onGroupExpandToggle,
+                    )
+                    PluginSelectionContent(
+                        availablePlugins = availablePlugins,
+                        selectedPlugins = selectedPlugins,
+                        onPluginSelected = onPluginSelected,
+                        pluginGroups = pluginGroups,
+                        expandedPluginGroups = expandedPluginGroups,
+                        onPluginGroupExpandToggle = onPluginGroupExpandToggle,
+                    )
+                }
             }
         }
     }

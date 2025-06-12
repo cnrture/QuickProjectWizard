@@ -29,11 +29,8 @@ fun DetectModulesContent(
     isAnalyzingState: Boolean,
     analysisResultState: String?,
     selectedSrc: String,
-    libraryDependencyFinder: LibraryDependencyFinder,
     onAnalysisResultChange: (String?) -> Unit,
     onAnalyzingChange: (Boolean) -> Unit,
-    analyzeLibraries: Boolean,
-    onDetectLibrariesLoaded: (List<String>) -> Unit,
     onDetectedModulesLoaded: (List<String>) -> Unit,
     onSelectedModulesLoaded: (List<String>) -> Unit,
     detectedModules: List<String>,
@@ -80,11 +77,8 @@ fun DetectModulesContent(
                                     analyzeSelectedDirectory(
                                         directory = selectedFile,
                                         project = project,
-                                        libraryDependencyFinder = libraryDependencyFinder,
                                         onAnalysisResultChange = onAnalysisResultChange,
                                         onAnalyzingChange = onAnalyzingChange,
-                                        analyzeLibraries = analyzeLibraries,
-                                        onDetectLibrariesLoaded = onDetectLibrariesLoaded,
                                         onDetectedModulesLoaded = onDetectedModulesLoaded,
                                         onSelectedModulesLoaded = onSelectedModulesLoaded,
                                         detectedModules = detectedModules,
@@ -98,10 +92,11 @@ fun DetectModulesContent(
                 }
             }
         }
-        Spacer(modifier = Modifier.size(8.dp))
+        Spacer(modifier = Modifier.size(4.dp))
         QPWText(
             text = "These modules will be added to the new module's build.gradle file.",
             color = QPWTheme.colors.lightGray,
+            style = TextStyle(fontSize = 13.sp),
         )
         Spacer(modifier = Modifier.size(8.dp))
         analysisResultState?.let { result ->

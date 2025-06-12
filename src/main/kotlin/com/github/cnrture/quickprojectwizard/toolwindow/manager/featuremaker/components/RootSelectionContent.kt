@@ -31,7 +31,6 @@ fun RootSelectionContent(
         QPWText(
             text = "Selected: $selectedSrc",
             color = QPWTheme.colors.red,
-            softWrap = true,
             style = TextStyle(
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Medium,

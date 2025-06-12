@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.github.cnrture.quickprojectwizard.common.NoRippleInteractionSource
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 
 @Composable
@@ -25,6 +26,7 @@ fun QPWButton(
             backgroundColor = backgroundColor,
             contentColor = QPWTheme.colors.white,
         ),
+        interactionSource = NoRippleInteractionSource(),
         onClick = onClick,
         content = {
             QPWText(

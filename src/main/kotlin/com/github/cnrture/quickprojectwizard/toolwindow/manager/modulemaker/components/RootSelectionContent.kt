@@ -11,42 +11,56 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.components.QPWButton
+import com.github.cnrture.quickprojectwizard.components.QPWCheckbox
 import com.github.cnrture.quickprojectwizard.components.QPWText
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 
 @Composable
 fun RootSelectionContent(
-    modifier: Modifier = Modifier,
     selectedSrc: String,
     showFileTreeDialog: Boolean,
+    isMoveFiles: Boolean,
+    onMoveFilesChange: (Boolean) -> Unit,
     onChooseRootClick: () -> Unit,
 ) {
-    Column(
-        modifier = modifier
+    Row(
+        modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
             .border(2.dp, QPWTheme.colors.white, RoundedCornerShape(8.dp))
-            .padding(16.dp),
+            .padding(16.dp)
     ) {
-        QPWText(
-            text = "Selected: $selectedSrc",
-            color = QPWTheme.colors.green,
-            softWrap = true,
-            style = TextStyle(
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Medium,
-            ),
-        )
-        Spacer(modifier = Modifier.size(4.dp))
-        QPWText(
-            text = "Choose the root directory for your new module.",
-            color = QPWTheme.colors.lightGray,
-        )
-        Spacer(modifier = Modifier.size(8.dp))
-        QPWButton(
-            text = if (showFileTreeDialog) "Close File Tree" else "Open File Tree",
-            backgroundColor = QPWTheme.colors.green,
-            onClick = onChooseRootClick,
-        )
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
+            QPWText(
+                text = "Selected: $selectedSrc",
+                color = QPWTheme.colors.green,
+                style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Medium)
+            )
+            Spacer(modifier = Modifier.size(4.dp))
+            QPWText(
+                text = "Choose the root directory for your new module.",
+                color = QPWTheme.colors.lightGray,
+                style = TextStyle(fontSize = 12.sp)
+            )
+            Spacer(modifier = Modifier.size(8.dp))
+            QPWButton(
+                text = if (showFileTreeDialog) "Close File Tree" else "Open File Tree",
+                backgroundColor = QPWTheme.colors.green,
+                onClick = onChooseRootClick,
+            )
+        }
+        Spacer(modifier = Modifier.width(16.dp))
+        Column(
+            modifier = Modifier.weight(1f),
+        ) {
+            QPWCheckbox(
+                label = "Move selected files to new module",
+                checked = isMoveFiles,
+                color = QPWTheme.colors.green,
+                onCheckedChange = { onMoveFilesChange(it) },
+            )
+        }
     }
 }

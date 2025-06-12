@@ -64,9 +64,7 @@ object Utils {
         moduleName: String,
         moduleType: String,
         isMoveFiles: Boolean,
-        analyzeLibraries: Boolean,
         libraryDependencyFinder: LibraryDependencyFinder,
-        detectedLibraries: List<String>,
         selectedLibraries: List<String>,
         selectedModules: List<String>,
         selectedPlugins: List<String> = emptyList(),
@@ -86,16 +84,10 @@ object Utils {
                 val moduleNameTrimmed = moduleName.removePrefix(":").replace(":", ".")
                 val finalPackageName = "${packageName}.${moduleNameTrimmed.split(".").last()}"
 
-                val libraryDependenciesString = if (isMoveFiles && analyzeLibraries) {
-                    libraryDependencyFinder.formatLibraryDependencies(detectedLibraries)
-                } else {
-                    Constants.EMPTY
-                }
-
                 val manualLibraryDependenciesString =
                     libraryDependencyFinder.formatLibraryDependencies(selectedLibraries)
 
-                val combinedLibraryDependencies = listOf(libraryDependenciesString, manualLibraryDependenciesString)
+                val combinedLibraryDependencies = listOf(manualLibraryDependenciesString)
                     .filter { it.isNotEmpty() }
                     .joinToString("\n")
 
@@ -517,11 +509,8 @@ object Utils {
     fun analyzeSelectedDirectory(
         directory: File,
         project: Project,
-        libraryDependencyFinder: LibraryDependencyFinder,
         onAnalysisResultChange: (String?) -> Unit,
         onAnalyzingChange: (Boolean) -> Unit,
-        analyzeLibraries: Boolean,
-        onDetectLibrariesLoaded: (List<String>) -> Unit,
         onDetectedModulesLoaded: (List<String>) -> Unit,
         onSelectedModulesLoaded: (List<String>) -> Unit,
         detectedModules: List<String>,
@@ -541,12 +530,6 @@ object Utils {
                         analyzer.discoverProjectModules(projectRoot)
                     }
                     val findModules = analyzer.analyzeSourceDirectory(directory)
-
-                    if (analyzeLibraries && projectRoot != null) {
-                        val availableLibraries = libraryDependencyFinder.parseLibsVersionsToml(projectRoot)
-                        val usedLibraries = libraryDependencyFinder.findImportedLibraries(directory, availableLibraries)
-                        SwingUtilities.invokeLater { onDetectLibrariesLoaded(usedLibraries) }
-                    }
 
                     SwingUtilities.invokeLater {
                         onDetectedModulesLoaded(findModules)

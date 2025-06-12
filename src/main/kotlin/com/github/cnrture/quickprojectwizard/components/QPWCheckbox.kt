@@ -21,6 +21,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.github.cnrture.quickprojectwizard.common.NoRippleInteractionSource
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -51,7 +52,7 @@ fun QPWCheckbox(
                 }
             )
             .clip(RoundedCornerShape(12.dp))
-            .padding(12.dp, vertical = 8.dp),
+            .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         CompositionLocalProvider(
@@ -60,6 +61,7 @@ fun QPWCheckbox(
             Checkbox(
                 checked = checked,
                 onCheckedChange = onCheckedChange,
+                interactionSource = NoRippleInteractionSource(),
                 colors = CheckboxDefaults.colors(
                     checkedColor = if (isBackgroundEnable && checked) {
                         QPWTheme.colors.white

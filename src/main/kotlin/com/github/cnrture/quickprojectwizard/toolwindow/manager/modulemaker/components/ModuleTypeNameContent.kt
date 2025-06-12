@@ -1,12 +1,9 @@
 package com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.components
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -28,17 +25,7 @@ fun ModuleTypeNameContent(
     onModuleNameChanged: (String) -> Unit,
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(
-                shape = RoundedCornerShape(8.dp)
-            )
-            .border(
-                width = 2.dp,
-                color = QPWTheme.colors.white,
-                shape = RoundedCornerShape(8.dp)
-            )
-            .padding(24.dp),
+        modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column {

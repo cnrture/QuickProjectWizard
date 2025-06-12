@@ -23,7 +23,6 @@ fun ExistingModulesContent(
     onCheckedModule: (String) -> Unit,
 ) {
     if (existingModules.isNotEmpty()) {
-        Spacer(modifier = Modifier.height(16.dp))
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -45,10 +44,11 @@ fun ExistingModulesContent(
                     fontWeight = FontWeight.SemiBold,
                 ),
             )
-            Spacer(modifier = Modifier.size(8.dp))
+            Spacer(modifier = Modifier.size(4.dp))
             QPWText(
                 text = "Select modules that your new module will depend on:",
                 color = QPWTheme.colors.lightGray,
+                style = TextStyle(fontSize = 13.sp),
             )
             Divider(
                 color = QPWTheme.colors.lightGray,

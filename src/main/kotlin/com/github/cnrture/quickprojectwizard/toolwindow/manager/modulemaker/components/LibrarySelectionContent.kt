@@ -23,7 +23,7 @@ import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun LibrarySelectionContent(
+fun RowScope.LibrarySelectionContent(
     availableLibraries: List<String>,
     selectedLibraries: List<String>,
     onLibrarySelected: (String) -> Unit,
@@ -34,7 +34,7 @@ fun LibrarySelectionContent(
     if (availableLibraries.isNotEmpty()) {
         Column(
             modifier = Modifier
-                .fillMaxWidth()
+                .weight(1f)
                 .clip(
                     shape = RoundedCornerShape(8.dp)
                 )
@@ -53,10 +53,11 @@ fun LibrarySelectionContent(
                     fontWeight = FontWeight.SemiBold,
                 ),
             )
-            Spacer(modifier = Modifier.size(8.dp))
+            Spacer(modifier = Modifier.size(4.dp))
             QPWText(
                 text = "Select libraries that your new module will depend on:",
                 color = QPWTheme.colors.lightGray,
+                style = TextStyle(fontSize = 13.sp),
             )
             Divider(
                 color = QPWTheme.colors.lightGray,
@@ -93,11 +94,9 @@ fun LibrarySelectionContent(
                     }
                     if (isExpanded) {
                         FlowRow(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp),
-                            verticalArrangement = Arrangement.spacedBy(8.dp),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalArrangement = Arrangement.spacedBy(4.dp),
+                            horizontalArrangement = Arrangement.spacedBy(4.dp),
                         ) {
                             groupLibraries.forEach { library ->
                                 val isChecked = library in selectedLibraries

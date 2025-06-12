@@ -75,11 +75,9 @@ fun CreateNewModuleConfigurationPanel(
                                 moduleName = moduleNameState,
                                 moduleType = moduleType,
                                 isMoveFiles = false,
-                                analyzeLibraries = false,
                                 libraryDependencyFinder = libraryDependencyFinder,
                                 selectedModules = emptyList(),
                                 selectedLibraries = selectedLibraries,
-                                detectedLibraries = emptyList(),
                                 selectedPlugins = selectedPlugins,
                             )
                         } else {
@@ -106,23 +104,28 @@ fun CreateNewModuleConfigurationPanel(
                 onModuleNameChanged = onModuleNameChanged,
             )
             Spacer(modifier = Modifier.height(16.dp))
-            LibrarySelectionContent(
-                availableLibraries = availableLibraries,
-                selectedLibraries = selectedLibraries,
-                onLibrarySelected = onLibrarySelected,
-                libraryGroups = libraryGroups,
-                expandedGroups = expandedGroups,
-                onGroupExpandToggle = onGroupExpandToggle,
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            PluginSelectionContent(
-                availablePlugins = availablePlugins,
-                selectedPlugins = selectedPlugins,
-                onPluginSelected = onPluginSelected,
-                pluginGroups = pluginGroups,
-                expandedPluginGroups = expandedPluginGroups,
-                onPluginGroupExpandToggle = onPluginGroupExpandToggle,
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalAlignment = Alignment.Top,
+            ) {
+                LibrarySelectionContent(
+                    availableLibraries = availableLibraries,
+                    selectedLibraries = selectedLibraries,
+                    onLibrarySelected = onLibrarySelected,
+                    libraryGroups = libraryGroups,
+                    expandedGroups = expandedGroups,
+                    onGroupExpandToggle = onGroupExpandToggle,
+                )
+                PluginSelectionContent(
+                    availablePlugins = availablePlugins,
+                    selectedPlugins = selectedPlugins,
+                    onPluginSelected = onPluginSelected,
+                    pluginGroups = pluginGroups,
+                    expandedPluginGroups = expandedPluginGroups,
+                    onPluginGroupExpandToggle = onPluginGroupExpandToggle,
+                )
+            }
         }
     }
 }

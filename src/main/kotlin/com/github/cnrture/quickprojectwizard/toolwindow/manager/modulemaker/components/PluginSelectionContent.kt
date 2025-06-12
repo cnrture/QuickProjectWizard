@@ -23,7 +23,7 @@ import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun PluginSelectionContent(
+fun RowScope.PluginSelectionContent(
     availablePlugins: List<String>,
     selectedPlugins: List<String>,
     onPluginSelected: (String) -> Unit,
@@ -34,7 +34,7 @@ fun PluginSelectionContent(
     if (availablePlugins.isNotEmpty()) {
         Column(
             modifier = Modifier
-                .fillMaxWidth()
+                .weight(1f)
                 .clip(
                     shape = RoundedCornerShape(8.dp)
                 )
@@ -53,10 +53,11 @@ fun PluginSelectionContent(
                     fontWeight = FontWeight.SemiBold,
                 ),
             )
-            Spacer(modifier = Modifier.size(8.dp))
+            Spacer(modifier = Modifier.size(4.dp))
             QPWText(
                 text = "Select plugins that your new module will use:",
                 color = QPWTheme.colors.lightGray,
+                style = TextStyle(fontSize = 13.sp),
             )
             Divider(
                 color = QPWTheme.colors.lightGray,
