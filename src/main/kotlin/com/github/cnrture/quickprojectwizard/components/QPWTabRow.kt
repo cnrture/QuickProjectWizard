@@ -22,7 +22,7 @@ fun QPWTabRow(text: String, color: Color, isSelected: Boolean, onTabSelected: ()
             .then(
                 if (isSelected) {
                     Modifier.background(
-                        brush = Brush.verticalGradient(listOf(QPWTheme.colors.black, color.copy(alpha = 0.3f)))
+                        brush = Brush.verticalGradient(listOf(Color.Transparent, color.copy(alpha = 0.3f)))
                     )
                 } else {
                     Modifier.background(QPWTheme.colors.black)
