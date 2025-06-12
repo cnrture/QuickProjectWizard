@@ -278,12 +278,38 @@ object Utils {
         val settingsGradleKtsPath = File(project.basePath, "settings.gradle.kts")
         val settingsGradlePath = File(project.basePath, "settings.gradle")
 
-        return listOf(settingsGradleKtsPath, settingsGradlePath).firstOrNull {
+        val settingsFile = listOf(settingsGradleKtsPath, settingsGradlePath).firstOrNull {
             it.exists()
         } ?: run {
             MessageDialogWrapper("Can't find settings.gradle(.kts) file")
-            null
+            return null
         }
+
+        // Check and add TYPESAFE_PROJECT_ACCESSORS if missing
+        try {
+            val content = settingsFile.readText()
+            if (!content.contains("TYPESAFE_PROJECT_ACCESSORS")) {
+                val lines = content.lines().toMutableList()
+                var insertIndex = -1
+
+                // Find the line with rootProject.name
+                for (i in lines.indices) {
+                    if (lines[i].trim().startsWith("rootProject.name")) {
+                        insertIndex = i + 1
+                        break
+                    }
+                }
+
+                if (insertIndex != -1) {
+                    lines.add(insertIndex, "enableFeaturePreview(\"TYPESAFE_PROJECT_ACCESSORS\")")
+                    settingsFile.writeText(lines.joinToString("\n"))
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        return settingsFile
     }
 
     fun syncProject(project: Project) {

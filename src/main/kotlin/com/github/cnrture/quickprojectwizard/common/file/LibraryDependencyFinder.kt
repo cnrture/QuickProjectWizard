@@ -147,10 +147,19 @@ class LibraryDependencyFinder {
     fun formatLibraryDependencies(libraryAliases: List<String>): String {
         if (libraryAliases.isEmpty()) return Constants.EMPTY
 
+        val bomLibraries = setOf("compose-bom", "firebase", "firebase-bom")
+        val annotationProcessors = setOf("room-compiler", "hilt-compiler")
+
         return StringBuilder().apply {
             append("    // Library Dependencies\n")
             libraryAliases.forEachIndexed { index, alias ->
-                append("    implementation(libs.${alias.replace("-", ".")})")
+                val formattedAlias = alias.replace("-", ".")
+                val implementationType = when {
+                    bomLibraries.contains(alias) -> "implementation(platform(libs.$formattedAlias))"
+                    annotationProcessors.contains(alias) -> "ksp(libs.$formattedAlias)"
+                    else -> "implementation(libs.$formattedAlias)"
+                }
+                append("    $implementationType")
                 if (index != libraryAliases.lastIndex) append("\n")
             }
         }.toString()

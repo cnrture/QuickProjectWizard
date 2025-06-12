@@ -8,17 +8,17 @@ $plugins
 }
 
 android {
-    namespace '$packageName'
-    compileSdkVersion 35
+    namespace = "$packageName"
+    compileSdk = 35
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 35
+        minSdk = 21
+        targetSdk = 35
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     buildFeatures {
