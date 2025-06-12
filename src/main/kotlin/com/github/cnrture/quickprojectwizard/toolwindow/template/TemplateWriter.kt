@@ -38,7 +38,7 @@ class TemplateWriter {
                 else -> GradleTemplate.getKotlinModuleGradleTemplate(plugins = pluginDependencies)
             }
 
-            val fileName = "build.gradle"
+            val fileName = "build.gradle.kts"
             val filePath = Paths.get(moduleFile.absolutePath, fileName).toFile()
             val file: Writer = FileWriter(Paths.get(moduleFile.absolutePath, fileName).toFile())
             file.write(gradleTemplate)
