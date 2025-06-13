@@ -12,7 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.automirrored.filled.Launch
 import androidx.compose.material.icons.automirrored.filled.TextSnippet
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -153,7 +153,7 @@ private fun FileItemIcon(modifier: Modifier, model: FileTree.Item) {
             is FileTree.ItemType.Folder -> when {
                 !type.canExpand -> Unit
                 type.isExpanded -> Icon(
-                    imageVector = Icons.Default.KeyboardArrowDown,
+                    imageVector = Icons.Rounded.KeyboardArrowDown,
                     contentDescription = null,
                     tint = QPWTheme.colors.white,
                 )
@@ -167,43 +167,43 @@ private fun FileItemIcon(modifier: Modifier, model: FileTree.Item) {
 
             is FileTree.ItemType.File -> when (type.ext) {
                 in sourceCodeFileExtensions -> Icon(
-                    imageVector = Icons.Default.Code,
+                    imageVector = Icons.Rounded.Code,
                     contentDescription = null,
                     tint = Color(0xFF3E86A0),
                 )
 
                 "txt" -> Icon(
-                    imageVector = Icons.Default.Description,
+                    imageVector = Icons.Rounded.Description,
                     contentDescription = null,
                     tint = Color(0xFF87939A),
                 )
 
                 "md" -> Icon(
-                    imageVector = Icons.Default.Description,
+                    imageVector = Icons.Rounded.Description,
                     contentDescription = null,
                     tint = Color(0xFF87939A),
                 )
 
                 "gitignore" -> Icon(
-                    imageVector = Icons.Default.BrokenImage,
+                    imageVector = Icons.Rounded.BrokenImage,
                     contentDescription = null,
                     tint = Color(0xFF87939A),
                 )
 
                 "gradle" -> Icon(
-                    imageVector = Icons.Default.Build,
+                    imageVector = Icons.Rounded.Build,
                     contentDescription = null,
                     tint = Color(0xFF87939A),
                 )
 
                 "kts" -> Icon(
-                    imageVector = Icons.Default.Build,
+                    imageVector = Icons.Rounded.Build,
                     contentDescription = null,
                     tint = Color(0xFF3E86A0),
                 )
 
                 "properties" -> Icon(
-                    imageVector = Icons.Default.Settings,
+                    imageVector = Icons.Rounded.Settings,
                     contentDescription = null,
                     tint = Color(0xFF62B543),
                 )

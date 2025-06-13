@@ -8,10 +8,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Save
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.Save
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -61,7 +61,7 @@ fun SettingsContent() {
             ) {
                 QPWActionCard(
                     title = "Save",
-                    icon = Icons.Default.Save,
+                    icon = Icons.Rounded.Save,
                     actionColor = QPWTheme.colors.lightGray,
                     type = QPWActionCardType.MEDIUM,
                     onClick = {
@@ -186,7 +186,7 @@ private fun ModuleTemplatesTab(
             )
             QPWActionCard(
                 title = "Add Template",
-                icon = Icons.Default.Add,
+                icon = Icons.Rounded.Add,
                 type = QPWActionCardType.SMALL,
                 actionColor = QPWTheme.colors.green,
                 onClick = {
@@ -269,7 +269,7 @@ private fun ModuleTemplateCard(
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     QPWActionCard(
                         title = "Edit",
-                        icon = Icons.Default.Edit,
+                        icon = Icons.Rounded.Edit,
                         type = QPWActionCardType.SMALL,
                         actionColor = QPWTheme.colors.lightGray,
                         onClick = {
@@ -279,7 +279,7 @@ private fun ModuleTemplateCard(
                     if (!template.isDefault || template.id != "candroid_template") {
                         QPWActionCard(
                             title = "Delete",
-                            icon = Icons.Default.Delete,
+                            icon = Icons.Rounded.Delete,
                             type = QPWActionCardType.SMALL,
                             actionColor = QPWTheme.colors.red,
                             onClick = onDelete

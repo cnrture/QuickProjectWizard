@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -87,7 +87,7 @@ fun FileTemplateEditor(
             QPWActionCard(
                 modifier = Modifier.align(Alignment.End),
                 title = "Delete File Template",
-                icon = Icons.Default.Delete,
+                icon = Icons.Rounded.Delete,
                 type = QPWActionCardType.SMALL,
                 actionColor = QPWTheme.colors.red,
                 onClick = onDelete

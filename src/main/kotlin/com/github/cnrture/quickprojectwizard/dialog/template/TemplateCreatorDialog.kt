@@ -6,8 +6,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.TabRow
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -174,7 +174,7 @@ private fun TemplateCreatorContent(
                         Spacer(modifier = Modifier.height(12.dp))
                         QPWActionCard(
                             title = "Add File Template",
-                            icon = Icons.Default.Add,
+                            icon = Icons.Rounded.Add,
                             type = QPWActionCardType.MEDIUM,
                             actionColor = QPWTheme.colors.green,
                             onClick = {
@@ -196,14 +196,14 @@ private fun TemplateCreatorContent(
         ) {
             QPWActionCard(
                 title = "Cancel",
-                icon = Icons.Default.Delete,
+                icon = Icons.Rounded.Delete,
                 actionColor = QPWTheme.colors.lightGray,
                 onClick = onCancel
             )
 
             QPWActionCard(
                 title = "Create Template",
-                icon = Icons.Default.Add,
+                icon = Icons.Rounded.Add,
                 actionColor = QPWTheme.colors.green,
                 onClick = {
                     if (templateName.isNotBlank()) {

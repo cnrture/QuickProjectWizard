@@ -9,8 +9,8 @@ import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.TabRow
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -81,7 +81,7 @@ private fun TemplateEditorContent(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Icon(
-                imageVector = Icons.Default.Edit,
+                imageVector = Icons.Rounded.Edit,
                 contentDescription = null,
                 tint = QPWTheme.colors.lightGray,
                 modifier = Modifier.size(28.dp)
@@ -193,7 +193,7 @@ private fun TemplateEditorContent(
                         Spacer(modifier = Modifier.height(12.dp))
                         QPWActionCard(
                             title = "Add File Template",
-                            icon = Icons.Default.Add,
+                            icon = Icons.Rounded.Add,
                             type = QPWActionCardType.MEDIUM,
                             actionColor = QPWTheme.colors.green,
                             onClick = {
@@ -222,7 +222,7 @@ private fun TemplateEditorContent(
 
             QPWActionCard(
                 title = "Save Changes",
-                icon = Icons.Default.Edit,
+                icon = Icons.Rounded.Edit,
                 type = QPWActionCardType.MEDIUM,
                 actionColor = QPWTheme.colors.green,
                 onClick = {

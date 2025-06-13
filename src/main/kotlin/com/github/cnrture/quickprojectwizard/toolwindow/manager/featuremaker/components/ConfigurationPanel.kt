@@ -3,7 +3,7 @@ package com.github.cnrture.quickprojectwizard.toolwindow.manager.featuremaker.co
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.rounded.Create
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,7 +44,7 @@ fun ConfigurationPanel(
             ) {
                 QPWActionCard(
                     title = "Create",
-                    icon = Icons.Default.Create,
+                    icon = Icons.Rounded.Create,
                     actionColor = QPWTheme.colors.red,
                     type = QPWActionCardType.MEDIUM,
                     onClick = {

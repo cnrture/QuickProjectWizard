@@ -7,7 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -123,7 +123,7 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
 
                         SidebarButton(
                             title = "Module",
-                            icon = Icons.Default.ViewModule,
+                            icon = Icons.Rounded.ViewModule,
                             isSelected = selectedSection == "module",
                             color = QPWTheme.colors.green,
                             onClick = { selectedSection = "module" }
@@ -131,7 +131,7 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
 
                         SidebarButton(
                             title = "Feature",
-                            icon = Icons.Default.FileOpen,
+                            icon = Icons.Rounded.FileOpen,
                             isSelected = selectedSection == "feature",
                             color = QPWTheme.colors.red,
                             onClick = { selectedSection = "feature" }
@@ -139,7 +139,7 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
 
                         SidebarButton(
                             title = "Picker",
-                            icon = Icons.Default.ColorLens,
+                            icon = Icons.Rounded.ColorLens,
                             isSelected = selectedSection == "color",
                             color = QPWTheme.colors.purple,
                             onClick = { selectedSection = "color" }
@@ -147,7 +147,7 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
 
                         SidebarButton(
                             title = "Settings",
-                            icon = Icons.Default.Settings,
+                            icon = Icons.Rounded.Settings,
                             isSelected = selectedSection == "settings",
                             color = QPWTheme.colors.lightGray,
                             onClick = { selectedSection = "settings" }
@@ -168,7 +168,7 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                         ) {
                             ContactButton(
                                 title = "Website",
-                                icon = Icons.Default.Language,
+                                icon = Icons.Rounded.Language,
                                 color = QPWTheme.colors.red,
                                 onClick = {
                                     BrowserUtil.browse("https://candroid.dev")
@@ -177,7 +177,7 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
 
                             ContactButton(
                                 title = "Plugin Page",
-                                icon = Icons.Default.Language,
+                                icon = Icons.Rounded.Language,
                                 color = QPWTheme.colors.green,
                                 onClick = {
                                     BrowserUtil.browse("https://plugins.jetbrains.com/plugin/25221-quickprojectwizard/edit")
@@ -186,7 +186,7 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
 
                             ContactButton(
                                 title = "Source Code",
-                                icon = Icons.Default.Source,
+                                icon = Icons.Rounded.Source,
                                 color = QPWTheme.colors.purple,
                                 onClick = {
                                     BrowserUtil.browse("https://github.com/cnrture/QuickProjectWizard")

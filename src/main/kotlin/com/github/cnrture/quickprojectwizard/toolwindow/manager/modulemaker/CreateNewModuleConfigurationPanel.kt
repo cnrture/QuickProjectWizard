@@ -5,7 +5,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.rounded.Create
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -73,7 +73,7 @@ fun CreateNewModuleConfigurationPanel(
             ) {
                 QPWActionCard(
                     title = "Create",
-                    icon = Icons.Default.Create,
+                    icon = Icons.Rounded.Create,
                     actionColor = QPWTheme.colors.green,
                     type = QPWActionCardType.MEDIUM,
                     onClick = {
