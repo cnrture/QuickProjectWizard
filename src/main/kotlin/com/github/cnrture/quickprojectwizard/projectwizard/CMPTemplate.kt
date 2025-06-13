@@ -83,7 +83,7 @@ val composeMultiplatformTemplate = template {
             "Please enter the screens you want to create. (e.g. Home, Detail, Profile)" +
                 "\nNote: First item is start destination"
         ),
-        UrlLinkWidget("Created by Caner Ture", "https://bento.me/canerture"),
+        UrlLinkWidget("Created by Caner Ture", "https://candroid.dev"),
         PackageNameWidget(defaultPackageNameParameter)
     )
 

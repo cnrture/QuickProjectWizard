@@ -110,7 +110,7 @@ val composeTemplate = template {
         TextFieldWidget(javaJvmVersion),
         LabelWidget("8 or 11 or 17 etc."),
         LabelWidget(" "),
-        UrlLinkWidget("Created by Caner Ture", "https://bento.me/canerture"),
+        UrlLinkWidget("Created by Caner Ture", "https://candroid.dev"),
         PackageNameWidget(defaultPackageNameParameter),
     )
 
