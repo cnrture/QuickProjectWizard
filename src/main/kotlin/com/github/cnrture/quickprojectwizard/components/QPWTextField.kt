@@ -44,22 +44,21 @@ fun QPWTextField(
         ),
         singleLine = isSingleLine,
         cursorBrush = SolidColor(value = color),
-        decorationBox = {
+        decorationBox = { innerTextField ->
             Box(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                 contentAlignment = Alignment.CenterStart,
             ) {
-                if (value.isBlank()) {
+                if (value.isEmpty() && placeholder != null) {
                     QPWText(
-                        text = value.ifBlank { placeholder ?: "" },
+                        text = placeholder,
                         color = QPWTheme.colors.hintGray,
                         style = textStyle.copy(
                             fontSize = 14.sp,
                         ),
                     )
-                } else {
-                    it()
                 }
+                innerTextField()
             }
         },
     )
