@@ -4,7 +4,7 @@ import com.github.cnrture.quickprojectwizard.common.file.FileWriter
 import com.github.cnrture.quickprojectwizard.common.file.ImportAnalyzer
 import com.github.cnrture.quickprojectwizard.common.file.LibraryDependencyFinder
 import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
-import com.github.cnrture.quickprojectwizard.dialog.MessageDialogWrapper
+import com.github.cnrture.quickprojectwizard.dialog.MessageDialog
 import com.intellij.ide.BrowserUtil
 import com.intellij.ide.starters.local.GeneratorTemplateFile
 import com.intellij.notification.NotificationGroupManager
@@ -51,15 +51,15 @@ object Utils {
                 file = File(projectRoot, cleanSelectedPath),
                 featureName = featureName,
                 packageName = packagePath.plus(".${featureName.lowercase()}"),
-                showErrorDialog = { MessageDialogWrapper("Error: $it").show() },
+                showErrorDialog = { MessageDialog("Error: $it").show() },
                 showSuccessDialog = {
-                    MessageDialogWrapper("Success").show()
+                    MessageDialog("Success").show()
                     val currentlySelectedFile = project.getCurrentlySelectedFile(selectedSrc)
                     listOf(currentlySelectedFile).refreshFileSystem()
                 }
             )
         } catch (e: Exception) {
-            MessageDialogWrapper("Error: ${e.message}").show()
+            MessageDialog("Error: ${e.message}").show()
         }
     }
 
@@ -88,7 +88,7 @@ object Utils {
             if (settingsGradleFile != null) {
                 val moduleName = moduleName.trim()
                 if (!moduleName.startsWith(":")) {
-                    MessageDialogWrapper("Module name must start with ':' (e.g. ':home' or ':feature:home')").show()
+                    MessageDialog("Module name must start with ':' (e.g. ':home' or ':feature:home')").show()
                     return emptyList()
                 }
 
@@ -109,9 +109,9 @@ object Utils {
                     settingsGradleFile = settingsGradleFile,
                     modulePathAsString = moduleName,
                     moduleType = moduleType,
-                    showErrorDialog = { MessageDialogWrapper(it).show() },
+                    showErrorDialog = { MessageDialog(it).show() },
                     showSuccessDialog = {
-                        MessageDialogWrapper("Module '$moduleName' created successfully").show()
+                        MessageDialog("Module '$moduleName' created successfully").show()
 
                         val projectDir = File(project.basePath.orEmpty())
                         VfsUtil.markDirtyAndRefresh(false, true, true, VfsUtil.findFileByIoFile(projectDir, true))
@@ -142,11 +142,11 @@ object Utils {
                 )
                 return filesCreated
             } else {
-                MessageDialogWrapper("Couldn't find settings.gradle(.kts) file").show()
+                MessageDialog("Couldn't find settings.gradle(.kts) file").show()
                 return emptyList()
             }
         } catch (e: Exception) {
-            MessageDialogWrapper("Error: ${e.message}").show()
+            MessageDialog("Error: ${e.message}").show()
             return emptyList()
         }
     }
@@ -162,7 +162,7 @@ object Utils {
 
         try {
             if (!sourceDir.exists() || !sourceDir.isDirectory) {
-                MessageDialogWrapper("Source directory does not exist or is not a directory").show()
+                MessageDialog("Source directory does not exist or is not a directory").show()
                 return
             }
 
@@ -179,7 +179,7 @@ object Utils {
             }.toList()
 
             if (sourceFiles.isEmpty()) {
-                MessageDialogWrapper("No source files found to move in ${sourceDir.absolutePath}").show()
+                MessageDialog("No source files found to move in ${sourceDir.absolutePath}").show()
                 return
             }
 
@@ -250,9 +250,9 @@ object Utils {
                 openNewModule(project, modulePath, movedFiles)
             }
 
-            MessageDialogWrapper("Moved ${movedFiles.size} files to new module").show()
+            MessageDialog("Moved ${movedFiles.size} files to new module").show()
         } catch (e: Exception) {
-            MessageDialogWrapper("Error moving files: ${e.message}").show()
+            MessageDialog("Error moving files: ${e.message}").show()
             e.printStackTrace()
         }
     }
@@ -284,7 +284,7 @@ object Utils {
         val settingsFile = listOf(settingsGradleKtsPath, settingsGradlePath).firstOrNull {
             it.exists()
         } ?: run {
-            MessageDialogWrapper("Can't find settings.gradle(.kts) file")
+            MessageDialog("Can't find settings.gradle(.kts) file")
             return null
         }
 

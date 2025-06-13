@@ -16,7 +16,7 @@ import com.github.cnrture.quickprojectwizard.components.QPWActionCard
 import com.github.cnrture.quickprojectwizard.components.QPWActionCardType
 import com.github.cnrture.quickprojectwizard.components.QPWText
 import com.github.cnrture.quickprojectwizard.components.QPWTextField
-import com.github.cnrture.quickprojectwizard.dialog.MessageDialogWrapper
+import com.github.cnrture.quickprojectwizard.dialog.MessageDialog
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.intellij.openapi.project.Project
 
@@ -56,7 +56,7 @@ fun ConfigurationPanel(
                                 fileWriter = fileWriter,
                             )
                         } else {
-                            MessageDialogWrapper("Please fill out required values").show()
+                            MessageDialog("Please fill out required values").show()
                         }
                     },
                 )

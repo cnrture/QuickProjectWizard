@@ -15,7 +15,7 @@ import com.github.cnrture.quickprojectwizard.components.QPWDialogWrapper
 import com.github.cnrture.quickprojectwizard.components.QPWText
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 
-class MessageDialogWrapper(private val message: String) : QPWDialogWrapper() {
+class MessageDialog(private val message: String) : QPWDialogWrapper() {
 
     @Composable
     override fun createDesign() {

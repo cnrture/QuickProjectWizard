@@ -22,7 +22,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import java.io.File
 
-class FeatureMakerDialogWrapper(
+class FeatureMakerDialog(
     private val project: Project,
     startingLocation: VirtualFile?,
 ) : QPWDialogWrapper(
@@ -126,7 +126,7 @@ class FeatureMakerDialogWrapper(
                         if (validateInput()) {
                             createFeature()
                         } else {
-                            MessageDialogWrapper("Please fill out required values").show()
+                            MessageDialog("Please fill out required values").show()
                         }
                     },
                     color = QPWTheme.colors.purple,
@@ -195,15 +195,15 @@ class FeatureMakerDialogWrapper(
                 file = File(projectRoot, cleanSelectedPath),
                 featureName = featureName.value,
                 packageName = packagePath.plus(".${featureName.value.lowercase()}"),
-                showErrorDialog = { MessageDialogWrapper("Error: $it").show() },
+                showErrorDialog = { MessageDialog("Error: $it").show() },
                 showSuccessDialog = {
-                    MessageDialogWrapper("Success").show()
+                    MessageDialog("Success").show()
                     val currentlySelectedFile = project.getCurrentlySelectedFile(selectedSrc.value)
                     listOf(currentlySelectedFile).refreshFileSystem()
                 }
             )
         } catch (e: Exception) {
-            MessageDialogWrapper("Error: ${e.message}").show()
+            MessageDialog("Error: ${e.message}").show()
         } finally {
             close(0)
         }

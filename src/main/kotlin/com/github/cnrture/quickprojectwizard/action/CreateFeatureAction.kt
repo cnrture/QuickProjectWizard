@@ -1,6 +1,6 @@
 package com.github.cnrture.quickprojectwizard.action
 
-import com.github.cnrture.quickprojectwizard.dialog.FeatureMakerDialogWrapper
+import com.github.cnrture.quickprojectwizard.dialog.FeatureMakerDialog
 import com.intellij.icons.AllIcons
 import com.intellij.ide.actions.CreateElementActionBase
 import com.intellij.openapi.actionSystem.AnActionEvent
@@ -24,7 +24,7 @@ class CreateFeatureAction : CreateElementActionBase(
     ) {
         val project = directory.project
         val virtualFile = directory.virtualFile
-        FeatureMakerDialogWrapper(project, virtualFile).show()
+        FeatureMakerDialog(project, virtualFile).show()
     }
 
     override fun update(e: AnActionEvent) {
