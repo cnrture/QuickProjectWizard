@@ -2,12 +2,12 @@ package com.github.cnrture.quickprojectwizard.projectwizard
 
 import com.android.tools.idea.wizard.template.*
 import com.android.tools.idea.wizard.template.impl.defaultPackageNameParameter
+import com.github.cnrture.quickprojectwizard.common.getImage
 import com.github.cnrture.quickprojectwizard.projectwizard.general.ImageLibrary
 import com.github.cnrture.quickprojectwizard.projectwizard.general.NetworkLibrary
 import com.github.cnrture.quickprojectwizard.projectwizard.gradle.network.getVersions
 import com.github.cnrture.quickprojectwizard.projectwizard.recipes.xmlProjectRecipe
 import kotlinx.coroutines.runBlocking
-import java.net.URL
 
 val xmlTemplate = template {
     name = "QuickProjectWizard - XML"
@@ -110,16 +110,7 @@ val xmlTemplate = template {
         PackageNameWidget(defaultPackageNameParameter),
     )
 
-    thumb = {
-        val pluginClassLoader =
-            Class.forName("com.github.cnrture.quickprojectwizard.projectwizard.XMLTemplateKt").classLoader
-        val imageUrl = pluginClassLoader?.getResource("images/qpw-xml.png")
-        if (imageUrl != null) {
-            Thumb { imageUrl }
-        } else {
-            Thumb { URL("https://canerture.com/qpw-xml.png") }
-        }
-    }
+    thumb = { getImage("XMLTemplate", "qpw-xml") }
 
     recipe = { data: TemplateData ->
         xmlProjectRecipe(

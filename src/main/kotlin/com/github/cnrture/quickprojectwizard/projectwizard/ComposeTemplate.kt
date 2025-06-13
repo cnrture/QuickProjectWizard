@@ -2,12 +2,12 @@ package com.github.cnrture.quickprojectwizard.projectwizard
 
 import com.android.tools.idea.wizard.template.*
 import com.android.tools.idea.wizard.template.impl.defaultPackageNameParameter
+import com.github.cnrture.quickprojectwizard.common.getImage
 import com.github.cnrture.quickprojectwizard.projectwizard.general.ImageLibrary
 import com.github.cnrture.quickprojectwizard.projectwizard.general.NetworkLibrary
 import com.github.cnrture.quickprojectwizard.projectwizard.gradle.network.getVersions
 import com.github.cnrture.quickprojectwizard.projectwizard.recipes.composeProjectRecipe
 import kotlinx.coroutines.runBlocking
-import java.net.URL
 import java.util.*
 
 val composeTemplate = template {
@@ -114,16 +114,7 @@ val composeTemplate = template {
         PackageNameWidget(defaultPackageNameParameter),
     )
 
-    thumb = {
-        val pluginClassLoader =
-            Class.forName("com.github.cnrture.quickprojectwizard.projectwizard.ComposeTemplateKt").classLoader
-        val imageUrl = pluginClassLoader?.getResource("images/qpw-compose.png")
-        if (imageUrl != null) {
-            Thumb { imageUrl }
-        } else {
-            Thumb { URL("https://canerture.com/qpw-compose.png") }
-        }
-    }
+    thumb = { getImage("ComposeTemplate", "qpw-compose") }
 
     recipe = { data: TemplateData ->
         composeProjectRecipe(

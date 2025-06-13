@@ -2,6 +2,7 @@ package com.github.cnrture.quickprojectwizard.projectwizard
 
 import com.android.tools.idea.wizard.template.*
 import com.android.tools.idea.wizard.template.impl.defaultPackageNameParameter
+import com.github.cnrture.quickprojectwizard.common.getImage
 import com.github.cnrture.quickprojectwizard.projectwizard.cmparch.CMPImageLibrary
 import com.github.cnrture.quickprojectwizard.projectwizard.gradle.network.getVersions
 import com.github.cnrture.quickprojectwizard.projectwizard.recipes.composeMultiplatformProjectRecipe
@@ -87,16 +88,7 @@ val composeMultiplatformTemplate = template {
         PackageNameWidget(defaultPackageNameParameter)
     )
 
-    thumb = {
-        val pluginClassLoader =
-            Class.forName("com.github.cnrture.quickprojectwizard.projectwizard.CMPTemplateKt").classLoader
-        val imageUrl = pluginClassLoader?.getResource("images/qpw-cmp.png")
-        if (imageUrl != null) {
-            Thumb { imageUrl }
-        } else {
-            Thumb { URL("https://canerture.com/qpw-cmp.png") }
-        }
-    }
+    thumb = { getImage("CMPTemplate", "qpw-cmp") }
 
     recipe = { data: TemplateData ->
         composeMultiplatformProjectRecipe(

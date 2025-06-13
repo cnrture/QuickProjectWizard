@@ -2,12 +2,14 @@ package com.github.cnrture.quickprojectwizard.common
 
 import com.android.tools.idea.wizard.template.ModuleTemplateData
 import com.android.tools.idea.wizard.template.RecipeExecutor
+import com.android.tools.idea.wizard.template.Thumb
 import com.github.cnrture.quickprojectwizard.projectwizard.gradle.Library
 import com.github.cnrture.quickprojectwizard.projectwizard.gradle.Plugin
 import com.github.cnrture.quickprojectwizard.projectwizard.gradle.Version
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VfsUtil
 import java.io.File
+import java.net.URL
 import com.github.cnrture.quickprojectwizard.common.file.File as ProjectFile
 
 fun Project.getCurrentlySelectedFile(selectedSrc: String): File =
@@ -150,4 +152,15 @@ fun StringBuilder.addAndroidBlock(packageName: String, minApi: Int, javaJvmVersi
     append("        }\n")
     append("    }\n")
     append("}\n\n")
+}
+
+fun getImage(className: String, imagePath: String): Thumb {
+    val pluginClassLoader =
+        Class.forName("com.github.cnrture.quickprojectwizard.projectwizard.${className}Kt").classLoader
+    val imageUrl = pluginClassLoader?.getResource("images/$imagePath.png")
+    return if (imageUrl != null) {
+        Thumb { imageUrl }
+    } else {
+        Thumb { URL("https://canerture.com/$imagePath.png") }
+    }
 }
