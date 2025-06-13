@@ -19,11 +19,7 @@ import com.github.cnrture.quickprojectwizard.components.QPWActionCardType
 import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
 import com.github.cnrture.quickprojectwizard.dialog.MessageDialogWrapper
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
-import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.components.DetectedModulesContent
-import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.components.LibrarySelectionContent
-import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.components.ModuleTypeNameContent
-import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.components.PluginSelectionContent
-import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.components.TemplateSelectionContent
+import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.components.*
 import com.intellij.openapi.project.Project
 
 @OptIn(ExperimentalLayoutApi::class)
