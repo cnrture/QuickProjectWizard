@@ -124,6 +124,7 @@ fun MoveExistingFilesToModuleContent(
                     .padding(padding)
                     .verticalScroll(rememberScrollState()),
             ) {
+                Spacer(modifier = Modifier.height(16.dp))
                 ModuleTypeNameContent(
                     moduleTypeSelectionState = moduleType,
                     packageName = packageName,
@@ -134,7 +135,7 @@ fun MoveExistingFilesToModuleContent(
                     onModuleNameChanged = onModuleNameChanged,
                 )
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(32.dp))
 
                 RootSelectionContent(
                     selectedSrc = selectedSrc,

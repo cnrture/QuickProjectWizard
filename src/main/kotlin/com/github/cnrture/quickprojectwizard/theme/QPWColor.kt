@@ -14,6 +14,7 @@ fun lightColors(
     purple: Color = Color(0xff7F52FF),
     green: Color = Color(0xff339e48),
     red: Color = Color(0xffE44857),
+    hintGray: Color = Color(0xFF565656),
 ): QPWColor = QPWColor(
     white = white,
     black = black,
@@ -22,6 +23,7 @@ fun lightColors(
     purple = purple,
     green = green,
     red = red,
+    hintGray = hintGray,
 )
 
 class QPWColor(
@@ -32,6 +34,7 @@ class QPWColor(
     purple: Color,
     green: Color,
     red: Color,
+    hintGray: Color,
 ) {
     private var _white: Color by mutableStateOf(white)
     val white: Color = _white
@@ -53,6 +56,9 @@ class QPWColor(
 
     private var _green: Color by mutableStateOf(green)
     val green: Color = _green
+
+    private var _hintGray: Color by mutableStateOf(hintGray)
+    val hintGray: Color = _hintGray
 }
 
 internal val LocalColors = staticCompositionLocalOf { lightColors() }

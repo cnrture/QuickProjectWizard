@@ -14,7 +14,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.components.QPWActionCard
 import com.github.cnrture.quickprojectwizard.components.QPWActionCardType
-import com.github.cnrture.quickprojectwizard.components.QPWText
 import com.github.cnrture.quickprojectwizard.components.QPWTextField
 import com.github.cnrture.quickprojectwizard.data.FileTemplate
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
@@ -42,30 +41,20 @@ fun FileTemplateEditor(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     QPWTextField(
-                        placeholder = "example: Repository.kt",
+                        placeholder = "ex. Repository.kt",
                         color = QPWTheme.colors.white,
                         value = fileTemplate.fileName,
                         onValueChange = { onUpdate(fileTemplate.copy(fileName = it)) }
-                    )
-                    QPWText(
-                        text = "File Name (e.g., Repository.kt)",
-                        color = QPWTheme.colors.lightGray,
-                        style = TextStyle(fontSize = 12.sp)
                     )
                 }
                 Column(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     QPWTextField(
-                        placeholder = "example: domain.repository",
+                        placeholder = "ex. domain.repository",
                         color = QPWTheme.colors.white,
                         value = fileTemplate.filePath,
                         onValueChange = { onUpdate(fileTemplate.copy(filePath = it)) }
-                    )
-                    QPWText(
-                        text = "File Path (e.g., domain.repository) - do not use '/'",
-                        color = QPWTheme.colors.lightGray,
-                        style = TextStyle(fontSize = 12.sp)
                     )
                 }
             }
@@ -73,7 +62,7 @@ fun FileTemplateEditor(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight(),
-                placeholder = "package {FILE_PACKAGE}\ninterface {NAME}Repository {\n    // Define methods here\n}",
+                placeholder = "package {FILE_PACKAGE}\n\ninterface {NAME}Repository {\n    // Define methods here\n}",
                 color = QPWTheme.colors.white,
                 textStyle = TextStyle(
                     fontSize = 12.sp,

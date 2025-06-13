@@ -52,7 +52,7 @@ fun QPWTextField(
                 if (value.isBlank()) {
                     QPWText(
                         text = value.ifBlank { placeholder ?: "" },
-                        color = QPWTheme.colors.lightGray,
+                        color = QPWTheme.colors.hintGray,
                         style = textStyle.copy(
                             fontSize = 14.sp,
                         ),

@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CheckCircle
@@ -52,7 +53,10 @@ fun TemplateSelectionContent(
             style = TextStyle(fontSize = 12.sp)
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Divider(
+            color = QPWTheme.colors.lightGray,
+            modifier = Modifier.padding(vertical = 16.dp)
+        )
 
         TemplateOption(
             title = "Custom Configuration",
