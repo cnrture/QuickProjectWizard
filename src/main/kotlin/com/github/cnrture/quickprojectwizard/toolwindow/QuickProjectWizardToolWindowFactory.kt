@@ -58,13 +58,15 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
         ComposePanel().apply {
             setContent {
                 QPWTheme {
-                    Box(
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(QPWTheme.colors.gray)
-                            .padding(24.dp),
+                            .background(QPWTheme.colors.gray),
                     ) {
                         QPWText(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(24.dp),
                             text = "Quick Project Wizard",
                             style = TextStyle(
                                 fontSize = 30.sp,
@@ -75,18 +77,11 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                                 ),
                             ),
                         )
+                        MainContent(project)
                     }
                 }
             }
-            panel.add(this, BorderLayout.NORTH)
-        }
-        ComposePanel().apply {
-            setContent {
-                QPWTheme {
-                    MainContent(project)
-                }
-            }
-            panel.add(this, BorderLayout.CENTER)
+            panel.add(this)
         }
         return panel
     }
