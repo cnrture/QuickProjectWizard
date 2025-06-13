@@ -63,6 +63,7 @@ fun SettingsContent() {
                     title = "Save",
                     icon = Icons.Default.Save,
                     actionColor = QPWTheme.colors.lightGray,
+                    type = QPWActionCardType.MEDIUM,
                     onClick = {
                         currentSettings = settings.state.copy(
                             defaultPackageName = packageName,
@@ -84,7 +85,7 @@ fun SettingsContent() {
                 text = "Settings",
                 style = TextStyle(
                     color = QPWTheme.colors.lightGray,
-                    fontSize = 36.sp,
+                    fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,
                 )
@@ -298,9 +299,7 @@ private fun GeneralSettingsTab(
     onModuleTypeChange: (String) -> Unit,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(12.dp),
+        modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         SettingItem("Default Package Name") {

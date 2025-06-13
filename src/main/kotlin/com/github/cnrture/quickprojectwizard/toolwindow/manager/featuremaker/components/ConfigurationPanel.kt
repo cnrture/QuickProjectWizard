@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.github.cnrture.quickprojectwizard.common.Utils
 import com.github.cnrture.quickprojectwizard.common.file.FileWriter
 import com.github.cnrture.quickprojectwizard.components.QPWActionCard
+import com.github.cnrture.quickprojectwizard.components.QPWActionCardType
 import com.github.cnrture.quickprojectwizard.components.QPWText
 import com.github.cnrture.quickprojectwizard.components.QPWTextField
 import com.github.cnrture.quickprojectwizard.dialog.MessageDialogWrapper
@@ -45,6 +46,7 @@ fun ConfigurationPanel(
                     title = "Create",
                     icon = Icons.Default.Create,
                     actionColor = QPWTheme.colors.red,
+                    type = QPWActionCardType.MEDIUM,
                     onClick = {
                         if (Utils.validateFeatureInput(featureName, selectedSrc)) {
                             Utils.createFeature(

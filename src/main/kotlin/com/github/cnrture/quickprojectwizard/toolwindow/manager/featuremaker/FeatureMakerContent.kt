@@ -50,7 +50,7 @@ fun FeatureMakerContent(project: Project) {
                 text = "Feature Creator",
                 style = TextStyle(
                     color = QPWTheme.colors.red,
-                    fontSize = 28.sp,
+                    fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,
                 ),

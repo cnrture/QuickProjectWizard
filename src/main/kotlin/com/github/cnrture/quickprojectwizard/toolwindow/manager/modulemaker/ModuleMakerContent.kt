@@ -66,7 +66,7 @@ fun ModuleMakerContent(project: Project) {
     var showFileTreeDialog by remember { mutableStateOf(false) }
 
     var selectedTab by remember { mutableStateOf(0) }
-    val tabs = listOf("New Module", "New Module with Existing Files")
+    val tabs = listOf("New\nModule", "New Module with\nExisting Files")
 
     Utils.loadExistingModules(
         project = project,
