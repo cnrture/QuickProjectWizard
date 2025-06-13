@@ -39,7 +39,7 @@ fun FileTemplateEditor(
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     QPWTextField(
                         placeholder = "example: Repository.kt",
@@ -50,11 +50,11 @@ fun FileTemplateEditor(
                     QPWText(
                         text = "File Name (e.g., Repository.kt)",
                         color = QPWTheme.colors.lightGray,
-                        style = TextStyle(fontSize = 11.sp)
+                        style = TextStyle(fontSize = 12.sp)
                     )
                 }
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     QPWTextField(
                         placeholder = "example: domain.repository",
@@ -62,11 +62,10 @@ fun FileTemplateEditor(
                         value = fileTemplate.filePath,
                         onValueChange = { onUpdate(fileTemplate.copy(filePath = it)) }
                     )
-                    Spacer(modifier = Modifier.height(4.dp))
                     QPWText(
                         text = "File Path (e.g., domain.repository) - do not use '/'",
                         color = QPWTheme.colors.lightGray,
-                        style = TextStyle(fontSize = 11.sp)
+                        style = TextStyle(fontSize = 12.sp)
                     )
                 }
             }

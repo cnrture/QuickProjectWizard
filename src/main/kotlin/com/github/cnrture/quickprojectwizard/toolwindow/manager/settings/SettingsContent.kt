@@ -170,7 +170,6 @@ private fun ModuleTemplatesTab(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Header
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -197,7 +196,6 @@ private fun ModuleTemplatesTab(
             )
         }
 
-        // Templates List
         templates.forEach { template ->
             ModuleTemplateCard(
                 template = template,
@@ -386,7 +384,7 @@ private fun getDefaultTemplates(): List<ModuleTemplate> {
             fileTemplates = listOf(
                 FileTemplate(
                     fileName = "Repository.kt",
-                    filePath = "domain/repository",
+                    filePath = "domain.repository",
                     fileContent = "interface {{MODULE_NAME}}Repository {\n    // Define methods here\n}",
                     fileType = "kt"
                 ),

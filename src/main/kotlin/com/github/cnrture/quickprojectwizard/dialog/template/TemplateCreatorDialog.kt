@@ -4,14 +4,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.TabRow
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -21,7 +19,6 @@ import com.github.cnrture.quickprojectwizard.data.FileTemplate
 import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
 import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.dialog.template.component.FileTemplateEditor
-import com.github.cnrture.quickprojectwizard.dialog.template.component.TemplateSection
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
@@ -59,11 +56,7 @@ private fun TemplateCreatorContent(
     onCancel: () -> Unit,
 ) {
     var templateName by remember { mutableStateOf("") }
-    var templateDescription by remember { mutableStateOf("") }
     val fileTemplates = remember { mutableStateListOf<FileTemplate>() }
-
-    var selectedTab by remember { mutableStateOf(0) }
-    val tabs = listOf("Information", "Files")
 
     Column(
         modifier = Modifier
@@ -80,25 +73,6 @@ private fun TemplateCreatorContent(
             )
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
-
-        TabRow(
-            selectedTabIndex = selectedTab,
-            backgroundColor = QPWTheme.colors.gray,
-            contentColor = QPWTheme.colors.white,
-            divider = {},
-            indicator = {}
-        ) {
-            tabs.forEachIndexed { index, tab ->
-                QPWTabRow(
-                    text = tab,
-                    color = if (selectedTab == index) QPWTheme.colors.lightGray else Color.Transparent,
-                    isSelected = selectedTab == index,
-                    onTabSelected = { selectedTab = index }
-                )
-            }
-        }
-
         Spacer(modifier = Modifier.height(16.dp))
 
         Box(
@@ -106,85 +80,62 @@ private fun TemplateCreatorContent(
                 .weight(1f)
                 .fillMaxWidth()
         ) {
-            when (selectedTab) {
-                0 -> Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState())
-                        .padding(16.dp)
-                ) {
-                    TemplateSection("Basic Information") {
-                        QPWTextField(
-                            modifier = Modifier.fillMaxWidth(),
-                            placeholder = "Template Name",
-                            color = QPWTheme.colors.white,
-                            value = templateName,
-                            onValueChange = { templateName = it }
-                        )
-
-                        Spacer(modifier = Modifier.height(12.dp))
-
-                        QPWTextField(
-                            modifier = Modifier.fillMaxWidth(),
-                            placeholder = "Description",
-                            color = QPWTheme.colors.white,
-                            value = templateDescription,
-                            onValueChange = { templateDescription = it }
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(16.dp)
+            ) {
+                QPWTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    placeholder = "Template Name",
+                    color = QPWTheme.colors.white,
+                    value = templateName,
+                    onValueChange = { templateName = it }
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                QPWText(
+                    text = "File Content (use {NAME}, {PACKAGE}, {FILE_PACKAGE} placeholders):",
+                    color = QPWTheme.colors.lightGray,
+                    style = TextStyle(fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                QPWText(
+                    text = "{NAME} -> Name of the file without extension",
+                    color = QPWTheme.colors.lightGray,
+                    style = TextStyle(fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+                )
+                QPWText(
+                    text = "{PACKAGE} -> Package structure (ex., com.example.app)",
+                    color = QPWTheme.colors.lightGray,
+                    style = TextStyle(fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+                )
+                QPWText(
+                    text = "{FILE_PACKAGE} -> Package structure without dots (ex., com.example.app.repository)",
+                    color = QPWTheme.colors.lightGray,
+                    style = TextStyle(fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+                fileTemplates.forEachIndexed { index, fileTemplate ->
+                    FileTemplateEditor(
+                        fileTemplate = fileTemplate,
+                        onUpdate = { fileTemplates[index] = it },
+                        onDelete = { fileTemplates.removeAt(index) }
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                }
+                Spacer(modifier = Modifier.height(12.dp))
+                QPWActionCard(
+                    title = "Add File Template",
+                    icon = Icons.Rounded.Add,
+                    type = QPWActionCardType.MEDIUM,
+                    actionColor = QPWTheme.colors.green,
+                    onClick = {
+                        fileTemplates.add(
+                            FileTemplate("", "", "", "kt")
                         )
                     }
-                }
-
-                1 -> Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState())
-                        .padding(16.dp)
-                ) {
-                    TemplateSection("File Templates") {
-                        QPWText(
-                            text = "File Content (use {NAME}, {PACKAGE}, {FILE_PACKAGE} placeholders):",
-                            color = QPWTheme.colors.lightGray,
-                            style = TextStyle(fontSize = 12.sp, fontWeight = FontWeight.Bold)
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        QPWText(
-                            text = "{NAME} -> Name of the file without extension",
-                            color = QPWTheme.colors.lightGray,
-                            style = TextStyle(fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
-                        )
-                        QPWText(
-                            text = "{PACKAGE} -> Package structure (e.g., com.example.app)",
-                            color = QPWTheme.colors.lightGray,
-                            style = TextStyle(fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
-                        )
-                        QPWText(
-                            text = "{FILE_PACKAGE} -> Package structure without dots (e.g., com_example.app.repository)",
-                            color = QPWTheme.colors.lightGray,
-                            style = TextStyle(fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
-                        )
-                        Spacer(modifier = Modifier.height(12.dp))
-                        fileTemplates.forEachIndexed { index, fileTemplate ->
-                            FileTemplateEditor(
-                                fileTemplate = fileTemplate,
-                                onUpdate = { fileTemplates[index] = it },
-                                onDelete = { fileTemplates.removeAt(index) }
-                            )
-                            Spacer(modifier = Modifier.height(12.dp))
-                        }
-                        Spacer(modifier = Modifier.height(12.dp))
-                        QPWActionCard(
-                            title = "Add File Template",
-                            icon = Icons.Rounded.Add,
-                            type = QPWActionCardType.MEDIUM,
-                            actionColor = QPWTheme.colors.green,
-                            onClick = {
-                                fileTemplates.add(
-                                    FileTemplate("", "", "", "kt")
-                                )
-                            }
-                        )
-                    }
-                }
+                )
             }
         }
 
