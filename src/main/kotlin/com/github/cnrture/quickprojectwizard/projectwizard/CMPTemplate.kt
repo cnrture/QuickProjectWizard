@@ -7,7 +7,6 @@ import com.github.cnrture.quickprojectwizard.projectwizard.cmparch.CMPImageLibra
 import com.github.cnrture.quickprojectwizard.projectwizard.gradle.network.getVersions
 import com.github.cnrture.quickprojectwizard.projectwizard.recipes.composeMultiplatformProjectRecipe
 import kotlinx.coroutines.runBlocking
-import java.net.URL
 
 val composeMultiplatformTemplate = template {
     name = "QuickProjectWizard - CMP"
