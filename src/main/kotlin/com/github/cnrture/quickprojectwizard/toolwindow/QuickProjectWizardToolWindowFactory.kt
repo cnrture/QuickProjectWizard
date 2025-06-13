@@ -22,12 +22,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.common.Constants
 import com.github.cnrture.quickprojectwizard.components.QPWText
+import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.colorpicker.ColorPickerContent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.featuremaker.FeatureMakerContent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.ModuleMakerContent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.SettingsContent
 import com.intellij.ide.BrowserUtil
+import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowFactory
@@ -37,6 +40,8 @@ import javax.swing.JComponent
 import javax.swing.JPanel
 
 class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
+
+    private val settings = ApplicationManager.getApplication().service<SettingsService>()
 
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
         toolWindow.contentManager.addContent(
@@ -89,6 +94,7 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
     @Composable
     private fun MainContent(project: Project) {
         var selectedSection by remember { mutableStateOf("module") }
+        var isExpanded by remember { mutableStateOf(settings.state.isActionsExpanded) }
 
         Row(
             modifier = Modifier
@@ -97,35 +103,66 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
         ) {
             Card(
                 modifier = Modifier
-                    .width(180.dp)
+                    .width(if (isExpanded) 180.dp else 60.dp)
                     .fillMaxHeight(),
                 backgroundColor = QPWTheme.colors.gray,
-                elevation = 8.dp
+                elevation = 8.dp,
             ) {
                 Column(
-                    modifier = Modifier.fillMaxHeight()
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(if (isExpanded) 16.dp else 8.dp),
                 ) {
                     Column(
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(16.dp),
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        QPWText(
-                            text = "Quick Actions",
-                            color = QPWTheme.colors.white,
-                            style = TextStyle(
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.Bold,
-                            ),
-                            modifier = Modifier.padding(bottom = 8.dp)
-                        )
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            if (isExpanded) {
+                                QPWText(
+                                    text = "Actions",
+                                    color = QPWTheme.colors.white,
+                                    style = TextStyle(
+                                        fontSize = 18.sp,
+                                        fontWeight = FontWeight.Bold,
+                                    ),
+                                )
+                                Spacer(modifier = Modifier.weight(1f))
+                                Icon(
+                                    imageVector = Icons.Rounded.KeyboardDoubleArrowLeft,
+                                    contentDescription = null,
+                                    tint = QPWTheme.colors.white,
+                                    modifier = Modifier
+                                        .size(32.dp)
+                                        .clickable {
+                                            isExpanded = !isExpanded
+                                            settings.loadState(settings.state.copy(isActionsExpanded = isExpanded))
+                                        }
+                                )
+                            } else {
+                                Icon(
+                                    imageVector = Icons.Rounded.KeyboardDoubleArrowRight,
+                                    contentDescription = null,
+                                    tint = QPWTheme.colors.white,
+                                    modifier = Modifier
+                                        .size(32.dp)
+                                        .clickable {
+                                            isExpanded = !isExpanded
+                                            settings.loadState(settings.state.copy(isActionsExpanded = isExpanded))
+                                        }
+                                )
+                            }
+                        }
 
                         SidebarButton(
                             title = "Module",
                             icon = Icons.Rounded.ViewModule,
                             isSelected = selectedSection == "module",
                             color = QPWTheme.colors.green,
+                            isExpanded = isExpanded,
                             onClick = { selectedSection = "module" }
                         )
 
@@ -134,6 +171,7 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                             icon = Icons.Rounded.FileOpen,
                             isSelected = selectedSection == "feature",
                             color = QPWTheme.colors.red,
+                            isExpanded = isExpanded,
                             onClick = { selectedSection = "feature" }
                         )
 
@@ -142,6 +180,7 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                             icon = Icons.Rounded.ColorLens,
                             isSelected = selectedSection == "color",
                             color = QPWTheme.colors.purple,
+                            isExpanded = isExpanded,
                             onClick = { selectedSection = "color" }
                         )
 
@@ -150,14 +189,12 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                             icon = Icons.Rounded.Settings,
                             isSelected = selectedSection == "settings",
                             color = QPWTheme.colors.lightGray,
+                            isExpanded = isExpanded,
                             onClick = { selectedSection = "settings" }
                         )
                     }
-
+                    Spacer(modifier = Modifier.weight(1f))
                     Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
                         shape = RoundedCornerShape(12.dp),
                         backgroundColor = QPWTheme.colors.black,
                         elevation = 0.dp
@@ -170,6 +207,7 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                                 title = "Website",
                                 icon = Icons.Rounded.Language,
                                 color = QPWTheme.colors.red,
+                                isExpanded = isExpanded,
                                 onClick = {
                                     BrowserUtil.browse("https://candroid.dev")
                                 }
@@ -179,6 +217,7 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                                 title = "Plugin Page",
                                 icon = Icons.Rounded.Language,
                                 color = QPWTheme.colors.green,
+                                isExpanded = isExpanded,
                                 onClick = {
                                     BrowserUtil.browse("https://plugins.jetbrains.com/plugin/25221-quickprojectwizard/edit")
                                 }
@@ -188,6 +227,7 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                                 title = "Source Code",
                                 icon = Icons.Rounded.Source,
                                 color = QPWTheme.colors.purple,
+                                isExpanded = isExpanded,
                                 onClick = {
                                     BrowserUtil.browse("https://github.com/cnrture/QuickProjectWizard")
                                 },
@@ -218,6 +258,7 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
         icon: ImageVector,
         isSelected: Boolean,
         color: Color,
+        isExpanded: Boolean,
         onClick: () -> Unit,
     ) {
         Card(
@@ -229,7 +270,7 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
             elevation = 0.dp
         ) {
             Row(
-                modifier = Modifier.padding(12.dp),
+                modifier = Modifier.padding(if (isExpanded) 12.dp else 6.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
             ) {
@@ -239,15 +280,17 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                     tint = if (isSelected) color else QPWTheme.colors.lightGray,
                     modifier = Modifier.size(24.dp)
                 )
-                Spacer(modifier = Modifier.width(8.dp))
-                QPWText(
-                    text = title,
-                    color = if (isSelected) QPWTheme.colors.white else QPWTheme.colors.lightGray,
-                    style = TextStyle(
-                        fontSize = 16.sp,
-                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
+                if (isExpanded) {
+                    QPWText(
+                        modifier = Modifier.padding(8.dp),
+                        text = title,
+                        color = if (isSelected) QPWTheme.colors.white else QPWTheme.colors.lightGray,
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
+                        )
                     )
-                )
+                }
             }
         }
     }
@@ -257,30 +300,34 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
         title: String,
         icon: ImageVector,
         color: Color,
+        isExpanded: Boolean,
         onClick: () -> Unit,
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { onClick() }
-                .padding(horizontal = 8.dp, vertical = 4.dp),
+                .padding(horizontal = if (isExpanded) 8.dp else 4.dp, vertical = if (isExpanded) 4.dp else 2.dp),
             verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = if (isExpanded) Arrangement.Start else Arrangement.Center
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
                 tint = color,
-                modifier = Modifier.size(16.dp)
+                modifier = Modifier.size(20.dp)
             )
-            Spacer(modifier = Modifier.width(8.dp))
-            QPWText(
-                text = title,
-                color = QPWTheme.colors.lightGray,
-                style = TextStyle(
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Medium
+            if (isExpanded) Spacer(modifier = Modifier.width(8.dp))
+            if (isExpanded) {
+                QPWText(
+                    text = title,
+                    color = QPWTheme.colors.lightGray,
+                    style = TextStyle(
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Medium
+                    )
                 )
-            )
+            }
         }
     }
 }

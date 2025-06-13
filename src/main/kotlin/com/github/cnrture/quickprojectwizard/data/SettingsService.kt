@@ -45,6 +45,7 @@ data class SettingsState(
 
     var isCompose: Boolean = true,
     var isHiltEnable: Boolean = true,
+    var isActionsExpanded: Boolean = true,
 )
 
 data class ModuleTemplate(
