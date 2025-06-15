@@ -73,7 +73,6 @@ data class FileTemplate(
     val fileName: String,
     val filePath: String,
     val fileContent: String,
-    val fileType: String,
 )
 
 data class FeatureTemplate(
@@ -93,7 +92,6 @@ fun getDefaultModuleTemplates(): List<ModuleTemplate> {
                     fileName = "Repository.kt",
                     filePath = "domain/repository",
                     fileContent = "interface {NAME}Repository {\n    // Define methods here\n}",
-                    fileType = "kt"
                 ),
             ),
             isDefault = true,
@@ -169,8 +167,7 @@ fun {NAME}ScreenPreview(
         onAction = {},
     )
 }
-""",
-                    fileType = "kt"
+""".trimIndent(),
                 ),
                 FileTemplate(
                     fileName = "{NAME}ViewModel.kt",
@@ -212,8 +209,7 @@ class {NAME}ViewModel @Inject constructor() : ViewModel() {
         _uiEffect.send(uiEffect)
     }
 }
-""",
-                    fileType = "kt"
+""".trimIndent(),
                 ),
                 FileTemplate(
                     fileName = "{NAME}Contract.kt",
@@ -231,8 +227,7 @@ object {NAME}Contract {
             
     sealed interface UiEffect
 }
-""",
-                    fileType = "kt"
+""".trimIndent(),
                 ),
                 FileTemplate(
                     fileName = "{NAME}ComponentKey.kt",
@@ -259,8 +254,7 @@ class {NAME}ScreenPreviewProvider : PreviewParameterProvider<{NAME}Contract.UiSt
             ),
         )
 }
-""",
-                    fileType = "kt",
+""".trimIndent(),
                 ),
             ),
             isDefault = true,
