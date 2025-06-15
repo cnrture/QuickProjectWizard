@@ -92,7 +92,7 @@ fun getDefaultModuleTemplates(): List<ModuleTemplate> {
                 FileTemplate(
                     fileName = "Repository.kt",
                     filePath = "domain/repository",
-                    fileContent = "interface {{MODULE_NAME}}Repository {\n    // Define methods here\n}",
+                    fileContent = "interface {NAME}Repository {\n    // Define methods here\n}",
                     fileType = "kt"
                 ),
             ),
@@ -216,7 +216,7 @@ class {NAME}ViewModel @Inject constructor() : ViewModel() {
                     fileType = "kt"
                 ),
                 FileTemplate(
-                    fileName = "{FEATURE_NAME}Contract.kt",
+                    fileName = "{NAME}Contract.kt",
                     filePath = "",
                     fileContent = """
 package {FILE_PACKAGE}

@@ -64,5 +64,5 @@ sealed class Library(val libName: String, val group: String, val name: String, v
     data object Firebase : Library("firebase", "com.google.firebase", "firebase-bom", "firebase")
     data object WorkManager : Library("workManager", "androidx.work", "work-runtime-ktx", "workManagerVersion")
     data object KotlinxSerialization :
-        Library("kotlinx-serialization", "org.jetbrains.kotlinx", "kotlinx-serialization-json", "kotlinxSerialization")
+        Library("kotlinx-serialization", "org.jetbrains.kotlinx", "kotlinx-serialization-json", "kotlinXSerialization")
 }
