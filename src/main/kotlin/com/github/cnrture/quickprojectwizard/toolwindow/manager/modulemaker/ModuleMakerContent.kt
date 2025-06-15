@@ -17,7 +17,6 @@ import com.github.cnrture.quickprojectwizard.common.rootDirectoryString
 import com.github.cnrture.quickprojectwizard.common.rootDirectoryStringDropLast
 import com.github.cnrture.quickprojectwizard.components.QPWTabRow
 import com.github.cnrture.quickprojectwizard.components.QPWText
-import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
 import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.data.getDefaultModuleTemplates
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme

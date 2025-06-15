@@ -25,8 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.common.Constants
 import com.github.cnrture.quickprojectwizard.components.*
-import com.github.cnrture.quickprojectwizard.data.*
-import com.github.cnrture.quickprojectwizard.data.FileTemplate
 import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
 import com.github.cnrture.quickprojectwizard.data.FeatureTemplate
 import com.github.cnrture.quickprojectwizard.data.SettingsService
