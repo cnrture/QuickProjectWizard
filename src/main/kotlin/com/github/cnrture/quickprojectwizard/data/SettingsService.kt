@@ -40,11 +40,29 @@ class SettingsService : PersistentStateComponent<SettingsState> {
     fun removeFeatureTemplate(template: FeatureTemplate) {
         myState.featureTemplates.removeAll { it.id == template.id }
     }
+
+    fun setDefaultModuleTemplate(templateId: String) {
+        myState.defaultModuleTemplateId = templateId
+    }
+
+    fun setDefaultFeatureTemplate(templateId: String) {
+        myState.defaultFeatureTemplateId = templateId
+    }
+
+    fun getDefaultModuleTemplate(): ModuleTemplate? {
+        return myState.moduleTemplates.find { it.id == myState.defaultModuleTemplateId }
+    }
+
+    fun getDefaultFeatureTemplate(): FeatureTemplate? {
+        return myState.featureTemplates.find { it.id == myState.defaultFeatureTemplateId }
+    }
 }
 
 data class SettingsState(
     var moduleTemplates: MutableList<ModuleTemplate> = mutableListOf(),
     var featureTemplates: MutableList<FeatureTemplate> = mutableListOf(),
+    var defaultModuleTemplateId: String = "candroid_template",
+    var defaultFeatureTemplateId: String = "candroid_template",
     var defaultPackageName: String = Constants.DEFAULT_BASE_PACKAGE_NAME,
     var preferredModuleType: String = Constants.ANDROID,
     var featureScreenTemplate: String = Constants.EMPTY,

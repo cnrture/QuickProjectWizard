@@ -17,9 +17,12 @@ import com.github.cnrture.quickprojectwizard.common.file.LibraryDependencyFinder
 import com.github.cnrture.quickprojectwizard.components.QPWActionCard
 import com.github.cnrture.quickprojectwizard.components.QPWActionCardType
 import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
+import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.dialog.MessageDialog
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.components.*
+import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -60,6 +63,7 @@ fun CreateNewModuleConfigurationPanel(
     onCheckedModule: (String) -> Unit,
 ) {
     val radioOptions = listOf(Constants.ANDROID, Constants.KOTLIN)
+    val settings = ApplicationManager.getApplication().service<SettingsService>()
 
     Scaffold(
         modifier = modifier,
@@ -120,6 +124,7 @@ fun CreateNewModuleConfigurationPanel(
             TemplateSelectionContent(
                 templates = templates,
                 selectedTemplate = selectedTemplate,
+                defaultTemplateId = settings.state.defaultModuleTemplateId,
                 onTemplateSelected = onTemplateSelected
             )
             Spacer(modifier = Modifier.height(16.dp))

@@ -44,7 +44,7 @@ fun ModuleMakerContent(project: Project) {
     val availablePlugins = mutableStateListOf<String>()
     val selectedPlugins = mutableStateListOf<String>()
 
-    var selectedTemplate by remember { mutableStateOf<ModuleTemplate?>(null) }
+    var selectedTemplate by remember { mutableStateOf(settings.getDefaultModuleTemplate()) }
     val availableTemplates = remember {
         val currentTemplates = settings.state.moduleTemplates.toMutableList()
         if (currentTemplates.isEmpty()) {

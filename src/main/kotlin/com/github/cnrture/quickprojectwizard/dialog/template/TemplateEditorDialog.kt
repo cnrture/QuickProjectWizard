@@ -18,9 +18,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.components.*
+import com.github.cnrture.quickprojectwizard.data.FeatureTemplate
 import com.github.cnrture.quickprojectwizard.data.FileTemplate
 import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
-import com.github.cnrture.quickprojectwizard.data.FeatureTemplate
 import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.dialog.template.component.FileTemplateEditor
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
@@ -82,26 +82,13 @@ private fun TemplateEditorContent(
                 modifier = Modifier.size(28.dp)
             )
             QPWText(
-                text = "Edit Template: ${template.name}",
+                text = template.name,
                 color = QPWTheme.colors.white,
                 style = TextStyle(
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold
                 )
             )
-            if (template.isDefault) {
-                Card(
-                    shape = RoundedCornerShape(6.dp),
-                    backgroundColor = QPWTheme.colors.green.copy(alpha = 0.2f)
-                ) {
-                    QPWText(
-                        text = "Default Template",
-                        color = QPWTheme.colors.green,
-                        style = TextStyle(fontSize = 11.sp, fontWeight = FontWeight.Bold),
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-                    )
-                }
-            }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -150,6 +137,7 @@ private fun TemplateEditorContent(
                 fileTemplates.forEachIndexed { index, fileTemplate ->
                     FileTemplateEditor(
                         fileTemplate = fileTemplate,
+                        isModuleEdit = true,
                         onUpdate = { fileTemplates[index] = it },
                         onDelete = { fileTemplates.removeAt(index) }
                     )
@@ -163,7 +151,7 @@ private fun TemplateEditorContent(
                     actionColor = QPWTheme.colors.green,
                     onClick = {
                         fileTemplates.add(
-                            FileTemplate("", "", "", "kt")
+                            FileTemplate("", "", "")
                         )
                     }
                 )
@@ -255,26 +243,13 @@ private fun FeatureTemplateEditorContent(
                 modifier = Modifier.size(28.dp)
             )
             QPWText(
-                text = "Edit Feature Template: ${template.name}",
+                text = template.name,
                 color = QPWTheme.colors.white,
                 style = TextStyle(
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold
                 )
             )
-            if (template.isDefault) {
-                Card(
-                    shape = RoundedCornerShape(6.dp),
-                    backgroundColor = QPWTheme.colors.green.copy(alpha = 0.2f)
-                ) {
-                    QPWText(
-                        text = "Default Template",
-                        color = QPWTheme.colors.green,
-                        style = TextStyle(fontSize = 11.sp, fontWeight = FontWeight.Bold),
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-                    )
-                }
-            }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -323,6 +298,7 @@ private fun FeatureTemplateEditorContent(
                 fileTemplates.forEachIndexed { index, fileTemplate ->
                     FileTemplateEditor(
                         fileTemplate = fileTemplate,
+                        isModuleEdit = false,
                         onUpdate = { fileTemplates[index] = it },
                         onDelete = { fileTemplates.removeAt(index) }
                     )
@@ -336,7 +312,7 @@ private fun FeatureTemplateEditorContent(
                     actionColor = QPWTheme.colors.green,
                     onClick = {
                         fileTemplates.add(
-                            FileTemplate("", "", "", "kt")
+                            FileTemplate("", "", "")
                         )
                     }
                 )

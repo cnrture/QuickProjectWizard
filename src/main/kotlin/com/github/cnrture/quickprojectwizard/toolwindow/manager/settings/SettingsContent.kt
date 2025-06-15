@@ -26,6 +26,12 @@ import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.common.Constants
 import com.github.cnrture.quickprojectwizard.components.*
 import com.github.cnrture.quickprojectwizard.data.*
+import com.github.cnrture.quickprojectwizard.data.FileTemplate
+import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
+import com.github.cnrture.quickprojectwizard.data.FeatureTemplate
+import com.github.cnrture.quickprojectwizard.data.SettingsService
+import com.github.cnrture.quickprojectwizard.data.getDefaultModuleTemplates
+import com.github.cnrture.quickprojectwizard.data.getDefaultFeatureTemplates
 import com.github.cnrture.quickprojectwizard.dialog.template.FeatureTemplateCreatorDialog
 import com.github.cnrture.quickprojectwizard.dialog.template.FeatureTemplateEditorDialog
 import com.github.cnrture.quickprojectwizard.dialog.template.TemplateCreatorDialog
@@ -139,6 +145,7 @@ fun SettingsContent() {
 
                     "templates" -> ModuleTemplatesTab(
                         templates = currentSettings.moduleTemplates,
+                        defaultTemplateId = currentSettings.defaultModuleTemplateId,
                         onTemplateDelete = { template ->
                             if (!template.isDefault) {
                                 settings.removeTemplate(template)
@@ -161,11 +168,16 @@ fun SettingsContent() {
                             if (currentSettings.moduleTemplates.isEmpty()) {
                                 currentSettings.moduleTemplates.addAll(getDefaultModuleTemplates())
                             }
+                        },
+                        onSetDefault = { template ->
+                            settings.setDefaultModuleTemplate(template.id)
+                            currentSettings = settings.state.copy()
                         }
                     )
 
                     "feature_templates" -> FeatureTemplatesTab(
                         templates = currentSettings.featureTemplates,
+                        defaultTemplateId = currentSettings.defaultFeatureTemplateId,
                         onTemplateDelete = { template ->
                             if (!template.isDefault) {
                                 settings.removeFeatureTemplate(template)
@@ -188,6 +200,10 @@ fun SettingsContent() {
                             if (currentSettings.featureTemplates.isEmpty()) {
                                 currentSettings.featureTemplates.addAll(getDefaultFeatureTemplates())
                             }
+                        },
+                        onSetDefault = { template ->
+                            settings.setDefaultFeatureTemplate(template.id)
+                            currentSettings = settings.state.copy()
                         }
                     )
                 }
@@ -199,9 +215,11 @@ fun SettingsContent() {
 @Composable
 private fun ModuleTemplatesTab(
     templates: List<ModuleTemplate>,
+    defaultTemplateId: String,
     onTemplateDelete: (ModuleTemplate) -> Unit,
     onTemplateAdd: (ModuleTemplate) -> Unit,
     onTemplateEdit: (ModuleTemplate, ModuleTemplate) -> Unit,
+    onSetDefault: (ModuleTemplate) -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -236,6 +254,7 @@ private fun ModuleTemplatesTab(
         templates.forEach { template ->
             ModuleTemplateCard(
                 template = template,
+                defaultTemplateId = defaultTemplateId,
                 onEdit = {
                     TemplateEditorDialog(
                         template = template,
@@ -248,6 +267,9 @@ private fun ModuleTemplatesTab(
                     if (!template.isDefault) {
                         onTemplateDelete(template)
                     }
+                },
+                onSetDefault = {
+                    onSetDefault(template)
                 }
             )
         }
@@ -257,8 +279,10 @@ private fun ModuleTemplatesTab(
 @Composable
 private fun ModuleTemplateCard(
     template: ModuleTemplate,
+    defaultTemplateId: String,
     onEdit: () -> Unit,
     onDelete: () -> Unit,
+    onSetDefault: () -> Unit,
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -282,7 +306,7 @@ private fun ModuleTemplateCard(
                             fontWeight = FontWeight.Bold
                         )
                     )
-                    if (template.isDefault) {
+                    if (template.id == defaultTemplateId) {
                         Spacer(modifier = Modifier.width(8.dp))
                         Card(
                             shape = RoundedCornerShape(4.dp),
@@ -300,6 +324,15 @@ private fun ModuleTemplateCard(
             }
 
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                if (template.id != defaultTemplateId) {
+                    QPWActionCard(
+                        title = "Set Default",
+                        icon = Icons.Rounded.Edit,
+                        type = QPWActionCardType.SMALL,
+                        actionColor = QPWTheme.colors.lightGray,
+                        onClick = onSetDefault
+                    )
+                }
                 QPWActionCard(
                     title = "Edit",
                     icon = Icons.Rounded.Edit,
@@ -413,9 +446,11 @@ private fun SettingItem(
 @Composable
 private fun FeatureTemplatesTab(
     templates: List<FeatureTemplate>,
+    defaultTemplateId: String,
     onTemplateDelete: (FeatureTemplate) -> Unit,
     onTemplateAdd: (FeatureTemplate) -> Unit,
     onTemplateEdit: (FeatureTemplate, FeatureTemplate) -> Unit,
+    onSetDefault: (FeatureTemplate) -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -450,6 +485,7 @@ private fun FeatureTemplatesTab(
         templates.forEach { template ->
             FeatureTemplateCard(
                 template = template,
+                defaultTemplateId = defaultTemplateId,
                 onEdit = {
                     FeatureTemplateEditorDialog(
                         template = template,
@@ -462,6 +498,9 @@ private fun FeatureTemplatesTab(
                     if (!template.isDefault) {
                         onTemplateDelete(template)
                     }
+                },
+                onSetDefault = {
+                    onSetDefault(template)
                 }
             )
         }
@@ -471,8 +510,10 @@ private fun FeatureTemplatesTab(
 @Composable
 private fun FeatureTemplateCard(
     template: FeatureTemplate,
+    defaultTemplateId: String,
     onEdit: () -> Unit,
     onDelete: () -> Unit,
+    onSetDefault: () -> Unit,
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -496,7 +537,7 @@ private fun FeatureTemplateCard(
                             fontWeight = FontWeight.Bold
                         )
                     )
-                    if (template.isDefault) {
+                    if (template.id == defaultTemplateId) {
                         Spacer(modifier = Modifier.width(8.dp))
                         Card(
                             shape = RoundedCornerShape(4.dp),
@@ -514,6 +555,15 @@ private fun FeatureTemplateCard(
             }
 
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                if (template.id != defaultTemplateId) {
+                    QPWActionCard(
+                        title = "Set Default",
+                        icon = Icons.Rounded.Edit,
+                        type = QPWActionCardType.SMALL,
+                        actionColor = QPWTheme.colors.lightGray,
+                        onClick = onSetDefault
+                    )
+                }
                 QPWActionCard(
                     title = "Edit",
                     icon = Icons.Rounded.Edit,

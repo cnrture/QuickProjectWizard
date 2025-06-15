@@ -34,17 +34,18 @@ fun ConfigurationPanel(
     onFileTreeDialogStateChange: () -> Unit,
 ) {
     val settings = ApplicationManager.getApplication().service<SettingsService>()
-    var selectedTemplate by remember {
-        mutableStateOf(
-            settings.state.featureTemplates.find { it.isDefault } ?: settings.state.featureTemplates.first(),
-        )
-    }
+    val defaultTemplate = remember { settings.getDefaultFeatureTemplate() }
     val availableTemplates = remember {
         val currentTemplates = settings.state.featureTemplates.toMutableList()
         if (currentTemplates.isEmpty()) {
             currentTemplates.addAll(getDefaultFeatureTemplates())
         }
         currentTemplates
+    }
+    var selectedTemplate by remember {
+        mutableStateOf(
+            defaultTemplate ?: if (availableTemplates.isNotEmpty()) availableTemplates.first() else null
+        )
     }
     Scaffold(
         modifier = modifier,
@@ -63,13 +64,18 @@ fun ConfigurationPanel(
                     type = QPWActionCardType.MEDIUM,
                     onClick = {
                         if (Utils.validateFeatureInput(featureName, selectedSrc)) {
-                            Utils.createFeature(
-                                project = project,
-                                selectedSrc = selectedSrc,
-                                featureName = featureName,
-                                fileWriter = fileWriter,
-                                selectedTemplate = selectedTemplate,
-                            )
+                            val template = selectedTemplate
+                            if (template != null) {
+                                Utils.createFeature(
+                                    project = project,
+                                    selectedSrc = selectedSrc,
+                                    featureName = featureName,
+                                    fileWriter = fileWriter,
+                                    selectedTemplate = template,
+                                )
+                            } else {
+                                MessageDialog("Please select a feature template").show()
+                            }
                         } else {
                             MessageDialog("Please fill out required values").show()
                         }

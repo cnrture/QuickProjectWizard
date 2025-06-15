@@ -26,6 +26,7 @@ import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 fun TemplateSelectionContent(
     templates: List<ModuleTemplate>,
     selectedTemplate: ModuleTemplate?,
+    defaultTemplateId: String,
     onTemplateSelected: (ModuleTemplate?) -> Unit,
 ) {
     Column(
@@ -75,8 +76,8 @@ fun TemplateSelectionContent(
                 onClick = {
                     onTemplateSelected(template)
                 },
-                badge = if (template.isDefault) "Default" else "Custom",
-                badgeColor = if (template.isDefault) QPWTheme.colors.green else QPWTheme.colors.purple
+                badge = if (template.id == defaultTemplateId) "Default" else "",
+                badgeColor = if (template.id == defaultTemplateId) QPWTheme.colors.green else QPWTheme.colors.purple
             )
             Spacer(modifier = Modifier.height(8.dp))
         }
@@ -122,16 +123,19 @@ private fun TemplateOption(
                         )
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    Card(
-                        shape = RoundedCornerShape(4.dp),
-                        backgroundColor = badgeColor.copy(alpha = 0.2f)
-                    ) {
-                        QPWText(
-                            text = badge,
-                            color = badgeColor,
-                            style = TextStyle(fontSize = 9.sp),
-                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
-                        )
+
+                    if (badge.isNotEmpty()) {
+                        Card(
+                            shape = RoundedCornerShape(4.dp),
+                            backgroundColor = badgeColor.copy(alpha = 0.2f)
+                        ) {
+                            QPWText(
+                                text = badge,
+                                color = badgeColor,
+                                style = TextStyle(fontSize = 9.sp),
+                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                            )
+                        }
                     }
                 }
             }

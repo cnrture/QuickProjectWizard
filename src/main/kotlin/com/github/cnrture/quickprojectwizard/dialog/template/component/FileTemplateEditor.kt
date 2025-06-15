@@ -21,6 +21,7 @@ import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 @Composable
 fun FileTemplateEditor(
     fileTemplate: FileTemplate,
+    isModuleEdit: Boolean,
     onUpdate: (FileTemplate) -> Unit,
     onDelete: () -> Unit,
 ) {
@@ -47,15 +48,17 @@ fun FileTemplateEditor(
                         onValueChange = { onUpdate(fileTemplate.copy(fileName = it)) }
                     )
                 }
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    QPWTextField(
-                        placeholder = "ex. domain.repository",
-                        color = QPWTheme.colors.white,
-                        value = fileTemplate.filePath,
-                        onValueChange = { onUpdate(fileTemplate.copy(filePath = it)) }
-                    )
+                if (isModuleEdit) {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        QPWTextField(
+                            placeholder = "ex. domain.repository",
+                            color = QPWTheme.colors.white,
+                            value = fileTemplate.filePath,
+                            onValueChange = { onUpdate(fileTemplate.copy(filePath = it)) }
+                        )
+                    }
                 }
             }
             QPWTextField(

@@ -120,6 +120,7 @@ private fun TemplateCreatorContent(
                 fileTemplates.forEachIndexed { index, fileTemplate ->
                     FileTemplateEditor(
                         fileTemplate = fileTemplate,
+                        isModuleEdit = true,
                         onUpdate = { fileTemplates[index] = it },
                         onDelete = { fileTemplates.removeAt(index) }
                     )
@@ -133,7 +134,7 @@ private fun TemplateCreatorContent(
                     actionColor = QPWTheme.colors.green,
                     onClick = {
                         fileTemplates.add(
-                            FileTemplate("", "", "", "kt")
+                            FileTemplate("", "", "")
                         )
                     }
                 )
@@ -268,6 +269,7 @@ private fun FeatureTemplateCreatorContent(
                 fileTemplates.forEachIndexed { index, fileTemplate ->
                     FileTemplateEditor(
                         fileTemplate = fileTemplate,
+                        isModuleEdit = false,
                         onUpdate = { fileTemplates[index] = it },
                         onDelete = { fileTemplates.removeAt(index) }
                     )
@@ -281,7 +283,7 @@ private fun FeatureTemplateCreatorContent(
                     actionColor = QPWTheme.colors.green,
                     onClick = {
                         fileTemplates.add(
-                            FileTemplate("", "", "", "kt")
+                            FileTemplate("", "", "")
                         )
                     }
                 )
