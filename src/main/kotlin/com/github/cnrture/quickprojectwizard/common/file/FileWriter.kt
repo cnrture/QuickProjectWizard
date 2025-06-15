@@ -4,12 +4,9 @@ import com.github.cnrture.quickprojectwizard.common.Constants
 import com.github.cnrture.quickprojectwizard.data.FeatureTemplate
 import com.github.cnrture.quickprojectwizard.data.FileTemplate
 import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
-import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.toolwindow.template.GitIgnoreTemplate
 import com.github.cnrture.quickprojectwizard.toolwindow.template.ManifestTemplate
 import com.github.cnrture.quickprojectwizard.toolwindow.template.TemplateWriter
-import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.components.service
 import java.io.File
 import java.io.FileWriter
 import java.io.IOException
@@ -20,7 +17,6 @@ import kotlin.io.path.absolutePathString
 
 class FileWriter() {
     private val templateWriter = TemplateWriter()
-    private val settings = ApplicationManager.getApplication().service<SettingsService>()
 
     fun createModule(
         packageName: String,
