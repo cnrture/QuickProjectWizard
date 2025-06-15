@@ -17,9 +17,9 @@ import com.github.cnrture.quickprojectwizard.common.rootDirectoryString
 import com.github.cnrture.quickprojectwizard.common.rootDirectoryStringDropLast
 import com.github.cnrture.quickprojectwizard.components.QPWTabRow
 import com.github.cnrture.quickprojectwizard.components.QPWText
-import com.github.cnrture.quickprojectwizard.data.FileTemplate
 import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
 import com.github.cnrture.quickprojectwizard.data.SettingsService
+import com.github.cnrture.quickprojectwizard.data.getDefaultModuleTemplates
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
@@ -48,7 +48,7 @@ fun ModuleMakerContent(project: Project) {
     val availableTemplates = remember {
         val currentTemplates = settings.state.moduleTemplates.toMutableList()
         if (currentTemplates.isEmpty()) {
-            currentTemplates.addAll(getDefaultTemplates())
+            currentTemplates.addAll(getDefaultModuleTemplates())
         }
         currentTemplates
     }
@@ -235,22 +235,4 @@ fun ModuleMakerContent(project: Project) {
             }
         }
     }
-}
-
-private fun getDefaultTemplates(): List<ModuleTemplate> {
-    return listOf(
-        ModuleTemplate(
-            id = "candroid_template",
-            name = "Candroid's Template",
-            fileTemplates = listOf(
-                FileTemplate(
-                    fileName = "Repository.kt",
-                    filePath = "domain/repository",
-                    fileContent = "interface {{MODULE_NAME}}Repository {\n    // Define methods here\n}",
-                    fileType = "kt"
-                ),
-            ),
-            isDefault = true,
-        ),
-    )
 }

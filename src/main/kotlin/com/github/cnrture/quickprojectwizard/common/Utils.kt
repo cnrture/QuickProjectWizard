@@ -4,6 +4,7 @@ import com.github.cnrture.quickprojectwizard.common.file.FileWriter
 import com.github.cnrture.quickprojectwizard.common.file.ImportAnalyzer
 import com.github.cnrture.quickprojectwizard.common.file.LibraryDependencyFinder
 import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
+import com.github.cnrture.quickprojectwizard.data.FeatureTemplate
 import com.github.cnrture.quickprojectwizard.dialog.MessageDialog
 import com.intellij.ide.BrowserUtil
 import com.intellij.ide.starters.local.GeneratorTemplateFile
@@ -30,7 +31,13 @@ object Utils {
     fun validateFeatureInput(featureName: String, selectedSrc: String): Boolean =
         featureName.isNotEmpty() && selectedSrc != Constants.DEFAULT_SRC_VALUE
 
-    fun createFeature(project: Project, selectedSrc: String, featureName: String, fileWriter: FileWriter) {
+    fun createFeature(
+        project: Project,
+        selectedSrc: String,
+        featureName: String,
+        fileWriter: FileWriter,
+        selectedTemplate: FeatureTemplate? = null,
+    ) {
         try {
             val projectRoot = project.rootDirectoryString()
 
@@ -56,7 +63,8 @@ object Utils {
                     MessageDialog("Success").show()
                     val currentlySelectedFile = project.getCurrentlySelectedFile(selectedSrc)
                     listOf(currentlySelectedFile).refreshFileSystem()
-                }
+                },
+                selectedTemplate = selectedTemplate
             )
         } catch (e: Exception) {
             MessageDialog("Error: ${e.message}").show()

@@ -25,9 +25,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.common.Constants
 import com.github.cnrture.quickprojectwizard.components.*
-import com.github.cnrture.quickprojectwizard.data.FileTemplate
-import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
-import com.github.cnrture.quickprojectwizard.data.SettingsService
+import com.github.cnrture.quickprojectwizard.data.*
+import com.github.cnrture.quickprojectwizard.dialog.template.FeatureTemplateCreatorDialog
+import com.github.cnrture.quickprojectwizard.dialog.template.FeatureTemplateEditorDialog
 import com.github.cnrture.quickprojectwizard.dialog.template.TemplateCreatorDialog
 import com.github.cnrture.quickprojectwizard.dialog.template.TemplateEditorDialog
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
@@ -43,7 +43,11 @@ fun SettingsContent() {
     var packageName by mutableStateOf(currentSettings.defaultPackageName)
 
     if (currentSettings.moduleTemplates.isEmpty()) {
-        currentSettings.moduleTemplates.addAll(getDefaultTemplates())
+        currentSettings.moduleTemplates.addAll(getDefaultModuleTemplates())
+    }
+
+    if (currentSettings.featureTemplates.isEmpty()) {
+        currentSettings.featureTemplates.addAll(getDefaultFeatureTemplates())
     }
 
     Scaffold(
@@ -109,6 +113,12 @@ fun SettingsContent() {
                     color = QPWTheme.colors.lightGray,
                     onTabSelected = { selectedTab = "templates" }
                 )
+                QPWTabRow(
+                    text = "Feature Templates",
+                    isSelected = selectedTab == "feature_templates",
+                    color = QPWTheme.colors.lightGray,
+                    onTabSelected = { selectedTab = "feature_templates" }
+                )
             }
 
             Spacer(modifier = Modifier.size(16.dp))
@@ -134,7 +144,7 @@ fun SettingsContent() {
                                 settings.removeTemplate(template)
                                 currentSettings = settings.state.copy()
                                 if (currentSettings.moduleTemplates.isEmpty()) {
-                                    currentSettings.moduleTemplates.addAll(getDefaultTemplates())
+                                    currentSettings.moduleTemplates.addAll(getDefaultModuleTemplates())
                                 }
                             }
                         },
@@ -142,14 +152,41 @@ fun SettingsContent() {
                             settings.saveTemplate(newTemplate)
                             currentSettings = settings.state.copy()
                             if (currentSettings.moduleTemplates.isEmpty()) {
-                                currentSettings.moduleTemplates.addAll(getDefaultTemplates())
+                                currentSettings.moduleTemplates.addAll(getDefaultModuleTemplates())
                             }
                         },
                         onTemplateEdit = { oldTemplate, updatedTemplate ->
                             settings.saveTemplate(updatedTemplate)
                             currentSettings = settings.state.copy()
                             if (currentSettings.moduleTemplates.isEmpty()) {
-                                currentSettings.moduleTemplates.addAll(getDefaultTemplates())
+                                currentSettings.moduleTemplates.addAll(getDefaultModuleTemplates())
+                            }
+                        }
+                    )
+
+                    "feature_templates" -> FeatureTemplatesTab(
+                        templates = currentSettings.featureTemplates,
+                        onTemplateDelete = { template ->
+                            if (!template.isDefault) {
+                                settings.removeFeatureTemplate(template)
+                                currentSettings = settings.state.copy()
+                                if (currentSettings.featureTemplates.isEmpty()) {
+                                    currentSettings.featureTemplates.addAll(getDefaultFeatureTemplates())
+                                }
+                            }
+                        },
+                        onTemplateAdd = { newTemplate ->
+                            settings.saveFeatureTemplate(newTemplate)
+                            currentSettings = settings.state.copy()
+                            if (currentSettings.featureTemplates.isEmpty()) {
+                                currentSettings.featureTemplates.addAll(getDefaultFeatureTemplates())
+                            }
+                        },
+                        onTemplateEdit = { oldTemplate, updatedTemplate ->
+                            settings.saveFeatureTemplate(updatedTemplate)
+                            currentSettings = settings.state.copy()
+                            if (currentSettings.featureTemplates.isEmpty()) {
+                                currentSettings.featureTemplates.addAll(getDefaultFeatureTemplates())
                             }
                         }
                     )
@@ -213,7 +250,6 @@ private fun ModuleTemplatesTab(
                     }
                 }
             )
-            Spacer(modifier = Modifier.height(8.dp))
         }
     }
 }
@@ -229,60 +265,58 @@ private fun ModuleTemplateCard(
         shape = RoundedCornerShape(12.dp),
         backgroundColor = QPWTheme.colors.gray,
     ) {
-        Column(
-            modifier = Modifier.padding(24.dp)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(24.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Column(modifier = Modifier.weight(1f)) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        QPWText(
-                            text = template.name,
-                            color = QPWTheme.colors.white,
-                            style = TextStyle(
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold
-                            )
+            Column(modifier = Modifier.weight(1f)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    QPWText(
+                        text = template.name,
+                        color = QPWTheme.colors.white,
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold
                         )
-                        if (template.isDefault) {
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Card(
-                                shape = RoundedCornerShape(4.dp),
-                                backgroundColor = QPWTheme.colors.green.copy(alpha = 0.2f)
-                            ) {
-                                QPWText(
-                                    text = "Default",
-                                    color = QPWTheme.colors.green,
-                                    style = TextStyle(fontSize = 10.sp),
-                                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
-                                )
-                            }
+                    )
+                    if (template.isDefault) {
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Card(
+                            shape = RoundedCornerShape(4.dp),
+                            backgroundColor = QPWTheme.colors.green.copy(alpha = 0.2f)
+                        ) {
+                            QPWText(
+                                text = "Default",
+                                color = QPWTheme.colors.green,
+                                style = TextStyle(fontSize = 10.sp),
+                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                            )
                         }
                     }
                 }
+            }
 
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    QPWActionCard(
-                        title = "Edit",
-                        icon = Icons.Rounded.Edit,
-                        type = QPWActionCardType.SMALL,
-                        actionColor = QPWTheme.colors.lightGray,
-                        onClick = {
-                            onEdit()
-                        }
-                    )
-                    if (!template.isDefault || template.id != "candroid_template") {
-                        QPWActionCard(
-                            title = "Delete",
-                            icon = Icons.Rounded.Delete,
-                            type = QPWActionCardType.SMALL,
-                            actionColor = QPWTheme.colors.red,
-                            onClick = onDelete
-                        )
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                QPWActionCard(
+                    title = "Edit",
+                    icon = Icons.Rounded.Edit,
+                    type = QPWActionCardType.SMALL,
+                    actionColor = QPWTheme.colors.lightGray,
+                    onClick = {
+                        onEdit()
                     }
+                )
+                if (!template.isDefault || template.id != "candroid_template") {
+                    QPWActionCard(
+                        title = "Delete",
+                        icon = Icons.Rounded.Delete,
+                        type = QPWActionCardType.SMALL,
+                        actionColor = QPWTheme.colors.red,
+                        onClick = onDelete
+                    )
                 }
             }
         }
@@ -376,20 +410,129 @@ private fun SettingItem(
     }
 }
 
-private fun getDefaultTemplates(): List<ModuleTemplate> {
-    return listOf(
-        ModuleTemplate(
-            id = "candroid_template",
-            name = "Candroid's Template",
-            fileTemplates = listOf(
-                FileTemplate(
-                    fileName = "Repository.kt",
-                    filePath = "domain.repository",
-                    fileContent = "interface {{MODULE_NAME}}Repository {\n    // Define methods here\n}",
-                    fileType = "kt"
-                ),
-            ),
-            isDefault = true,
-        ),
-    )
+@Composable
+private fun FeatureTemplatesTab(
+    templates: List<FeatureTemplate>,
+    onTemplateDelete: (FeatureTemplate) -> Unit,
+    onTemplateAdd: (FeatureTemplate) -> Unit,
+    onTemplateEdit: (FeatureTemplate, FeatureTemplate) -> Unit,
+) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            QPWText(
+                text = "Feature Templates",
+                color = QPWTheme.colors.white,
+                style = TextStyle(
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            )
+            QPWActionCard(
+                title = "Add Template",
+                icon = Icons.Rounded.Add,
+                type = QPWActionCardType.SMALL,
+                actionColor = QPWTheme.colors.green,
+                onClick = {
+                    FeatureTemplateCreatorDialog(onTemplateCreated = { newTemplate ->
+                        onTemplateAdd(newTemplate)
+                    }).show()
+                }
+            )
+        }
+
+        templates.forEach { template ->
+            FeatureTemplateCard(
+                template = template,
+                onEdit = {
+                    FeatureTemplateEditorDialog(
+                        template = template,
+                        onTemplateUpdated = { updatedTemplate ->
+                            onTemplateEdit(template, updatedTemplate)
+                        }
+                    ).show()
+                },
+                onDelete = {
+                    if (!template.isDefault) {
+                        onTemplateDelete(template)
+                    }
+                }
+            )
+        }
+    }
+}
+
+@Composable
+private fun FeatureTemplateCard(
+    template: FeatureTemplate,
+    onEdit: () -> Unit,
+    onDelete: () -> Unit,
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(12.dp),
+        backgroundColor = QPWTheme.colors.gray,
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(24.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    QPWText(
+                        text = template.name,
+                        color = QPWTheme.colors.white,
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    )
+                    if (template.isDefault) {
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Card(
+                            shape = RoundedCornerShape(4.dp),
+                            backgroundColor = QPWTheme.colors.green.copy(alpha = 0.2f)
+                        ) {
+                            QPWText(
+                                text = "Default",
+                                color = QPWTheme.colors.green,
+                                style = TextStyle(fontSize = 10.sp),
+                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                            )
+                        }
+                    }
+                }
+            }
+
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                QPWActionCard(
+                    title = "Edit",
+                    icon = Icons.Rounded.Edit,
+                    type = QPWActionCardType.SMALL,
+                    actionColor = QPWTheme.colors.lightGray,
+                    onClick = {
+                        onEdit()
+                    }
+                )
+                if (!template.isDefault || template.id != "candroid_template") {
+                    QPWActionCard(
+                        title = "Delete",
+                        icon = Icons.Rounded.Delete,
+                        type = QPWActionCardType.SMALL,
+                        actionColor = QPWTheme.colors.red,
+                        onClick = onDelete
+                    )
+                }
+            }
+        }
+    }
 }

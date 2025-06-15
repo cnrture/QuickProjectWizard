@@ -2,12 +2,14 @@ package com.github.cnrture.quickprojectwizard.common.file
 
 import com.github.cnrture.quickprojectwizard.common.Constants
 import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
+import com.github.cnrture.quickprojectwizard.data.FeatureTemplate
+import com.github.cnrture.quickprojectwizard.data.FileTemplate
 import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.projectwizard.xmlarch.ui.emptyFragmentLayout
 import com.github.cnrture.quickprojectwizard.projectwizard.xmlarch.ui.emptyMainFragment
 import com.github.cnrture.quickprojectwizard.projectwizard.xmlarch.ui.emptyMainUIState
 import com.github.cnrture.quickprojectwizard.projectwizard.xmlarch.ui.emptyMainViewModelXML
-import com.github.cnrture.quickprojectwizard.toolwindow.template.FeatureTemplate
+import com.github.cnrture.quickprojectwizard.toolwindow.template.FeatureTemplate as FeatureTemplateOld
 import com.github.cnrture.quickprojectwizard.toolwindow.template.GitIgnoreTemplate
 import com.github.cnrture.quickprojectwizard.toolwindow.template.ManifestTemplate
 import com.github.cnrture.quickprojectwizard.toolwindow.template.TemplateWriter
@@ -168,7 +170,19 @@ class FileWriter() {
         packageName: String,
         showErrorDialog: (String) -> Unit,
         showSuccessDialog: () -> Unit,
+        selectedTemplate: FeatureTemplate? = null,
     ): List<File> {
+        if (selectedTemplate != null) {
+            return createFeatureFilesFromTemplate(
+                file = file,
+                featureName = featureName,
+                packageName = packageName,
+                template = selectedTemplate,
+                showErrorDialog = showErrorDialog,
+                showSuccessDialog = showSuccessDialog
+            )
+        }
+
         val featureFile = Paths.get(file.absolutePath, featureName.lowercase()).toFile()
         featureFile.mkdirs()
 
@@ -203,7 +217,7 @@ class FileWriter() {
                 val writer: Writer = FileWriter(file)
                 val dataToWrite = when (file.name) {
                     "${capitalizedModuleName}Screen.kt" -> {
-                        FeatureTemplate.getScreen(packageName, capitalizedModuleName)
+                        FeatureTemplateOld.getScreen(packageName, capitalizedModuleName)
                     }
 
                     "${capitalizedModuleName}Fragment.kt" -> {
@@ -212,7 +226,7 @@ class FileWriter() {
 
                     "${capitalizedModuleName}ViewModel.kt" -> {
                         if (settings.state.isCompose) {
-                            FeatureTemplate.getViewModel(
+                            FeatureTemplateOld.getViewModel(
                                 packageName,
                                 capitalizedModuleName,
                                 settings.state.isHiltEnable,
@@ -227,7 +241,7 @@ class FileWriter() {
                     }
 
                     "${capitalizedModuleName}Contract.kt" -> {
-                        FeatureTemplate.getContract(packageName, capitalizedModuleName)
+                        FeatureTemplateOld.getContract(packageName, capitalizedModuleName)
                     }
 
                     "${capitalizedModuleName}UiState.kt" -> {
@@ -235,7 +249,7 @@ class FileWriter() {
                     }
 
                     "${capitalizedModuleName}ScreenPreviewProvider.kt" -> {
-                        FeatureTemplate.getPreviewProvider(packageName, capitalizedModuleName)
+                        FeatureTemplateOld.getPreviewProvider(packageName, capitalizedModuleName)
                     }
 
                     "app/src/main/res/layout/fragment$xmlName.xml" -> {
@@ -265,6 +279,63 @@ class FileWriter() {
         }
         showSuccessDialog()
         return successfullyCreatedFiles
+    }
+
+    private fun createFeatureFilesFromTemplate(
+        file: File,
+        featureName: String,
+        packageName: String,
+        template: FeatureTemplate,
+        showErrorDialog: (String) -> Unit,
+        showSuccessDialog: () -> Unit,
+    ): List<File> {
+        val featureFile = Paths.get(file.absolutePath, featureName.lowercase()).toFile()
+        featureFile.mkdirs()
+
+        val filesCreated = mutableListOf<File>()
+
+        template.fileTemplates.forEach { fileTemplate: FileTemplate ->
+            val fileName = fileTemplate.fileName
+                .replace("{FEATURE_NAME}", featureName.replaceFirstChar { it.uppercase() })
+                .replace("{FEATURE_NAME_LOWERCASE}", featureName.lowercase())
+
+            val fileDir = if (fileTemplate.filePath.isNotEmpty()) {
+                val subDirPath = fileTemplate.filePath.replace(".", File.separator)
+                Paths.get(featureFile.absolutePath, subDirPath).toFile().apply { mkdirs() }
+            } else {
+                featureFile
+            }
+
+            val targetFile = File(fileDir, fileName)
+
+            val content = fileTemplate.fileContent
+                .replace("{FEATURE_NAME}", featureName.replaceFirstChar { it.uppercase() })
+                .replace("{FEATURE_NAME_LOWERCASE}", featureName.lowercase())
+                .replace("{PACKAGE}", packageName)
+                .replace(
+                    "{FILE_PACKAGE}",
+                    if (fileTemplate.filePath.isNotEmpty()) {
+                        "$packageName.${fileTemplate.filePath}"
+                    } else {
+                        packageName
+                    }
+                )
+
+            try {
+                val writer: Writer = FileWriter(targetFile)
+                writer.write(content)
+                writer.flush()
+                writer.close()
+                filesCreated.add(targetFile)
+            } catch (e: IOException) {
+                showErrorDialog("Error creating file ${fileName}: ${e.message}")
+            } catch (e: Exception) {
+                showErrorDialog("Unexpected error: ${e.message}")
+            }
+        }
+
+        showSuccessDialog()
+        return filesCreated
     }
 
     private fun createDefaultPackages(moduleFile: File, packageName: String): List<File> {
