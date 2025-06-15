@@ -4,3 +4,7 @@
 .qodana
 build
 .kotlin
+
+# Detekt Reports
+build/reports/detekt/
+config/detekt/baseline.xml

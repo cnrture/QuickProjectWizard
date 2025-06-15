@@ -12,6 +12,7 @@ plugins {
     alias(libs.plugins.kotlinxSerialization) // Kotlinx Serialization Plugin
     id("org.jetbrains.compose")
     alias(libs.plugins.compose)
+    alias(libs.plugins.detekt)
 }
 
 group = providers.gradleProperty("pluginGroup").get()
@@ -43,7 +44,6 @@ repositories {
     }
 }
 
-
 // Dependencies are managed with Gradle version catalog - read more: https://docs.gradle.org/current/userguide/platforms.html#sub:version-catalog
 dependencies {
     testImplementation(libs.junit)
@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.ktor.cio)
     implementation(libs.kotlinx.serialization)
     implementation(libs.freemarker)
+    implementation(libs.detekt.formatting)
     implementation(compose.desktop.currentOs)
     implementation(compose.materialIconsExtended)
 
@@ -118,7 +119,8 @@ intellijPlatform {
         // The pluginVersion is based on the SemVer (https://semver.org) and supports pre-release labels, like 2.1.7-alpha.3
         // Specify pre-release label to publish the plugin in a custom Release Channel automatically. Read more:
         // https://plugins.jetbrains.com/docs/intellij/deployment.html#specifying-a-release-channel
-        channels = providers.gradleProperty("pluginVersion").map { listOf(it.substringAfter('-', "").substringBefore('.').ifEmpty { "default" }) }
+        channels = providers.gradleProperty("pluginVersion")
+            .map { listOf(it.substringAfter('-', "").substringBefore('.').ifEmpty { "default" }) }
     }
 
     pluginVerification {
@@ -145,6 +147,21 @@ kover {
     }
 }
 
+// Configure Detekt for code quality
+detekt {
+    buildUponDefaultConfig = true
+    allRules = false
+    config.setFrom("$projectDir/config/detekt/detekt.yml")
+}
+
+tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+    jvmTarget = "17"
+}
+
+tasks.withType<io.gitlab.arturbosch.detekt.DetektCreateBaselineTask>().configureEach {
+    jvmTarget = "17"
+}
+
 tasks {
     wrapper {
         gradleVersion = providers.gradleProperty("gradleVersion").get()
@@ -152,6 +169,22 @@ tasks {
 
     publishPlugin {
         dependsOn(patchChangelog)
+    }
+
+    // Make detekt run with check task
+    check {
+        dependsOn(detekt)
+    }
+
+    // Add detekt format task for auto-correction
+    register("detektFormat") {
+        group = "verification"
+        description = "Auto-corrects detekt issues"
+        doLast {
+            exec {
+                commandLine("./gradlew", "detekt", "--auto-correct")
+            }
+        }
     }
 }
 
