@@ -1,9 +1,9 @@
 package com.github.cnrture.quickprojectwizard.common.file
 
 import com.github.cnrture.quickprojectwizard.common.Constants
-import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
 import com.github.cnrture.quickprojectwizard.data.FeatureTemplate
 import com.github.cnrture.quickprojectwizard.data.FileTemplate
+import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
 import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.toolwindow.template.GitIgnoreTemplate
 import com.github.cnrture.quickprojectwizard.toolwindow.template.ManifestTemplate

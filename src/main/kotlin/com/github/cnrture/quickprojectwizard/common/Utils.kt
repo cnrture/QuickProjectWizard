@@ -3,8 +3,8 @@ package com.github.cnrture.quickprojectwizard.common
 import com.github.cnrture.quickprojectwizard.common.file.FileWriter
 import com.github.cnrture.quickprojectwizard.common.file.ImportAnalyzer
 import com.github.cnrture.quickprojectwizard.common.file.LibraryDependencyFinder
-import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
 import com.github.cnrture.quickprojectwizard.data.FeatureTemplate
+import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
 import com.github.cnrture.quickprojectwizard.dialog.MessageDialog
 import com.intellij.ide.BrowserUtil
 import com.intellij.ide.starters.local.GeneratorTemplateFile
