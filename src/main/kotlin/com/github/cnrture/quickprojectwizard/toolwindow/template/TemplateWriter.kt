@@ -25,9 +25,6 @@ class TemplateWriter {
         pluginDependencies: String = Constants.EMPTY,
     ): List<File> {
         try {
-            val data: MutableMap<String, Any> = HashMap()
-            data["packageName"] = packageName
-
             val gradleTemplate = when (moduleType) {
                 Constants.ANDROID -> GradleTemplate.getAndroidModuleGradleTemplate(
                     packageName = packageName,
