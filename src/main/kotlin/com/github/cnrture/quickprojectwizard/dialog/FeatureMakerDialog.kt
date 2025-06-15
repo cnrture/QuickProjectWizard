@@ -4,9 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -17,7 +15,12 @@ import com.github.cnrture.quickprojectwizard.common.*
 import com.github.cnrture.quickprojectwizard.common.file.FileTree
 import com.github.cnrture.quickprojectwizard.common.file.FileWriter
 import com.github.cnrture.quickprojectwizard.components.*
+import com.github.cnrture.quickprojectwizard.data.FeatureTemplate
+import com.github.cnrture.quickprojectwizard.data.SettingsService
+import com.github.cnrture.quickprojectwizard.data.getDefaultFeatureTemplates
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
+import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import java.io.File
@@ -112,6 +115,19 @@ class FeatureMakerDialog(
     private fun ConfigurationPanel(modifier: Modifier = Modifier) {
         val selectedSrc = remember { selectedSrc }
         val featureName = remember { featureName }
+        val settings = ApplicationManager.getApplication().service<SettingsService>()
+        var selectedTemplate by remember {
+            mutableStateOf(
+                settings.state.featureTemplates.find { it.isDefault } ?: settings.state.featureTemplates.first(),
+            )
+        }
+        val availableTemplates = remember {
+            val currentTemplates = settings.state.featureTemplates.toMutableList()
+            if (currentTemplates.isEmpty()) {
+                currentTemplates.addAll(getDefaultFeatureTemplates())
+            }
+            currentTemplates
+        }
 
         Scaffold(
             modifier = modifier,
@@ -124,7 +140,7 @@ class FeatureMakerDialog(
                     onCancelClick = { close(Constants.DEFAULT_EXIT_CODE) },
                     onCreateClick = {
                         if (validateInput()) {
-                            createFeature()
+                            createFeature(selectedTemplate)
                         } else {
                             MessageDialog("Please fill out required values").show()
                         }
@@ -163,6 +179,31 @@ class FeatureMakerDialog(
                         fontWeight = FontWeight.SemiBold,
                     ),
                 )
+
+                if (availableTemplates.isNotEmpty()) {
+                    QPWText(
+                        text = "Feature Template",
+                        color = QPWTheme.colors.white,
+                        style = TextStyle(
+                            fontWeight = FontWeight.SemiBold,
+                        ),
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        availableTemplates.forEach { template ->
+                            QPWRadioButton(
+                                text = template.name,
+                                selected = selectedTemplate?.id == template.id,
+                                color = QPWTheme.colors.red,
+                                onClick = { selectedTemplate = template }
+                            )
+                        }
+                    }
+                }
             }
         }
     }
@@ -171,36 +212,14 @@ class FeatureMakerDialog(
         return featureName.value.isNotEmpty() && selectedSrc.value != Constants.DEFAULT_SRC_VALUE
     }
 
-    private fun createFeature() {
+    private fun createFeature(selectedTemplate: FeatureTemplate) {
         try {
-            val projectRoot = project.rootDirectoryString()
-
-            val cleanSelectedPath = selectedSrc.value.let { path ->
-                val projectName = projectRoot.split(File.separator).last()
-                if (path.startsWith(projectName + File.separator)) {
-                    path.substring(projectName.length + 1)
-                } else {
-                    path
-                }
-            }
-
-            val packagePath = cleanSelectedPath
-                .replace(
-                    Regex("^.*?(/src/main/java/|/src/main/kotlin/)"),
-                    Constants.EMPTY,
-                )
-                .replace("/", ".")
-
-            fileWriter.createFeatureFiles(
-                file = File(projectRoot, cleanSelectedPath),
+            Utils.createFeature(
+                project = project,
+                selectedSrc = selectedSrc.value,
                 featureName = featureName.value,
-                packageName = packagePath.plus(".${featureName.value.lowercase()}"),
-                showErrorDialog = { MessageDialog("Error: $it").show() },
-                showSuccessDialog = {
-                    MessageDialog("Success").show()
-                    val currentlySelectedFile = project.getCurrentlySelectedFile(selectedSrc.value)
-                    listOf(currentlySelectedFile).refreshFileSystem()
-                }
+                fileWriter = fileWriter,
+                selectedTemplate = selectedTemplate,
             )
         } catch (e: Exception) {
             MessageDialog("Error: ${e.message}").show()

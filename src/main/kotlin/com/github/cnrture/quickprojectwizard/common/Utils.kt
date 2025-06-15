@@ -36,7 +36,7 @@ object Utils {
         selectedSrc: String,
         featureName: String,
         fileWriter: FileWriter,
-        selectedTemplate: FeatureTemplate? = null,
+        selectedTemplate: FeatureTemplate,
     ) {
         try {
             val projectRoot = project.rootDirectoryString()

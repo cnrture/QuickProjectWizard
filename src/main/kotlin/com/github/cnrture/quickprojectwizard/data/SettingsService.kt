@@ -87,7 +87,7 @@ fun getDefaultModuleTemplates(): List<ModuleTemplate> {
     return listOf(
         ModuleTemplate(
             id = "candroid_template",
-            name = "Candroid's Template",
+            name = "Candroid's Module",
             fileTemplates = listOf(
                 FileTemplate(
                     fileName = "Repository.kt",
@@ -105,7 +105,7 @@ fun getDefaultFeatureTemplates(): List<FeatureTemplate> {
     return listOf(
         FeatureTemplate(
             id = "candroid_template",
-            name = "Compose MVVM Template",
+            name = "Candroid's Feature",
             fileTemplates = listOf(
                 FileTemplate(
                     fileName = "{NAME}Screen.kt",

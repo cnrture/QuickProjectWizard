@@ -13,7 +13,6 @@ import androidx.compose.ui.unit.dp
 import com.github.cnrture.quickprojectwizard.common.Utils
 import com.github.cnrture.quickprojectwizard.common.file.FileWriter
 import com.github.cnrture.quickprojectwizard.components.*
-import com.github.cnrture.quickprojectwizard.data.FeatureTemplate
 import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.data.getDefaultFeatureTemplates
 import com.github.cnrture.quickprojectwizard.dialog.MessageDialog
@@ -35,7 +34,11 @@ fun ConfigurationPanel(
     onFileTreeDialogStateChange: () -> Unit,
 ) {
     val settings = ApplicationManager.getApplication().service<SettingsService>()
-    var selectedTemplate by remember { mutableStateOf<FeatureTemplate?>(null) }
+    var selectedTemplate by remember {
+        mutableStateOf(
+            settings.state.featureTemplates.find { it.isDefault } ?: settings.state.featureTemplates.first(),
+        )
+    }
     val availableTemplates = remember {
         val currentTemplates = settings.state.featureTemplates.toMutableList()
         if (currentTemplates.isEmpty()) {

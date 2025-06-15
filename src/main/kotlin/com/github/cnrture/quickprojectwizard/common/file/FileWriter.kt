@@ -5,11 +5,6 @@ import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
 import com.github.cnrture.quickprojectwizard.data.FeatureTemplate
 import com.github.cnrture.quickprojectwizard.data.FileTemplate
 import com.github.cnrture.quickprojectwizard.data.SettingsService
-import com.github.cnrture.quickprojectwizard.projectwizard.xmlarch.ui.emptyFragmentLayout
-import com.github.cnrture.quickprojectwizard.projectwizard.xmlarch.ui.emptyMainFragment
-import com.github.cnrture.quickprojectwizard.projectwizard.xmlarch.ui.emptyMainUIState
-import com.github.cnrture.quickprojectwizard.projectwizard.xmlarch.ui.emptyMainViewModelXML
-import com.github.cnrture.quickprojectwizard.toolwindow.template.FeatureTemplate as FeatureTemplateOld
 import com.github.cnrture.quickprojectwizard.toolwindow.template.GitIgnoreTemplate
 import com.github.cnrture.quickprojectwizard.toolwindow.template.ManifestTemplate
 import com.github.cnrture.quickprojectwizard.toolwindow.template.TemplateWriter
@@ -170,115 +165,16 @@ class FileWriter() {
         packageName: String,
         showErrorDialog: (String) -> Unit,
         showSuccessDialog: () -> Unit,
-        selectedTemplate: FeatureTemplate? = null,
+        selectedTemplate: FeatureTemplate,
     ): List<File> {
-        if (selectedTemplate != null) {
-            return createFeatureFilesFromTemplate(
-                file = file,
-                featureName = featureName,
-                packageName = packageName,
-                template = selectedTemplate,
-                showErrorDialog = showErrorDialog,
-                showSuccessDialog = showSuccessDialog
-            )
-        }
-
-        val featureFile = Paths.get(file.absolutePath, featureName.lowercase()).toFile()
-        featureFile.mkdirs()
-
-        val capitalizedModuleName = featureName.replaceFirstChar { it.uppercase() }
-        val isFirstLetterUpperCase = featureName[0].isUpperCase()
-        val xmlName = featureName.split("(?=[A-Z])".toRegex()).joinToString("_").lowercase()
-
-        val filePaths = if (settings.state.isCompose) {
-            listOf(
-                Paths.get(featureFile.absolutePath, "${capitalizedModuleName}Screen.kt").toFile(),
-                Paths.get(featureFile.absolutePath, "${capitalizedModuleName}ViewModel.kt").toFile(),
-                Paths.get(featureFile.absolutePath, "${capitalizedModuleName}Contract.kt").toFile(),
-                Paths.get(featureFile.absolutePath, "${capitalizedModuleName}ScreenPreviewProvider.kt").toFile(),
-            )
-        } else {
-            listOf(
-                Paths.get(featureFile.absolutePath, "${capitalizedModuleName}Fragment.kt").toFile(),
-                Paths.get(featureFile.absolutePath, "${capitalizedModuleName}ViewModel.kt").toFile(),
-                Paths.get(featureFile.absolutePath, "${capitalizedModuleName}UiState.kt").toFile(),
-                if (isFirstLetterUpperCase) {
-                    Paths.get(featureFile.absolutePath, "app/src/main/res/layout/fragment$xmlName.xml").toFile()
-                } else {
-                    Paths.get(featureFile.absolutePath, "app/src/main/res/layout/fragment_${xmlName}.xml").toFile()
-                }
-            )
-        }
-
-        val successfullyCreatedFiles = mutableListOf<File>()
-
-        filePaths.forEach { file ->
-            try {
-                val writer: Writer = FileWriter(file)
-                val dataToWrite = when (file.name) {
-                    "${capitalizedModuleName}Screen.kt" -> {
-                        FeatureTemplateOld.getScreen(packageName, capitalizedModuleName)
-                    }
-
-                    "${capitalizedModuleName}Fragment.kt" -> {
-                        emptyMainFragment(packageName, capitalizedModuleName, settings.state.isHiltEnable)
-                    }
-
-                    "${capitalizedModuleName}ViewModel.kt" -> {
-                        if (settings.state.isCompose) {
-                            FeatureTemplateOld.getViewModel(
-                                packageName,
-                                capitalizedModuleName,
-                                settings.state.isHiltEnable,
-                            )
-                        } else {
-                            emptyMainViewModelXML(
-                                packageName,
-                                capitalizedModuleName,
-                                settings.state.isHiltEnable,
-                            )
-                        }
-                    }
-
-                    "${capitalizedModuleName}Contract.kt" -> {
-                        FeatureTemplateOld.getContract(packageName, capitalizedModuleName)
-                    }
-
-                    "${capitalizedModuleName}UiState.kt" -> {
-                        emptyMainUIState(packageName, capitalizedModuleName)
-                    }
-
-                    "${capitalizedModuleName}ScreenPreviewProvider.kt" -> {
-                        FeatureTemplateOld.getPreviewProvider(packageName, capitalizedModuleName)
-                    }
-
-                    "app/src/main/res/layout/fragment$xmlName.xml" -> {
-                        emptyFragmentLayout(capitalizedModuleName)
-                    }
-
-                    "app/src/main/res/layout/fragment_${xmlName}.xml" -> {
-                        emptyFragmentLayout(capitalizedModuleName)
-                    }
-
-                    else -> Constants.EMPTY
-                }
-
-                if (dataToWrite.isNotEmpty()) {
-                    writer.write(dataToWrite)
-                    writer.flush()
-                    writer.close()
-                    successfullyCreatedFiles.add(file)
-                } else {
-                    showErrorDialog("No data to write for ${file.name}")
-                }
-            } catch (e: IOException) {
-                showErrorDialog("Error creating file ${file.name}: ${e.message}")
-            } catch (e: Exception) {
-                showErrorDialog("Unexpected error: ${e.message}")
-            }
-        }
-        showSuccessDialog()
-        return successfullyCreatedFiles
+        return createFeatureFilesFromTemplate(
+            file = file,
+            featureName = featureName,
+            packageName = packageName,
+            template = selectedTemplate,
+            showErrorDialog = showErrorDialog,
+            showSuccessDialog = showSuccessDialog,
+        )
     }
 
     private fun createFeatureFilesFromTemplate(
@@ -296,8 +192,7 @@ class FileWriter() {
 
         template.fileTemplates.forEach { fileTemplate: FileTemplate ->
             val fileName = fileTemplate.fileName
-                .replace("{FEATURE_NAME}", featureName.replaceFirstChar { it.uppercase() })
-                .replace("{FEATURE_NAME_LOWERCASE}", featureName.lowercase())
+                .replace("{NAME}", featureName.replaceFirstChar { it.uppercase() })
 
             val fileDir = if (fileTemplate.filePath.isNotEmpty()) {
                 val subDirPath = fileTemplate.filePath.replace(".", File.separator)
@@ -309,8 +204,7 @@ class FileWriter() {
             val targetFile = File(fileDir, fileName)
 
             val content = fileTemplate.fileContent
-                .replace("{FEATURE_NAME}", featureName.replaceFirstChar { it.uppercase() })
-                .replace("{FEATURE_NAME_LOWERCASE}", featureName.lowercase())
+                .replace("{NAME}", featureName.replaceFirstChar { it.uppercase() })
                 .replace("{PACKAGE}", packageName)
                 .replace(
                     "{FILE_PACKAGE}",
