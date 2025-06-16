@@ -26,6 +26,7 @@ fun QPWActionCard(
     title: String? = null,
     icon: ImageVector? = null,
     actionColor: Color,
+    isTextVisible: Boolean = true,
     type: QPWActionCardType = QPWActionCardType.LARGE,
     onClick: () -> Unit,
 ) {
@@ -96,19 +97,21 @@ fun QPWActionCard(
             }
         }
 
-        if (icon != null && title != null) {
+        if (icon != null && title != null && isTextVisible) {
             Spacer(modifier = Modifier.width(8.dp))
         }
 
-        title?.let {
-            QPWText(
-                text = it,
-                style = TextStyle(
-                    fontWeight = FontWeight.Medium,
-                    fontSize = fontSize,
-                    color = QPWTheme.colors.white,
-                ),
-            )
+        if (isTextVisible) {
+            title?.let {
+                QPWText(
+                    text = it,
+                    style = TextStyle(
+                        fontWeight = FontWeight.Medium,
+                        fontSize = fontSize,
+                        color = QPWTheme.colors.white,
+                    ),
+                )
+            }
         }
     }
 }

@@ -21,8 +21,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.common.Constants
+import com.github.cnrture.quickprojectwizard.components.QPWActionCard
+import com.github.cnrture.quickprojectwizard.components.QPWActionCardType
 import com.github.cnrture.quickprojectwizard.components.QPWText
 import com.github.cnrture.quickprojectwizard.data.SettingsService
+import com.github.cnrture.quickprojectwizard.data.SettingsState
+import com.github.cnrture.quickprojectwizard.dialog.ExportSettingsDialog
+import com.github.cnrture.quickprojectwizard.dialog.MessageDialog
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.colorpicker.ColorPickerContent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.featuremaker.FeatureMakerContent
@@ -31,7 +36,10 @@ import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.Setting
 import com.intellij.ide.BrowserUtil
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
+import com.intellij.openapi.fileChooser.FileChooser
+import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.project.ProjectManager
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowFactory
 import com.intellij.ui.content.ContentFactory
@@ -88,6 +96,7 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
 
     @Composable
     private fun MainContent(project: Project) {
+        val settings = ApplicationManager.getApplication().service<SettingsService>()
         var selectedSection by remember { mutableStateOf("module") }
         var isExpanded by remember { mutableStateOf(settings.state.isActionsExpanded) }
 
@@ -189,44 +198,75 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                         )
                     }
                     Spacer(modifier = Modifier.weight(1f))
-                    Card(
-                        shape = RoundedCornerShape(12.dp),
-                        backgroundColor = QPWTheme.colors.black,
-                        elevation = 0.dp
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(8.dp),
-                            verticalArrangement = Arrangement.spacedBy(6.dp)
+                    Column {
+                        QPWActionCard(
+                            title = "Export Settings",
+                            icon = Icons.Rounded.FileUpload,
+                            type = QPWActionCardType.SMALL,
+                            actionColor = QPWTheme.colors.green,
+                            isTextVisible = isExpanded,
+                            onClick = {
+                                ExportSettingsDialog(
+                                    settings = settings,
+                                    onComplete = { success, message ->
+                                        MessageDialog(message).show()
+                                    }
+                                ).show()
+                            }
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                        QPWActionCard(
+                            title = "Import Settings",
+                            icon = Icons.Rounded.FileDownload,
+                            type = QPWActionCardType.SMALL,
+                            actionColor = QPWTheme.colors.lightGray,
+                            isTextVisible = isExpanded,
+                            onClick = {
+                                importSettings(settings) { newSettings ->
+                                    settings.loadState(newSettings)
+                                }
+                            }
+                        )
+                        Spacer(modifier = Modifier.height(24.dp))
+                        Card(
+                            shape = RoundedCornerShape(12.dp),
+                            backgroundColor = QPWTheme.colors.black,
+                            elevation = 0.dp
                         ) {
-                            ContactButton(
-                                title = "Website",
-                                icon = Icons.Rounded.Language,
-                                color = QPWTheme.colors.red,
-                                isExpanded = isExpanded,
-                                onClick = {
-                                    BrowserUtil.browse("https://candroid.dev")
-                                }
-                            )
+                            Column(
+                                modifier = Modifier.padding(8.dp),
+                                verticalArrangement = Arrangement.spacedBy(6.dp)
+                            ) {
+                                ContactButton(
+                                    title = "Website",
+                                    icon = Icons.Rounded.Language,
+                                    color = QPWTheme.colors.red,
+                                    isExpanded = isExpanded,
+                                    onClick = {
+                                        BrowserUtil.browse("https://candroid.dev")
+                                    }
+                                )
 
-                            ContactButton(
-                                title = "Plugin Page",
-                                icon = Icons.Rounded.Language,
-                                color = QPWTheme.colors.green,
-                                isExpanded = isExpanded,
-                                onClick = {
-                                    BrowserUtil.browse("https://plugins.jetbrains.com/plugin/25221-quickprojectwizard/edit")
-                                }
-                            )
+                                ContactButton(
+                                    title = "Plugin Page",
+                                    icon = Icons.Rounded.Language,
+                                    color = QPWTheme.colors.green,
+                                    isExpanded = isExpanded,
+                                    onClick = {
+                                        BrowserUtil.browse("https://plugins.jetbrains.com/plugin/25221-quickprojectwizard/edit")
+                                    }
+                                )
 
-                            ContactButton(
-                                title = "Source Code",
-                                icon = Icons.Rounded.Source,
-                                color = QPWTheme.colors.purple,
-                                isExpanded = isExpanded,
-                                onClick = {
-                                    BrowserUtil.browse("https://github.com/cnrture/QuickProjectWizard")
-                                },
-                            )
+                                ContactButton(
+                                    title = "Source Code",
+                                    icon = Icons.Rounded.Source,
+                                    color = QPWTheme.colors.purple,
+                                    isExpanded = isExpanded,
+                                    onClick = {
+                                        BrowserUtil.browse("https://github.com/cnrture/QuickProjectWizard")
+                                    },
+                                )
+                            }
                         }
                     }
                 }
@@ -322,6 +362,20 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                         fontWeight = FontWeight.Medium
                     )
                 )
+            }
+        }
+    }
+
+    private fun importSettings(settings: SettingsService, onSuccess: (SettingsState) -> Unit) {
+        val project = ProjectManager.getInstance().defaultProject
+        val descriptor = FileChooserDescriptorFactory.createSingleFileDescriptor("json")
+        descriptor.title = "Import Settings"
+        FileChooser.chooseFile(descriptor, project, null) { file ->
+            if (settings.importFromFile(file.path)) {
+                MessageDialog("Settings imported successfully!").show()
+                onSuccess(settings.state)
+            } else {
+                MessageDialog("Failed to import settings. Please check the file format.").show()
             }
         }
     }

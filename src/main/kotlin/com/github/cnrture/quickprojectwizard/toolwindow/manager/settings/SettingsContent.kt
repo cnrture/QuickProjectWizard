@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.common.Constants
 import com.github.cnrture.quickprojectwizard.components.*
 import com.github.cnrture.quickprojectwizard.data.*
-import com.github.cnrture.quickprojectwizard.dialog.ExportSettingsDialog
 import com.github.cnrture.quickprojectwizard.dialog.MessageDialog
 import com.github.cnrture.quickprojectwizard.dialog.template.FeatureTemplateCreatorDialog
 import com.github.cnrture.quickprojectwizard.dialog.template.FeatureTemplateEditorDialog
@@ -38,7 +37,6 @@ import com.intellij.openapi.components.service
 import com.intellij.openapi.fileChooser.FileChooser
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.project.ProjectManager
-
 
 @Composable
 fun SettingsContent() {
@@ -127,41 +125,6 @@ fun SettingsContent() {
                 )
             }
 
-            Spacer(modifier = Modifier.size(16.dp))
-
-            // Export/Import Row
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
-            ) {
-                QPWActionCard(
-                    title = "Export Settings",
-                    icon = Icons.Rounded.Save,
-                    type = QPWActionCardType.SMALL,
-                    actionColor = QPWTheme.colors.green,
-                    onClick = {
-                        ExportSettingsDialog(
-                            settings = settings,
-                            onComplete = { success, message ->
-                                MessageDialog(message).show()
-                            }
-                        ).show()
-                    }
-                )
-                QPWActionCard(
-                    title = "Import Settings",
-                    icon = Icons.Rounded.Add,
-                    type = QPWActionCardType.SMALL,
-                    actionColor = QPWTheme.colors.lightGray,
-                    onClick = {
-                        importSettings(settings) { newSettings ->
-                            currentSettings = newSettings
-                            settings.loadState(newSettings)
-                        }
-                    }
-                )
-            }
-
             Spacer(modifier = Modifier.size(24.dp))
 
             Box(
@@ -243,20 +206,6 @@ fun SettingsContent() {
                     )
                 }
             }
-        }
-    }
-}
-
-private fun importSettings(settings: SettingsService, onSuccess: (SettingsState) -> Unit) {
-    val project = ProjectManager.getInstance().defaultProject
-    val descriptor = FileChooserDescriptorFactory.createSingleFileDescriptor("json")
-    descriptor.title = "Import Settings"
-    FileChooser.chooseFile(descriptor, project, null) { file ->
-        if (settings.importFromFile(file.path)) {
-            MessageDialog("Settings imported successfully!").show()
-            onSuccess(settings.state)
-        } else {
-            MessageDialog("Failed to import settings. Please check the file format.").show()
         }
     }
 }
