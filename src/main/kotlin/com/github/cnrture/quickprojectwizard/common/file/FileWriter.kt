@@ -267,12 +267,15 @@ class FileWriter() {
             ).toFile()
             fileDir.mkdirs()
 
-            val file = File(fileDir, fileTemplate.fileName)
-
             val moduleNameFromPath = moduleFile.name.removePrefix(":")
                 .split("-", "_", "/").joinToString("") { part ->
                     if (part.isNotEmpty()) part.replaceFirstChar { char -> char.uppercase() } else ""
                 }
+
+            val fileName = fileTemplate.fileName
+                .replace("{NAME}", moduleNameFromPath.replaceFirstChar { it.uppercase() })
+
+            val file = File(fileDir, fileName)
 
             val content = fileTemplate.fileContent
                 .replace("{NAME}", moduleNameFromPath)

@@ -157,13 +157,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.sp
-import {PACKAGE}.{NAME}Contract.UiState
-import {PACKAGE}.{NAME}Contract.UiEffect
-import {PACKAGE}.{NAME}Contract.UiAction
+import {FILE_PACKAGE}.{NAME}Contract.UiState
+import {FILE_PACKAGE}.{NAME}Contract.UiEffect
+import {FILE_PACKAGE}.{NAME}Contract.UiAction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 
@@ -217,9 +216,9 @@ fun {NAME}ScreenPreview(
 package {FILE_PACKAGE}
 
 import androidx.lifecycle.ViewModel
-import {PACKAGE}.{NAME}Contract.UiState
-import {PACKAGE}.{NAME}Contract.UiEffect
-import {PACKAGE}.{NAME}Contract.UiAction
+import {FILE_PACKAGE}.{NAME}Contract.UiState
+import {FILE_PACKAGE}.{NAME}Contract.UiEffect
+import {FILE_PACKAGE}.{NAME}Contract.UiAction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -321,13 +320,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.sp
-import {PACKAGE}.{NAME}Contract.UiState
-import {PACKAGE}.{NAME}Contract.UiEffect
-import {PACKAGE}.{NAME}Contract.UiAction
+import {FILE_PACKAGE}.{NAME}Contract.UiState
+import {FILE_PACKAGE}.{NAME}Contract.UiEffect
+import {FILE_PACKAGE}.{NAME}Contract.UiAction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 
@@ -381,9 +379,9 @@ fun {NAME}ScreenPreview(
 package {FILE_PACKAGE}
 
 import androidx.lifecycle.ViewModel
-import {PACKAGE}.{NAME}Contract.UiState
-import {PACKAGE}.{NAME}Contract.UiEffect
-import {PACKAGE}.{NAME}Contract.UiAction
+import {FILE_PACKAGE}.{NAME}Contract.UiState
+import {FILE_PACKAGE}.{NAME}Contract.UiEffect
+import {FILE_PACKAGE}.{NAME}Contract.UiAction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
