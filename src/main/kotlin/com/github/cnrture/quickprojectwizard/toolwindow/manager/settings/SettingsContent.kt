@@ -156,6 +156,7 @@ fun SettingsContent() {
                     onClick = {
                         importSettings(settings) { newSettings ->
                             currentSettings = newSettings
+                            settings.loadState(newSettings)
                         }
                     }
                 )
