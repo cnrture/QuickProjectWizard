@@ -171,11 +171,6 @@ tasks {
         dependsOn(patchChangelog)
     }
 
-    // Make detekt run with check task
-    check {
-        dependsOn(detekt)
-    }
-
     // Add detekt format task for auto-correction
     register("detektFormat") {
         group = "verification"

@@ -5,6 +5,8 @@ import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 
 @State(name = "QuickProjectWizardSettings", storages = [Storage("quickProjectWizard.xml")])
 @Service(Service.Level.APP)
@@ -56,8 +58,42 @@ class SettingsService : PersistentStateComponent<SettingsState> {
     fun getDefaultFeatureTemplate(): FeatureTemplate? {
         return myState.featureTemplates.find { it.id == myState.defaultFeatureTemplateId }
     }
+
+    fun exportSettings(): String {
+        return Json.encodeToString(SettingsState.serializer(), myState)
+    }
+
+    fun importSettings(jsonString: String): Boolean {
+        return try {
+            val importedState = Json.decodeFromString(SettingsState.serializer(), jsonString)
+            myState = importedState
+            true
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    fun exportToFile(filePath: String): Boolean {
+        return try {
+            val jsonString = exportSettings()
+            java.io.File(filePath).writeText(jsonString)
+            true
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    fun importFromFile(filePath: String): Boolean {
+        return try {
+            val jsonString = java.io.File(filePath).readText()
+            importSettings(jsonString)
+        } catch (e: Exception) {
+            false
+        }
+    }
 }
 
+@Serializable
 data class SettingsState(
     var moduleTemplates: MutableList<ModuleTemplate> = mutableListOf(),
     var featureTemplates: MutableList<FeatureTemplate> = mutableListOf(),
@@ -80,6 +116,7 @@ data class SettingsState(
     var isActionsExpanded: Boolean = true,
 )
 
+@Serializable
 data class ModuleTemplate(
     val id: String,
     val name: String,
@@ -87,12 +124,14 @@ data class ModuleTemplate(
     val isDefault: Boolean = false,
 )
 
+@Serializable
 data class FileTemplate(
     val fileName: String,
     val filePath: String,
     val fileContent: String,
 )
 
+@Serializable
 data class FeatureTemplate(
     val id: String,
     val name: String,
@@ -134,6 +173,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
