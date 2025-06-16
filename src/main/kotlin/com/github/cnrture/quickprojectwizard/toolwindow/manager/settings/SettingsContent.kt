@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.common.Constants
 import com.github.cnrture.quickprojectwizard.components.*
 import com.github.cnrture.quickprojectwizard.data.*
-import com.github.cnrture.quickprojectwizard.dialog.MessageDialog
 import com.github.cnrture.quickprojectwizard.dialog.template.FeatureTemplateCreatorDialog
 import com.github.cnrture.quickprojectwizard.dialog.template.FeatureTemplateEditorDialog
 import com.github.cnrture.quickprojectwizard.dialog.template.TemplateCreatorDialog
@@ -34,9 +33,6 @@ import com.github.cnrture.quickprojectwizard.dialog.template.TemplateEditorDialo
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
-import com.intellij.openapi.fileChooser.FileChooser
-import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
-import com.intellij.openapi.project.ProjectManager
 
 @Composable
 fun SettingsContent() {

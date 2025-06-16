@@ -96,7 +96,6 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
 
     @Composable
     private fun MainContent(project: Project) {
-        val settings = ApplicationManager.getApplication().service<SettingsService>()
         var selectedSection by remember { mutableStateOf("module") }
         var isExpanded by remember { mutableStateOf(settings.state.isActionsExpanded) }
 
