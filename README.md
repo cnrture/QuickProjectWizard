@@ -7,10 +7,12 @@
 <img src="src/main/resources/META-INF/pluginIcon.svg" alt="New Project" width="144">
 
 <!-- Plugin description -->
-#### This plugin simplifies the process of setting up a new Android project with all the necessary dependencies and configurations.
+
+#### This plugin simplifies the process of setting up a new Android project with all the necessary dependencies and configurations. It also provides powerful development tools for managing modules, features, and project resources.
 - Popular libraries and frameworks
 - Compose, XML and Compose Multiplatform templates
 - data, di, domain, ui, and common packages
+- Built-in development tools and utilities
 <!-- Plugin description end -->
 
 ## Installation
@@ -85,6 +87,50 @@
 <img src="images/iosApp_configuration.png" alt="Quick Project Wizard Page">
 
 - Select Apple device from Execution Target.
+
+## Development Tools
+
+QuickProjectWizard includes a powerful tool window with several utilities to enhance your development workflow. Access
+it via **View > Tool Windows > QuickProjectWizard**.
+
+### Module Creator
+
+Create new modules in your existing Android project with ease:
+
+- **New Module**: Generate clean modules with customizable templates
+- **Move Existing Files**: Reorganize existing code into proper module structure
+- Automatic dependency detection and configuration
+- Support for different module types (Library, Application, etc.)
+- Template-based code generation
+
+### Feature Creator
+
+Rapidly scaffold new features for your project:
+
+- Generate complete feature structures with data, domain, and UI layers
+- Customizable file templates
+- Interactive file tree browser for selecting target directories
+- Consistent architecture patterns across features
+
+### Color Picker
+
+Professional color picking tool for UI development:
+
+- System-wide color picker with crosshair cursor
+- Magnified preview for precise color selection
+- Color history with recent picks
+- Copy colors in HEX and RGB formats
+- One-click clipboard integration
+
+### Settings Management
+
+Comprehensive plugin configuration:
+
+- Customize default package names and module preferences
+- Import/Export settings for team collaboration
+- Template management for modules and features
+- Persistent configuration across IDE sessions
+
 ---
 Plugin based on the [IntelliJ Platform Plugin Template][template].
 
