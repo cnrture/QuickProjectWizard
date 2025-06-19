@@ -183,7 +183,7 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                             title = "Formatter",
                             icon = Icons.Rounded.FormatAlignCenter,
                             isSelected = selectedSection == "formatter",
-                            color = QPWTheme.colors.red,
+                            color = QPWTheme.colors.green,
                             isExpanded = isExpanded,
                             onClick = { selectedSection = "formatter" }
                         )
