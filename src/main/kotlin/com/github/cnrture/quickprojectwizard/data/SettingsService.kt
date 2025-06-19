@@ -12,9 +12,34 @@ import kotlinx.serialization.json.Json
 @Service(Service.Level.APP)
 class SettingsService : PersistentStateComponent<SettingsState> {
     private var myState = SettingsState()
-    override fun getState(): SettingsState = myState
+
+    init {
+        if (myState.moduleTemplates.isEmpty()) {
+            myState.moduleTemplates.addAll(getDefaultModuleTemplates())
+        }
+        if (myState.featureTemplates.isEmpty()) {
+            myState.featureTemplates.addAll(getDefaultFeatureTemplates())
+        }
+    }
+
+    override fun getState(): SettingsState {
+        if (myState.moduleTemplates.isEmpty()) {
+            myState.moduleTemplates.addAll(getDefaultModuleTemplates())
+        }
+        if (myState.featureTemplates.isEmpty()) {
+            myState.featureTemplates.addAll(getDefaultFeatureTemplates())
+        }
+        return myState
+    }
+
     override fun loadState(state: SettingsState) {
         myState = state
+        if (myState.moduleTemplates.isEmpty()) {
+            myState.moduleTemplates.addAll(getDefaultModuleTemplates())
+        }
+        if (myState.featureTemplates.isEmpty()) {
+            myState.featureTemplates.addAll(getDefaultFeatureTemplates())
+        }
     }
 
     fun saveTemplate(template: ModuleTemplate) {
@@ -67,6 +92,12 @@ class SettingsService : PersistentStateComponent<SettingsState> {
         return try {
             val importedState = Json.decodeFromString(SettingsState.serializer(), jsonString)
             myState = importedState
+            if (myState.moduleTemplates.isEmpty()) {
+                myState.moduleTemplates.addAll(getDefaultModuleTemplates())
+            }
+            if (myState.featureTemplates.isEmpty()) {
+                myState.featureTemplates.addAll(getDefaultFeatureTemplates())
+            }
             true
         } catch (e: Exception) {
             false
@@ -90,6 +121,20 @@ class SettingsService : PersistentStateComponent<SettingsState> {
         } catch (e: Exception) {
             false
         }
+    }
+
+    fun getModuleTemplates(): List<ModuleTemplate> {
+        if (myState.moduleTemplates.isEmpty()) {
+            myState.moduleTemplates.addAll(getDefaultModuleTemplates())
+        }
+        return myState.moduleTemplates
+    }
+
+    fun getFeatureTemplates(): List<FeatureTemplate> {
+        if (myState.featureTemplates.isEmpty()) {
+            myState.featureTemplates.addAll(getDefaultFeatureTemplates())
+        }
+        return myState.featureTemplates
     }
 }
 
@@ -118,8 +163,8 @@ data class SettingsState(
 
 @Serializable
 data class ModuleTemplate(
-    val id: String = "",
-    val name: String = "",
+    val id: String,
+    val name: String,
     val fileTemplates: List<FileTemplate> = emptyList(),
     val isDefault: Boolean = false,
 )
@@ -133,8 +178,8 @@ data class FileTemplate(
 
 @Serializable
 data class FeatureTemplate(
-    val id: String = "",
-    val name: String = "",
+    val id: String,
+    val name: String,
     val fileTemplates: List<FileTemplate> = emptyList(),
     val isDefault: Boolean = false,
 )

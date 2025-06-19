@@ -15,6 +15,7 @@ import androidx.compose.material.icons.rounded.Save
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,13 +43,8 @@ fun SettingsContent() {
     var selectedModuleType by mutableStateOf(currentSettings.preferredModuleType)
     var packageName by mutableStateOf(currentSettings.defaultPackageName)
 
-    if (currentSettings.moduleTemplates.isEmpty()) {
-        currentSettings.moduleTemplates.addAll(getDefaultModuleTemplates())
-    }
-
-    if (currentSettings.featureTemplates.isEmpty()) {
-        currentSettings.featureTemplates.addAll(getDefaultFeatureTemplates())
-    }
+    var moduleTemplates by remember { mutableStateOf(settings.getModuleTemplates()) }
+    var featureTemplates by remember { mutableStateOf(settings.getFeatureTemplates()) }
 
     Scaffold(
         modifier = Modifier
@@ -69,9 +65,9 @@ fun SettingsContent() {
                     actionColor = QPWTheme.colors.lightGray,
                     type = QPWActionCardType.MEDIUM,
                     onClick = {
-                        currentSettings = settings.state.copy(
+                        currentSettings = currentSettings.copy(
                             defaultPackageName = packageName,
-                            preferredModuleType = selectedModuleType,
+                            preferredModuleType = selectedModuleType
                         )
                         settings.loadState(currentSettings)
                     },
@@ -138,65 +134,55 @@ fun SettingsContent() {
                     )
 
                     "templates" -> ModuleTemplatesTab(
-                        templates = currentSettings.moduleTemplates,
+                        templates = moduleTemplates,
                         defaultTemplateId = currentSettings.defaultModuleTemplateId,
                         onTemplateDelete = { template ->
                             if (!template.isDefault) {
                                 settings.removeTemplate(template)
+                                moduleTemplates = settings.getModuleTemplates()
                                 currentSettings = settings.state.copy()
-                                if (currentSettings.moduleTemplates.isEmpty()) {
-                                    currentSettings.moduleTemplates.addAll(getDefaultModuleTemplates())
-                                }
                             }
                         },
                         onTemplateAdd = { newTemplate ->
                             settings.saveTemplate(newTemplate)
+                            moduleTemplates = settings.getModuleTemplates()
                             currentSettings = settings.state.copy()
-                            if (currentSettings.moduleTemplates.isEmpty()) {
-                                currentSettings.moduleTemplates.addAll(getDefaultModuleTemplates())
-                            }
                         },
                         onTemplateEdit = { oldTemplate, updatedTemplate ->
                             settings.saveTemplate(updatedTemplate)
+                            moduleTemplates = settings.getModuleTemplates()
                             currentSettings = settings.state.copy()
-                            if (currentSettings.moduleTemplates.isEmpty()) {
-                                currentSettings.moduleTemplates.addAll(getDefaultModuleTemplates())
-                            }
                         },
                         onSetDefault = { template ->
                             settings.setDefaultModuleTemplate(template.id)
+                            moduleTemplates = settings.getModuleTemplates()
                             currentSettings = settings.state.copy()
                         }
                     )
 
                     "feature_templates" -> FeatureTemplatesTab(
-                        templates = currentSettings.featureTemplates,
+                        templates = featureTemplates,
                         defaultTemplateId = currentSettings.defaultFeatureTemplateId,
                         onTemplateDelete = { template ->
                             if (!template.isDefault) {
                                 settings.removeFeatureTemplate(template)
+                                featureTemplates = settings.getFeatureTemplates()
                                 currentSettings = settings.state.copy()
-                                if (currentSettings.featureTemplates.isEmpty()) {
-                                    currentSettings.featureTemplates.addAll(getDefaultFeatureTemplates())
-                                }
                             }
                         },
                         onTemplateAdd = { newTemplate ->
                             settings.saveFeatureTemplate(newTemplate)
+                            featureTemplates = settings.getFeatureTemplates()
                             currentSettings = settings.state.copy()
-                            if (currentSettings.featureTemplates.isEmpty()) {
-                                currentSettings.featureTemplates.addAll(getDefaultFeatureTemplates())
-                            }
                         },
                         onTemplateEdit = { oldTemplate, updatedTemplate ->
                             settings.saveFeatureTemplate(updatedTemplate)
+                            featureTemplates = settings.getFeatureTemplates()
                             currentSettings = settings.state.copy()
-                            if (currentSettings.featureTemplates.isEmpty()) {
-                                currentSettings.featureTemplates.addAll(getDefaultFeatureTemplates())
-                            }
                         },
                         onSetDefault = { template ->
                             settings.setDefaultFeatureTemplate(template.id)
+                            featureTemplates = settings.getFeatureTemplates()
                             currentSettings = settings.state.copy()
                         }
                     )

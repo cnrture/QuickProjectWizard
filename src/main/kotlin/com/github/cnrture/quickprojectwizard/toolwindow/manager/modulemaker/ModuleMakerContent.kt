@@ -18,7 +18,6 @@ import com.github.cnrture.quickprojectwizard.common.rootDirectoryStringDropLast
 import com.github.cnrture.quickprojectwizard.components.QPWTabRow
 import com.github.cnrture.quickprojectwizard.components.QPWText
 import com.github.cnrture.quickprojectwizard.data.SettingsService
-import com.github.cnrture.quickprojectwizard.data.getDefaultModuleTemplates
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
@@ -44,13 +43,7 @@ fun ModuleMakerContent(project: Project) {
     val selectedPlugins = mutableStateListOf<String>()
 
     var selectedTemplate by remember { mutableStateOf(settings.getDefaultModuleTemplate()) }
-    val availableTemplates = remember {
-        val currentTemplates = settings.state.moduleTemplates.toMutableList()
-        if (currentTemplates.isEmpty()) {
-            currentTemplates.addAll(getDefaultModuleTemplates())
-        }
-        currentTemplates
-    }
+    val availableTemplates = remember { settings.getModuleTemplates() }
 
     val isMoveFiles = mutableStateOf(false)
 

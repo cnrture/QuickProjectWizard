@@ -1,8 +1,6 @@
 package com.github.cnrture.quickprojectwizard.dialog
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -30,7 +28,6 @@ import com.github.cnrture.quickprojectwizard.common.rootDirectoryStringDropLast
 import com.github.cnrture.quickprojectwizard.components.*
 import com.github.cnrture.quickprojectwizard.data.FeatureTemplate
 import com.github.cnrture.quickprojectwizard.data.SettingsService
-import com.github.cnrture.quickprojectwizard.data.getDefaultFeatureTemplates
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
@@ -42,8 +39,8 @@ class FeatureMakerDialog(
     private val project: Project,
     startingLocation: VirtualFile?,
 ) : QPWDialogWrapper(
-    width = Constants.FEATURE_MAKER_WINDOW_WIDTH,
-    height = Constants.FEATURE_MAKER_WINDOW_HEIGHT,
+    width = 600,
+    height = 540,
 ) {
 
     private val fileWriter = FileWriter()
@@ -100,19 +97,8 @@ class FeatureMakerDialog(
         val selectedSrc = remember { selectedSrc }
         val featureName = remember { featureName }
         val settings = ApplicationManager.getApplication().service<SettingsService>()
-        val defaultTemplate = remember { settings.getDefaultFeatureTemplate() }
-        val availableTemplates = remember {
-            val currentTemplates = settings.state.featureTemplates.toMutableList()
-            if (currentTemplates.isEmpty()) {
-                currentTemplates.addAll(getDefaultFeatureTemplates())
-            }
-            currentTemplates
-        }
-        var selectedTemplate by remember {
-            mutableStateOf(
-                defaultTemplate ?: if (availableTemplates.isNotEmpty()) availableTemplates.first() else null
-            )
-        }
+        var selectedTemplate by remember { mutableStateOf(settings.getDefaultFeatureTemplate()) }
+        val availableTemplates = remember { settings.getFeatureTemplates() }
 
         Scaffold(
             modifier = modifier,
@@ -150,7 +136,9 @@ class FeatureMakerDialog(
             }
         ) { padding ->
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState()),
             ) {
                 QPWText(
                     text = "Selected root: ${selectedSrc.value}",
@@ -167,9 +155,9 @@ class FeatureMakerDialog(
                     TemplateSelectionContent(
                         templates = availableTemplates,
                         selectedTemplate = selectedTemplate,
-                        defaultTemplateId = defaultTemplate?.id ?: "",
+                        defaultTemplateId = settings.getDefaultFeatureTemplate()?.id.orEmpty(),
                         onTemplateSelected = { template ->
-                            selectedTemplate = template ?: defaultTemplate
+                            selectedTemplate = template ?: settings.getDefaultFeatureTemplate()
                         }
                     )
                 }
