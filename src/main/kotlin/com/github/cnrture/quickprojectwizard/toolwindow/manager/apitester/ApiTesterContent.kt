@@ -5,10 +5,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.Send
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.ContentCopy
-import androidx.compose.material.icons.rounded.Send
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -104,7 +104,7 @@ fun ApiTesterContent() {
                     )
                     QPWActionCard(
                         title = if (isLoading) "..." else "Send",
-                        icon = if (isLoading) null else Icons.Rounded.Send,
+                        icon = if (isLoading) null else Icons.AutoMirrored.Rounded.Send,
                         actionColor = QPWTheme.colors.red,
                         type = QPWActionCardType.MEDIUM,
                         onClick = {
@@ -421,11 +421,11 @@ private suspend fun makeApiRequest(
             val url = URL(urlString)
             connection = url.openConnection() as HttpURLConnection
 
-            connection?.apply {
+            connection.apply {
                 requestMethod = method
                 doOutput = method in listOf("POST", "PUT", "PATCH")
-                connectTimeout = 10000
-                readTimeout = 10000
+                connectTimeout = 20000
+                readTimeout = 20000
 
                 headers.forEach { (key, value) ->
                     if (key.isNotBlank() && value.isNotBlank()) {
