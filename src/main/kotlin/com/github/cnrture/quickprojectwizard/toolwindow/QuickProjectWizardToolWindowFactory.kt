@@ -29,6 +29,7 @@ import com.github.cnrture.quickprojectwizard.data.SettingsState
 import com.github.cnrture.quickprojectwizard.dialog.ExportSettingsDialog
 import com.github.cnrture.quickprojectwizard.dialog.MessageDialog
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
+import com.github.cnrture.quickprojectwizard.toolwindow.manager.apitester.ApiTesterContent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.colorpicker.ColorPickerContent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.featuremaker.FeatureMakerContent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.formatter.FormatterContent
@@ -198,6 +199,15 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                         )
 
                         SidebarButton(
+                            title = "API Tester",
+                            icon = Icons.Rounded.Api,
+                            isSelected = selectedSection == "api",
+                            color = QPWTheme.colors.lightGray,
+                            isExpanded = isExpanded,
+                            onClick = { selectedSection = "api" }
+                        )
+
+                        SidebarButton(
                             title = "Settings",
                             icon = Icons.Rounded.Settings,
                             isSelected = selectedSection == "settings",
@@ -291,6 +301,7 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                     "feature" -> FeatureMakerContent(project)
                     "formatter" -> FormatterContent()
                     "color" -> ColorPickerContent()
+                    "api" -> ApiTesterContent()
                     "settings" -> SettingsContent()
                 }
             }
