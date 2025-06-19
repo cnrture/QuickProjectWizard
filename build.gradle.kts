@@ -12,7 +12,6 @@ plugins {
     alias(libs.plugins.kotlinxSerialization) // Kotlinx Serialization Plugin
     id("org.jetbrains.compose")
     alias(libs.plugins.compose)
-    alias(libs.plugins.detekt)
 }
 
 group = providers.gradleProperty("pluginGroup").get()
@@ -147,21 +146,6 @@ kover {
     }
 }
 
-// Configure Detekt for code quality
-detekt {
-    buildUponDefaultConfig = true
-    allRules = false
-    config.setFrom("$projectDir/config/detekt/detekt.yml")
-}
-
-tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
-    jvmTarget = "17"
-}
-
-tasks.withType<io.gitlab.arturbosch.detekt.DetektCreateBaselineTask>().configureEach {
-    jvmTarget = "17"
-}
-
 tasks {
     wrapper {
         gradleVersion = providers.gradleProperty("gradleVersion").get()
@@ -169,17 +153,6 @@ tasks {
 
     publishPlugin {
         dependsOn(patchChangelog)
-    }
-
-    // Add detekt format task for auto-correction
-    register("detektFormat") {
-        group = "verification"
-        description = "Auto-corrects detekt issues"
-        doLast {
-            exec {
-                commandLine("./gradlew", "detekt", "--auto-correct")
-            }
-        }
     }
 }
 
