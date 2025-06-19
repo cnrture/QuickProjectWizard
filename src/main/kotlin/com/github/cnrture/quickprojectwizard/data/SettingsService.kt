@@ -118,24 +118,24 @@ data class SettingsState(
 
 @Serializable
 data class ModuleTemplate(
-    val id: String,
-    val name: String,
-    val fileTemplates: List<FileTemplate>,
+    val id: String = "",
+    val name: String = "",
+    val fileTemplates: List<FileTemplate> = emptyList(),
     val isDefault: Boolean = false,
 )
 
 @Serializable
 data class FileTemplate(
-    val fileName: String,
-    val filePath: String,
-    val fileContent: String,
+    val fileName: String = "",
+    val filePath: String = "",
+    val fileContent: String = "",
 )
 
 @Serializable
 data class FeatureTemplate(
-    val id: String,
-    val name: String,
-    val fileTemplates: List<FileTemplate>,
+    val id: String = "",
+    val name: String = "",
+    val fileTemplates: List<FileTemplate> = emptyList(),
     val isDefault: Boolean = false,
 )
 
