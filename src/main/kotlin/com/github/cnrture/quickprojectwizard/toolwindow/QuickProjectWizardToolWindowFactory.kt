@@ -181,15 +181,6 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                         )
 
                         SidebarButton(
-                            title = "Formatter",
-                            icon = Icons.Rounded.FormatAlignCenter,
-                            isSelected = selectedSection == "formatter",
-                            color = QPWTheme.colors.green,
-                            isExpanded = isExpanded,
-                            onClick = { selectedSection = "formatter" }
-                        )
-
-                        SidebarButton(
                             title = "Picker",
                             icon = Icons.Rounded.ColorLens,
                             isSelected = selectedSection == "color",
@@ -199,10 +190,19 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                         )
 
                         SidebarButton(
+                            title = "Formatter",
+                            icon = Icons.Rounded.FormatAlignCenter,
+                            isSelected = selectedSection == "formatter",
+                            color = QPWTheme.colors.green,
+                            isExpanded = isExpanded,
+                            onClick = { selectedSection = "formatter" }
+                        )
+
+                        SidebarButton(
                             title = "API Tester",
                             icon = Icons.Rounded.Api,
                             isSelected = selectedSection == "api",
-                            color = QPWTheme.colors.lightGray,
+                            color = QPWTheme.colors.red,
                             isExpanded = isExpanded,
                             onClick = { selectedSection = "api" }
                         )

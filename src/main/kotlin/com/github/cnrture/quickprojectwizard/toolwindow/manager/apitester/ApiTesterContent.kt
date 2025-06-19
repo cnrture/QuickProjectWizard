@@ -41,7 +41,8 @@ fun ApiTesterContent() {
     var responseTime by remember { mutableStateOf(0L) }
     var statusCode by remember { mutableStateOf(0) }
     var selectedTab by remember { mutableStateOf("headers") }
-    var headers by remember { mutableStateOf(mutableMapOf("Content-Type" to "application/json")) }
+    var headers by remember { mutableStateOf(mapOf("Content-Type" to "application/json")) }
+    var queryParams by remember { mutableStateOf(mapOf<String, String>()) }
 
     val scope = rememberCoroutineScope()
     val methods = listOf("GET", "POST", "PUT", "DELETE", "PATCH")
@@ -90,7 +91,7 @@ fun ApiTesterContent() {
                     }
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -111,7 +112,7 @@ fun ApiTesterContent() {
                             if (!isLoading) {
                                 scope.launch {
                                     isLoading = true
-                                    val result = makeApiRequest(selectedMethod, url, requestBody, headers)
+                                    val result = makeApiRequest(selectedMethod, url, requestBody, headers, queryParams)
                                     responseText = result.first
                                     statusCode = result.second
                                     responseTime = result.third
@@ -122,7 +123,7 @@ fun ApiTesterContent() {
                     )
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -135,20 +136,20 @@ fun ApiTesterContent() {
                         onTabSelected = { selectedTab = "headers" }
                     )
                     QPWTabRow(
+                        text = "Query",
+                        isSelected = selectedTab == "query",
+                        color = QPWTheme.colors.red,
+                        onTabSelected = { selectedTab = "query" }
+                    )
+                    QPWTabRow(
                         text = "Body",
                         isSelected = selectedTab == "body",
                         color = QPWTheme.colors.red,
                         onTabSelected = { selectedTab = "body" }
                     )
-                    QPWTabRow(
-                        text = "Auth",
-                        isSelected = selectedTab == "auth",
-                        color = QPWTheme.colors.red,
-                        onTabSelected = { selectedTab = "auth" }
-                    )
                 }
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
                 when (selectedTab) {
                     "headers" -> HeadersSection(
@@ -156,18 +157,21 @@ fun ApiTesterContent() {
                         onHeadersChange = { headers = it }
                     )
 
+                    "query" -> QueryParamsSection(
+                        queryParams = queryParams,
+                        onQueryParamsChange = { queryParams = it }
+                    )
+
                     "body" -> BodySection(
                         body = requestBody,
                         onBodyChange = { requestBody = it },
                         method = selectedMethod
                     )
-
-                    "auth" -> AuthSection()
                 }
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         Card(
             modifier = Modifier
@@ -250,8 +254,8 @@ fun ApiTesterContent() {
 
 @Composable
 private fun HeadersSection(
-    headers: MutableMap<String, String>,
-    onHeadersChange: (MutableMap<String, String>) -> Unit,
+    headers: Map<String, String>,
+    onHeadersChange: (Map<String, String>) -> Unit,
 ) {
     Column {
         QPWText(
@@ -260,12 +264,12 @@ private fun HeadersSection(
             style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Medium)
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         headers.forEach { (key, value) ->
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 QPWTextField(
@@ -284,8 +288,9 @@ private fun HeadersSection(
                     modifier = Modifier.weight(1f),
                     value = value,
                     onValueChange = { newValue ->
-                        headers[key] = newValue
-                        onHeadersChange(headers)
+                        val newHeaders = headers.toMutableMap()
+                        newHeaders[key] = newValue
+                        onHeadersChange(newHeaders)
                     },
                     placeholder = "Header value"
                 )
@@ -302,7 +307,7 @@ private fun HeadersSection(
                     }
                 )
             }
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(12.dp))
         }
         Spacer(modifier = Modifier.height(8.dp))
         QPWActionCard(
@@ -311,8 +316,81 @@ private fun HeadersSection(
             actionColor = QPWTheme.colors.red,
             type = QPWActionCardType.SMALL,
             onClick = {
-                headers[""] = ""
-                onHeadersChange(headers)
+                val newHeaders = headers.toMutableMap()
+                newHeaders[""] = ""
+                onHeadersChange(newHeaders)
+            }
+        )
+    }
+}
+
+@Composable
+private fun QueryParamsSection(
+    queryParams: Map<String, String>,
+    onQueryParamsChange: (Map<String, String>) -> Unit,
+) {
+    Column {
+        QPWText(
+            text = "Query Parameters",
+            color = QPWTheme.colors.white,
+            style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Medium)
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        queryParams.forEach { (key, value) ->
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                QPWTextField(
+                    modifier = Modifier.weight(1f),
+                    value = key,
+                    onValueChange = { newKey ->
+                        val newParams = queryParams.toMutableMap()
+                        newParams.remove(key)
+                        newParams[newKey] = value
+                        onQueryParamsChange(newParams)
+                    },
+                    placeholder = "Query parameter name"
+                )
+
+                QPWTextField(
+                    modifier = Modifier.weight(1f),
+                    value = value,
+                    onValueChange = { newValue ->
+                        val newParams = queryParams.toMutableMap()
+                        newParams[key] = newValue
+                        onQueryParamsChange(newParams)
+                    },
+                    placeholder = "Query parameter value"
+                )
+
+                QPWActionCard(
+                    title = "×",
+                    icon = null,
+                    actionColor = QPWTheme.colors.red,
+                    type = QPWActionCardType.SMALL,
+                    onClick = {
+                        val newParams = queryParams.toMutableMap()
+                        newParams.remove(key)
+                        onQueryParamsChange(newParams)
+                    }
+                )
+            }
+            Spacer(modifier = Modifier.height(4.dp))
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        QPWActionCard(
+            title = "Add Query Param",
+            icon = Icons.Rounded.Add,
+            actionColor = QPWTheme.colors.red,
+            type = QPWActionCardType.SMALL,
+            onClick = {
+                val newParams = queryParams.toMutableMap()
+                newParams[""] = ""
+                onQueryParamsChange(newParams)
             }
         )
     }
@@ -358,33 +436,6 @@ private fun BodySection(
 }
 
 @Composable
-private fun AuthSection() {
-    Column {
-        QPWText(
-            text = "Authentication",
-            color = QPWTheme.colors.white,
-            style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Medium)
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        QPWText(
-            text = "Authentication support will be added in future versions.",
-            color = QPWTheme.colors.lightGray,
-            style = TextStyle(fontSize = 12.sp)
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        QPWText(
-            text = "For now, you can add Authorization headers in the Headers tab.",
-            color = QPWTheme.colors.lightGray,
-            style = TextStyle(fontSize = 12.sp)
-        )
-    }
-}
-
-@Composable
 private fun StatusCodeChip(statusCode: Int) {
     val color = when (statusCode) {
         in 200..299 -> QPWTheme.colors.green
@@ -413,12 +464,19 @@ private suspend fun makeApiRequest(
     urlString: String,
     body: String,
     headers: Map<String, String>,
+    queryParams: Map<String, String>,
 ): Triple<String, Int, Long> = withContext(Dispatchers.IO) {
     var connection: HttpURLConnection? = null
 
     val time = measureTime {
         try {
-            val url = URL(urlString)
+            val url = URL(
+                urlString + (if (queryParams.isNotEmpty()) {
+                    buildQueryParamsString(queryParams)
+                } else {
+                    ""
+                })
+            )
             connection = url.openConnection() as HttpURLConnection
 
             connection.apply {
@@ -465,4 +523,20 @@ private suspend fun makeApiRequest(
     } finally {
         connection?.disconnect()
     }
+}
+
+private fun buildQueryParamsString(params: Map<String, String>): String {
+    if (params.isEmpty()) return ""
+
+    val filteredParams = params.filterKeys { it.isNotBlank() }
+        .filterValues { it.isNotBlank() }
+
+    if (filteredParams.isEmpty()) return ""
+
+    return "?" + filteredParams.map { "${encode(it.key)}=${encode(it.value)}" }
+        .joinToString("&")
+}
+
+private fun encode(value: String): String {
+    return java.net.URLEncoder.encode(value, "UTF-8")
 }
