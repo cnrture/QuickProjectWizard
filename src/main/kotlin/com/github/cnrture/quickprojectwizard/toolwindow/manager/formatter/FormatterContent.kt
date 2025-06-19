@@ -29,13 +29,11 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import org.xml.sax.InputSource
-import org.xml.sax.helpers.DefaultHandler
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
 import java.io.StringReader
 import java.io.StringWriter
 import javax.xml.parsers.DocumentBuilderFactory
-import javax.xml.parsers.SAXParserFactory
 import javax.xml.transform.OutputKeys
 import javax.xml.transform.TransformerFactory
 import javax.xml.transform.dom.DOMSource
@@ -122,7 +120,6 @@ fun FormatterContent() {
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             QPWActionCard(
-                modifier = Modifier.weight(1f),
                 title = "Format",
                 icon = Icons.AutoMirrored.Rounded.FormatAlignLeft,
                 actionColor = QPWTheme.colors.green,
@@ -140,7 +137,6 @@ fun FormatterContent() {
             )
 
             QPWActionCard(
-                modifier = Modifier.weight(1f),
                 title = "Minify",
                 icon = Icons.Rounded.Compress,
                 actionColor = QPWTheme.colors.green,
@@ -158,25 +154,6 @@ fun FormatterContent() {
             )
 
             QPWActionCard(
-                modifier = Modifier.weight(1f),
-                title = "Validate",
-                icon = Icons.Rounded.CheckCircle,
-                actionColor = if (isValidInput) QPWTheme.colors.green else QPWTheme.colors.red,
-                type = QPWActionCardType.MEDIUM,
-                onClick = {
-                    val result = if (selectedFormat == "JSON") {
-                        validateJson(inputText)
-                    } else {
-                        validateXml(inputText)
-                    }
-                    isValidInput = result.first
-                    errorMessage = result.second
-                    outputText = if (result.first) "✅ Valid ${selectedFormat}!" else ""
-                }
-            )
-
-            QPWActionCard(
-                modifier = Modifier.weight(1f),
                 title = "Clear",
                 icon = Icons.Rounded.Clear,
                 actionColor = QPWTheme.colors.red,
@@ -203,6 +180,7 @@ fun FormatterContent() {
                 backgroundColor = if (isValidInput) QPWTheme.colors.green.copy(alpha = 0.1f) else QPWTheme.colors.red.copy(
                     alpha = 0.1f
                 ),
+                elevation = 0.dp,
             ) {
                 Row(
                     modifier = Modifier.padding(12.dp),
@@ -225,41 +203,18 @@ fun FormatterContent() {
             Spacer(modifier = Modifier.height(16.dp))
         }
 
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    QPWText(
-                        text = "Input",
-                        color = QPWTheme.colors.white,
-                        style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold)
-                    )
-                    QPWActionCard(
-                        title = "Paste",
-                        icon = Icons.Rounded.ContentPaste,
-                        actionColor = QPWTheme.colors.lightGray,
-                        type = QPWActionCardType.SMALL,
-                        onClick = {
-                            try {
-                                val clipboard = Toolkit.getDefaultToolkit().systemClipboard
-                                val data =
-                                    clipboard.getData(java.awt.datatransfer.DataFlavor.stringFlavor) as String
-                                inputText = data
-                            } catch (_: Exception) {
-                                errorMessage = "Failed to paste from clipboard"
-                                isValidInput = false
-                            }
-                        }
-                    )
-                }
+                QPWText(
+                    text = "Input",
+                    color = QPWTheme.colors.white,
+                    style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
@@ -295,7 +250,7 @@ fun FormatterContent() {
                             try {
                                 val clipboard = Toolkit.getDefaultToolkit().systemClipboard
                                 clipboard.setContents(StringSelection(outputText), null)
-                                errorMessage = "✅ Copied to clipboard!"
+                                errorMessage = "Copied to clipboard!"
                                 isValidInput = true
                             } catch (_: Exception) {
                                 errorMessage = "Failed to copy to clipboard"
@@ -586,9 +541,9 @@ private fun formatJson(input: String): Triple<String, Boolean, String> {
             prettyPrint = true
             prettyPrintIndent = " ".repeat(2)
         }.encodeToString(JsonElement.serializer(), jsonElement)
-        Triple(formatted, true, "✅ JSON formatted successfully!")
+        Triple(formatted, true, "JSON formatted successfully!")
     } catch (e: Exception) {
-        Triple("", false, "❌ Invalid JSON: ${e.message}")
+        Triple("", false, "Invalid JSON: ${e.message}")
     }
 }
 
@@ -598,20 +553,9 @@ private fun minifyJson(input: String): Triple<String, Boolean, String> {
     return try {
         val jsonElement = Json.parseToJsonElement(input)
         val minified = Json.encodeToString(JsonElement.serializer(), jsonElement)
-        Triple(minified, true, "✅ JSON minified successfully!")
+        Triple(minified, true, "JSON minified successfully!")
     } catch (e: Exception) {
-        Triple("", false, "❌ Invalid JSON: ${e.message}")
-    }
-}
-
-private fun validateJson(input: String): Pair<Boolean, String> {
-    if (input.isEmpty()) return Pair(true, "")
-
-    return try {
-        Json.parseToJsonElement(input)
-        Pair(true, "✅ Valid JSON!")
-    } catch (e: Exception) {
-        Pair(false, "❌ Invalid JSON: ${e.message}")
+        Triple("", false, "Invalid JSON: ${e.message}")
     }
 }
 
@@ -660,19 +604,6 @@ private fun minifyXml(input: String): Triple<String, Boolean, String> {
         Triple(minified, true, "✅ XML minified successfully!")
     } catch (e: Exception) {
         Triple("", false, "❌ Invalid XML: ${e.message}")
-    }
-}
-
-private fun validateXml(input: String): Pair<Boolean, String> {
-    if (input.isEmpty()) return Pair(true, "")
-
-    return try {
-        val factory = SAXParserFactory.newInstance()
-        val parser = factory.newSAXParser()
-        parser.parse(InputSource(StringReader(input)), DefaultHandler())
-        Pair(true, "✅ Valid XML!")
-    } catch (e: Exception) {
-        Pair(false, "❌ Invalid XML: ${e.message}")
     }
 }
 
