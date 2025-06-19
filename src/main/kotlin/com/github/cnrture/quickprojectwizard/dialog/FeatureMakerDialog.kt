@@ -1,19 +1,32 @@
 package com.github.cnrture.quickprojectwizard.dialog
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
+import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Cancel
+import androidx.compose.material.icons.rounded.CheckCircle
+import androidx.compose.material.icons.rounded.CreateNewFolder
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.github.cnrture.quickprojectwizard.common.*
-import com.github.cnrture.quickprojectwizard.common.file.FileTree
+import com.github.cnrture.quickprojectwizard.common.Constants
+import com.github.cnrture.quickprojectwizard.common.Utils
 import com.github.cnrture.quickprojectwizard.common.file.FileWriter
+import com.github.cnrture.quickprojectwizard.common.rootDirectoryString
+import com.github.cnrture.quickprojectwizard.common.rootDirectoryStringDropLast
 import com.github.cnrture.quickprojectwizard.components.*
 import com.github.cnrture.quickprojectwizard.data.FeatureTemplate
 import com.github.cnrture.quickprojectwizard.data.SettingsService
@@ -54,7 +67,7 @@ class FeatureMakerDialog(
     override fun createDesign() {
         Surface(
             modifier = Modifier.fillMaxSize(),
-            color = QPWTheme.colors.gray,
+            color = QPWTheme.colors.black,
         ) {
             Column(
                 modifier = Modifier
@@ -65,49 +78,20 @@ class FeatureMakerDialog(
                     modifier = Modifier.fillMaxWidth(),
                     text = "Feature Creator",
                     style = TextStyle(
-                        color = QPWTheme.colors.purple,
+                        color = QPWTheme.colors.red,
                         fontSize = 36.sp,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center,
                     ),
                 )
                 Spacer(modifier = Modifier.size(24.dp))
-                Row {
-                    FileTreePanel(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .weight(0.5f),
-                    )
-                    Box(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .padding(end = 32.dp)
-                            .background(QPWTheme.colors.white)
-                            .width(2.dp)
-                    )
-                    ConfigurationPanel(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .weight(0.5f),
-                    )
-                }
+                ConfigurationPanel(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .weight(0.6f),
+                )
             }
         }
-    }
-
-    @Composable
-    private fun FileTreePanel(modifier: Modifier = Modifier) {
-        QPWFileTree(
-            modifier = modifier,
-            model = FileTree(root = File(project.rootDirectoryString()).toProjectFile()),
-            titleColor = QPWTheme.colors.purple,
-            onClick = { fileTreeNode ->
-                val absolutePathAtNode = fileTreeNode.file.absolutePath
-                val relativePath = absolutePathAtNode.removePrefix(project.rootDirectoryStringDropLast())
-                    .removePrefix(File.separator)
-                if (fileTreeNode.file.isDirectory) selectedSrc.value = relativePath
-            }
-        )
     }
 
     @OptIn(ExperimentalLayoutApi::class)
@@ -116,11 +100,7 @@ class FeatureMakerDialog(
         val selectedSrc = remember { selectedSrc }
         val featureName = remember { featureName }
         val settings = ApplicationManager.getApplication().service<SettingsService>()
-        var selectedTemplate by remember {
-            mutableStateOf(
-                settings.state.featureTemplates.find { it.isDefault } ?: settings.state.featureTemplates.first(),
-            )
-        }
+        val defaultTemplate = remember { settings.getDefaultFeatureTemplate() }
         val availableTemplates = remember {
             val currentTemplates = settings.state.featureTemplates.toMutableList()
             if (currentTemplates.isEmpty()) {
@@ -128,25 +108,45 @@ class FeatureMakerDialog(
             }
             currentTemplates
         }
+        var selectedTemplate by remember {
+            mutableStateOf(
+                defaultTemplate ?: if (availableTemplates.isNotEmpty()) availableTemplates.first() else null
+            )
+        }
 
         Scaffold(
             modifier = modifier,
-            backgroundColor = QPWTheme.colors.gray,
+            backgroundColor = QPWTheme.colors.black,
             bottomBar = {
-                QPWDialogActions(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(QPWTheme.colors.gray),
-                    onCancelClick = { close(Constants.DEFAULT_EXIT_CODE) },
-                    onCreateClick = {
-                        if (validateInput()) {
-                            createFeature(selectedTemplate)
-                        } else {
-                            MessageDialog("Please fill out required values").show()
-                        }
-                    },
-                    color = QPWTheme.colors.purple,
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    QPWActionCard(
+                        title = "Cancel",
+                        icon = Icons.Rounded.Cancel,
+                        actionColor = QPWTheme.colors.red,
+                        type = QPWActionCardType.MEDIUM,
+                        onClick = { close(Constants.DEFAULT_EXIT_CODE) },
+                    )
+                    Spacer(modifier = Modifier.size(16.dp))
+                    QPWActionCard(
+                        title = "Create",
+                        icon = Icons.Rounded.CreateNewFolder,
+                        actionColor = QPWTheme.colors.red,
+                        type = QPWActionCardType.MEDIUM,
+                        onClick = {
+                            if (validateInput()) {
+                                selectedTemplate?.let {
+                                    createFeature(it)
+                                } ?: run { MessageDialog("Please select a feature template").show() }
+                            } else {
+                                MessageDialog("Please fill out required values").show()
+                            }
+                        },
+                    )
+                }
             }
         ) { padding ->
             Column(
@@ -154,7 +154,7 @@ class FeatureMakerDialog(
             ) {
                 QPWText(
                     text = "Selected root: ${selectedSrc.value}",
-                    color = QPWTheme.colors.purple,
+                    color = QPWTheme.colors.red,
                     style = TextStyle(
                         fontSize = 16.sp,
                         fontWeight = FontWeight.SemiBold,
@@ -163,46 +163,161 @@ class FeatureMakerDialog(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                QPWTextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    placeholder = "Enter feature name",
-                    value = featureName.value,
-                    onValueChange = { featureName.value = it },
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                QPWText(
-                    text = "Be sure to use camel case for the feature name (e.g. MyFeature)",
-                    color = QPWTheme.colors.lightGray,
-                    style = TextStyle(
-                        fontWeight = FontWeight.SemiBold,
-                    ),
-                )
-
                 if (availableTemplates.isNotEmpty()) {
-                    QPWText(
-                        text = "Feature Template",
-                        color = QPWTheme.colors.white,
-                        style = TextStyle(
-                            fontWeight = FontWeight.SemiBold,
-                        ),
+                    TemplateSelectionContent(
+                        templates = availableTemplates,
+                        selectedTemplate = selectedTemplate,
+                        defaultTemplateId = defaultTemplate?.id ?: "",
+                        onTemplateSelected = { template ->
+                            selectedTemplate = template ?: defaultTemplate
+                        }
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Column(
+                    modifier = Modifier
+                        .background(
+                            color = QPWTheme.colors.gray,
+                            shape = RoundedCornerShape(8.dp)
+                        )
+                        .padding(16.dp)
+                ) {
+                    QPWTextField(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        placeholder = "Enter feature name",
+                        value = featureName.value,
+                        onValueChange = { featureName.value = it },
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    QPWText(
+                        text = "Be sure to use camel case for the feature name (e.g. MyFeature)",
+                        color = QPWTheme.colors.lightGray,
+                        style = TextStyle(
+                            fontWeight = FontWeight.SemiBold,
+                        ),
+                    )
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun TemplateSelectionContent(
+        templates: List<FeatureTemplate>,
+        selectedTemplate: FeatureTemplate?,
+        defaultTemplateId: String,
+        onTemplateSelected: (FeatureTemplate?) -> Unit,
+    ) {
+        Column(
+            modifier = Modifier
+                .background(
+                    color = QPWTheme.colors.gray,
+                    shape = RoundedCornerShape(8.dp)
+                )
+                .padding(16.dp)
+        ) {
+            QPWText(
+                text = "Feature Templates",
+                color = QPWTheme.colors.white,
+                style = TextStyle(
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                )
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            QPWText(
+                text = "Choose a template to auto-configure your module",
+                color = QPWTheme.colors.lightGray,
+                style = TextStyle(fontSize = 12.sp)
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            templates.forEach { template ->
+                TemplateOption(
+                    title = template.name,
+                    isSelected = selectedTemplate?.id == template.id,
+                    onClick = {
+                        onTemplateSelected(template)
+                    },
+                    badge = if (template.id == defaultTemplateId) "Default" else "",
+                    badgeColor = if (template.id == defaultTemplateId) QPWTheme.colors.red else QPWTheme.colors.purple
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+        }
+    }
+
+    @Composable
+    private fun TemplateOption(
+        title: String,
+        isSelected: Boolean,
+        onClick: () -> Unit,
+        badge: String,
+        badgeColor: Color,
+    ) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onClick() },
+            shape = RoundedCornerShape(8.dp),
+            border = BorderStroke(
+                width = if (isSelected) 2.dp else 0.dp,
+                color = if (isSelected) QPWTheme.colors.red else Color.Transparent
+            ),
+            backgroundColor = QPWTheme.colors.gray,
+            elevation = 0.dp
+        ) {
+            Row(
+                modifier = Modifier.padding(12.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        availableTemplates.forEach { template ->
-                            QPWRadioButton(
-                                text = template.name,
-                                selected = selectedTemplate?.id == template.id,
-                                color = QPWTheme.colors.red,
-                                onClick = { selectedTemplate = template }
+                        QPWText(
+                            text = title,
+                            color = QPWTheme.colors.white,
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Bold
                             )
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+
+                        if (badge.isNotEmpty()) {
+                            Card(
+                                shape = RoundedCornerShape(4.dp),
+                                backgroundColor = badgeColor.copy(alpha = 0.2f)
+                            ) {
+                                QPWText(
+                                    text = badge,
+                                    color = badgeColor,
+                                    style = TextStyle(fontSize = 9.sp),
+                                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                                )
+                            }
                         }
                     }
+                }
+
+                if (isSelected) {
+                    Icon(
+                        imageVector = Icons.Rounded.CheckCircle,
+                        contentDescription = "Selected",
+                        tint = QPWTheme.colors.red,
+                        modifier = Modifier.size(20.dp)
+                    )
                 }
             }
         }

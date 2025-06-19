@@ -64,18 +64,15 @@ fun ConfigurationPanel(
                     type = QPWActionCardType.MEDIUM,
                     onClick = {
                         if (Utils.validateFeatureInput(featureName, selectedSrc)) {
-                            val template = selectedTemplate
-                            if (template != null) {
+                            selectedTemplate?.let { selectedTemplate ->
                                 Utils.createFeature(
                                     project = project,
                                     selectedSrc = selectedSrc,
                                     featureName = featureName,
                                     fileWriter = fileWriter,
-                                    selectedTemplate = template,
+                                    selectedTemplate = selectedTemplate,
                                 )
-                            } else {
-                                MessageDialog("Please select a feature template").show()
-                            }
+                            } ?: run { MessageDialog("Please select a feature template").show() }
                         } else {
                             MessageDialog("Please fill out required values").show()
                         }
