@@ -31,6 +31,7 @@ import com.github.cnrture.quickprojectwizard.dialog.MessageDialog
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.colorpicker.ColorPickerContent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.featuremaker.FeatureMakerContent
+import com.github.cnrture.quickprojectwizard.toolwindow.manager.formatter.FormatterContent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.ModuleMakerContent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.SettingsContent
 import com.intellij.ide.BrowserUtil
@@ -179,6 +180,15 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                         )
 
                         SidebarButton(
+                            title = "Formatter",
+                            icon = Icons.Rounded.FormatAlignCenter,
+                            isSelected = selectedSection == "formatter",
+                            color = QPWTheme.colors.red,
+                            isExpanded = isExpanded,
+                            onClick = { selectedSection = "formatter" }
+                        )
+
+                        SidebarButton(
                             title = "Picker",
                             icon = Icons.Rounded.ColorLens,
                             isSelected = selectedSection == "color",
@@ -279,6 +289,7 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                 when (selectedSection) {
                     "module" -> ModuleMakerContent(project)
                     "feature" -> FeatureMakerContent(project)
+                    "formatter" -> FormatterContent()
                     "color" -> ColorPickerContent()
                     "settings" -> SettingsContent()
                 }
