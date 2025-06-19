@@ -54,7 +54,17 @@ fun FormatterContent() {
             } else {
                 formatXml(inputText)
             }
-            outputText = result.first
+
+            if (result.second) {
+                val formattedInput = result.first
+                if (formattedInput != inputText) {
+                    inputText = formattedInput
+                }
+                outputText = formattedInput
+            } else {
+                outputText = ""
+            }
+
             isValidInput = result.second
             errorMessage = result.third
         }
@@ -66,6 +76,9 @@ fun FormatterContent() {
         } else {
             getSampleXml()
         }
+        outputText = ""
+        errorMessage = ""
+        isValidInput = true
     }
 
     Column(
@@ -540,8 +553,9 @@ private fun formatJson(input: String): Triple<String, Boolean, String> {
         val formatted = Json {
             prettyPrint = true
             prettyPrintIndent = " ".repeat(2)
-        }.encodeToString(JsonElement.serializer(), jsonElement)
-        Triple(formatted, true, "JSON formatted successfully!")
+        }
+        val formattedJson = formatted.encodeToString(JsonElement.serializer(), jsonElement)
+        Triple(formattedJson, true, "JSON formatted successfully!")
     } catch (e: Exception) {
         Triple("", false, "Invalid JSON: ${e.message}")
     }
