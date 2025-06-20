@@ -13,8 +13,8 @@ import java.time.format.DateTimeFormatter
 class AnalyticsService {
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
-    private val measurementId = System.getenv("QPW_MEASUREMENT_ID") ?: ""
-    private val apiSecret = System.getenv("QPW_API_SECRET") ?: ""
+    private val measurementId = System.getenv("QPW_MEASUREMENT_ID").orEmpty()
+    private val apiSecret = System.getenv("QPW_API_SECRET").orEmpty()
 
     private val isAnalyticsEnabled = measurementId.isNotEmpty() && apiSecret.isNotEmpty()
 
