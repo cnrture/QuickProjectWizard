@@ -72,7 +72,7 @@ val xmlTemplate = template {
     }
 
     val dataDiDomainPresentationUiPackages = booleanParameter {
-        name = "data - di - domain - presentation - ui packages"
+        name = "Common-Data-Domain-DI-UI Packages"
         default = false
     }
 
