@@ -53,10 +53,8 @@ class AnalyticsService {
                 connection.outputStream.use { os ->
                     os.write(payload.toByteArray())
                 }
-                println("Analytics event sent: ${event.eventName} at ${event.timestamp}")
-                if (connection.responseCode != HttpURLConnection.HTTP_OK) {
-                    println("Failed to send analytics event: ${connection.responseMessage}")
-                }
+
+                connection.responseCode
                 connection.disconnect()
             } catch (_: Exception) {
             }
