@@ -48,7 +48,9 @@ fun FormatterContent() {
     var selectedFormat by remember { mutableStateOf(settings.getFormatterSelectedFormat()) }
     var inputText by remember {
         mutableStateOf(
-            settings.getFormatterInputText().ifEmpty {
+            if (settings.getFormatterInputText().isNotEmpty()) {
+                settings.getFormatterInputText()
+            } else {
                 if (selectedFormat == "JSON") getSampleJson() else getSampleXml()
             }
         )
@@ -62,7 +64,7 @@ fun FormatterContent() {
         settings.saveFormatterState(selectedFormat, inputText, errorMessage)
     }
 
-    LaunchedEffect(inputText, selectedFormat) {
+    LaunchedEffect(inputText) {
         if (inputText.isNotEmpty()) {
             val result = if (selectedFormat == "JSON") {
                 formatJson(inputText)
@@ -71,11 +73,7 @@ fun FormatterContent() {
             }
 
             if (result.second) {
-                val formattedInput = result.first
-                if (formattedInput != inputText) {
-                    inputText = formattedInput
-                }
-                outputText = formattedInput
+                outputText = result.first
             } else {
                 outputText = ""
             }
@@ -85,15 +83,24 @@ fun FormatterContent() {
         }
     }
 
+    // Handle format changes to regenerate output
     LaunchedEffect(selectedFormat) {
-        inputText = if (selectedFormat == "JSON") {
-            getSampleJson()
-        } else {
-            getSampleXml()
+        if (inputText.isNotEmpty()) {
+            val result = if (selectedFormat == "JSON") {
+                formatJson(inputText)
+            } else {
+                formatXml(inputText)
+            }
+
+            if (result.second) {
+                outputText = result.first
+            } else {
+                outputText = ""
+            }
+
+            isValidInput = result.second
+            errorMessage = result.third
         }
-        outputText = ""
-        errorMessage = ""
-        isValidInput = true
     }
 
     Column(
@@ -514,8 +521,11 @@ private fun SyntaxHighlightedText(
         trimmedText.startsWith("\"") -> QPWTheme.colors.green
         trimmedText.matches(Regex("\\d+")) || trimmedText.matches(Regex("\\d+\\.\\d+")) -> QPWTheme.colors.red
         trimmedText in listOf("true", "false") -> QPWTheme.colors.red
+
         trimmedText == "null" -> QPWTheme.colors.lightGray
+
         trimmedText.contains("{") || trimmedText.contains("}") || trimmedText.contains("[") || trimmedText.contains("]") -> QPWTheme.colors.white
+
         else -> QPWTheme.colors.white
     }
 
