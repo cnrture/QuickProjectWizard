@@ -1,24 +1,11 @@
 package com.github.cnrture.quickprojectwizard.common.file
 
 import com.github.cnrture.quickprojectwizard.common.Constants
+import com.github.cnrture.quickprojectwizard.data.LibraryInfo
+import com.github.cnrture.quickprojectwizard.data.PluginInfo
 import java.io.File
 
 class LibraryDependencyFinder {
-
-    data class LibraryInfo(
-        val alias: String,
-        val group: String,
-        val artifact: String,
-        val versionRef: String? = null,
-        val version: String? = null,
-    )
-
-    data class PluginInfo(
-        val alias: String,
-        val id: String,
-        val versionRef: String? = null,
-        val version: String? = null,
-    )
 
     fun parseLibsVersionsToml(projectRoot: File): List<LibraryInfo> {
         val libraries = mutableListOf<LibraryInfo>()
@@ -26,17 +13,9 @@ class LibraryDependencyFinder {
         val versionsTomlPath = "gradle/libs.versions.toml"
         var versionsToml = File(projectRoot, versionsTomlPath)
 
-        if (!versionsToml.exists()) {
-            versionsToml = File(projectRoot.parentFile, versionsTomlPath)
-        }
-
-        if (!versionsToml.exists()) {
-            versionsToml = File(projectRoot, "libs.versions.toml")
-        }
-
-        if (!versionsToml.exists()) {
-            return emptyList()
-        }
+        if (!versionsToml.exists()) versionsToml = File(projectRoot.parentFile, versionsTomlPath)
+        if (!versionsToml.exists()) versionsToml = File(projectRoot, "libs.versions.toml")
+        if (!versionsToml.exists()) return emptyList()
 
         val content = versionsToml.readText()
 
@@ -59,7 +38,6 @@ class LibraryDependencyFinder {
             val artifact = matchGroups[3]
             val versionRef = if (matchGroups.size > 4) matchGroups[4] else Constants.EMPTY
             val version = if (matchGroups.size > 5) matchGroups[5] else Constants.EMPTY
-
             libraries.add(LibraryInfo(alias, group, artifact, versionRef.ifEmpty { null }, version.ifEmpty { null }))
         }
 
@@ -71,16 +49,7 @@ class LibraryDependencyFinder {
             val artifact = matchGroups[3]
             val versionRef = if (matchGroups.size > 4) matchGroups[4] else Constants.EMPTY
             val version = if (matchGroups.size > 5) matchGroups[5] else Constants.EMPTY
-
-            libraries.add(
-                LibraryInfo(
-                    alias,
-                    group,
-                    artifact,
-                    versionRef.ifEmpty { null },
-                    version.ifEmpty { null }
-                )
-            )
+            libraries.add(LibraryInfo(alias, group, artifact, versionRef.ifEmpty { null }, version.ifEmpty { null }))
         }
 
         return libraries
@@ -92,17 +61,9 @@ class LibraryDependencyFinder {
         val versionsTomlPath = "gradle/libs.versions.toml"
         var versionsToml = File(projectRoot, versionsTomlPath)
 
-        if (!versionsToml.exists()) {
-            versionsToml = File(projectRoot.parentFile, versionsTomlPath)
-        }
-
-        if (!versionsToml.exists()) {
-            versionsToml = File(projectRoot, "libs.versions.toml")
-        }
-
-        if (!versionsToml.exists()) {
-            return emptyList()
-        }
+        if (!versionsToml.exists()) versionsToml = File(projectRoot.parentFile, versionsTomlPath)
+        if (!versionsToml.exists()) versionsToml = File(projectRoot, "libs.versions.toml")
+        if (!versionsToml.exists()) return emptyList()
 
         val content = versionsToml.readText()
 
@@ -121,7 +82,6 @@ class LibraryDependencyFinder {
             val id = matchGroups[2]
             val versionRef = if (matchGroups.size > 3 && matchGroups[3].isNotEmpty()) matchGroups[3] else null
             val version = if (matchGroups.size > 4 && matchGroups[4].isNotEmpty()) matchGroups[4] else null
-
             plugins.add(PluginInfo(alias, id, versionRef, version))
         }
 
@@ -130,10 +90,8 @@ class LibraryDependencyFinder {
 
     fun formatLibraryDependencies(libraryAliases: List<String>): String {
         if (libraryAliases.isEmpty()) return Constants.EMPTY
-
         val bomLibraries = setOf("compose-bom", "firebase", "firebase-bom")
         val annotationProcessors = setOf("room-compiler", "hilt-compiler")
-
         return StringBuilder().apply {
             append("    // Library Dependencies\n")
             libraryAliases.forEachIndexed { index, alias ->
@@ -151,7 +109,6 @@ class LibraryDependencyFinder {
 
     fun formatPluginDependencies(pluginAliases: List<String>): String {
         if (pluginAliases.isEmpty()) return Constants.EMPTY
-
         return StringBuilder().apply {
             pluginAliases.forEachIndexed { index, alias ->
                 append("    alias(libs.plugins.${alias.replace("-", ".")})")

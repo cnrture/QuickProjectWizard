@@ -128,10 +128,7 @@ class FileWriter() {
         resDir.mkdirs()
         createdDirs.add(resDir)
 
-        val subDirs = listOf(
-            "drawable",
-            "values",
-        )
+        val subDirs = listOf("drawable", "values")
 
         subDirs.forEach { dirName ->
             val dir = Paths.get(resDir.absolutePath, dirName).toFile()

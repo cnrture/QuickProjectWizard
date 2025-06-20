@@ -25,14 +25,11 @@ class TemplateWriter {
         pluginDependencies: String = Constants.EMPTY,
     ): List<File> {
         try {
-            val gradleTemplate = when (moduleType) {
-                Constants.ANDROID -> GradleTemplate.getAndroidModuleGradleTemplate(
-                    packageName = packageName,
-                    dependencies = buildDependenciesBlock(dependencies, libraryDependencies),
-                    plugins = pluginDependencies,
-                )
-
-                else -> GradleTemplate.getKotlinModuleGradleTemplate(plugins = pluginDependencies)
+            val gradleTemplate = if (moduleType == Constants.ANDROID) {
+                val dependencies = buildDependenciesBlock(dependencies, libraryDependencies)
+                GradleTemplate.getAndroidModuleGradleTemplate(packageName, dependencies, pluginDependencies)
+            } else {
+                GradleTemplate.getKotlinModuleGradleTemplate(plugins = pluginDependencies)
             }
 
             val fileName = "build.gradle.kts"
@@ -91,9 +88,5 @@ class TemplateWriter {
             e.printStackTrace()
         }
         return emptyList()
-    }
-
-    companion object {
-
     }
 }

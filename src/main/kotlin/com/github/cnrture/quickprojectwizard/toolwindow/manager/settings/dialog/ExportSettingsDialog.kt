@@ -78,7 +78,6 @@ private fun ExportSettingsContent(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Directory Selection
         Column {
             QPWText(
                 text = "Export Location",
@@ -123,7 +122,6 @@ private fun ExportSettingsContent(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // File Name Input
         Column {
             QPWText(
                 text = "File Name",
@@ -155,7 +153,6 @@ private fun ExportSettingsContent(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        // Action Buttons
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.End)

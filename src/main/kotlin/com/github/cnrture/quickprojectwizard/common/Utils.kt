@@ -303,14 +303,12 @@ object Utils {
             return null
         }
 
-        // Check and add TYPESAFE_PROJECT_ACCESSORS if missing
         try {
             val content = settingsFile.readText()
             if (!content.contains("TYPESAFE_PROJECT_ACCESSORS")) {
                 val lines = content.lines().toMutableList()
                 var insertIndex = -1
 
-                // Find the line with rootProject.name
                 for (i in lines.indices) {
                     if (lines[i].trim().startsWith("rootProject.name")) {
                         insertIndex = i + 1
