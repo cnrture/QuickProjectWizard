@@ -13,3 +13,4 @@ config/detekt/baseline.xml
 local-analytics.properties
 *.env
 .env.*
+.run

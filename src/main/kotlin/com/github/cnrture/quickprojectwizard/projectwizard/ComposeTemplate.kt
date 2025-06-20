@@ -119,7 +119,7 @@ val composeTemplate = template {
     recipe = { data: TemplateData ->
         composeProjectRecipe(
             moduleData = data as ModuleTemplateData,
-            packageName = defaultPackageNameParameter.value,
+            packageName = data.packageName,
             isRoomEnable = isRoomEnable.value,
             isWorkManagerEnable = isWorkManagerEnable.value,
             selectedNetworkLibrary = selectedNetworkLibrary.value,
@@ -132,7 +132,7 @@ val composeTemplate = template {
             dataDiDomainPresentationUiPackages = dataDiDomainPresentationUiPackages.value,
             screens = screens.value,
             javaJvmVersion = javaJvmVersion.value,
-            projectName = projectName
+            projectName = projectName,
         )
     }
 }

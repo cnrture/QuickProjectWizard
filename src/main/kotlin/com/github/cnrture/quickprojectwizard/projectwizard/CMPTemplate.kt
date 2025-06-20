@@ -92,7 +92,7 @@ val composeMultiplatformTemplate = template {
     recipe = { data: TemplateData ->
         composeMultiplatformProjectRecipe(
             moduleData = data as ModuleTemplateData,
-            packageName = defaultPackageNameParameter.value,
+            packageName = data.packageName,
             isAndroidEnable = isAndroidEnable.value,
             isIosEnable = isIosEnable.value,
             isDesktopEnable = isDesktopEnable.value,

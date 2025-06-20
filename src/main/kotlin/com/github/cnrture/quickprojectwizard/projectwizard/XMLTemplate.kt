@@ -115,7 +115,7 @@ val xmlTemplate = template {
     recipe = { data: TemplateData ->
         xmlProjectRecipe(
             moduleData = data as ModuleTemplateData,
-            packageName = defaultPackageNameParameter.value,
+            packageName = data.packageName,
             isRoomEnable = isRoomEnable.value,
             isWorkManagerEnable = isWorkManagerEnable.value,
             selectedNetworkLibrary = selectedNetworkLibrary.value,
