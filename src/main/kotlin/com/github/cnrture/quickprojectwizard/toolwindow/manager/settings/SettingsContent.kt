@@ -50,28 +50,6 @@ fun SettingsContent() {
             .background(QPWTheme.colors.black)
             .padding(24.dp),
         backgroundColor = QPWTheme.colors.black,
-        bottomBar = {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                contentAlignment = Alignment.CenterEnd,
-            ) {
-                QPWActionCard(
-                    title = "Save",
-                    icon = Icons.Rounded.Save,
-                    actionColor = QPWTheme.colors.lightGray,
-                    type = QPWActionCardType.MEDIUM,
-                    onClick = {
-                        currentSettings = currentSettings.copy(
-                            defaultPackageName = packageName,
-                            preferredModuleType = selectedModuleType
-                        )
-                        settings.loadState(currentSettings)
-                    },
-                )
-            }
-        }
     ) { padding ->
         Column(
             modifier = Modifier
@@ -127,6 +105,13 @@ fun SettingsContent() {
                     "general" -> GeneralSettingsTab(
                         defaultPackageName = packageName,
                         preferredModuleType = selectedModuleType,
+                        onSaveClick = {
+                            currentSettings = currentSettings.copy(
+                                defaultPackageName = packageName,
+                                preferredModuleType = selectedModuleType
+                            )
+                            settings.loadState(currentSettings)
+                        },
                         onPackageNameChange = { packageName = it },
                         onModuleTypeChange = { selectedModuleType = it }
                     )
@@ -338,6 +323,7 @@ private fun ModuleTemplateCard(
 private fun GeneralSettingsTab(
     defaultPackageName: String,
     preferredModuleType: String,
+    onSaveClick: () -> Unit,
     onPackageNameChange: (String) -> Unit,
     onModuleTypeChange: (String) -> Unit,
 ) {
@@ -354,7 +340,6 @@ private fun GeneralSettingsTab(
                 onValueChange = onPackageNameChange,
             )
         }
-
         SettingItem("Preferred Module Type") {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -377,6 +362,14 @@ private fun GeneralSettingsTab(
                 )
             }
         }
+        QPWActionCard(
+            modifier = Modifier.align(Alignment.End),
+            title = "Save",
+            icon = Icons.Rounded.Save,
+            actionColor = QPWTheme.colors.lightGray,
+            type = QPWActionCardType.MEDIUM,
+            onClick = onSaveClick,
+        )
     }
 }
 
