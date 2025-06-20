@@ -21,8 +21,6 @@ import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
 import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulegenerator.components.*
-import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -63,7 +61,7 @@ fun CreateNewModuleConfigurationPanel(
     onCheckedModule: (String) -> Unit,
 ) {
     val radioOptions = listOf(Constants.ANDROID, Constants.KOTLIN)
-    val settings = ApplicationManager.getApplication().service<SettingsService>()
+    val settings = SettingsService.getInstance()
 
     Scaffold(
         modifier = modifier,

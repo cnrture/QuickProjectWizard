@@ -1,6 +1,6 @@
 package com.github.cnrture.quickprojectwizard.analytics
 
-import com.github.cnrture.quickprojectwizard.analytics.events.QPWEvent
+import com.github.cnrture.quickprojectwizard.data.QPWEvent
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.Service
 import kotlinx.coroutines.*
@@ -17,12 +17,6 @@ class AnalyticsService {
     private val apiSecret = System.getenv("QPW_API_SECRET").orEmpty()
 
     private val isAnalyticsEnabled = measurementId.isNotEmpty() && apiSecret.isNotEmpty()
-
-    companion object {
-        fun getInstance(): AnalyticsService {
-            return ApplicationManager.getApplication().getService(AnalyticsService::class.java)
-        }
-    }
 
     fun track(event: String) {
         scope.launch {
@@ -83,5 +77,11 @@ class AnalyticsService {
 
     private fun getCurrentTimestamp(): String {
         return LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+    }
+
+    companion object {
+        fun getInstance(): AnalyticsService {
+            return ApplicationManager.getApplication().getService(AnalyticsService::class.java)
+        }
     }
 }

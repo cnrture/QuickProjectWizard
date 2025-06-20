@@ -1,5 +1,6 @@
 package com.github.cnrture.quickprojectwizard.projectwizard.gradle.network
 
+import com.github.cnrture.quickprojectwizard.data.VersionModel
 import com.github.cnrture.quickprojectwizard.projectwizard.gradle.Versions
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*

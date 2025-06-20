@@ -1,11 +1,10 @@
 package com.github.cnrture.quickprojectwizard.data
 
-import com.github.cnrture.quickprojectwizard.common.Constants
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import java.io.File
 
@@ -139,11 +138,10 @@ class SettingsService : PersistentStateComponent<SettingsState> {
     }
 
     fun addColorToHistory(colorInfo: ColorInfo) {
-        // Check if color already exists by hex value to avoid duplicates
         if (!myState.colorHistory.any { it.hex == colorInfo.hex }) {
             myState.colorHistory.add(0, colorInfo) // Add to front
             if (myState.colorHistory.size > 10) {
-                myState.colorHistory.removeAt(myState.colorHistory.size - 1) // Keep only last 10
+                myState.colorHistory.removeAt(myState.colorHistory.size - 1)
             }
         }
     }
@@ -184,66 +182,13 @@ class SettingsService : PersistentStateComponent<SettingsState> {
     fun getApiHeaders(): Map<String, String> = myState.apiHeaders.toMap()
     fun getApiQueryParams(): Map<String, String> = myState.apiQueryParams.toMap()
     fun getApiSelectedTab(): String = myState.apiSelectedTab
+
+    companion object {
+        fun getInstance(): SettingsService {
+            return ApplicationManager.getApplication().getService(SettingsService::class.java)
+        }
+    }
 }
-
-@Serializable
-data class SettingsState(
-    var moduleTemplates: MutableList<ModuleTemplate> = mutableListOf(),
-    var featureTemplates: MutableList<FeatureTemplate> = mutableListOf(),
-    var defaultModuleTemplateId: String = "candroid_template",
-    var defaultFeatureTemplateId: String = "candroid_template",
-    var defaultPackageName: String = Constants.DEFAULT_BASE_PACKAGE_NAME,
-    var preferredModuleType: String = Constants.ANDROID,
-    var featureScreenTemplate: String = Constants.EMPTY,
-    var featureViewModelTemplate: String = Constants.EMPTY,
-    var featureContractTemplate: String = Constants.EMPTY,
-    var featureComponentKeyTemplate: String = Constants.EMPTY,
-    var featurePreviewProviderTemplate: String = Constants.EMPTY,
-    var moduleReadmeTemplate: String = Constants.EMPTY,
-    var manifestTemplate: String = Constants.EMPTY,
-    var gradleAndroidTemplate: String = Constants.EMPTY,
-    var gradleKotlinTemplate: String = Constants.EMPTY,
-
-    var isCompose: Boolean = true,
-    var isHiltEnable: Boolean = true,
-    var isActionsExpanded: Boolean = true,
-
-    var colorHistory: MutableList<ColorInfo> = mutableListOf(),
-
-    var formatterSelectedFormat: String = "JSON",
-    var formatterInputText: String = "",
-    var formatterErrorMessage: String = "",
-
-    var apiSelectedMethod: String = "GET",
-    var apiUrl: String = "https://api.canerture.com/harrypotterapp/characters",
-    var apiRequestBody: String = "",
-    var apiHeaders: MutableMap<String, String> = mutableMapOf("Content-Type" to "application/json"),
-    var apiQueryParams: MutableMap<String, String> = mutableMapOf(),
-    var apiSelectedTab: String = "headers",
-)
-
-@Serializable
-data class ModuleTemplate(
-    val id: String,
-    val name: String,
-    val fileTemplates: List<FileTemplate> = emptyList(),
-    val isDefault: Boolean = false,
-)
-
-@Serializable
-data class FileTemplate(
-    val fileName: String = "",
-    val filePath: String = "",
-    val fileContent: String = "",
-)
-
-@Serializable
-data class FeatureTemplate(
-    val id: String,
-    val name: String,
-    val fileTemplates: List<FileTemplate> = emptyList(),
-    val isDefault: Boolean = false,
-)
 
 fun getDefaultModuleTemplates(): List<ModuleTemplate> {
     return listOf(

@@ -28,7 +28,6 @@ import com.github.cnrture.quickprojectwizard.components.QPWText
 import com.github.cnrture.quickprojectwizard.data.ColorInfo
 import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
-import com.intellij.openapi.application.ApplicationManager
 import com.intellij.ui.JBColor
 import java.awt.*
 import java.awt.datatransfer.StringSelection
@@ -43,7 +42,7 @@ import javax.swing.SwingUtilities
 @Composable
 fun ColorPickerContent() {
     val analyticsService = AnalyticsService.getInstance()
-    val settings = ApplicationManager.getApplication().getService(SettingsService::class.java)
+    val settings = SettingsService.getInstance()
     var colorHistory by remember { mutableStateOf(settings.getColorHistory()) }
 
     Column(

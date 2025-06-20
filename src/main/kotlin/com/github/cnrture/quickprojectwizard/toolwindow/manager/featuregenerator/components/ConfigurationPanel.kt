@@ -25,8 +25,6 @@ import com.github.cnrture.quickprojectwizard.components.*
 import com.github.cnrture.quickprojectwizard.data.FeatureTemplate
 import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
-import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -41,7 +39,7 @@ fun ConfigurationPanel(
     showFileTreeDialog: Boolean,
     onFileTreeDialogStateChange: () -> Unit,
 ) {
-    val settings = ApplicationManager.getApplication().service<SettingsService>()
+    val settings = SettingsService.getInstance()
     var selectedTemplate by remember { mutableStateOf(settings.getDefaultFeatureTemplate()) }
     val availableTemplates = remember { settings.getFeatureTemplates() }
     Scaffold(

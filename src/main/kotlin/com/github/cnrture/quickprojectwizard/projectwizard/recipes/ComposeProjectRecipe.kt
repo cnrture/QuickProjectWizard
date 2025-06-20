@@ -9,6 +9,8 @@ import com.github.cnrture.quickprojectwizard.analytics.AnalyticsService
 import com.github.cnrture.quickprojectwizard.common.Utils
 import com.github.cnrture.quickprojectwizard.common.addRootFile
 import com.github.cnrture.quickprojectwizard.common.addSrcFile
+import com.github.cnrture.quickprojectwizard.data.ImageLibrary
+import com.github.cnrture.quickprojectwizard.data.NetworkLibrary
 import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.projectwizard.composearch.common.emptyCollectExtension
 import com.github.cnrture.quickprojectwizard.projectwizard.composearch.ui.components.emptyEmptyScreen
@@ -23,7 +25,6 @@ import com.github.cnrture.quickprojectwizard.projectwizard.composearch.ui.naviga
 import com.github.cnrture.quickprojectwizard.projectwizard.composearch.ui.theme.emptyColor
 import com.github.cnrture.quickprojectwizard.projectwizard.composearch.ui.theme.emptyTheme
 import com.github.cnrture.quickprojectwizard.projectwizard.composearch.ui.theme.emptyType
-import com.github.cnrture.quickprojectwizard.projectwizard.general.*
 import com.github.cnrture.quickprojectwizard.projectwizard.general.data.model.emptyMainEntityModel
 import com.github.cnrture.quickprojectwizard.projectwizard.general.data.repository.emptyMainRepositoryImpl
 import com.github.cnrture.quickprojectwizard.projectwizard.general.data.source.local.emptyMainDao
@@ -35,11 +36,12 @@ import com.github.cnrture.quickprojectwizard.projectwizard.general.di.emptyLocal
 import com.github.cnrture.quickprojectwizard.projectwizard.general.di.emptyMainRepositoryModule
 import com.github.cnrture.quickprojectwizard.projectwizard.general.di.emptyNetworkModule
 import com.github.cnrture.quickprojectwizard.projectwizard.general.domain.emptyMainRepository
+import com.github.cnrture.quickprojectwizard.projectwizard.general.emptyConstants
+import com.github.cnrture.quickprojectwizard.projectwizard.general.emptyMainApplication
+import com.github.cnrture.quickprojectwizard.projectwizard.general.emptyManifestXml
 import com.github.cnrture.quickprojectwizard.projectwizard.gradle.getDependencies
 import com.github.cnrture.quickprojectwizard.projectwizard.gradle.getGradleKts
 import com.github.cnrture.quickprojectwizard.projectwizard.gradle.getProjectGradleKts
-import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.components.service
 import java.io.File
 
 fun RecipeExecutor.composeProjectRecipe(
@@ -61,7 +63,7 @@ fun RecipeExecutor.composeProjectRecipe(
 ) {
     val packagePath = escapeKotlinIdentifier(packageName)
     val analyticsService = AnalyticsService.getInstance()
-    val settings = ApplicationManager.getApplication().service<SettingsService>()
+    val settings = SettingsService.getInstance()
     settings.loadState(
         settings.state.copy(
             isHiltEnable = isHiltEnable,

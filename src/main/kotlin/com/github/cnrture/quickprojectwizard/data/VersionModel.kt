@@ -1,4 +1,4 @@
-package com.github.cnrture.quickprojectwizard.projectwizard.gradle.network
+package com.github.cnrture.quickprojectwizard.data
 
 import kotlinx.serialization.Serializable
 

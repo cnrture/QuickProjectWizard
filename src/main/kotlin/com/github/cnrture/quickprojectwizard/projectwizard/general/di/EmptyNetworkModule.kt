@@ -1,6 +1,6 @@
 package com.github.cnrture.quickprojectwizard.projectwizard.general.di
 
-import com.github.cnrture.quickprojectwizard.projectwizard.general.NetworkLibrary
+import com.github.cnrture.quickprojectwizard.data.NetworkLibrary
 
 fun emptyNetworkModule(packageName: String, selectedNetworkLibrary: NetworkLibrary): String {
     return when (selectedNetworkLibrary) {

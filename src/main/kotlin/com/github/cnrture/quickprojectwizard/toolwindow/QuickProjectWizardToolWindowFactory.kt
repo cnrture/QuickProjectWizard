@@ -37,8 +37,6 @@ import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulegenerator.
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.SettingsContent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.dialog.ExportSettingsDialog
 import com.intellij.ide.BrowserUtil
-import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.components.service
 import com.intellij.openapi.fileChooser.FileChooser
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.project.Project
@@ -52,7 +50,7 @@ import javax.swing.JPanel
 
 class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
 
-    private val settings = ApplicationManager.getApplication().service<SettingsService>()
+    private val settings = SettingsService.getInstance()
 
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
         toolWindow.contentManager.addContent(
@@ -306,18 +304,22 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                         analyticsService.track("view_feature_generator")
                         FeatureGeneratorContent(project)
                     }
+
                     "formatter" -> {
                         analyticsService.track("view_formatter")
                         FormatterContent()
                     }
+
                     "color" -> {
                         analyticsService.track("view_color_picker")
                         ColorPickerContent()
                     }
+
                     "api" -> {
                         analyticsService.track("view_api_tester")
                         ApiTesterContent()
                     }
+
                     "settings" -> SettingsContent()
                 }
             }

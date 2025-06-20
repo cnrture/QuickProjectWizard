@@ -3,8 +3,8 @@ package com.github.cnrture.quickprojectwizard.projectwizard.gradle
 import com.github.cnrture.quickprojectwizard.common.addLibsDependency
 import com.github.cnrture.quickprojectwizard.common.addLibsPlugin
 import com.github.cnrture.quickprojectwizard.common.addLibsVersion
-import com.github.cnrture.quickprojectwizard.projectwizard.general.ImageLibrary
-import com.github.cnrture.quickprojectwizard.projectwizard.general.NetworkLibrary
+import com.github.cnrture.quickprojectwizard.data.ImageLibrary
+import com.github.cnrture.quickprojectwizard.data.NetworkLibrary
 
 fun getDependencies(
     isCompose: Boolean,

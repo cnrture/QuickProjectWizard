@@ -3,7 +3,7 @@ package com.github.cnrture.quickprojectwizard.projectwizard
 import com.android.tools.idea.wizard.template.*
 import com.android.tools.idea.wizard.template.impl.defaultPackageNameParameter
 import com.github.cnrture.quickprojectwizard.common.getImage
-import com.github.cnrture.quickprojectwizard.projectwizard.cmparch.CMPImageLibrary
+import com.github.cnrture.quickprojectwizard.data.CMPImageLibrary
 import com.github.cnrture.quickprojectwizard.projectwizard.gradle.network.getVersions
 import com.github.cnrture.quickprojectwizard.projectwizard.recipes.composeMultiplatformProjectRecipe
 import kotlinx.coroutines.runBlocking

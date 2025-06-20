@@ -92,4 +92,8 @@ class TemplateWriter {
         }
         return emptyList()
     }
+
+    companion object {
+
+    }
 }

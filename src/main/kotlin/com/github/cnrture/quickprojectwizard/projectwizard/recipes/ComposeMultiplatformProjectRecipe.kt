@@ -4,6 +4,8 @@ import com.android.tools.idea.wizard.template.ModuleTemplateData
 import com.android.tools.idea.wizard.template.escapeKotlinIdentifier
 import com.github.cnrture.quickprojectwizard.analytics.AnalyticsService
 import com.github.cnrture.quickprojectwizard.common.Utils
+import com.github.cnrture.quickprojectwizard.data.CMPConfigModel
+import com.github.cnrture.quickprojectwizard.data.CMPImageLibrary
 import com.github.cnrture.quickprojectwizard.projectwizard.cmparch.*
 import com.github.cnrture.quickprojectwizard.projectwizard.gradle.Versions
 import com.intellij.ide.fileTemplates.FileTemplateManager

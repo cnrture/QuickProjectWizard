@@ -32,12 +32,10 @@ import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.dialog.
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.dialog.FeatureTemplateEditorDialog
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.dialog.TemplateCreatorDialog
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.dialog.TemplateEditorDialog
-import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.components.service
 
 @Composable
 fun SettingsContent() {
-    val settings = ApplicationManager.getApplication().service<SettingsService>()
+    val settings = SettingsService.getInstance()
     val analyticsService = AnalyticsService.getInstance()
     var currentSettings by mutableStateOf(settings.state.copy())
     var selectedTab by mutableStateOf("general")

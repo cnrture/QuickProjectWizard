@@ -1,5 +1,6 @@
 package com.github.cnrture.quickprojectwizard.projectwizard.cmparch
 
+import com.github.cnrture.quickprojectwizard.data.CMPConfigModel
 import com.intellij.ide.fileTemplates.FileTemplateManager
 import com.intellij.ide.starters.local.GeneratorAsset
 import com.intellij.ide.starters.local.GeneratorTemplateFile

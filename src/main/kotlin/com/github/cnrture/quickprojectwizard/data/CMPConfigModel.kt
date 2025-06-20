@@ -1,4 +1,4 @@
-package com.github.cnrture.quickprojectwizard.projectwizard.cmparch
+package com.github.cnrture.quickprojectwizard.data
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

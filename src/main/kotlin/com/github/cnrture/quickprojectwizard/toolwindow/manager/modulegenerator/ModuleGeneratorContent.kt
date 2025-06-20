@@ -20,15 +20,13 @@ import com.github.cnrture.quickprojectwizard.components.QPWTabRow
 import com.github.cnrture.quickprojectwizard.components.QPWText
 import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
-import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import java.io.File
 
 @Composable
 fun ModuleGeneratorContent(project: Project) {
     val fileWriter = FileWriter()
-    val settings = ApplicationManager.getApplication().service<SettingsService>()
+    val settings = SettingsService.getInstance()
     val analyticsService = AnalyticsService.getInstance()
     val libraryDependencyFinder = LibraryDependencyFinder()
 

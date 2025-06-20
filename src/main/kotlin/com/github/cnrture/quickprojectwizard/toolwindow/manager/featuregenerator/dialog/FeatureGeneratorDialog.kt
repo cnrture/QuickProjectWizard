@@ -30,8 +30,6 @@ import com.github.cnrture.quickprojectwizard.components.*
 import com.github.cnrture.quickprojectwizard.data.FeatureTemplate
 import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
-import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import java.io.File
@@ -98,7 +96,7 @@ class FeatureGeneratorDialog(
     private fun ConfigurationPanel(modifier: Modifier = Modifier.Companion) {
         val selectedSrc = remember { selectedSrc }
         val featureName = remember { featureName }
-        val settings = ApplicationManager.getApplication().service<SettingsService>()
+        val settings = SettingsService.getInstance()
         var selectedTemplate by remember { mutableStateOf(settings.getDefaultFeatureTemplate()) }
         val availableTemplates = remember { settings.getFeatureTemplates() }
 

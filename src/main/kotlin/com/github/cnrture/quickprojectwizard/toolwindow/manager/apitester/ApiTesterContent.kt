@@ -21,7 +21,6 @@ import com.github.cnrture.quickprojectwizard.analytics.AnalyticsService
 import com.github.cnrture.quickprojectwizard.components.*
 import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
-import com.intellij.openapi.application.ApplicationManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -37,7 +36,7 @@ import kotlin.time.measureTime
 @Composable
 fun ApiTesterContent() {
     val analyticsService = AnalyticsService.getInstance()
-    val settings = ApplicationManager.getApplication().getService(SettingsService::class.java)
+    val settings = SettingsService.getInstance()
 
     var selectedMethod by remember { mutableStateOf(settings.getApiSelectedMethod()) }
     var url by remember { mutableStateOf(settings.getApiUrl()) }

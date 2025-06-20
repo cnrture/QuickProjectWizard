@@ -27,7 +27,6 @@ import com.github.cnrture.quickprojectwizard.components.QPWTabRow
 import com.github.cnrture.quickprojectwizard.components.QPWText
 import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
-import com.intellij.openapi.application.ApplicationManager
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
@@ -44,7 +43,7 @@ import javax.xml.transform.stream.StreamResult
 
 @Composable
 fun FormatterContent() {
-    val settings = ApplicationManager.getApplication().getService(SettingsService::class.java)
+    val settings = SettingsService.getInstance()
 
     var selectedFormat by remember { mutableStateOf(settings.getFormatterSelectedFormat()) }
     var inputText by remember {

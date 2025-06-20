@@ -27,8 +27,6 @@ import com.github.cnrture.quickprojectwizard.components.*
 import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulegenerator.components.*
-import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import java.io.File
@@ -41,7 +39,7 @@ class ModuleGeneratorDialog(
     height = 700,
 ) {
     private val analyticsService = AnalyticsService.getInstance()
-    private val settings = ApplicationManager.getApplication().service<SettingsService>()
+    private val settings = SettingsService.getInstance()
     private val libraryDependencyFinder = LibraryDependencyFinder()
     private val fileWriter = FileWriter()
     private var selectedSrc = mutableStateOf(Constants.DEFAULT_SRC_VALUE)

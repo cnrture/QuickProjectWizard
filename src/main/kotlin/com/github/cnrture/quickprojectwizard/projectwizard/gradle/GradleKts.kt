@@ -1,8 +1,8 @@
 package com.github.cnrture.quickprojectwizard.projectwizard.gradle
 
 import com.github.cnrture.quickprojectwizard.common.*
-import com.github.cnrture.quickprojectwizard.projectwizard.general.ImageLibrary
-import com.github.cnrture.quickprojectwizard.projectwizard.general.NetworkLibrary
+import com.github.cnrture.quickprojectwizard.data.ImageLibrary
+import com.github.cnrture.quickprojectwizard.data.NetworkLibrary
 
 fun getGradleKts(
     isCompose: Boolean,

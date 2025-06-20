@@ -1,4 +1,4 @@
-package com.github.cnrture.quickprojectwizard.analytics.events
+package com.github.cnrture.quickprojectwizard.data
 
 import kotlinx.serialization.Serializable
 
