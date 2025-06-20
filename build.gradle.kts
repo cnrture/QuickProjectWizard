@@ -154,6 +154,11 @@ tasks {
     publishPlugin {
         dependsOn(patchChangelog)
     }
+
+    // Disable buildSearchableOptions task to prevent verification failures
+    buildSearchableOptions {
+        enabled = false
+    }
 }
 
 intellijPlatformTesting {
