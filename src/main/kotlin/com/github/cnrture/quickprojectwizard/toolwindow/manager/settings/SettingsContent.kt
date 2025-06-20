@@ -41,8 +41,17 @@ fun SettingsContent() {
     var selectedModuleType by mutableStateOf(currentSettings.preferredModuleType)
     var packageName by mutableStateOf(currentSettings.defaultPackageName)
 
-    var moduleTemplates by remember { mutableStateOf(settings.getModuleTemplates()) }
-    var featureTemplates by remember { mutableStateOf(settings.getFeatureTemplates()) }
+    // Use remember with a refreshTrigger to force UI updates
+    var refreshTrigger by remember { mutableStateOf(0) }
+    val moduleTemplates by remember(refreshTrigger) {
+        mutableStateOf(settings.getModuleTemplates())
+    }
+    val featureTemplates by remember(refreshTrigger) {
+        mutableStateOf(settings.getFeatureTemplates())
+    }
+
+    // Function to trigger refresh
+    val triggerRefresh = { refreshTrigger++ }
 
     Scaffold(
         modifier = Modifier
@@ -111,6 +120,7 @@ fun SettingsContent() {
                                 preferredModuleType = selectedModuleType
                             )
                             settings.loadState(currentSettings)
+                            triggerRefresh()
                         },
                         onPackageNameChange = { packageName = it },
                         onModuleTypeChange = { selectedModuleType = it }
@@ -122,24 +132,20 @@ fun SettingsContent() {
                         onTemplateDelete = { template ->
                             if (!template.isDefault) {
                                 settings.removeTemplate(template)
-                                moduleTemplates = settings.getModuleTemplates()
-                                currentSettings = settings.state.copy()
+                                triggerRefresh()
                             }
                         },
                         onTemplateAdd = { newTemplate ->
                             settings.saveTemplate(newTemplate)
-                            moduleTemplates = settings.getModuleTemplates()
-                            currentSettings = settings.state.copy()
+                            triggerRefresh()
                         },
                         onTemplateEdit = { oldTemplate, updatedTemplate ->
                             settings.saveTemplate(updatedTemplate)
-                            moduleTemplates = settings.getModuleTemplates()
-                            currentSettings = settings.state.copy()
+                            triggerRefresh()
                         },
                         onSetDefault = { template ->
                             settings.setDefaultModuleTemplate(template.id)
-                            moduleTemplates = settings.getModuleTemplates()
-                            currentSettings = settings.state.copy()
+                            triggerRefresh()
                         }
                     )
 
@@ -149,24 +155,20 @@ fun SettingsContent() {
                         onTemplateDelete = { template ->
                             if (!template.isDefault) {
                                 settings.removeFeatureTemplate(template)
-                                featureTemplates = settings.getFeatureTemplates()
-                                currentSettings = settings.state.copy()
+                                triggerRefresh()
                             }
                         },
                         onTemplateAdd = { newTemplate ->
                             settings.saveFeatureTemplate(newTemplate)
-                            featureTemplates = settings.getFeatureTemplates()
-                            currentSettings = settings.state.copy()
+                            triggerRefresh()
                         },
                         onTemplateEdit = { oldTemplate, updatedTemplate ->
                             settings.saveFeatureTemplate(updatedTemplate)
-                            featureTemplates = settings.getFeatureTemplates()
-                            currentSettings = settings.state.copy()
+                            triggerRefresh()
                         },
                         onSetDefault = { template ->
                             settings.setDefaultFeatureTemplate(template.id)
-                            featureTemplates = settings.getFeatureTemplates()
-                            currentSettings = settings.state.copy()
+                            triggerRefresh()
                         }
                     )
                 }
