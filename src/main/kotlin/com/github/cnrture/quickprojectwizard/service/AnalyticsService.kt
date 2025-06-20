@@ -1,4 +1,4 @@
-package com.github.cnrture.quickprojectwizard.analytics
+package com.github.cnrture.quickprojectwizard.service
 
 import com.github.cnrture.quickprojectwizard.data.QPWEvent
 import com.intellij.openapi.application.ApplicationManager

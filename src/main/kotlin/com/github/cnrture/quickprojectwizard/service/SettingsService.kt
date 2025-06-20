@@ -1,5 +1,10 @@
-package com.github.cnrture.quickprojectwizard.data
+package com.github.cnrture.quickprojectwizard.service
 
+import com.github.cnrture.quickprojectwizard.data.ColorInfo
+import com.github.cnrture.quickprojectwizard.data.FeatureTemplate
+import com.github.cnrture.quickprojectwizard.data.FileTemplate
+import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
+import com.github.cnrture.quickprojectwizard.data.SettingsState
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.Service
@@ -14,58 +19,29 @@ class SettingsService : PersistentStateComponent<SettingsState> {
     private var myState = SettingsState()
 
     init {
-        if (myState.moduleTemplates.isEmpty()) {
-            myState.moduleTemplates.addAll(getDefaultModuleTemplates())
-        }
-        if (myState.featureTemplates.isEmpty()) {
-            myState.featureTemplates.addAll(getDefaultFeatureTemplates())
-        }
+        setDefaultTemplatesIfEmpty()
     }
 
     override fun getState(): SettingsState {
-        if (myState.moduleTemplates.isEmpty()) {
-            myState.moduleTemplates.addAll(getDefaultModuleTemplates())
-        }
-        if (myState.featureTemplates.isEmpty()) {
-            myState.featureTemplates.addAll(getDefaultFeatureTemplates())
-        }
+        setDefaultTemplatesIfEmpty()
         return myState
     }
 
     override fun loadState(state: SettingsState) {
         myState = state
-        if (myState.moduleTemplates.isEmpty()) {
-            myState.moduleTemplates.addAll(getDefaultModuleTemplates())
-        }
-        if (myState.featureTemplates.isEmpty()) {
-            myState.featureTemplates.addAll(getDefaultFeatureTemplates())
-        }
+        setDefaultTemplatesIfEmpty()
     }
 
     fun saveTemplate(template: ModuleTemplate) {
         val existingIndex = myState.moduleTemplates.indexOfFirst { it.id == template.id }
-        if (existingIndex != -1) {
-            myState.moduleTemplates[existingIndex] = template
-        } else {
-            myState.moduleTemplates.add(template)
-        }
-    }
-
-    fun removeTemplate(template: ModuleTemplate) {
-        myState.moduleTemplates.removeAll { it.id == template.id }
+        if (existingIndex != -1) myState.moduleTemplates[existingIndex] = template
+        else myState.moduleTemplates.add(template)
     }
 
     fun saveFeatureTemplate(template: FeatureTemplate) {
         val existingIndex = myState.featureTemplates.indexOfFirst { it.id == template.id }
-        if (existingIndex != -1) {
-            myState.featureTemplates[existingIndex] = template
-        } else {
-            myState.featureTemplates.add(template)
-        }
-    }
-
-    fun removeFeatureTemplate(template: FeatureTemplate) {
-        myState.featureTemplates.removeAll { it.id == template.id }
+        if (existingIndex != -1) myState.featureTemplates[existingIndex] = template
+        else myState.featureTemplates.add(template)
     }
 
     fun setDefaultModuleTemplate(templateId: String) {
@@ -76,28 +52,16 @@ class SettingsService : PersistentStateComponent<SettingsState> {
         myState.defaultFeatureTemplateId = templateId
     }
 
-    fun getDefaultModuleTemplate(): ModuleTemplate? {
-        return myState.moduleTemplates.find { it.id == myState.defaultModuleTemplateId }
-    }
+    fun getDefaultModuleTemplate() = myState.moduleTemplates.find { it.id == myState.defaultModuleTemplateId }
 
-    fun getDefaultFeatureTemplate(): FeatureTemplate? {
-        return myState.featureTemplates.find { it.id == myState.defaultFeatureTemplateId }
-    }
+    fun getDefaultFeatureTemplate() = myState.featureTemplates.find { it.id == myState.defaultFeatureTemplateId }
 
-    fun exportSettings(): String {
-        return Json.encodeToString(SettingsState.serializer(), myState)
-    }
+    fun exportSettings(): String = Json.encodeToString(SettingsState.serializer(), myState)
 
     fun importSettings(jsonString: String): Boolean {
         return try {
-            val importedState = Json.decodeFromString(SettingsState.serializer(), jsonString)
-            myState = importedState
-            if (myState.moduleTemplates.isEmpty()) {
-                myState.moduleTemplates.addAll(getDefaultModuleTemplates())
-            }
-            if (myState.featureTemplates.isEmpty()) {
-                myState.featureTemplates.addAll(getDefaultFeatureTemplates())
-            }
+            myState = Json.decodeFromString(SettingsState.serializer(), jsonString)
+            setDefaultTemplatesIfEmpty()
             true
         } catch (_: Exception) {
             false
@@ -106,8 +70,7 @@ class SettingsService : PersistentStateComponent<SettingsState> {
 
     fun exportToFile(filePath: String): Boolean {
         return try {
-            val jsonString = exportSettings()
-            File(filePath).writeText(jsonString)
+            File(filePath).writeText(exportSettings())
             true
         } catch (_: Exception) {
             false
@@ -116,47 +79,34 @@ class SettingsService : PersistentStateComponent<SettingsState> {
 
     fun importFromFile(filePath: String): Boolean {
         return try {
-            val jsonString = File(filePath).readText()
-            importSettings(jsonString)
+            importSettings(File(filePath).readText())
         } catch (_: Exception) {
             false
         }
     }
 
     fun getModuleTemplates(): List<ModuleTemplate> {
-        if (myState.moduleTemplates.isEmpty()) {
-            myState.moduleTemplates.addAll(getDefaultModuleTemplates())
-        }
+        if (myState.moduleTemplates.isEmpty()) myState.moduleTemplates.addAll(getDefaultModuleTemplates())
         return myState.moduleTemplates
     }
 
     fun getFeatureTemplates(): List<FeatureTemplate> {
-        if (myState.featureTemplates.isEmpty()) {
-            myState.featureTemplates.addAll(getDefaultFeatureTemplates())
-        }
+        if (myState.featureTemplates.isEmpty()) myState.featureTemplates.addAll(getDefaultFeatureTemplates())
         return myState.featureTemplates
     }
 
     fun addColorToHistory(colorInfo: ColorInfo) {
         if (!myState.colorHistory.any { it.hex == colorInfo.hex }) {
-            myState.colorHistory.add(0, colorInfo) // Add to front
-            if (myState.colorHistory.size > 10) {
-                myState.colorHistory.removeAt(myState.colorHistory.size - 1)
-            }
+            myState.colorHistory.add(0, colorInfo)
+            if (myState.colorHistory.size > 10) myState.colorHistory.removeAt(myState.colorHistory.size - 1)
         }
     }
-
-    fun getColorHistory(): List<ColorInfo> = myState.colorHistory.toList()
 
     fun saveFormatterState(selectedFormat: String, inputText: String, errorMessage: String) {
         myState.formatterSelectedFormat = selectedFormat
         myState.formatterInputText = inputText
         myState.formatterErrorMessage = errorMessage
     }
-
-    fun getFormatterSelectedFormat(): String = myState.formatterSelectedFormat
-    fun getFormatterInputText(): String = myState.formatterInputText
-    fun getFormatterErrorMessage(): String = myState.formatterErrorMessage
 
     fun saveApiTesterState(
         method: String,
@@ -182,6 +132,17 @@ class SettingsService : PersistentStateComponent<SettingsState> {
     fun getApiHeaders(): Map<String, String> = myState.apiHeaders.toMap()
     fun getApiQueryParams(): Map<String, String> = myState.apiQueryParams.toMap()
     fun getApiSelectedTab(): String = myState.apiSelectedTab
+    fun getFormatterSelectedFormat(): String = myState.formatterSelectedFormat
+    fun getFormatterInputText(): String = myState.formatterInputText
+    fun getFormatterErrorMessage(): String = myState.formatterErrorMessage
+    fun getColorHistory(): List<ColorInfo> = myState.colorHistory.toList()
+    fun removeFeatureTemplate(template: FeatureTemplate) = myState.featureTemplates.removeAll { it.id == template.id }
+    fun removeTemplate(template: ModuleTemplate) = myState.moduleTemplates.removeAll { it.id == template.id }
+
+    private fun setDefaultTemplatesIfEmpty() {
+        if (myState.moduleTemplates.isEmpty()) myState.moduleTemplates.addAll(getDefaultModuleTemplates())
+        if (myState.featureTemplates.isEmpty()) myState.featureTemplates.addAll(getDefaultFeatureTemplates())
+    }
 
     companion object {
         fun getInstance(): SettingsService {

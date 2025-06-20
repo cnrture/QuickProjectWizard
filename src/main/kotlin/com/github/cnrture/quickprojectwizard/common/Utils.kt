@@ -1,6 +1,6 @@
 package com.github.cnrture.quickprojectwizard.common
 
-import com.github.cnrture.quickprojectwizard.analytics.AnalyticsService
+import com.github.cnrture.quickprojectwizard.service.AnalyticsService
 import com.github.cnrture.quickprojectwizard.common.file.FileWriter
 import com.github.cnrture.quickprojectwizard.common.file.ImportAnalyzer
 import com.github.cnrture.quickprojectwizard.common.file.LibraryDependencyFinder
@@ -26,7 +26,6 @@ import freemarker.template.Configuration
 import java.io.File
 import java.io.IOException
 import java.io.StringWriter
-import javax.swing.Icon
 import javax.swing.SwingUtilities
 import kotlin.concurrent.thread
 
