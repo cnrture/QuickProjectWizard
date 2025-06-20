@@ -68,6 +68,7 @@ fun ConfigurationPanel(
                                     featureName = featureName,
                                     fileWriter = fileWriter,
                                     selectedTemplate = selectedTemplate,
+                                    from = "tool",
                                 )
                             } ?: run { QPWMessageDialog("Please select a feature template").show() }
                         } else {

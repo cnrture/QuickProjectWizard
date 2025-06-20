@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.github.cnrture.quickprojectwizard.analytics.AnalyticsService
 import com.github.cnrture.quickprojectwizard.components.QPWActionCard
 import com.github.cnrture.quickprojectwizard.components.QPWActionCardType
 import com.github.cnrture.quickprojectwizard.components.QPWText
@@ -41,6 +42,7 @@ import javax.swing.SwingUtilities
 
 @Composable
 fun ColorPickerContent() {
+    val analyticsService = AnalyticsService.getInstance()
     val settings = ApplicationManager.getApplication().getService(SettingsService::class.java)
     var colorHistory by remember { mutableStateOf(settings.getColorHistory()) }
 
@@ -73,6 +75,7 @@ fun ColorPickerContent() {
             onClick = {
                 startColorPicking { color ->
                     val colorInfo = createColorInfo(color)
+                    analyticsService.track("color_picked")
                     settings.addColorToHistory(colorInfo)
                     colorHistory = settings.getColorHistory()
                 }

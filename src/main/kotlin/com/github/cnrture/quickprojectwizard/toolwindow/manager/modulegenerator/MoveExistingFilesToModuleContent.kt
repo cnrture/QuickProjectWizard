@@ -109,6 +109,7 @@ fun MoveExistingFilesToModuleContent(
                                     selectedModules = selectedModules,
                                     selectedLibraries = selectedLibraries,
                                     selectedPlugins = selectedPlugins,
+                                    from = "existing",
                                 )
                             } else {
                                 QPWMessageDialog("Please fill out required values").show()

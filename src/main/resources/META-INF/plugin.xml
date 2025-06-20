@@ -16,8 +16,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <notificationGroup id="QPW Notification Group"
-                           displayType="BALLOON"
-                           key="notification.group.qpw"/>
+                           displayType="BALLOON"/>
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij">

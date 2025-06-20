@@ -5,6 +5,7 @@ import com.android.tools.idea.wizard.template.ModuleTemplateData
 import com.android.tools.idea.wizard.template.PackageName
 import com.android.tools.idea.wizard.template.RecipeExecutor
 import com.android.tools.idea.wizard.template.escapeKotlinIdentifier
+import com.github.cnrture.quickprojectwizard.analytics.AnalyticsService
 import com.github.cnrture.quickprojectwizard.common.Utils
 import com.github.cnrture.quickprojectwizard.common.addRootFile
 import com.github.cnrture.quickprojectwizard.common.addSrcFile
@@ -59,7 +60,7 @@ fun RecipeExecutor.composeProjectRecipe(
     projectName: String,
 ) {
     val packagePath = escapeKotlinIdentifier(packageName)
-
+    val analyticsService = AnalyticsService.getInstance()
     val settings = ApplicationManager.getApplication().service<SettingsService>()
     settings.loadState(
         settings.state.copy(
@@ -179,7 +180,7 @@ fun RecipeExecutor.composeProjectRecipe(
         moduleData.apis.minApi.api,
         javaJvmVersion,
     )
-
+    analyticsService.track("compose_project_created")
     Utils.showInfo(
         title = "Quick Project Wizard",
         message = "Your project is ready! 🚀 If you like the plugin, please comment and rate it on the plugin page. 🙏",

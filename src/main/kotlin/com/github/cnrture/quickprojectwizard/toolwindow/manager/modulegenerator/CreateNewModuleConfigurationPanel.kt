@@ -95,6 +95,7 @@ fun CreateNewModuleConfigurationPanel(
                                 selectedLibraries = selectedLibraries,
                                 selectedPlugins = selectedPlugins,
                                 template = selectedTemplate,
+                                from = "new",
                             )
                         } else {
                             QPWMessageDialog("Please fill out required values").show()

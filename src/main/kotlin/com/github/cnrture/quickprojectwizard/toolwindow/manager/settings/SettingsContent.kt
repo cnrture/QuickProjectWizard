@@ -53,7 +53,6 @@ fun SettingsContent() {
     }
 
     val triggerRefresh = { refreshTrigger++ }
-
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -112,103 +111,120 @@ fun SettingsContent() {
                     .verticalScroll(rememberScrollState())
             ) {
                 when (selectedTab) {
-                    "general" -> GeneralSettingsTab(
-                        defaultPackageName = packageName,
-                        preferredModuleType = selectedModuleType,
-                        onSaveClick = {
-                            currentSettings = currentSettings.copy(
-                                defaultPackageName = packageName,
-                                preferredModuleType = selectedModuleType
-                            )
-                            settings.loadState(currentSettings)
-                            triggerRefresh()
-                            analyticsService.track("settings_saved")
-                            Utils.showInfo(
-                                title = "Quick Project Wizard",
-                                message = "Settings saved successfully!",
-                            )
-                        },
-                        onPackageNameChange = { packageName = it },
-                        onModuleTypeChange = { selectedModuleType = it }
-                    )
-
-                    "templates" -> ModuleTemplatesTab(
-                        templates = moduleTemplates,
-                        defaultTemplateId = currentSettings.defaultModuleTemplateId,
-                        onTemplateDelete = { template ->
-                            if (!template.isDefault) {
-                                settings.removeTemplate(template)
+                    "general" -> {
+                        analyticsService.track("view_general_settings")
+                        GeneralSettingsTab(
+                            defaultPackageName = packageName,
+                            preferredModuleType = selectedModuleType,
+                            onSaveClick = {
+                                currentSettings = currentSettings.copy(
+                                    defaultPackageName = packageName,
+                                    preferredModuleType = selectedModuleType
+                                )
+                                settings.loadState(currentSettings)
                                 triggerRefresh()
+                                analyticsService.track("settings_saved")
                                 Utils.showInfo(
                                     title = "Quick Project Wizard",
-                                    message = "Template '${template.name}' deleted successfully!",
+                                    message = "Settings saved successfully!",
                                 )
-                            }
-                        },
-                        onTemplateAdd = { newTemplate ->
-                            settings.saveTemplate(newTemplate)
-                            triggerRefresh()
-                            Utils.showInfo(
-                                title = "Quick Project Wizard",
-                                message = "Template '${newTemplate.name}' added successfully!",
-                            )
-                        },
-                        onTemplateEdit = { oldTemplate, updatedTemplate ->
-                            settings.saveTemplate(updatedTemplate)
-                            triggerRefresh()
-                            Utils.showInfo(
-                                title = "Quick Project Wizard",
-                                message = "Template '${updatedTemplate.name}' updated successfully!",
-                            )
-                        },
-                        onSetDefault = { template ->
-                            settings.setDefaultModuleTemplate(template.id)
-                            triggerRefresh()
-                            Utils.showInfo(
-                                title = "Quick Project Wizard",
-                                message = "Default template set to '${template.name}' successfully!",
-                            )
-                        }
-                    )
+                            },
+                            onPackageNameChange = { packageName = it },
+                            onModuleTypeChange = { selectedModuleType = it }
+                        )
+                    }
 
-                    "feature_templates" -> FeatureTemplatesTab(
-                        templates = featureTemplates,
-                        defaultTemplateId = currentSettings.defaultFeatureTemplateId,
-                        onTemplateDelete = { template ->
-                            if (!template.isDefault) {
-                                settings.removeFeatureTemplate(template)
+                    "templates" -> {
+                        analyticsService.track("view_module_templates")
+                        ModuleTemplatesTab(
+                            templates = moduleTemplates,
+                            defaultTemplateId = currentSettings.defaultModuleTemplateId,
+                            onTemplateDelete = { template ->
+                                if (!template.isDefault) {
+                                    settings.removeTemplate(template)
+                                    triggerRefresh()
+                                    analyticsService.track("module_template_deleted")
+                                    Utils.showInfo(
+                                        title = "Quick Project Wizard",
+                                        message = "Template '${template.name}' deleted successfully!",
+                                    )
+                                }
+                            },
+                            onTemplateAdd = { newTemplate ->
+                                settings.saveTemplate(newTemplate)
                                 triggerRefresh()
+                                analyticsService.track("module_template_added")
                                 Utils.showInfo(
                                     title = "Quick Project Wizard",
-                                    message = "Feature template '${template.name}' deleted successfully!",
+                                    message = "Template '${newTemplate.name}' added successfully!",
+                                )
+                            },
+                            onTemplateEdit = { oldTemplate, updatedTemplate ->
+                                settings.saveTemplate(updatedTemplate)
+                                triggerRefresh()
+                                analyticsService.track("module_template_updated")
+                                Utils.showInfo(
+                                    title = "Quick Project Wizard",
+                                    message = "Template '${updatedTemplate.name}' updated successfully!",
+                                )
+                            },
+                            onSetDefault = { template ->
+                                settings.setDefaultModuleTemplate(template.id)
+                                triggerRefresh()
+                                analyticsService.track("default_module_template_set")
+                                Utils.showInfo(
+                                    title = "Quick Project Wizard",
+                                    message = "Default template set to '${template.name}' successfully!",
                                 )
                             }
-                        },
-                        onTemplateAdd = { newTemplate ->
-                            settings.saveFeatureTemplate(newTemplate)
-                            triggerRefresh()
-                            Utils.showInfo(
-                                title = "Quick Project Wizard",
-                                message = "Feature template '${newTemplate.name}' added successfully!",
-                            )
-                        },
-                        onTemplateEdit = { oldTemplate, updatedTemplate ->
-                            settings.saveFeatureTemplate(updatedTemplate)
-                            triggerRefresh()
-                            Utils.showInfo(
-                                title = "Quick Project Wizard",
-                                message = "Feature template '${updatedTemplate.name}' updated successfully!",
-                            )
-                        },
-                        onSetDefault = { template ->
-                            settings.setDefaultFeatureTemplate(template.id)
-                            triggerRefresh()
-                            Utils.showInfo(
-                                title = "Quick Project Wizard",
-                                message = "Default feature template set to '${template.name}' successfully!",
-                            )
-                        }
-                    )
+                        )
+                    }
+
+                    "feature_templates" -> {
+                        analyticsService.track("view_feature_templates")
+                        FeatureTemplatesTab(
+                            templates = featureTemplates,
+                            defaultTemplateId = currentSettings.defaultFeatureTemplateId,
+                            onTemplateDelete = { template ->
+                                if (!template.isDefault) {
+                                    settings.removeFeatureTemplate(template)
+                                    triggerRefresh()
+                                    analyticsService.track("feature_template_deleted")
+                                    Utils.showInfo(
+                                        title = "Quick Project Wizard",
+                                        message = "Feature template '${template.name}' deleted successfully!",
+                                    )
+                                }
+                            },
+                            onTemplateAdd = { newTemplate ->
+                                settings.saveFeatureTemplate(newTemplate)
+                                triggerRefresh()
+                                analyticsService.track("feature_template_added")
+                                Utils.showInfo(
+                                    title = "Quick Project Wizard",
+                                    message = "Feature template '${newTemplate.name}' added successfully!",
+                                )
+                            },
+                            onTemplateEdit = { oldTemplate, updatedTemplate ->
+                                settings.saveFeatureTemplate(updatedTemplate)
+                                triggerRefresh()
+                                analyticsService.track("feature_template_updated")
+                                Utils.showInfo(
+                                    title = "Quick Project Wizard",
+                                    message = "Feature template '${updatedTemplate.name}' updated successfully!",
+                                )
+                            },
+                            onSetDefault = { template ->
+                                settings.setDefaultFeatureTemplate(template.id)
+                                triggerRefresh()
+                                analyticsService.track("default_feature_template_set")
+                                Utils.showInfo(
+                                    title = "Quick Project Wizard",
+                                    message = "Default feature template set to '${template.name}' successfully!",
+                                )
+                            }
+                        )
+                    }
                 }
             }
         }

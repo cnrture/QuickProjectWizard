@@ -9,6 +9,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.github.cnrture.quickprojectwizard.analytics.AnalyticsService
 import com.github.cnrture.quickprojectwizard.common.Constants
 import com.github.cnrture.quickprojectwizard.common.Utils
 import com.github.cnrture.quickprojectwizard.common.file.FileWriter
@@ -28,6 +29,7 @@ import java.io.File
 fun ModuleGeneratorContent(project: Project) {
     val fileWriter = FileWriter()
     val settings = ApplicationManager.getApplication().service<SettingsService>()
+    val analyticsService = AnalyticsService.getInstance()
     val libraryDependencyFinder = LibraryDependencyFinder()
 
     var existingModules = listOf<String>()
@@ -135,95 +137,101 @@ fun ModuleGeneratorContent(project: Project) {
             }
             Spacer(modifier = Modifier.size(24.dp))
             when (selectedTab) {
-                0 -> CreateNewModuleConfigurationPanel(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 24.dp),
-                    project = project,
-                    fileWriter = fileWriter,
-                    selectedSrc = selectedSrc.value,
-                    libraryDependencyFinder = libraryDependencyFinder,
-                    moduleType = moduleType.value,
-                    packageName = packageName.value,
-                    onPackageNameChanged = { packageName.value = it },
-                    moduleNameState = moduleName.value,
-                    onModuleNameChanged = { moduleName.value = it },
-                    onModuleTypeSelected = { moduleType.value = it },
-                    availableLibraries = availableLibraries,
-                    selectedLibraries = selectedLibraries,
-                    onLibrarySelected = {
-                        if (it in selectedLibraries) selectedLibraries.remove(it) else selectedLibraries.add(it)
-                    },
-                    libraryGroups = libraryGroups,
-                    expandedGroups = expandedGroups,
-                    onGroupExpandToggle = { expandedGroups[it] = !(expandedGroups[it] ?: false) },
-                    availablePlugins = availablePlugins,
-                    selectedPlugins = selectedPlugins,
-                    onPluginSelected = {
-                        if (it in selectedPlugins) selectedPlugins.remove(it) else selectedPlugins.add(it)
-                    },
-                    templates = availableTemplates,
-                    selectedTemplate = selectedTemplate,
-                    onTemplateSelected = { selectedTemplate = it },
-                    isAnalyzingState = isAnalyzing.value,
-                    analysisResultState = analysisResult.value,
-                    onAnalysisResultChange = { analysisResult.value = it },
-                    onAnalyzingChange = { isAnalyzing.value = it },
-                    onDetectedModulesLoaded = { detectedModules.clear(); detectedModules.addAll(it) },
-                    onSelectedModulesLoaded = { selectedModules.clear(); selectedModules.addAll(it) },
-                    detectedModules = detectedModules,
-                    existingModules = existingModules,
-                    selectedModules = selectedModules,
-                    onCheckedModule = {
-                        if (it in selectedModules) selectedModules.remove(it) else selectedModules.add(it)
-                    },
-                )
+                0 -> {
+                    analyticsService.track("view_module_generator_new_module")
+                    CreateNewModuleConfigurationPanel(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 24.dp),
+                        project = project,
+                        fileWriter = fileWriter,
+                        selectedSrc = selectedSrc.value,
+                        libraryDependencyFinder = libraryDependencyFinder,
+                        moduleType = moduleType.value,
+                        packageName = packageName.value,
+                        onPackageNameChanged = { packageName.value = it },
+                        moduleNameState = moduleName.value,
+                        onModuleNameChanged = { moduleName.value = it },
+                        onModuleTypeSelected = { moduleType.value = it },
+                        availableLibraries = availableLibraries,
+                        selectedLibraries = selectedLibraries,
+                        onLibrarySelected = {
+                            if (it in selectedLibraries) selectedLibraries.remove(it) else selectedLibraries.add(it)
+                        },
+                        libraryGroups = libraryGroups,
+                        expandedGroups = expandedGroups,
+                        onGroupExpandToggle = { expandedGroups[it] = !(expandedGroups[it] ?: false) },
+                        availablePlugins = availablePlugins,
+                        selectedPlugins = selectedPlugins,
+                        onPluginSelected = {
+                            if (it in selectedPlugins) selectedPlugins.remove(it) else selectedPlugins.add(it)
+                        },
+                        templates = availableTemplates,
+                        selectedTemplate = selectedTemplate,
+                        onTemplateSelected = { selectedTemplate = it },
+                        isAnalyzingState = isAnalyzing.value,
+                        analysisResultState = analysisResult.value,
+                        onAnalysisResultChange = { analysisResult.value = it },
+                        onAnalyzingChange = { isAnalyzing.value = it },
+                        onDetectedModulesLoaded = { detectedModules.clear(); detectedModules.addAll(it) },
+                        onSelectedModulesLoaded = { selectedModules.clear(); selectedModules.addAll(it) },
+                        detectedModules = detectedModules,
+                        existingModules = existingModules,
+                        selectedModules = selectedModules,
+                        onCheckedModule = {
+                            if (it in selectedModules) selectedModules.remove(it) else selectedModules.add(it)
+                        },
+                    )
+                }
 
-                1 -> MoveExistingFilesToModuleContent(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 24.dp),
-                    project = project,
-                    fileWriter = fileWriter,
-                    isAnalyzingState = isAnalyzing.value,
-                    analysisResultState = analysisResult.value,
-                    selectedSrc = selectedSrc.value,
-                    libraryDependencyFinder = libraryDependencyFinder,
-                    onAnalysisResultChange = { analysisResult.value = it },
-                    onAnalyzingChange = { isAnalyzing.value = it },
-                    onDetectedModulesLoaded = { detectedModules.clear(); detectedModules.addAll(it) },
-                    onSelectedModulesLoaded = { selectedModules.clear(); selectedModules.addAll(it) },
-                    detectedModules = detectedModules,
-                    isMoveFiles = isMoveFiles.value,
-                    onMoveFilesChange = { isMoveFiles.value = it },
-                    moduleType = moduleType.value,
-                    packageName = packageName.value,
-                    onPackageNameChanged = { packageName.value = it },
-                    moduleNameState = moduleName.value,
-                    onModuleNameChanged = { moduleName.value = it },
-                    onModuleTypeSelected = { moduleType.value = it },
-                    existingModules = existingModules,
-                    selectedModules = selectedModules,
-                    onCheckedModule = {
-                        if (it in selectedModules) selectedModules.remove(it) else selectedModules.add(it)
-                    },
-                    availableLibraries = availableLibraries,
-                    selectedLibraries = selectedLibraries,
-                    onLibrarySelected = {
-                        if (it in selectedLibraries) selectedLibraries.remove(it) else selectedLibraries.add(it)
-                    },
-                    libraryGroups = libraryGroups,
-                    expandedGroups = expandedGroups,
-                    onGroupExpandToggle = { expandedGroups[it] = !(expandedGroups[it] ?: false) },
-                    showFileTreeDialog = showFileTreeDialog,
-                    onFileTreeDialogStateChange = { showFileTreeDialog = !showFileTreeDialog },
-                    onSelectedSrc = { selectedSrc.value = it },
-                    availablePlugins = availablePlugins,
-                    selectedPlugins = selectedPlugins,
-                    onPluginSelected = {
-                        if (it in selectedPlugins) selectedPlugins.remove(it) else selectedPlugins.add(it)
-                    },
-                )
+                1 -> {
+                    analyticsService.track("view_module_generator_existing_files")
+                    MoveExistingFilesToModuleContent(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 24.dp),
+                        project = project,
+                        fileWriter = fileWriter,
+                        isAnalyzingState = isAnalyzing.value,
+                        analysisResultState = analysisResult.value,
+                        selectedSrc = selectedSrc.value,
+                        libraryDependencyFinder = libraryDependencyFinder,
+                        onAnalysisResultChange = { analysisResult.value = it },
+                        onAnalyzingChange = { isAnalyzing.value = it },
+                        onDetectedModulesLoaded = { detectedModules.clear(); detectedModules.addAll(it) },
+                        onSelectedModulesLoaded = { selectedModules.clear(); selectedModules.addAll(it) },
+                        detectedModules = detectedModules,
+                        isMoveFiles = isMoveFiles.value,
+                        onMoveFilesChange = { isMoveFiles.value = it },
+                        moduleType = moduleType.value,
+                        packageName = packageName.value,
+                        onPackageNameChanged = { packageName.value = it },
+                        moduleNameState = moduleName.value,
+                        onModuleNameChanged = { moduleName.value = it },
+                        onModuleTypeSelected = { moduleType.value = it },
+                        existingModules = existingModules,
+                        selectedModules = selectedModules,
+                        onCheckedModule = {
+                            if (it in selectedModules) selectedModules.remove(it) else selectedModules.add(it)
+                        },
+                        availableLibraries = availableLibraries,
+                        selectedLibraries = selectedLibraries,
+                        onLibrarySelected = {
+                            if (it in selectedLibraries) selectedLibraries.remove(it) else selectedLibraries.add(it)
+                        },
+                        libraryGroups = libraryGroups,
+                        expandedGroups = expandedGroups,
+                        onGroupExpandToggle = { expandedGroups[it] = !(expandedGroups[it] ?: false) },
+                        showFileTreeDialog = showFileTreeDialog,
+                        onFileTreeDialogStateChange = { showFileTreeDialog = !showFileTreeDialog },
+                        onSelectedSrc = { selectedSrc.value = it },
+                        availablePlugins = availablePlugins,
+                        selectedPlugins = selectedPlugins,
+                        onPluginSelected = {
+                            if (it in selectedPlugins) selectedPlugins.remove(it) else selectedPlugins.add(it)
+                        },
+                    )
+                }
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.github.cnrture.quickprojectwizard.common
 
+import com.github.cnrture.quickprojectwizard.analytics.AnalyticsService
 import com.github.cnrture.quickprojectwizard.common.file.FileWriter
 import com.github.cnrture.quickprojectwizard.common.file.ImportAnalyzer
 import com.github.cnrture.quickprojectwizard.common.file.LibraryDependencyFinder
@@ -18,16 +19,19 @@ import com.intellij.openapi.externalSystem.service.execution.ProgressExecutionMo
 import com.intellij.openapi.externalSystem.util.ExternalSystemUtil
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.IconLoader
 import com.intellij.openapi.vfs.VfsUtil
 import com.intellij.openapi.vfs.VirtualFile
 import freemarker.template.Configuration
 import java.io.File
 import java.io.IOException
 import java.io.StringWriter
+import javax.swing.Icon
 import javax.swing.SwingUtilities
 import kotlin.concurrent.thread
 
 object Utils {
+    val analyticsService = AnalyticsService.getInstance()
     fun validateFeatureInput(featureName: String, selectedSrc: String): Boolean =
         featureName.isNotEmpty() && selectedSrc != Constants.DEFAULT_SRC_VALUE
 
@@ -37,6 +41,7 @@ object Utils {
         featureName: String,
         fileWriter: FileWriter,
         selectedTemplate: FeatureTemplate,
+        from: String,
     ) {
         try {
             val projectRoot = project.rootDirectoryString()
@@ -60,6 +65,7 @@ object Utils {
                 packageName = packagePath.plus(".${featureName.lowercase()}"),
                 showErrorDialog = { QPWMessageDialog("Error: $it").show() },
                 showSuccessDialog = {
+                    analyticsService.track("${from}_feature_created")
                     QPWMessageDialog("Success").show()
                     val currentlySelectedFile = project.getCurrentlySelectedFile(selectedSrc)
                     listOf(currentlySelectedFile).refreshFileSystem()
@@ -87,6 +93,7 @@ object Utils {
         selectedModules: List<String>,
         selectedPlugins: List<String> = emptyList(),
         template: ModuleTemplate? = null,
+        from: String,
     ): List<File> {
         try {
             val settingsGradleFile = getSettingsGradleFile(project)
@@ -119,6 +126,7 @@ object Utils {
                     moduleType = moduleType,
                     showErrorDialog = { QPWMessageDialog(it).show() },
                     showSuccessDialog = {
+                        analyticsService.track("${from}_module_created")
                         QPWMessageDialog("Module '$moduleName' created successfully").show()
 
                         val projectDir = File(project.basePath.orEmpty())
@@ -619,6 +627,7 @@ object Utils {
                 }
             }
         )
+        notification.setIcon(IconLoader.getIcon("/META-INF/pluginIcon.svg", this::class.java))
         notification.notify(null)
     }
 }

@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.github.cnrture.quickprojectwizard.analytics.AnalyticsService
 import com.github.cnrture.quickprojectwizard.components.*
 import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
@@ -35,6 +36,7 @@ import kotlin.time.measureTime
 
 @Composable
 fun ApiTesterContent() {
+    val analyticsService = AnalyticsService.getInstance()
     val settings = ApplicationManager.getApplication().getService(SettingsService::class.java)
 
     var selectedMethod by remember { mutableStateOf(settings.getApiSelectedMethod()) }
@@ -118,6 +120,7 @@ fun ApiTesterContent() {
                         type = QPWActionCardType.MEDIUM,
                         onClick = {
                             if (!isLoading) {
+                                analyticsService.track("send_api_request")
                                 scope.launch {
                                     isLoading = true
                                     val result = makeApiRequest(selectedMethod, url, requestBody, headers, queryParams)

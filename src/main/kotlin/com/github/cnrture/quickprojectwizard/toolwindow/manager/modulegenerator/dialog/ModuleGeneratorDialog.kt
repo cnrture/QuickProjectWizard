@@ -16,6 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.github.cnrture.quickprojectwizard.analytics.AnalyticsService
 import com.github.cnrture.quickprojectwizard.common.Constants
 import com.github.cnrture.quickprojectwizard.common.Utils
 import com.github.cnrture.quickprojectwizard.common.file.FileWriter
@@ -39,6 +40,7 @@ class ModuleGeneratorDialog(
     width = 800,
     height = 700,
 ) {
+    private val analyticsService = AnalyticsService.getInstance()
     private val settings = ApplicationManager.getApplication().service<SettingsService>()
     private val libraryDependencyFinder = LibraryDependencyFinder()
     private val fileWriter = FileWriter()
@@ -108,7 +110,7 @@ class ModuleGeneratorDialog(
                 availablePlugins.addAll(it)
             },
         )
-
+        analyticsService.track("view_module_generator_dialog")
         Surface(
             modifier = Modifier.Companion.fillMaxSize(),
             color = QPWTheme.colors.black,
@@ -250,6 +252,7 @@ class ModuleGeneratorDialog(
                                         selectedModules = selectedModules,
                                         selectedLibraries = selectedLibraries,
                                         selectedPlugins = selectedPlugins,
+                                        from = "action",
                                     )
                                     close(0)
                                 } catch (_: Exception) {

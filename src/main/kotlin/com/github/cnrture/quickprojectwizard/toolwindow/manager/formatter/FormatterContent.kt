@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.github.cnrture.quickprojectwizard.common.Constants
 import com.github.cnrture.quickprojectwizard.components.QPWActionCard
 import com.github.cnrture.quickprojectwizard.components.QPWActionCardType
 import com.github.cnrture.quickprojectwizard.components.QPWTabRow
@@ -59,45 +60,23 @@ fun FormatterContent() {
     var isValidInput by remember { mutableStateOf(true) }
     var errorMessage by remember { mutableStateOf(settings.getFormatterErrorMessage()) }
 
-    // Save state whenever it changes
     LaunchedEffect(selectedFormat, inputText, errorMessage) {
         settings.saveFormatterState(selectedFormat, inputText, errorMessage)
     }
 
     LaunchedEffect(inputText) {
         if (inputText.isNotEmpty()) {
-            val result = if (selectedFormat == "JSON") {
-                formatJson(inputText)
-            } else {
-                formatXml(inputText)
-            }
-
-            if (result.second) {
-                outputText = result.first
-            } else {
-                outputText = ""
-            }
-
+            val result = if (selectedFormat == "JSON") formatJson(inputText) else formatXml(inputText)
+            outputText = if (result.second) result.first else Constants.EMPTY
             isValidInput = result.second
             errorMessage = result.third
         }
     }
 
-    // Handle format changes to regenerate output
     LaunchedEffect(selectedFormat) {
         if (inputText.isNotEmpty()) {
-            val result = if (selectedFormat == "JSON") {
-                formatJson(inputText)
-            } else {
-                formatXml(inputText)
-            }
-
-            if (result.second) {
-                outputText = result.first
-            } else {
-                outputText = ""
-            }
-
+            val result = if (selectedFormat == "JSON") formatJson(inputText) else formatXml(inputText)
+            outputText = if (result.second) result.first else Constants.EMPTY
             isValidInput = result.second
             errorMessage = result.third
         }

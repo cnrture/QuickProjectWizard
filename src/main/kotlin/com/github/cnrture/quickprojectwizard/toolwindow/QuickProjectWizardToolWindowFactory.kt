@@ -20,6 +20,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.github.cnrture.quickprojectwizard.analytics.AnalyticsService
 import com.github.cnrture.quickprojectwizard.common.Constants
 import com.github.cnrture.quickprojectwizard.components.QPWActionCard
 import com.github.cnrture.quickprojectwizard.components.QPWActionCardType
@@ -98,6 +99,7 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
 
     @Composable
     private fun MainContent(project: Project) {
+        val analyticsService = AnalyticsService.getInstance()
         var selectedSection by remember { mutableStateOf("module") }
         var isExpanded by remember { mutableStateOf(settings.state.isActionsExpanded) }
 
@@ -228,6 +230,7 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                                 ExportSettingsDialog(
                                     settings = settings,
                                     onComplete = { success, message ->
+                                        analyticsService.track("export_settings")
                                         QPWMessageDialog(message).show()
                                     }
                                 ).show()
@@ -242,6 +245,7 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                             isTextVisible = isExpanded,
                             onClick = {
                                 importSettings(settings) { newSettings ->
+                                    analyticsService.track("import_settings")
                                     settings.loadState(newSettings)
                                 }
                             }
@@ -298,10 +302,22 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
             ) {
                 when (selectedSection) {
                     "module" -> ModuleGeneratorContent(project)
-                    "feature" -> FeatureGeneratorContent(project)
-                    "formatter" -> FormatterContent()
-                    "color" -> ColorPickerContent()
-                    "api" -> ApiTesterContent()
+                    "feature" -> {
+                        analyticsService.track("view_feature_generator")
+                        FeatureGeneratorContent(project)
+                    }
+                    "formatter" -> {
+                        analyticsService.track("view_formatter")
+                        FormatterContent()
+                    }
+                    "color" -> {
+                        analyticsService.track("view_color_picker")
+                        ColorPickerContent()
+                    }
+                    "api" -> {
+                        analyticsService.track("view_api_tester")
+                        ApiTesterContent()
+                    }
                     "settings" -> SettingsContent()
                 }
             }
