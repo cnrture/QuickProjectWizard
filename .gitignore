@@ -8,3 +8,8 @@ build
 # Detekt Reports
 build/reports/detekt/
 config/detekt/baseline.xml
+
+# Analytics configuration (contains sensitive keys)
+local-analytics.properties
+*.env
+.env.*

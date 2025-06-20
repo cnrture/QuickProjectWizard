@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.github.cnrture.quickprojectwizard.analytics.AnalyticsService
 import com.github.cnrture.quickprojectwizard.common.Constants
 import com.github.cnrture.quickprojectwizard.common.Utils
 import com.github.cnrture.quickprojectwizard.components.*
@@ -37,12 +38,12 @@ import com.intellij.openapi.components.service
 @Composable
 fun SettingsContent() {
     val settings = ApplicationManager.getApplication().service<SettingsService>()
+    val analyticsService = AnalyticsService.getInstance()
     var currentSettings by mutableStateOf(settings.state.copy())
     var selectedTab by mutableStateOf("general")
     var selectedModuleType by mutableStateOf(currentSettings.preferredModuleType)
     var packageName by mutableStateOf(currentSettings.defaultPackageName)
 
-    // Use remember with a refreshTrigger to force UI updates
     var refreshTrigger by remember { mutableStateOf(0) }
     val moduleTemplates by remember(refreshTrigger) {
         mutableStateOf(settings.getModuleTemplates())
@@ -51,7 +52,6 @@ fun SettingsContent() {
         mutableStateOf(settings.getFeatureTemplates())
     }
 
-    // Function to trigger refresh
     val triggerRefresh = { refreshTrigger++ }
 
     Scaffold(
@@ -122,6 +122,7 @@ fun SettingsContent() {
                             )
                             settings.loadState(currentSettings)
                             triggerRefresh()
+                            analyticsService.track("settings_saved")
                             Utils.showInfo(
                                 title = "Quick Project Wizard",
                                 message = "Settings saved successfully!",

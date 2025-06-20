@@ -151,6 +151,19 @@ tasks {
         gradleVersion = providers.gradleProperty("gradleVersion").get()
     }
 
+    runIde {
+        systemProperty("QPW_MEASUREMENT_ID", System.getenv("QPW_MEASUREMENT_ID").orEmpty())
+        systemProperty("QPW_API_SECRET", System.getenv("QPW_API_SECRET").orEmpty())
+    }
+
+    buildPlugin {
+        doFirst {
+            if (System.getenv("QPW_MEASUREMENT_ID").isNullOrEmpty()) {
+                println("Warning: QPW_MEASUREMENT_ID not set - analytics will be disabled")
+            }
+        }
+    }
+
     publishPlugin {
         dependsOn(patchChangelog)
     }
