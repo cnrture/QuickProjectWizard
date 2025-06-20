@@ -21,6 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.common.Constants
+import com.github.cnrture.quickprojectwizard.common.Utils
 import com.github.cnrture.quickprojectwizard.components.*
 import com.github.cnrture.quickprojectwizard.data.FeatureTemplate
 import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
@@ -121,6 +122,10 @@ fun SettingsContent() {
                             )
                             settings.loadState(currentSettings)
                             triggerRefresh()
+                            Utils.showInfo(
+                                title = "Quick Project Wizard",
+                                message = "Settings saved successfully!",
+                            )
                         },
                         onPackageNameChange = { packageName = it },
                         onModuleTypeChange = { selectedModuleType = it }
@@ -133,19 +138,35 @@ fun SettingsContent() {
                             if (!template.isDefault) {
                                 settings.removeTemplate(template)
                                 triggerRefresh()
+                                Utils.showInfo(
+                                    title = "Quick Project Wizard",
+                                    message = "Template '${template.name}' deleted successfully!",
+                                )
                             }
                         },
                         onTemplateAdd = { newTemplate ->
                             settings.saveTemplate(newTemplate)
                             triggerRefresh()
+                            Utils.showInfo(
+                                title = "Quick Project Wizard",
+                                message = "Template '${newTemplate.name}' added successfully!",
+                            )
                         },
                         onTemplateEdit = { oldTemplate, updatedTemplate ->
                             settings.saveTemplate(updatedTemplate)
                             triggerRefresh()
+                            Utils.showInfo(
+                                title = "Quick Project Wizard",
+                                message = "Template '${updatedTemplate.name}' updated successfully!",
+                            )
                         },
                         onSetDefault = { template ->
                             settings.setDefaultModuleTemplate(template.id)
                             triggerRefresh()
+                            Utils.showInfo(
+                                title = "Quick Project Wizard",
+                                message = "Default template set to '${template.name}' successfully!",
+                            )
                         }
                     )
 
@@ -156,19 +177,35 @@ fun SettingsContent() {
                             if (!template.isDefault) {
                                 settings.removeFeatureTemplate(template)
                                 triggerRefresh()
+                                Utils.showInfo(
+                                    title = "Quick Project Wizard",
+                                    message = "Feature template '${template.name}' deleted successfully!",
+                                )
                             }
                         },
                         onTemplateAdd = { newTemplate ->
                             settings.saveFeatureTemplate(newTemplate)
                             triggerRefresh()
+                            Utils.showInfo(
+                                title = "Quick Project Wizard",
+                                message = "Feature template '${newTemplate.name}' added successfully!",
+                            )
                         },
                         onTemplateEdit = { oldTemplate, updatedTemplate ->
                             settings.saveFeatureTemplate(updatedTemplate)
                             triggerRefresh()
+                            Utils.showInfo(
+                                title = "Quick Project Wizard",
+                                message = "Feature template '${updatedTemplate.name}' updated successfully!",
+                            )
                         },
                         onSetDefault = { template ->
                             settings.setDefaultFeatureTemplate(template.id)
                             triggerRefresh()
+                            Utils.showInfo(
+                                title = "Quick Project Wizard",
+                                message = "Default feature template set to '${template.name}' successfully!",
+                            )
                         }
                     )
                 }
