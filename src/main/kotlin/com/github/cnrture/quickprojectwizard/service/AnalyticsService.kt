@@ -22,9 +22,7 @@ class AnalyticsService {
         scope.launch {
             try {
                 val eventWithTimestamp = QPWEvent(eventName = event, timestamp = getCurrentTimestamp())
-                if (isAnalyticsEnabled) {
-                    sendToFirebase(eventWithTimestamp)
-                }
+                if (isAnalyticsEnabled) sendToFirebase(eventWithTimestamp)
             } catch (_: Exception) {
             }
         }
@@ -44,10 +42,7 @@ class AnalyticsService {
                 connection.readTimeout = 5000
 
                 val payload = createFirebasePayload(event)
-                connection.outputStream.use { os ->
-                    os.write(payload.toByteArray())
-                }
-
+                connection.outputStream.use { os -> os.write(payload.toByteArray()) }
                 connection.responseCode
                 connection.disconnect()
             } catch (_: Exception) {
@@ -71,13 +66,9 @@ class AnalyticsService {
         return jsonPayload
     }
 
-    private fun generateClientId(): String {
-        return "qpw_" + System.currentTimeMillis().toString() + "_" + (1000..9999).random()
-    }
+    private fun generateClientId() = "qpw_" + System.currentTimeMillis().toString() + "_" + (1000..9999).random()
 
-    private fun getCurrentTimestamp(): String {
-        return LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
-    }
+    private fun getCurrentTimestamp() = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
 
     companion object {
         fun getInstance(): AnalyticsService {
