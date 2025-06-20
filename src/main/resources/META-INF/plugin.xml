@@ -30,14 +30,14 @@
 
     <actions>
         <action id="QuickProjectWizard.NewFeature"
-                class="com.github.cnrture.quickprojectwizard.action.FeatureGeneratorAction"
+                class="com.github.cnrture.quickprojectwizard.toolwindow.manager.featuregenerator.action.FeatureGeneratorAction"
                 text="Add Feature"
                 description="Create a new feature"
                 icon="/icons/pluginIcon.svg">
             <add-to-group group-id="NewGroup" anchor="after" relative-to-action="NewDir"/>
         </action>
         <action id="QuickProjectWizard.NewModule"
-                class="com.github.cnrture.quickprojectwizard.action.ModuleGeneratorAction"
+                class="com.github.cnrture.quickprojectwizard.toolwindow.manager.modulegenerator.action.ModuleGeneratorAction"
                 text="New Module with This Files"
                 description="Create a new module with the selected files"
                 icon="/icons/pluginIcon.svg">

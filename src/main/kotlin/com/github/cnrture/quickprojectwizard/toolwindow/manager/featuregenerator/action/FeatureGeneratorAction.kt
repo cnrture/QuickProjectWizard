@@ -1,6 +1,6 @@
-package com.github.cnrture.quickprojectwizard.action
+package com.github.cnrture.quickprojectwizard.toolwindow.manager.featuregenerator.action
 
-import com.github.cnrture.quickprojectwizard.dialog.FeatureGeneratorDialog
+import com.github.cnrture.quickprojectwizard.toolwindow.manager.featuregenerator.dialog.FeatureGeneratorDialog
 import com.intellij.icons.AllIcons
 import com.intellij.ide.actions.CreateElementActionBase
 import com.intellij.openapi.actionSystem.AnActionEvent

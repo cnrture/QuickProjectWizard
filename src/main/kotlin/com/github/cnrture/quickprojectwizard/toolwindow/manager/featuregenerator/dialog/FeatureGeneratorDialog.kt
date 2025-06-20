@@ -1,4 +1,4 @@
-package com.github.cnrture.quickprojectwizard.dialog
+package com.github.cnrture.quickprojectwizard.toolwindow.manager.featuregenerator.dialog
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -63,27 +63,27 @@ class FeatureGeneratorDialog(
     @Composable
     override fun createDesign() {
         Surface(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.Companion.fillMaxSize(),
             color = QPWTheme.colors.black,
         ) {
             Column(
-                modifier = Modifier
+                modifier = Modifier.Companion
                     .fillMaxSize()
                     .padding(24.dp),
             ) {
                 QPWText(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.Companion.fillMaxWidth(),
                     text = "Feature Generator",
                     style = TextStyle(
                         color = QPWTheme.colors.red,
                         fontSize = 36.sp,
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Companion.Bold,
+                        textAlign = TextAlign.Companion.Center,
                     ),
                 )
-                Spacer(modifier = Modifier.size(24.dp))
+                Spacer(modifier = Modifier.Companion.size(24.dp))
                 ConfigurationPanel(
-                    modifier = Modifier
+                    modifier = Modifier.Companion
                         .fillMaxHeight()
                         .weight(0.6f),
                 )
@@ -93,7 +93,7 @@ class FeatureGeneratorDialog(
 
     @OptIn(ExperimentalLayoutApi::class)
     @Composable
-    private fun ConfigurationPanel(modifier: Modifier = Modifier) {
+    private fun ConfigurationPanel(modifier: Modifier = Modifier.Companion) {
         val selectedSrc = remember { selectedSrc }
         val featureName = remember { featureName }
         val settings = ApplicationManager.getApplication().service<SettingsService>()
@@ -105,9 +105,9 @@ class FeatureGeneratorDialog(
             backgroundColor = QPWTheme.colors.black,
             bottomBar = {
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.Companion.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.CenterVertically,
+                    verticalAlignment = Alignment.Companion.CenterVertically,
                 ) {
                     QPWActionCard(
                         title = "Cancel",
@@ -116,7 +116,7 @@ class FeatureGeneratorDialog(
                         type = QPWActionCardType.MEDIUM,
                         onClick = { close(Constants.DEFAULT_EXIT_CODE) },
                     )
-                    Spacer(modifier = Modifier.size(16.dp))
+                    Spacer(modifier = Modifier.Companion.size(16.dp))
                     QPWActionCard(
                         title = "Create",
                         icon = Icons.Rounded.CreateNewFolder,
@@ -126,9 +126,9 @@ class FeatureGeneratorDialog(
                             if (validateInput()) {
                                 selectedTemplate?.let {
                                     createFeature(it)
-                                } ?: run { MessageDialog("Please select a feature template").show() }
+                                } ?: run { QPWMessageDialog("Please select a feature template").show() }
                             } else {
-                                MessageDialog("Please fill out required values").show()
+                                QPWMessageDialog("Please fill out required values").show()
                             }
                         },
                     )
@@ -136,7 +136,7 @@ class FeatureGeneratorDialog(
             }
         ) { padding ->
             Column(
-                modifier = Modifier
+                modifier = Modifier.Companion
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState()),
             ) {
@@ -145,11 +145,11 @@ class FeatureGeneratorDialog(
                     color = QPWTheme.colors.red,
                     style = TextStyle(
                         fontSize = 16.sp,
-                        fontWeight = FontWeight.SemiBold,
+                        fontWeight = FontWeight.Companion.SemiBold,
                     ),
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.Companion.height(16.dp))
 
                 if (availableTemplates.isNotEmpty()) {
                     TemplateSelectionContent(
@@ -162,10 +162,10 @@ class FeatureGeneratorDialog(
                     )
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.Companion.height(16.dp))
 
                 Column(
-                    modifier = Modifier
+                    modifier = Modifier.Companion
                         .background(
                             color = QPWTheme.colors.gray,
                             shape = RoundedCornerShape(8.dp)
@@ -173,20 +173,20 @@ class FeatureGeneratorDialog(
                         .padding(16.dp)
                 ) {
                     QPWTextField(
-                        modifier = Modifier
+                        modifier = Modifier.Companion
                             .fillMaxWidth(),
                         placeholder = "Enter feature name",
                         value = featureName.value,
                         onValueChange = { featureName.value = it },
                     )
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.Companion.height(8.dp))
 
                     QPWText(
                         text = "Be sure to use camel case for the feature name (e.g. MyFeature)",
                         color = QPWTheme.colors.lightGray,
                         style = TextStyle(
-                            fontWeight = FontWeight.SemiBold,
+                            fontWeight = FontWeight.Companion.SemiBold,
                         ),
                     )
                 }
@@ -202,10 +202,10 @@ class FeatureGeneratorDialog(
         onTemplateSelected: (FeatureTemplate?) -> Unit,
     ) {
         Column(
-            modifier = Modifier
+            modifier = Modifier.Companion
                 .background(
                     color = QPWTheme.colors.gray,
-                    shape = RoundedCornerShape(8.dp)
+                    shape = androidx.compose.foundation.shape.RoundedCornerShape(8.dp)
                 )
                 .padding(16.dp)
         ) {
@@ -214,11 +214,11 @@ class FeatureGeneratorDialog(
                 color = QPWTheme.colors.white,
                 style = TextStyle(
                     fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.Companion.Bold,
                 )
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.Companion.height(8.dp))
 
             QPWText(
                 text = "Choose a template to auto-configure your module",
@@ -226,7 +226,7 @@ class FeatureGeneratorDialog(
                 style = TextStyle(fontSize = 12.sp)
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.Companion.height(12.dp))
 
             templates.forEach { template ->
                 TemplateOption(
@@ -238,7 +238,7 @@ class FeatureGeneratorDialog(
                     badge = if (template.id == defaultTemplateId) "Default" else "",
                     badgeColor = if (template.id == defaultTemplateId) QPWTheme.colors.red else QPWTheme.colors.purple
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.Companion.height(8.dp))
             }
         }
     }
@@ -252,47 +252,47 @@ class FeatureGeneratorDialog(
         badgeColor: Color,
     ) {
         Card(
-            modifier = Modifier
+            modifier = Modifier.Companion
                 .fillMaxWidth()
                 .clickable { onClick() },
-            shape = RoundedCornerShape(8.dp),
+            shape = androidx.compose.foundation.shape.RoundedCornerShape(8.dp),
             border = BorderStroke(
                 width = if (isSelected) 2.dp else 0.dp,
-                color = if (isSelected) QPWTheme.colors.red else Color.Transparent
+                color = if (isSelected) QPWTheme.colors.red else Color.Companion.Transparent
             ),
             backgroundColor = QPWTheme.colors.gray,
             elevation = 0.dp
         ) {
             Row(
-                modifier = Modifier.padding(12.dp),
-                verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier.Companion.padding(12.dp),
+                verticalAlignment = Alignment.Companion.CenterVertically
             ) {
                 Column(
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.Companion.weight(1f)
                 ) {
                     Row(
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.Companion.CenterVertically
                     ) {
                         QPWText(
                             text = title,
                             color = QPWTheme.colors.white,
                             style = TextStyle(
                                 fontSize = 14.sp,
-                                fontWeight = FontWeight.Bold
+                                fontWeight = FontWeight.Companion.Bold
                             )
                         )
-                        Spacer(modifier = Modifier.width(8.dp))
+                        Spacer(modifier = Modifier.Companion.width(8.dp))
 
                         if (badge.isNotEmpty()) {
                             Card(
-                                shape = RoundedCornerShape(4.dp),
+                                shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp),
                                 backgroundColor = badgeColor.copy(alpha = 0.2f)
                             ) {
                                 QPWText(
                                     text = badge,
                                     color = badgeColor,
                                     style = TextStyle(fontSize = 9.sp),
-                                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                                    modifier = Modifier.Companion.padding(horizontal = 6.dp, vertical = 2.dp)
                                 )
                             }
                         }
@@ -304,7 +304,7 @@ class FeatureGeneratorDialog(
                         imageVector = Icons.Rounded.CheckCircle,
                         contentDescription = "Selected",
                         tint = QPWTheme.colors.red,
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.Companion.size(20.dp)
                     )
                 }
             }
@@ -325,7 +325,7 @@ class FeatureGeneratorDialog(
                 selectedTemplate = selectedTemplate,
             )
         } catch (e: Exception) {
-            MessageDialog("Error: ${e.message}").show()
+            QPWMessageDialog("Error: ${e.message}").show()
         } finally {
             close(0)
         }

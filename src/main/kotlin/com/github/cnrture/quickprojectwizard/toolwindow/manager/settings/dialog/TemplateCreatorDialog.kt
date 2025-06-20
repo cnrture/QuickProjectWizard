@@ -1,4 +1,4 @@
-package com.github.cnrture.quickprojectwizard.dialog.template
+package com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.dialog
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -19,8 +19,8 @@ import com.github.cnrture.quickprojectwizard.data.FeatureTemplate
 import com.github.cnrture.quickprojectwizard.data.FileTemplate
 import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
 import com.github.cnrture.quickprojectwizard.data.SettingsService
-import com.github.cnrture.quickprojectwizard.dialog.template.component.FileTemplateEditor
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
+import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.component.FileTemplateEditor
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
 import java.util.*

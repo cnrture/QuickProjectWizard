@@ -1,4 +1,4 @@
-package com.github.cnrture.quickprojectwizard.dialog.template.component
+package com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.component
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape

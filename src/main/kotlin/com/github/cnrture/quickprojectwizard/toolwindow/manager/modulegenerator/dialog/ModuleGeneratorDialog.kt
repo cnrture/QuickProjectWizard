@@ -1,4 +1,4 @@
-package com.github.cnrture.quickprojectwizard.dialog
+package com.github.cnrture.quickprojectwizard.toolwindow.manager.modulegenerator.dialog
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -22,10 +22,7 @@ import com.github.cnrture.quickprojectwizard.common.file.FileWriter
 import com.github.cnrture.quickprojectwizard.common.file.LibraryDependencyFinder
 import com.github.cnrture.quickprojectwizard.common.rootDirectoryString
 import com.github.cnrture.quickprojectwizard.common.rootDirectoryStringDropLast
-import com.github.cnrture.quickprojectwizard.components.QPWActionCard
-import com.github.cnrture.quickprojectwizard.components.QPWActionCardType
-import com.github.cnrture.quickprojectwizard.components.QPWDialogWrapper
-import com.github.cnrture.quickprojectwizard.components.QPWText
+import com.github.cnrture.quickprojectwizard.components.*
 import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulegenerator.components.*
@@ -113,27 +110,27 @@ class ModuleGeneratorDialog(
         )
 
         Surface(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.Companion.fillMaxSize(),
             color = QPWTheme.colors.black,
         ) {
             Column(
-                modifier = Modifier
+                modifier = Modifier.Companion
                     .fillMaxSize()
                     .padding(24.dp),
             ) {
                 QPWText(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.Companion.fillMaxWidth(),
                     text = "Feature Generator",
                     style = TextStyle(
                         color = QPWTheme.colors.red,
                         fontSize = 36.sp,
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Companion.Bold,
+                        textAlign = TextAlign.Companion.Center,
                     ),
                 )
-                Spacer(modifier = Modifier.size(24.dp))
+                Spacer(modifier = Modifier.Companion.size(24.dp))
                 MoveExistingFilesToModuleContent(
-                    modifier = Modifier
+                    modifier = Modifier.Companion
                         .fillMaxSize()
                         .padding(horizontal = 24.dp),
                     project = project,
@@ -180,7 +177,7 @@ class ModuleGeneratorDialog(
 
     @Composable
     fun MoveExistingFilesToModuleContent(
-        modifier: Modifier = Modifier,
+        modifier: Modifier = Modifier.Companion,
         project: Project,
         fileWriter: FileWriter,
         isAnalyzingState: Boolean,
@@ -219,11 +216,11 @@ class ModuleGeneratorDialog(
             backgroundColor = QPWTheme.colors.black,
             bottomBar = {
                 Row(
-                    modifier = Modifier
+                    modifier = Modifier.Companion
                         .fillMaxWidth()
                         .padding(top = 16.dp),
                     horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.CenterVertically,
+                    verticalAlignment = Alignment.Companion.CenterVertically,
                 ) {
                     QPWActionCard(
                         title = "Cancel",
@@ -232,7 +229,7 @@ class ModuleGeneratorDialog(
                         type = QPWActionCardType.MEDIUM,
                         onClick = { close(Constants.DEFAULT_EXIT_CODE) },
                     )
-                    Spacer(modifier = Modifier.size(16.dp))
+                    Spacer(modifier = Modifier.Companion.size(16.dp))
                     QPWActionCard(
                         title = "Create",
                         icon = Icons.Rounded.CreateNewFolder,
@@ -258,7 +255,7 @@ class ModuleGeneratorDialog(
                                 } catch (_: Exception) {
                                 }
                             } else {
-                                MessageDialog("Please fill out required values").show()
+                                QPWMessageDialog("Please fill out required values").show()
                             }
                         }
                     )
@@ -266,12 +263,12 @@ class ModuleGeneratorDialog(
             }
         ) { padding ->
             Column(
-                modifier = Modifier
+                modifier = Modifier.Companion
                     .fillMaxSize()
                     .padding(padding)
                     .verticalScroll(rememberScrollState()),
             ) {
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.Companion.height(16.dp))
                 ModuleTypeNameContent(
                     moduleTypeSelectionState = moduleType,
                     packageName = packageName,
@@ -282,7 +279,7 @@ class ModuleGeneratorDialog(
                     onModuleNameChanged = onModuleNameChanged,
                 )
 
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.Companion.height(32.dp))
 
                 RootSelectionContent(
                     selectedSrc = selectedSrc,
@@ -292,7 +289,7 @@ class ModuleGeneratorDialog(
                     isFileTreeButtonEnabled = false,
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.Companion.height(16.dp))
 
                 DetectedModulesContent(
                     project = project,
@@ -309,10 +306,10 @@ class ModuleGeneratorDialog(
                     onCheckedModule = onCheckedModule,
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.Companion.height(16.dp))
 
                 Column(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.Companion.fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                 ) {
                     PluginSelectionContent(

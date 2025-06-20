@@ -25,11 +25,11 @@ import com.github.cnrture.quickprojectwizard.components.*
 import com.github.cnrture.quickprojectwizard.data.FeatureTemplate
 import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
 import com.github.cnrture.quickprojectwizard.data.SettingsService
-import com.github.cnrture.quickprojectwizard.dialog.template.FeatureTemplateCreatorDialog
-import com.github.cnrture.quickprojectwizard.dialog.template.FeatureTemplateEditorDialog
-import com.github.cnrture.quickprojectwizard.dialog.template.TemplateCreatorDialog
-import com.github.cnrture.quickprojectwizard.dialog.template.TemplateEditorDialog
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
+import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.dialog.FeatureTemplateCreatorDialog
+import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.dialog.FeatureTemplateEditorDialog
+import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.dialog.TemplateCreatorDialog
+import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.dialog.TemplateEditorDialog
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
 

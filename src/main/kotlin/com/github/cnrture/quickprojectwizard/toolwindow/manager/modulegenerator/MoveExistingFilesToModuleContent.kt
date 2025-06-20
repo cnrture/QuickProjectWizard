@@ -18,7 +18,7 @@ import com.github.cnrture.quickprojectwizard.common.Utils
 import com.github.cnrture.quickprojectwizard.common.file.FileWriter
 import com.github.cnrture.quickprojectwizard.common.file.LibraryDependencyFinder
 import com.github.cnrture.quickprojectwizard.components.QPWActionCard
-import com.github.cnrture.quickprojectwizard.dialog.MessageDialog
+import com.github.cnrture.quickprojectwizard.components.QPWMessageDialog
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulegenerator.components.*
 import com.intellij.openapi.project.Project
@@ -111,7 +111,7 @@ fun MoveExistingFilesToModuleContent(
                                     selectedPlugins = selectedPlugins,
                                 )
                             } else {
-                                MessageDialog("Please fill out required values").show()
+                                QPWMessageDialog("Please fill out required values").show()
                             }
                         }
                     )

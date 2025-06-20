@@ -23,11 +23,10 @@ import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.common.Constants
 import com.github.cnrture.quickprojectwizard.components.QPWActionCard
 import com.github.cnrture.quickprojectwizard.components.QPWActionCardType
+import com.github.cnrture.quickprojectwizard.components.QPWMessageDialog
 import com.github.cnrture.quickprojectwizard.components.QPWText
 import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.data.SettingsState
-import com.github.cnrture.quickprojectwizard.dialog.ExportSettingsDialog
-import com.github.cnrture.quickprojectwizard.dialog.MessageDialog
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.apitester.ApiTesterContent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.colorpicker.ColorPickerContent
@@ -35,6 +34,7 @@ import com.github.cnrture.quickprojectwizard.toolwindow.manager.featuregenerator
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.formatter.FormatterContent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulegenerator.ModuleGeneratorContent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.SettingsContent
+import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.dialog.ExportSettingsDialog
 import com.intellij.ide.BrowserUtil
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
@@ -228,7 +228,7 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                                 ExportSettingsDialog(
                                     settings = settings,
                                     onComplete = { success, message ->
-                                        MessageDialog(message).show()
+                                        QPWMessageDialog(message).show()
                                     }
                                 ).show()
                             }
@@ -393,10 +393,10 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
         descriptor.title = "Import Settings"
         FileChooser.chooseFile(descriptor, project, null) { file ->
             if (settings.importFromFile(file.path)) {
-                MessageDialog("Settings imported successfully!").show()
+                QPWMessageDialog("Settings imported successfully!").show()
                 onSuccess(settings.state)
             } else {
-                MessageDialog("Failed to import settings. Please check the file format.").show()
+                QPWMessageDialog("Failed to import settings. Please check the file format.").show()
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.github.cnrture.quickprojectwizard.dialog
+package com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.dialog
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
