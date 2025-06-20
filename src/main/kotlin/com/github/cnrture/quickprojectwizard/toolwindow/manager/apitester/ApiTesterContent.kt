@@ -18,7 +18,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.components.*
+import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
+import com.intellij.openapi.application.ApplicationManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -33,19 +35,25 @@ import kotlin.time.measureTime
 
 @Composable
 fun ApiTesterContent() {
-    var selectedMethod by remember { mutableStateOf("GET") }
-    var url by remember { mutableStateOf("https://api.canerture.com/harrypotterapp/characters") }
-    var requestBody by remember { mutableStateOf("") }
+    val settings = ApplicationManager.getApplication().getService(SettingsService::class.java)
+
+    var selectedMethod by remember { mutableStateOf(settings.getApiSelectedMethod()) }
+    var url by remember { mutableStateOf(settings.getApiUrl()) }
+    var requestBody by remember { mutableStateOf(settings.getApiRequestBody()) }
     var responseText by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
     var responseTime by remember { mutableStateOf(0L) }
     var statusCode by remember { mutableStateOf(0) }
-    var selectedTab by remember { mutableStateOf("headers") }
-    var headers by remember { mutableStateOf(mapOf("Content-Type" to "application/json")) }
-    var queryParams by remember { mutableStateOf(mapOf<String, String>()) }
+    var selectedTab by remember { mutableStateOf(settings.getApiSelectedTab()) }
+    var headers by remember { mutableStateOf(settings.getApiHeaders()) }
+    var queryParams by remember { mutableStateOf(settings.getApiQueryParams()) }
 
     val scope = rememberCoroutineScope()
     val methods = listOf("GET", "POST", "PUT", "DELETE", "PATCH")
+
+    LaunchedEffect(selectedMethod, url, requestBody, selectedTab, headers, queryParams) {
+        settings.saveApiTesterState(selectedMethod, url, requestBody, headers, queryParams, selectedTab)
+    }
 
     Column(
         modifier = Modifier

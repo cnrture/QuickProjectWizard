@@ -7,6 +7,7 @@ import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import java.io.File
 
 @State(name = "QuickProjectWizardSettings", storages = [Storage("quickProjectWizard.xml")])
 @Service(Service.Level.APP)
@@ -99,7 +100,7 @@ class SettingsService : PersistentStateComponent<SettingsState> {
                 myState.featureTemplates.addAll(getDefaultFeatureTemplates())
             }
             true
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             false
         }
     }
@@ -107,18 +108,18 @@ class SettingsService : PersistentStateComponent<SettingsState> {
     fun exportToFile(filePath: String): Boolean {
         return try {
             val jsonString = exportSettings()
-            java.io.File(filePath).writeText(jsonString)
+            File(filePath).writeText(jsonString)
             true
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             false
         }
     }
 
     fun importFromFile(filePath: String): Boolean {
         return try {
-            val jsonString = java.io.File(filePath).readText()
+            val jsonString = File(filePath).readText()
             importSettings(jsonString)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             false
         }
     }
@@ -136,6 +137,53 @@ class SettingsService : PersistentStateComponent<SettingsState> {
         }
         return myState.featureTemplates
     }
+
+    fun addColorToHistory(colorInfo: ColorInfo) {
+        // Check if color already exists by hex value to avoid duplicates
+        if (!myState.colorHistory.any { it.hex == colorInfo.hex }) {
+            myState.colorHistory.add(0, colorInfo) // Add to front
+            if (myState.colorHistory.size > 10) {
+                myState.colorHistory.removeAt(myState.colorHistory.size - 1) // Keep only last 10
+            }
+        }
+    }
+
+    fun getColorHistory(): List<ColorInfo> = myState.colorHistory.toList()
+
+    fun saveFormatterState(selectedFormat: String, inputText: String, errorMessage: String) {
+        myState.formatterSelectedFormat = selectedFormat
+        myState.formatterInputText = inputText
+        myState.formatterErrorMessage = errorMessage
+    }
+
+    fun getFormatterSelectedFormat(): String = myState.formatterSelectedFormat
+    fun getFormatterInputText(): String = myState.formatterInputText
+    fun getFormatterErrorMessage(): String = myState.formatterErrorMessage
+
+    fun saveApiTesterState(
+        method: String,
+        url: String,
+        requestBody: String,
+        headers: Map<String, String>,
+        queryParams: Map<String, String>,
+        selectedTab: String,
+    ) {
+        myState.apiSelectedMethod = method
+        myState.apiUrl = url
+        myState.apiRequestBody = requestBody
+        myState.apiHeaders.clear()
+        myState.apiHeaders.putAll(headers)
+        myState.apiQueryParams.clear()
+        myState.apiQueryParams.putAll(queryParams)
+        myState.apiSelectedTab = selectedTab
+    }
+
+    fun getApiSelectedMethod(): String = myState.apiSelectedMethod
+    fun getApiUrl(): String = myState.apiUrl
+    fun getApiRequestBody(): String = myState.apiRequestBody
+    fun getApiHeaders(): Map<String, String> = myState.apiHeaders.toMap()
+    fun getApiQueryParams(): Map<String, String> = myState.apiQueryParams.toMap()
+    fun getApiSelectedTab(): String = myState.apiSelectedTab
 }
 
 @Serializable
@@ -159,6 +207,19 @@ data class SettingsState(
     var isCompose: Boolean = true,
     var isHiltEnable: Boolean = true,
     var isActionsExpanded: Boolean = true,
+
+    var colorHistory: MutableList<ColorInfo> = mutableListOf(),
+
+    var formatterSelectedFormat: String = "JSON",
+    var formatterInputText: String = "",
+    var formatterErrorMessage: String = "",
+
+    var apiSelectedMethod: String = "GET",
+    var apiUrl: String = "https://api.canerture.com/harrypotterapp/characters",
+    var apiRequestBody: String = "",
+    var apiHeaders: MutableMap<String, String> = mutableMapOf("Content-Type" to "application/json"),
+    var apiQueryParams: MutableMap<String, String> = mutableMapOf(),
+    var apiSelectedTab: String = "headers",
 )
 
 @Serializable

@@ -24,7 +24,9 @@ import com.github.cnrture.quickprojectwizard.components.QPWActionCard
 import com.github.cnrture.quickprojectwizard.components.QPWActionCardType
 import com.github.cnrture.quickprojectwizard.components.QPWTabRow
 import com.github.cnrture.quickprojectwizard.components.QPWText
+import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
+import com.intellij.openapi.application.ApplicationManager
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
@@ -41,11 +43,24 @@ import javax.xml.transform.stream.StreamResult
 
 @Composable
 fun FormatterContent() {
-    var selectedFormat by remember { mutableStateOf("JSON") }
-    var inputText by remember { mutableStateOf(getSampleJson()) }
+    val settings = ApplicationManager.getApplication().getService(SettingsService::class.java)
+
+    var selectedFormat by remember { mutableStateOf(settings.getFormatterSelectedFormat()) }
+    var inputText by remember {
+        mutableStateOf(
+            settings.getFormatterInputText().ifEmpty {
+                if (selectedFormat == "JSON") getSampleJson() else getSampleXml()
+            }
+        )
+    }
     var outputText by remember { mutableStateOf("") }
     var isValidInput by remember { mutableStateOf(true) }
-    var errorMessage by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf(settings.getFormatterErrorMessage()) }
+
+    // Save state whenever it changes
+    LaunchedEffect(selectedFormat, inputText, errorMessage) {
+        settings.saveFormatterState(selectedFormat, inputText, errorMessage)
+    }
 
     LaunchedEffect(inputText, selectedFormat) {
         if (inputText.isNotEmpty()) {

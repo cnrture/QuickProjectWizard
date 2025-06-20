@@ -24,8 +24,12 @@ import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.components.QPWActionCard
 import com.github.cnrture.quickprojectwizard.components.QPWActionCardType
 import com.github.cnrture.quickprojectwizard.components.QPWText
+import com.github.cnrture.quickprojectwizard.data.ColorInfo
+import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.ui.JBColor
+import kotlinx.serialization.Serializable
 import java.awt.*
 import java.awt.datatransfer.StringSelection
 import java.awt.event.*
@@ -36,16 +40,10 @@ import javax.swing.JFrame
 import javax.swing.JPanel
 import javax.swing.SwingUtilities
 
-data class ColorInfo(
-    val color: Color,
-    val hex: String,
-    val rgb: String,
-    val timestamp: String,
-)
-
 @Composable
 fun ColorPickerContent() {
-    var colorHistory by remember { mutableStateOf(emptyList<ColorInfo>()) }
+    val settings = ApplicationManager.getApplication().getService(SettingsService::class.java)
+    var colorHistory by remember { mutableStateOf(settings.getColorHistory()) }
 
     Column(
         modifier = Modifier
@@ -76,7 +74,8 @@ fun ColorPickerContent() {
             onClick = {
                 startColorPicking { color ->
                     val colorInfo = createColorInfo(color)
-                    colorHistory = listOf(colorInfo) + colorHistory.take(9)
+                    settings.addColorToHistory(colorInfo)
+                    colorHistory = settings.getColorHistory()
                 }
             }
         )
@@ -374,7 +373,7 @@ private fun createColorInfo(color: Color): ColorInfo {
     val rgb = "rgb($r, $g, $b)"
     val timestamp = LocalTime.now().toString().substring(0, 8)
 
-    return ColorInfo(color, hex, rgb, timestamp)
+    return ColorInfo.from(color, hex, rgb, timestamp)
 }
 
 private fun copyToClipboard(text: String) {
