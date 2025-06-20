@@ -21,7 +21,8 @@ fun RootSelectionContent(
     showFileTreeDialog: Boolean,
     isMoveFiles: Boolean,
     onMoveFilesChange: (Boolean) -> Unit,
-    onChooseRootClick: () -> Unit,
+    isFileTreeButtonEnabled: Boolean = true,
+    onChooseRootClick: () -> Unit = {},
 ) {
     Row(
         modifier = Modifier
@@ -40,23 +41,27 @@ fun RootSelectionContent(
                 color = QPWTheme.colors.green,
                 style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Medium)
             )
-            Spacer(modifier = Modifier.size(4.dp))
-            QPWText(
-                text = "Choose the root directory for your new module.",
-                color = QPWTheme.colors.lightGray,
-                style = TextStyle(fontSize = 12.sp)
-            )
+            if (isFileTreeButtonEnabled) {
+                Spacer(modifier = Modifier.size(4.dp))
+                QPWText(
+                    text = "Choose the root directory for your new module.",
+                    color = QPWTheme.colors.lightGray,
+                    style = TextStyle(fontSize = 12.sp)
+                )
+            }
             Spacer(modifier = Modifier.size(8.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                QPWButton(
-                    text = if (showFileTreeDialog) "Close File Tree" else "Open File Tree",
-                    backgroundColor = QPWTheme.colors.green,
-                    onClick = onChooseRootClick,
-                )
-                Spacer(modifier = Modifier.size(8.dp))
+                if (isFileTreeButtonEnabled) {
+                    QPWButton(
+                        text = if (showFileTreeDialog) "Close File Tree" else "Open File Tree",
+                        backgroundColor = QPWTheme.colors.green,
+                        onClick = onChooseRootClick,
+                    )
+                    Spacer(modifier = Modifier.size(8.dp))
+                }
                 QPWCheckbox(
                     label = "Move selected files to new module",
                     checked = isMoveFiles,

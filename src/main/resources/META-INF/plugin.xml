@@ -10,7 +10,8 @@
     <depends>com.intellij.modules.java</depends>
 
     <extensions defaultExtensionNs="com.android.tools.idea.wizard.template">
-        <wizardTemplateProvider implementation="com.github.cnrture.quickprojectwizard.projectwizard.AndroidStudioTemplateProvider"/>
+        <wizardTemplateProvider
+                implementation="com.github.cnrture.quickprojectwizard.projectwizard.AndroidStudioTemplateProvider"/>
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij">
@@ -29,12 +30,18 @@
 
     <actions>
         <action id="QuickProjectWizard.NewFeature"
-                class="com.github.cnrture.quickprojectwizard.action.CreateFeatureAction"
+                class="com.github.cnrture.quickprojectwizard.action.FeatureGeneratorAction"
                 text="Add Feature"
                 description="Create a new feature"
                 icon="/icons/pluginIcon.svg">
             <add-to-group group-id="NewGroup" anchor="after" relative-to-action="NewDir"/>
-            <keyboard-shortcut keymap="$default" first-keystroke="control shift Q"/>
+        </action>
+        <action id="QuickProjectWizard.NewModule"
+                class="com.github.cnrture.quickprojectwizard.action.ModuleGeneratorAction"
+                text="New Module with This Files"
+                description="Create a new module with the selected files"
+                icon="/icons/pluginIcon.svg">
+            <add-to-group group-id="NewGroup" anchor="after" relative-to-action="NewDir"/>
         </action>
     </actions>
 </idea-plugin>

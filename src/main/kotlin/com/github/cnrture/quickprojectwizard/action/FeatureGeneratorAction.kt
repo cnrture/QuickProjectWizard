@@ -10,7 +10,7 @@ import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiElement
 import java.util.function.Consumer
 
-class CreateFeatureAction : CreateElementActionBase(
+class FeatureGeneratorAction : CreateElementActionBase(
     "Add Feature",
     "Create a new feature",
     AllIcons.Nodes.Folder,
