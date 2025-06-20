@@ -1,4 +1,4 @@
-package com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.components
+package com.github.cnrture.quickprojectwizard.toolwindow.manager.modulegenerator.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

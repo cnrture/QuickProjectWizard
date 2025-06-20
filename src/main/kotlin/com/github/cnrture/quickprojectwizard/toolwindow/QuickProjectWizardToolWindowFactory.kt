@@ -31,9 +31,9 @@ import com.github.cnrture.quickprojectwizard.dialog.MessageDialog
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.apitester.ApiTesterContent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.colorpicker.ColorPickerContent
-import com.github.cnrture.quickprojectwizard.toolwindow.manager.featuremaker.FeatureMakerContent
+import com.github.cnrture.quickprojectwizard.toolwindow.manager.featuregenerator.FeatureGeneratorContent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.formatter.FormatterContent
-import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.ModuleMakerContent
+import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulegenerator.ModuleGeneratorContent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.SettingsContent
 import com.intellij.ide.BrowserUtil
 import com.intellij.openapi.application.ApplicationManager
@@ -199,7 +199,7 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                         )
 
                         SidebarButton(
-                            title = "API Tester",
+                            title = "API Test",
                             icon = Icons.Rounded.Api,
                             isSelected = selectedSection == "api",
                             color = QPWTheme.colors.red,
@@ -272,7 +272,7 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                                     color = QPWTheme.colors.green,
                                     isExpanded = isExpanded,
                                     onClick = {
-                                        BrowserUtil.browse("https://plugins.jetbrains.com/plugin/25221-quickprojectwizard/edit")
+                                        BrowserUtil.browse("https://quickprojectwizard.candroid.dev")
                                     }
                                 )
 
@@ -297,8 +297,8 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                     .fillMaxHeight()
             ) {
                 when (selectedSection) {
-                    "module" -> ModuleMakerContent(project)
-                    "feature" -> FeatureMakerContent(project)
+                    "module" -> ModuleGeneratorContent(project)
+                    "feature" -> FeatureGeneratorContent(project)
                     "formatter" -> FormatterContent()
                     "color" -> ColorPickerContent()
                     "api" -> ApiTesterContent()

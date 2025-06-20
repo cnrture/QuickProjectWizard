@@ -1,4 +1,4 @@
-package com.github.cnrture.quickprojectwizard.toolwindow.manager.featuremaker
+package com.github.cnrture.quickprojectwizard.toolwindow.manager.featuregenerator
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInHorizontally
@@ -18,13 +18,13 @@ import com.github.cnrture.quickprojectwizard.common.rootDirectoryString
 import com.github.cnrture.quickprojectwizard.common.rootDirectoryStringDropLast
 import com.github.cnrture.quickprojectwizard.components.QPWText
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
-import com.github.cnrture.quickprojectwizard.toolwindow.manager.featuremaker.components.ConfigurationPanel
-import com.github.cnrture.quickprojectwizard.toolwindow.manager.featuremaker.components.FileTreePanel
+import com.github.cnrture.quickprojectwizard.toolwindow.manager.featuregenerator.components.ConfigurationPanel
+import com.github.cnrture.quickprojectwizard.toolwindow.manager.featuregenerator.components.FileTreePanel
 import com.intellij.openapi.project.Project
 import java.io.File
 
 @Composable
-fun FeatureMakerContent(project: Project) {
+fun FeatureGeneratorContent(project: Project) {
     val fileWriter = FileWriter()
 
     val selectedSrc = mutableStateOf(Constants.DEFAULT_SRC_VALUE)
@@ -47,7 +47,7 @@ fun FeatureMakerContent(project: Project) {
         ) {
             QPWText(
                 modifier = Modifier.fillMaxWidth(),
-                text = "Feature Creator",
+                text = "Feature Generator",
                 style = TextStyle(
                     color = QPWTheme.colors.red,
                     fontSize = 24.sp,

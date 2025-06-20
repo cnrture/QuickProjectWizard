@@ -1,4 +1,4 @@
-package com.github.cnrture.quickprojectwizard.toolwindow.manager.featuremaker.components
+package com.github.cnrture.quickprojectwizard.toolwindow.manager.featuregenerator.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

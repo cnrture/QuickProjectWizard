@@ -1,4 +1,4 @@
-package com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker
+package com.github.cnrture.quickprojectwizard.toolwindow.manager.modulegenerator
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInHorizontally
@@ -20,7 +20,7 @@ import com.github.cnrture.quickprojectwizard.common.file.LibraryDependencyFinder
 import com.github.cnrture.quickprojectwizard.components.QPWActionCard
 import com.github.cnrture.quickprojectwizard.dialog.MessageDialog
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
-import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker.components.*
+import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulegenerator.components.*
 import com.intellij.openapi.project.Project
 
 @Composable

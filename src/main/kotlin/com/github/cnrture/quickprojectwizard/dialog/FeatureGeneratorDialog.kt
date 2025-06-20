@@ -35,7 +35,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import java.io.File
 
-class FeatureMakerDialog(
+class FeatureGeneratorDialog(
     private val project: Project,
     startingLocation: VirtualFile?,
 ) : QPWDialogWrapper(
@@ -73,7 +73,7 @@ class FeatureMakerDialog(
             ) {
                 QPWText(
                     modifier = Modifier.fillMaxWidth(),
-                    text = "Feature Creator",
+                    text = "Feature Generator",
                     style = TextStyle(
                         color = QPWTheme.colors.red,
                         fontSize = 36.sp,

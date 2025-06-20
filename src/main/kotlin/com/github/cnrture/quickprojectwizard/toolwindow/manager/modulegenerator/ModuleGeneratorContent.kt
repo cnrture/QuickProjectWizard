@@ -1,4 +1,4 @@
-package com.github.cnrture.quickprojectwizard.toolwindow.manager.modulemaker
+package com.github.cnrture.quickprojectwizard.toolwindow.manager.modulegenerator
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Surface
@@ -25,7 +25,7 @@ import com.intellij.openapi.project.Project
 import java.io.File
 
 @Composable
-fun ModuleMakerContent(project: Project) {
+fun ModuleGeneratorContent(project: Project) {
     val fileWriter = FileWriter()
     val settings = ApplicationManager.getApplication().service<SettingsService>()
     val libraryDependencyFinder = LibraryDependencyFinder()
@@ -103,7 +103,7 @@ fun ModuleMakerContent(project: Project) {
         ) {
             QPWText(
                 modifier = Modifier.fillMaxWidth(),
-                text = "Module Creator",
+                text = "Module Generator",
                 style = TextStyle(
                     color = QPWTheme.colors.green,
                     fontSize = 24.sp,
