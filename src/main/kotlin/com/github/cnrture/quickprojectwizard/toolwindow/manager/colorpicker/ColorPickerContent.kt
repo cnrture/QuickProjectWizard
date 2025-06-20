@@ -29,7 +29,6 @@ import com.github.cnrture.quickprojectwizard.data.SettingsService
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.ui.JBColor
-import kotlinx.serialization.Serializable
 import java.awt.*
 import java.awt.datatransfer.StringSelection
 import java.awt.event.*
@@ -327,7 +326,7 @@ private fun startColorPicking(onColorPicked: (Color) -> Unit) {
 
                             frame.dispose()
                             onColorPicked(pixelColor)
-                        } catch (ex: Exception) {
+                        } catch (_: Exception) {
                             frame.dispose()
                         }
                     }
