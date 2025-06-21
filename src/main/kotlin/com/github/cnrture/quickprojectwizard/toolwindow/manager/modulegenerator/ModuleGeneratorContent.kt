@@ -45,8 +45,6 @@ fun ModuleGeneratorContent(project: Project) {
     var selectedTemplate by remember { mutableStateOf(settings.getDefaultModuleTemplate()) }
     val availableTemplates = remember { settings.getModuleTemplates() }
 
-    val isMoveFiles = mutableStateOf(false)
-
     val selectedSrc = mutableStateOf(Constants.DEFAULT_SRC_VALUE)
     val moduleType = mutableStateOf(settings.state.preferredModuleType)
     val packageName = mutableStateOf(settings.state.defaultPackageName)
@@ -199,8 +197,6 @@ fun ModuleGeneratorContent(project: Project) {
                         onDetectedModulesLoaded = { detectedModules.clear(); detectedModules.addAll(it) },
                         onSelectedModulesLoaded = { selectedModules.clear(); selectedModules.addAll(it) },
                         detectedModules = detectedModules,
-                        isMoveFiles = isMoveFiles.value,
-                        onMoveFilesChange = { isMoveFiles.value = it },
                         moduleType = moduleType.value,
                         packageName = packageName.value,
                         onPackageNameChanged = { packageName.value = it },

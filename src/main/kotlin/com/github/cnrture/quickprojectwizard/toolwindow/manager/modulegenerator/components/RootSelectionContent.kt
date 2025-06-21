@@ -11,7 +11,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.components.QPWButton
-import com.github.cnrture.quickprojectwizard.components.QPWCheckbox
 import com.github.cnrture.quickprojectwizard.components.QPWText
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 
@@ -19,8 +18,6 @@ import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 fun RootSelectionContent(
     selectedSrc: String,
     showFileTreeDialog: Boolean,
-    isMoveFiles: Boolean,
-    onMoveFilesChange: (Boolean) -> Unit,
     isFileTreeButtonEnabled: Boolean = true,
     onChooseRootClick: () -> Unit = {},
 ) {
@@ -62,12 +59,6 @@ fun RootSelectionContent(
                     )
                     Spacer(modifier = Modifier.size(8.dp))
                 }
-                QPWCheckbox(
-                    label = "Move selected files to new module",
-                    checked = isMoveFiles,
-                    color = QPWTheme.colors.green,
-                    onCheckedChange = { onMoveFilesChange(it) },
-                )
             }
         }
     }

@@ -14,7 +14,6 @@ data class SettingsState(
     var featureScreenTemplate: String = Constants.EMPTY,
     var featureViewModelTemplate: String = Constants.EMPTY,
     var featureContractTemplate: String = Constants.EMPTY,
-    var featureComponentKeyTemplate: String = Constants.EMPTY,
     var featurePreviewProviderTemplate: String = Constants.EMPTY,
     var moduleReadmeTemplate: String = Constants.EMPTY,
     var manifestTemplate: String = Constants.EMPTY,

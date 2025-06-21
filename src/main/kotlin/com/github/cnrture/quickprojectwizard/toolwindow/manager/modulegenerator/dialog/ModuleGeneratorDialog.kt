@@ -16,7 +16,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.github.cnrture.quickprojectwizard.service.AnalyticsService
 import com.github.cnrture.quickprojectwizard.common.Constants
 import com.github.cnrture.quickprojectwizard.common.Utils
 import com.github.cnrture.quickprojectwizard.common.file.FileWriter
@@ -24,6 +23,7 @@ import com.github.cnrture.quickprojectwizard.common.file.LibraryDependencyFinder
 import com.github.cnrture.quickprojectwizard.common.rootDirectoryString
 import com.github.cnrture.quickprojectwizard.common.rootDirectoryStringDropLast
 import com.github.cnrture.quickprojectwizard.components.*
+import com.github.cnrture.quickprojectwizard.service.AnalyticsService
 import com.github.cnrture.quickprojectwizard.service.SettingsService
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulegenerator.components.*
@@ -72,8 +72,6 @@ class ModuleGeneratorDialog(
         val availablePlugins = mutableStateListOf<String>()
         val selectedPlugins = mutableStateListOf<String>()
 
-        val isMoveFiles = mutableStateOf(false)
-
         val moduleType = mutableStateOf(settings.state.preferredModuleType)
         val packageName = mutableStateOf(settings.state.defaultPackageName)
         val moduleName = mutableStateOf(Constants.EMPTY)
@@ -120,9 +118,9 @@ class ModuleGeneratorDialog(
             ) {
                 QPWText(
                     modifier = Modifier.Companion.fillMaxWidth(),
-                    text = "Feature Generator",
+                    text = "Module Generator",
                     style = TextStyle(
-                        color = QPWTheme.colors.red,
+                        color = QPWTheme.colors.green,
                         fontSize = 36.sp,
                         fontWeight = FontWeight.Companion.Bold,
                         textAlign = TextAlign.Companion.Center,
@@ -144,8 +142,6 @@ class ModuleGeneratorDialog(
                     onDetectedModulesLoaded = { detectedModules.clear(); detectedModules.addAll(it) },
                     onSelectedModulesLoaded = { selectedModules.clear(); selectedModules.addAll(it) },
                     detectedModules = detectedModules,
-                    isMoveFiles = isMoveFiles.value,
-                    onMoveFilesChange = { isMoveFiles.value = it },
                     moduleType = moduleType.value,
                     packageName = packageName.value,
                     onPackageNameChanged = { packageName.value = it },
@@ -189,8 +185,6 @@ class ModuleGeneratorDialog(
         onDetectedModulesLoaded: (List<String>) -> Unit,
         onSelectedModulesLoaded: (List<String>) -> Unit,
         detectedModules: List<String>,
-        isMoveFiles: Boolean,
-        onMoveFilesChange: (Boolean) -> Unit,
         moduleType: String,
         packageName: String,
         onPackageNameChanged: (String) -> Unit,
@@ -245,7 +239,7 @@ class ModuleGeneratorDialog(
                                         packageName = packageName,
                                         moduleName = moduleNameState,
                                         moduleType = moduleType,
-                                        isMoveFiles = isMoveFiles,
+                                        isMoveFiles = true,
                                         libraryDependencyFinder = libraryDependencyFinder,
                                         selectedModules = selectedModules,
                                         selectedLibraries = selectedLibraries,
@@ -285,8 +279,6 @@ class ModuleGeneratorDialog(
                 RootSelectionContent(
                     selectedSrc = selectedSrc,
                     showFileTreeDialog = false,
-                    isMoveFiles = isMoveFiles,
-                    onMoveFilesChange = onMoveFilesChange,
                     isFileTreeButtonEnabled = false,
                 )
 

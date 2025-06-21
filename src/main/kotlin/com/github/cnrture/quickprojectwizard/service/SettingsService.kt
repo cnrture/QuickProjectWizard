@@ -282,7 +282,7 @@ object {NAME}Contract {
 """.trimIndent(),
                 ),
                 FileTemplate(
-                    fileName = "{NAME}ComponentKey.kt",
+                    fileName = "{NAME}PreviewParameterProvider.kt",
                     filePath = "ui",
                     fileContent = """
 package {FILE_PACKAGE}
@@ -445,7 +445,7 @@ object {NAME}Contract {
 """.trimIndent(),
                 ),
                 FileTemplate(
-                    fileName = "{NAME}ComponentKey.kt",
+                    fileName = "{NAME}PreviewParameterProvider.kt",
                     filePath = "",
                     fileContent = """
 package {FILE_PACKAGE}

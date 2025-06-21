@@ -37,8 +37,6 @@ fun MoveExistingFilesToModuleContent(
     onDetectedModulesLoaded: (List<String>) -> Unit,
     onSelectedModulesLoaded: (List<String>) -> Unit,
     detectedModules: List<String>,
-    isMoveFiles: Boolean,
-    onMoveFilesChange: (Boolean) -> Unit,
     moduleType: String,
     packageName: String,
     onPackageNameChanged: (String) -> Unit,
@@ -104,7 +102,7 @@ fun MoveExistingFilesToModuleContent(
                                     packageName = packageName,
                                     moduleName = moduleNameState,
                                     moduleType = moduleType,
-                                    isMoveFiles = isMoveFiles,
+                                    isMoveFiles = true,
                                     libraryDependencyFinder = libraryDependencyFinder,
                                     selectedModules = selectedModules,
                                     selectedLibraries = selectedLibraries,
@@ -141,8 +139,6 @@ fun MoveExistingFilesToModuleContent(
                 RootSelectionContent(
                     selectedSrc = selectedSrc,
                     showFileTreeDialog = showFileTreeDialog,
-                    isMoveFiles = isMoveFiles,
-                    onMoveFilesChange = onMoveFilesChange,
                     onChooseRootClick = { onFileTreeDialogStateChange() }
                 )
 
