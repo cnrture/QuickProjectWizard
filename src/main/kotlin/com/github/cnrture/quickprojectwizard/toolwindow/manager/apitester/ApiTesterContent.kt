@@ -17,13 +17,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.github.cnrture.quickprojectwizard.service.AnalyticsService
+import com.github.cnrture.quickprojectwizard.common.Constants
 import com.github.cnrture.quickprojectwizard.components.*
+import com.github.cnrture.quickprojectwizard.service.AnalyticsService
 import com.github.cnrture.quickprojectwizard.service.SettingsService
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
 import java.io.BufferedReader
@@ -527,7 +531,7 @@ private suspend fun makeApiRequest(
             }
         } ?: "No response"
 
-        Triple(response, statusCode, time.inWholeMilliseconds)
+        Triple(formatJson(response), statusCode, time.inWholeMilliseconds)
     } catch (e: Exception) {
         Triple("Error reading response: ${e.message}", connection?.responseCode ?: 0, time.inWholeMilliseconds)
     } finally {
@@ -549,4 +553,19 @@ private fun buildQueryParamsString(params: Map<String, String>): String {
 
 private fun encode(value: String): String {
     return java.net.URLEncoder.encode(value, "UTF-8")
+}
+
+@OptIn(ExperimentalSerializationApi::class)
+private fun formatJson(input: String): String {
+    if (input.isEmpty()) return Constants.EMPTY
+    return try {
+        val jsonElement = Json.parseToJsonElement(input)
+        val formatted = Json {
+            prettyPrint = true
+            prettyPrintIndent = " ".repeat(2)
+        }
+        formatted.encodeToString(JsonElement.serializer(), jsonElement)
+    } catch (e: Exception) {
+        "Invalid JSON: ${e.message ?: "Unknown error"}"
+    }
 }
