@@ -9,7 +9,7 @@ object Constants {
     const val ANDROID = "Android"
     const val KOTLIN = "Kotlin / JVM"
 
-    const val DEFAULT_MODULE_NAME = ":featureName"
+    const val DEFAULT_MODULE_NAME = ":module"
     const val DEFAULT_SRC_VALUE = "EMPTY"
 
     const val DEFAULT_BASE_PACKAGE_NAME = "app.example.app"

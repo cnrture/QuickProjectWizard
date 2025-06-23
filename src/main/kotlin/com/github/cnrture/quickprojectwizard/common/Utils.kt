@@ -90,6 +90,7 @@ object Utils {
         selectedSrc: String,
         packageName: String,
         moduleName: String,
+        name: String,
         moduleType: String,
         isMoveFiles: Boolean,
         libraryDependencyFinder: LibraryDependencyFinder,
@@ -127,6 +128,7 @@ object Utils {
                     packageName = finalPackageName,
                     settingsGradleFile = settingsGradleFile,
                     modulePathAsString = moduleName,
+                    name = name,
                     moduleType = moduleType,
                     showErrorDialog = { QPWMessageDialog(it).show() },
                     showSuccessDialog = {
@@ -484,7 +486,7 @@ object Utils {
         libraryDependencyFinder: LibraryDependencyFinder,
         onAvailableLibrariesLoaded: (List<String>) -> Unit,
         onLibraryGroupsLoaded: (Map<String, List<String>>) -> Unit,
-        expandedGroups: MutableMap<String, Boolean>,
+        expandedGroups: Map<String, Boolean>,
     ) {
         thread {
             val projectRoot = File(project.basePath.orEmpty())
@@ -495,8 +497,8 @@ object Utils {
                 SwingUtilities.invokeLater {
                     onAvailableLibrariesLoaded(libraryAliases)
                     onLibraryGroupsLoaded(grouped)
-                    expandedGroups.clear()
-                    grouped.keys.forEach { expandedGroups[it] = false }
+                    expandedGroups.toMutableMap().clear()
+                    grouped.keys.forEach { expandedGroups.toMutableMap()[it] = false }
                 }
             }
         }

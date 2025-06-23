@@ -11,7 +11,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.github.cnrture.quickprojectwizard.common.Constants
 import com.github.cnrture.quickprojectwizard.components.QPWRadioButton
 import com.github.cnrture.quickprojectwizard.components.QPWText
 import com.github.cnrture.quickprojectwizard.components.QPWTextField
@@ -22,10 +21,12 @@ fun ModuleTypeNameContent(
     moduleTypeSelectionState: String,
     packageName: String,
     moduleNameState: String,
+    nameState: String,
     radioOptions: List<String>,
     onPackageNameChanged: (String) -> Unit,
     onModuleTypeSelected: (String) -> Unit,
     onModuleNameChanged: (String) -> Unit,
+    onNameChanged: (String) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -86,9 +87,16 @@ fun ModuleTypeNameContent(
             Spacer(modifier = Modifier.size(16.dp))
             QPWTextField(
                 color = QPWTheme.colors.green,
-                placeholder = Constants.DEFAULT_MODULE_NAME,
+                placeholder = ":module",
                 value = moduleNameState,
                 onValueChange = { onModuleNameChanged(it) },
+            )
+            Spacer(modifier = Modifier.size(16.dp))
+            QPWTextField(
+                color = QPWTheme.colors.green,
+                placeholder = "{NAME} value",
+                value = nameState,
+                onValueChange = { onNameChanged(it) },
             )
         }
     }

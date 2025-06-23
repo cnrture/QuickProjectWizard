@@ -23,6 +23,7 @@ class FileWriter() {
         settingsGradleFile: File,
         workingDirectory: File,
         modulePathAsString: String,
+        name: String,
         moduleType: String,
         showErrorDialog: (String) -> Unit,
         showSuccessDialog: () -> Unit,
@@ -55,6 +56,7 @@ class FileWriter() {
             packageName = packageName,
             moduleFile = moduleFile,
             moduleName = modulePathAsString,
+            name = name,
             moduleType = moduleType,
             dependencies = dependencies,
             libraryDependencies = libraryDependencies,
@@ -71,6 +73,7 @@ class FileWriter() {
         packageName: String,
         moduleFile: File,
         moduleName: String,
+        name: String,
         moduleType: String,
         dependencies: List<String> = emptyList(),
         libraryDependencies: String = Constants.EMPTY,
@@ -96,7 +99,7 @@ class FileWriter() {
         filesCreated += templateWriter.createReadmeFile(moduleFile, moduleName)
 
         filesCreated += if (template != null) {
-            createTemplateBasedStructure(moduleFile, packageName, template)
+            createTemplateBasedStructure(moduleFile, packageName, name, template)
         } else {
             createDefaultPackages(moduleFile, packageName)
         }
@@ -244,6 +247,7 @@ class FileWriter() {
     private fun createTemplateBasedStructure(
         moduleFile: File,
         packageName: String,
+        name: String,
         template: ModuleTemplate,
     ): List<File> {
         val filesCreated = mutableListOf<File>()
@@ -264,18 +268,13 @@ class FileWriter() {
             ).toFile()
             fileDir.mkdirs()
 
-            val moduleNameFromPath = moduleFile.name.removePrefix(":")
-                .split("-", "_", "/").joinToString("") { part ->
-                    if (part.isNotEmpty()) part.replaceFirstChar { char -> char.uppercase() } else ""
-                }
-
             val fileName = fileTemplate.fileName
-                .replace("{NAME}", moduleNameFromPath.replaceFirstChar { it.uppercase() })
+                .replace("{NAME}", name)
 
             val file = File(fileDir, fileName)
 
             val content = fileTemplate.fileContent
-                .replace("{NAME}", moduleNameFromPath)
+                .replace("{NAME}", name)
                 .replace("{PACKAGE}", packageName)
                 .replace("{FILE_PACKAGE}", packagePath)
 

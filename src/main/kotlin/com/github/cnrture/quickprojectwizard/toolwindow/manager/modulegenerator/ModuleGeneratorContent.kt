@@ -49,6 +49,7 @@ fun ModuleGeneratorContent(project: Project) {
     val moduleType = mutableStateOf(settings.state.preferredModuleType)
     val packageName = mutableStateOf(settings.state.defaultPackageName)
     val moduleName = mutableStateOf(Constants.EMPTY)
+    val name = mutableStateOf(Constants.EMPTY)
 
     val isAnalyzing = mutableStateOf(false)
     val analysisResult = mutableStateOf<String?>(null)
@@ -145,6 +146,8 @@ fun ModuleGeneratorContent(project: Project) {
                         libraryDependencyFinder = libraryDependencyFinder,
                         moduleType = moduleType.value,
                         packageName = packageName.value,
+                        nameState = name.value,
+                        onNameChanged = { name.value = it },
                         onPackageNameChanged = { packageName.value = it },
                         moduleNameState = moduleName.value,
                         onModuleNameChanged = { moduleName.value = it },
@@ -202,6 +205,8 @@ fun ModuleGeneratorContent(project: Project) {
                         detectedModules = detectedModules,
                         moduleType = moduleType.value,
                         packageName = packageName.value,
+                        nameState = name.value,
+                        onNameChanged = { name.value = it },
                         onPackageNameChanged = { packageName.value = it },
                         moduleNameState = moduleName.value,
                         onModuleNameChanged = { moduleName.value = it },

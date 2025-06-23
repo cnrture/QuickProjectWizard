@@ -34,6 +34,8 @@ fun CreateNewModuleConfigurationPanel(
     libraryDependencyFinder: LibraryDependencyFinder,
     moduleType: String,
     packageName: String,
+    nameState: String,
+    onNameChanged: (String) -> Unit,
     onPackageNameChanged: (String) -> Unit,
     moduleNameState: String,
     onModuleNameChanged: (String) -> Unit,
@@ -87,6 +89,7 @@ fun CreateNewModuleConfigurationPanel(
                                 selectedSrc = selectedSrc,
                                 packageName = packageName,
                                 moduleName = moduleNameState,
+                                name = nameState,
                                 moduleType = moduleType,
                                 isMoveFiles = false,
                                 libraryDependencyFinder = libraryDependencyFinder,
@@ -115,10 +118,12 @@ fun CreateNewModuleConfigurationPanel(
                 moduleTypeSelectionState = moduleType,
                 packageName = packageName,
                 moduleNameState = moduleNameState,
+                nameState = nameState,
                 radioOptions = radioOptions,
                 onPackageNameChanged = onPackageNameChanged,
                 onModuleTypeSelected = onModuleTypeSelected,
                 onModuleNameChanged = onModuleNameChanged,
+                onNameChanged = onNameChanged,
             )
             Spacer(modifier = Modifier.height(32.dp))
             TemplateSelectionContent(

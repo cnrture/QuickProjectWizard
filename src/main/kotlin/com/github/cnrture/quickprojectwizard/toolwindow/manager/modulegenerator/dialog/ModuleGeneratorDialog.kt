@@ -75,6 +75,7 @@ class ModuleGeneratorDialog(
         val moduleType = mutableStateOf(settings.state.preferredModuleType)
         val packageName = mutableStateOf(settings.state.defaultPackageName)
         val moduleName = mutableStateOf(Constants.EMPTY)
+        val name = mutableStateOf(Constants.EMPTY)
 
         val isAnalyzing = mutableStateOf(false)
         val analysisResult = mutableStateOf<String?>(null)
@@ -144,6 +145,8 @@ class ModuleGeneratorDialog(
                     detectedModules = detectedModules,
                     moduleType = moduleType.value,
                     packageName = packageName.value,
+                    nameState = name.value,
+                    onNameChanged = { name.value = it },
                     onPackageNameChanged = { packageName.value = it },
                     moduleNameState = moduleName.value,
                     onModuleNameChanged = { moduleName.value = it },
@@ -189,6 +192,8 @@ class ModuleGeneratorDialog(
         detectedModules: List<String>,
         moduleType: String,
         packageName: String,
+        nameState: String,
+        onNameChanged: (String) -> Unit,
         onPackageNameChanged: (String) -> Unit,
         moduleNameState: String,
         onModuleNameChanged: (String) -> Unit,
@@ -239,6 +244,7 @@ class ModuleGeneratorDialog(
                                         selectedSrc = selectedSrc,
                                         packageName = packageName,
                                         moduleName = moduleNameState,
+                                        name = nameState,
                                         moduleType = moduleType,
                                         isMoveFiles = true,
                                         libraryDependencyFinder = libraryDependencyFinder,
@@ -269,7 +275,9 @@ class ModuleGeneratorDialog(
                     moduleTypeSelectionState = moduleType,
                     packageName = packageName,
                     moduleNameState = moduleNameState,
+                    nameState = nameState,
                     radioOptions = radioOptions,
+                    onNameChanged = onNameChanged,
                     onPackageNameChanged = onPackageNameChanged,
                     onModuleTypeSelected = onModuleTypeSelected,
                     onModuleNameChanged = onModuleNameChanged,
@@ -322,4 +330,22 @@ class ModuleGeneratorDialog(
             }
         }
     }
+
+    data class ModuleGeneratorState(
+        val moduleType: String = Constants.ANDROID,
+        val packageName: String = Constants.DEFAULT_BASE_PACKAGE_NAME,
+        val moduleName: String = Constants.EMPTY,
+        val name: String = Constants.EMPTY,
+        val selectedSrc: String = Constants.DEFAULT_SRC_VALUE,
+        val isAnalyzing: Boolean = false,
+        val analysisResult: String? = null,
+        val existingModules: List<String> = emptyList(),
+        val detectedModules: List<String> = emptyList(),
+        val selectedModules: List<String> = emptyList(),
+        val availableLibraries: List<String> = emptyList(),
+        val selectedLibraries: List<String> = emptyList(),
+        val libraryGroups: Map<String, List<String>> = emptyMap(),
+        val expandedGroups: Map<String, Boolean> = emptyMap(),
+        val availablePlugins: List<PluginListItem> = emptyList(),
+    )
 }
