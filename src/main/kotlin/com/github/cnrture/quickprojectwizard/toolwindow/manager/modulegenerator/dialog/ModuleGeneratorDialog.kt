@@ -109,62 +109,63 @@ class ModuleGeneratorDialog(
         )
         analyticsService.track("view_module_generator_dialog")
         Surface(
-            modifier = Modifier.Companion.fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             color = QPWTheme.colors.black,
         ) {
             Column(
-                modifier = Modifier.Companion
+                modifier = Modifier
                     .fillMaxSize()
                     .padding(24.dp),
             ) {
                 QPWText(
-                    modifier = Modifier.Companion.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     text = "Module Generator",
                     style = TextStyle(
                         color = QPWTheme.colors.green,
                         fontSize = 36.sp,
-                        fontWeight = FontWeight.Companion.Bold,
-                        textAlign = TextAlign.Companion.Center,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center,
                     ),
                 )
-                Spacer(modifier = Modifier.Companion.size(24.dp))
-                MoveExistingFilesToModuleContent(
-                    modifier = Modifier.Companion
-                        .fillMaxSize()
-                        .padding(horizontal = 24.dp),
+                Spacer(modifier = Modifier.size(24.dp))
+
+                val state = ModuleGeneratorState(
                     project = project,
                     fileWriter = fileWriter,
                     isAnalyzingState = isAnalyzing.value,
                     analysisResultState = analysisResult.value,
                     selectedSrc = selectedSrc.value,
                     libraryDependencyFinder = libraryDependencyFinder,
-                    onAnalysisResultChange = { analysisResult.value = it },
-                    onAnalyzingChange = { isAnalyzing.value = it },
-                    onDetectedModulesLoaded = { detectedModules.clear(); detectedModules.addAll(it) },
-                    onSelectedModulesLoaded = { selectedModules.clear(); selectedModules.addAll(it) },
                     detectedModules = detectedModules,
                     moduleType = moduleType.value,
                     packageName = packageName.value,
                     nameState = name.value,
-                    onNameChanged = { name.value = it },
-                    onPackageNameChanged = { packageName.value = it },
                     moduleNameState = moduleName.value,
-                    onModuleNameChanged = { moduleName.value = it },
-                    onModuleTypeSelected = { moduleType.value = it },
                     existingModules = existingModules,
                     selectedModules = selectedModules,
+                    availableLibraries = availableLibraries,
+                    selectedLibraries = selectedLibraries,
+                    libraryGroups = libraryGroups,
+                    expandedGroups = expandedGroups,
+                    availablePlugins = availablePlugins,
+                )
+
+                val callbacks = ModuleGeneratorCallbacks(
+                    onAnalysisResultChange = { analysisResult.value = it },
+                    onAnalyzingChange = { isAnalyzing.value = it },
+                    onDetectedModulesLoaded = { detectedModules.clear(); detectedModules.addAll(it) },
+                    onSelectedModulesLoaded = { selectedModules.clear(); selectedModules.addAll(it) },
+                    onNameChanged = { name.value = it },
+                    onPackageNameChanged = { packageName.value = it },
+                    onModuleNameChanged = { moduleName.value = it },
+                    onModuleTypeSelected = { moduleType.value = it },
                     onCheckedModule = {
                         if (it in selectedModules) selectedModules.remove(it) else selectedModules.add(it)
                     },
-                    availableLibraries = availableLibraries,
-                    selectedLibraries = selectedLibraries,
                     onLibrarySelected = {
                         if (it in selectedLibraries) selectedLibraries.remove(it) else selectedLibraries.add(it)
                     },
-                    libraryGroups = libraryGroups,
-                    expandedGroups = expandedGroups,
                     onGroupExpandToggle = { expandedGroups[it] = !(expandedGroups[it] ?: false) },
-                    availablePlugins = availablePlugins,
                     onPluginSelected = { plugin ->
                         val index = availablePlugins.indexOfFirst { it.name == plugin.name }
                         if (index != -1) {
@@ -172,43 +173,23 @@ class ModuleGeneratorDialog(
                         }
                     },
                 )
+
+                MoveExistingFilesToModuleContent(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 24.dp),
+                    state = state,
+                    callbacks = callbacks,
+                )
             }
         }
     }
 
     @Composable
     fun MoveExistingFilesToModuleContent(
-        modifier: Modifier = Modifier.Companion,
-        project: Project,
-        fileWriter: FileWriter,
-        isAnalyzingState: Boolean,
-        analysisResultState: String?,
-        selectedSrc: String,
-        libraryDependencyFinder: LibraryDependencyFinder,
-        onAnalysisResultChange: (String?) -> Unit,
-        onAnalyzingChange: (Boolean) -> Unit,
-        onDetectedModulesLoaded: (List<String>) -> Unit,
-        onSelectedModulesLoaded: (List<String>) -> Unit,
-        detectedModules: List<String>,
-        moduleType: String,
-        packageName: String,
-        nameState: String,
-        onNameChanged: (String) -> Unit,
-        onPackageNameChanged: (String) -> Unit,
-        moduleNameState: String,
-        onModuleNameChanged: (String) -> Unit,
-        onModuleTypeSelected: (String) -> Unit,
-        existingModules: List<String>,
-        selectedModules: List<String>,
-        onCheckedModule: (String) -> Unit,
-        availableLibraries: List<String>,
-        selectedLibraries: List<String>,
-        onLibrarySelected: (String) -> Unit,
-        libraryGroups: Map<String, List<String>>,
-        expandedGroups: Map<String, Boolean>,
-        onGroupExpandToggle: (String) -> Unit,
-        availablePlugins: List<PluginListItem>,
-        onPluginSelected: (PluginListItem) -> Unit,
+        modifier: Modifier = Modifier,
+        state: ModuleGeneratorState,
+        callbacks: ModuleGeneratorCallbacks,
     ) {
         val radioOptions = listOf(Constants.ANDROID, Constants.KOTLIN)
         Scaffold(
@@ -216,11 +197,11 @@ class ModuleGeneratorDialog(
             backgroundColor = QPWTheme.colors.black,
             bottomBar = {
                 Row(
-                    modifier = Modifier.Companion
+                    modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 16.dp),
                     horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.Companion.CenterVertically,
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     QPWActionCard(
                         title = "Cancel",
@@ -229,28 +210,32 @@ class ModuleGeneratorDialog(
                         type = QPWActionCardType.MEDIUM,
                         onClick = { close(Constants.DEFAULT_EXIT_CODE) },
                     )
-                    Spacer(modifier = Modifier.Companion.size(16.dp))
+                    Spacer(modifier = Modifier.size(16.dp))
                     QPWActionCard(
                         title = "Create",
                         icon = Icons.Rounded.CreateNewFolder,
                         actionColor = QPWTheme.colors.green,
                         type = QPWActionCardType.MEDIUM,
                         onClick = {
-                            if (Utils.validateModuleInput(packageName, moduleNameState) && selectedSrc.isNotEmpty()) {
+                            if (Utils.validateModuleInput(
+                                    state.packageName,
+                                    state.moduleNameState
+                                ) && state.selectedSrc.isNotEmpty()
+                            ) {
                                 try {
                                     Utils.createModule(
-                                        project = project,
-                                        fileWriter = fileWriter,
-                                        selectedSrc = selectedSrc,
-                                        packageName = packageName,
-                                        moduleName = moduleNameState,
-                                        name = nameState,
-                                        moduleType = moduleType,
+                                        project = state.project,
+                                        fileWriter = state.fileWriter,
+                                        selectedSrc = state.selectedSrc,
+                                        packageName = state.packageName,
+                                        moduleName = state.moduleNameState,
+                                        name = state.nameState,
+                                        moduleType = state.moduleType,
                                         isMoveFiles = true,
-                                        libraryDependencyFinder = libraryDependencyFinder,
-                                        selectedModules = selectedModules,
-                                        selectedLibraries = selectedLibraries,
-                                        selectedPlugins = availablePlugins,
+                                        libraryDependencyFinder = state.libraryDependencyFinder,
+                                        selectedModules = state.selectedModules,
+                                        selectedLibraries = state.selectedLibraries,
+                                        selectedPlugins = state.availablePlugins,
                                         from = "action",
                                     )
                                     close(0)
@@ -265,66 +250,66 @@ class ModuleGeneratorDialog(
             }
         ) { padding ->
             Column(
-                modifier = Modifier.Companion
+                modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
                     .verticalScroll(rememberScrollState()),
             ) {
-                Spacer(modifier = Modifier.Companion.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
                 ModuleTypeNameContent(
-                    moduleTypeSelectionState = moduleType,
-                    packageName = packageName,
-                    moduleNameState = moduleNameState,
-                    nameState = nameState,
+                    moduleTypeSelectionState = state.moduleType,
+                    packageName = state.packageName,
+                    moduleNameState = state.moduleNameState,
+                    nameState = state.nameState,
                     radioOptions = radioOptions,
-                    onNameChanged = onNameChanged,
-                    onPackageNameChanged = onPackageNameChanged,
-                    onModuleTypeSelected = onModuleTypeSelected,
-                    onModuleNameChanged = onModuleNameChanged,
+                    onNameChanged = callbacks.onNameChanged,
+                    onPackageNameChanged = callbacks.onPackageNameChanged,
+                    onModuleTypeSelected = callbacks.onModuleTypeSelected,
+                    onModuleNameChanged = callbacks.onModuleNameChanged,
                 )
 
-                Spacer(modifier = Modifier.Companion.height(32.dp))
+                Spacer(modifier = Modifier.height(32.dp))
 
                 RootSelectionContent(
-                    selectedSrc = selectedSrc,
+                    selectedSrc = state.selectedSrc,
                     showFileTreeDialog = false,
                     isFileTreeButtonEnabled = false,
                 )
 
-                Spacer(modifier = Modifier.Companion.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 DetectedModulesContent(
-                    project = project,
-                    isAnalyzingState = isAnalyzingState,
-                    analysisResultState = analysisResultState,
-                    selectedSrc = selectedSrc,
-                    onAnalysisResultChange = onAnalysisResultChange,
-                    onAnalyzingChange = onAnalyzingChange,
-                    onDetectedModulesLoaded = onDetectedModulesLoaded,
-                    onSelectedModulesLoaded = onSelectedModulesLoaded,
-                    detectedModules = detectedModules,
-                    existingModules = existingModules,
-                    selectedModules = selectedModules,
-                    onCheckedModule = onCheckedModule,
+                    project = state.project,
+                    isAnalyzingState = state.isAnalyzingState,
+                    analysisResultState = state.analysisResultState,
+                    selectedSrc = state.selectedSrc,
+                    onAnalysisResultChange = callbacks.onAnalysisResultChange,
+                    onAnalyzingChange = callbacks.onAnalyzingChange,
+                    onDetectedModulesLoaded = callbacks.onDetectedModulesLoaded,
+                    onSelectedModulesLoaded = callbacks.onSelectedModulesLoaded,
+                    detectedModules = state.detectedModules,
+                    existingModules = state.existingModules,
+                    selectedModules = state.selectedModules,
+                    onCheckedModule = callbacks.onCheckedModule,
                 )
 
-                Spacer(modifier = Modifier.Companion.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 Column(
-                    modifier = Modifier.Companion.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                 ) {
                     PluginSelectionContent(
-                        availablePlugins = availablePlugins,
-                        onPluginSelected = onPluginSelected,
+                        availablePlugins = state.availablePlugins,
+                        onPluginSelected = callbacks.onPluginSelected,
                     )
                     LibrarySelectionContent(
-                        availableLibraries = availableLibraries,
-                        selectedLibraries = selectedLibraries,
-                        onLibrarySelected = onLibrarySelected,
-                        libraryGroups = libraryGroups,
-                        expandedGroups = expandedGroups,
-                        onGroupExpandToggle = onGroupExpandToggle,
+                        availableLibraries = state.availableLibraries,
+                        selectedLibraries = state.selectedLibraries,
+                        onLibrarySelected = callbacks.onLibrarySelected,
+                        libraryGroups = state.libraryGroups,
+                        expandedGroups = state.expandedGroups,
+                        onGroupExpandToggle = callbacks.onGroupExpandToggle,
                     )
                 }
             }
@@ -332,20 +317,38 @@ class ModuleGeneratorDialog(
     }
 
     data class ModuleGeneratorState(
-        val moduleType: String = Constants.ANDROID,
-        val packageName: String = Constants.DEFAULT_BASE_PACKAGE_NAME,
-        val moduleName: String = Constants.EMPTY,
-        val name: String = Constants.EMPTY,
-        val selectedSrc: String = Constants.DEFAULT_SRC_VALUE,
-        val isAnalyzing: Boolean = false,
-        val analysisResult: String? = null,
-        val existingModules: List<String> = emptyList(),
-        val detectedModules: List<String> = emptyList(),
-        val selectedModules: List<String> = emptyList(),
-        val availableLibraries: List<String> = emptyList(),
-        val selectedLibraries: List<String> = emptyList(),
-        val libraryGroups: Map<String, List<String>> = emptyMap(),
-        val expandedGroups: Map<String, Boolean> = emptyMap(),
-        val availablePlugins: List<PluginListItem> = emptyList(),
+        val project: Project,
+        val fileWriter: FileWriter,
+        val isAnalyzingState: Boolean,
+        val analysisResultState: String?,
+        val selectedSrc: String,
+        val libraryDependencyFinder: LibraryDependencyFinder,
+        val detectedModules: List<String>,
+        val moduleType: String,
+        val packageName: String,
+        val nameState: String,
+        val moduleNameState: String,
+        val existingModules: List<String>,
+        val selectedModules: List<String>,
+        val availableLibraries: List<String>,
+        val selectedLibraries: List<String>,
+        val libraryGroups: Map<String, List<String>>,
+        val expandedGroups: Map<String, Boolean>,
+        val availablePlugins: List<PluginListItem>,
+    )
+
+    data class ModuleGeneratorCallbacks(
+        val onAnalysisResultChange: (String?) -> Unit,
+        val onAnalyzingChange: (Boolean) -> Unit,
+        val onDetectedModulesLoaded: (List<String>) -> Unit,
+        val onSelectedModulesLoaded: (List<String>) -> Unit,
+        val onNameChanged: (String) -> Unit,
+        val onPackageNameChanged: (String) -> Unit,
+        val onModuleNameChanged: (String) -> Unit,
+        val onModuleTypeSelected: (String) -> Unit,
+        val onCheckedModule: (String) -> Unit,
+        val onLibrarySelected: (String) -> Unit,
+        val onGroupExpandToggle: (String) -> Unit,
+        val onPluginSelected: (PluginListItem) -> Unit,
     )
 }
