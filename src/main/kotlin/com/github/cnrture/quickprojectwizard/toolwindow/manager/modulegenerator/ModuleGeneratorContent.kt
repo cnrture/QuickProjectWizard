@@ -205,8 +205,6 @@ fun ModuleGeneratorContent(project: Project) {
                         detectedModules = detectedModules,
                         moduleType = moduleType.value,
                         packageName = packageName.value,
-                        nameState = name.value,
-                        onNameChanged = { name.value = it },
                         onPackageNameChanged = { packageName.value = it },
                         moduleNameState = moduleName.value,
                         onModuleNameChanged = { moduleName.value = it },

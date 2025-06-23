@@ -21,12 +21,10 @@ fun ModuleTypeNameContent(
     moduleTypeSelectionState: String,
     packageName: String,
     moduleNameState: String,
-    nameState: String,
     radioOptions: List<String>,
     onPackageNameChanged: (String) -> Unit,
     onModuleTypeSelected: (String) -> Unit,
     onModuleNameChanged: (String) -> Unit,
-    onNameChanged: (String) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -90,13 +88,6 @@ fun ModuleTypeNameContent(
                 placeholder = ":module",
                 value = moduleNameState,
                 onValueChange = { onModuleNameChanged(it) },
-            )
-            Spacer(modifier = Modifier.size(16.dp))
-            QPWTextField(
-                color = QPWTheme.colors.green,
-                placeholder = "{NAME} value",
-                value = nameState,
-                onValueChange = { onNameChanged(it) },
             )
         }
     }

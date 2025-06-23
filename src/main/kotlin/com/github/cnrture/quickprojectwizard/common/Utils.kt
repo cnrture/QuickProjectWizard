@@ -90,7 +90,7 @@ object Utils {
         selectedSrc: String,
         packageName: String,
         moduleName: String,
-        name: String,
+        name: String = Constants.EMPTY,
         moduleType: String,
         isMoveFiles: Boolean,
         libraryDependencyFinder: LibraryDependencyFinder,

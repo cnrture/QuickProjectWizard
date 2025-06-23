@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.components.QPWText
+import com.github.cnrture.quickprojectwizard.components.QPWTextField
 import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 
@@ -27,7 +28,9 @@ fun TemplateSelectionContent(
     templates: List<ModuleTemplate>,
     selectedTemplate: ModuleTemplate?,
     defaultTemplateId: String,
+    nameState: String,
     onTemplateSelected: (ModuleTemplate?) -> Unit,
+    onNameChanged: (String) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -77,7 +80,9 @@ fun TemplateSelectionContent(
                     onTemplateSelected(template)
                 },
                 badge = if (template.id == defaultTemplateId) "Default" else "",
-                badgeColor = if (template.id == defaultTemplateId) QPWTheme.colors.green else QPWTheme.colors.purple
+                badgeColor = if (template.id == defaultTemplateId) QPWTheme.colors.green else QPWTheme.colors.purple,
+                nameState = nameState,
+                onNameChanged = onNameChanged,
             )
             Spacer(modifier = Modifier.height(8.dp))
         }
@@ -91,6 +96,8 @@ private fun TemplateOption(
     onClick: () -> Unit,
     badge: String,
     badgeColor: Color,
+    nameState: String? = null,
+    onNameChanged: ((String) -> Unit)? = null,
 ) {
     Card(
         modifier = Modifier
@@ -137,6 +144,21 @@ private fun TemplateOption(
                             )
                         }
                     }
+                }
+                nameState?.let {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    QPWTextField(
+                        color = QPWTheme.colors.green,
+                        placeholder = "{NAME} value",
+                        value = nameState,
+                        onValueChange = { onNameChanged?.invoke(it) },
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    QPWText(
+                        text = "If you use {NAME} in your template, it will be replaced with this value.",
+                        color = QPWTheme.colors.green,
+                        style = TextStyle(fontSize = 12.sp),
+                    )
                 }
             }
 

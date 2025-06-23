@@ -118,19 +118,19 @@ fun CreateNewModuleConfigurationPanel(
                 moduleTypeSelectionState = moduleType,
                 packageName = packageName,
                 moduleNameState = moduleNameState,
-                nameState = nameState,
                 radioOptions = radioOptions,
                 onPackageNameChanged = onPackageNameChanged,
                 onModuleTypeSelected = onModuleTypeSelected,
                 onModuleNameChanged = onModuleNameChanged,
-                onNameChanged = onNameChanged,
             )
             Spacer(modifier = Modifier.height(32.dp))
             TemplateSelectionContent(
                 templates = templates,
                 selectedTemplate = selectedTemplate,
+                nameState = nameState,
                 defaultTemplateId = settings.state.defaultModuleTemplateId,
-                onTemplateSelected = onTemplateSelected
+                onTemplateSelected = onTemplateSelected,
+                onNameChanged = onNameChanged,
             )
             Spacer(modifier = Modifier.height(16.dp))
             DetectedModulesContent(
