@@ -85,13 +85,13 @@ fun SettingsContent(project: Project) {
                     onTabSelected = { selectedTab = "general" }
                 )
                 QPWTabRow(
-                    text = "Module Templates",
+                    text = "Module",
                     isSelected = selectedTab == "templates",
                     color = QPWTheme.colors.lightGray,
                     onTabSelected = { selectedTab = "templates" }
                 )
                 QPWTabRow(
-                    text = "Feature Templates",
+                    text = "Feature",
                     isSelected = selectedTab == "feature_templates",
                     color = QPWTheme.colors.lightGray,
                     onTabSelected = { selectedTab = "feature_templates" }
@@ -254,7 +254,7 @@ private fun ModuleTemplatesTab(
             verticalAlignment = Alignment.CenterVertically
         ) {
             QPWText(
-                text = "Module Templates",
+                text = "Module",
                 color = QPWTheme.colors.white,
                 style = TextStyle(
                     fontSize = 20.sp,
@@ -571,7 +571,7 @@ private fun FeatureTemplatesTab(
             verticalAlignment = Alignment.CenterVertically
         ) {
             QPWText(
-                text = "Feature Templates",
+                text = "Templates",
                 color = QPWTheme.colors.white,
                 style = TextStyle(
                     fontSize = 20.sp,
@@ -748,7 +748,6 @@ private fun FeatureTemplateCard(
                 if (template.id != defaultTemplateId) {
                     QPWActionCard(
                         title = "Set Default",
-                        icon = Icons.Rounded.DisabledByDefault,
                         type = QPWActionCardType.SMALL,
                         actionColor = QPWTheme.colors.lightGray,
                         onClick = onSetDefault
@@ -756,7 +755,6 @@ private fun FeatureTemplateCard(
                 }
                 if (template.id != "candroid_template") {
                     QPWActionCard(
-                        title = "Edit",
                         icon = Icons.Rounded.Edit,
                         type = QPWActionCardType.SMALL,
                         actionColor = QPWTheme.colors.lightGray,
@@ -764,7 +762,6 @@ private fun FeatureTemplateCard(
                     )
                 } else {
                     QPWActionCard(
-                        title = "Preview",
                         icon = Icons.Rounded.RemoveRedEye,
                         type = QPWActionCardType.SMALL,
                         actionColor = QPWTheme.colors.lightGray,
@@ -772,7 +769,6 @@ private fun FeatureTemplateCard(
                     )
                 }
                 QPWActionCard(
-                    title = "Export",
                     icon = Icons.Rounded.FileUpload,
                     type = QPWActionCardType.SMALL,
                     actionColor = QPWTheme.colors.lightGray,

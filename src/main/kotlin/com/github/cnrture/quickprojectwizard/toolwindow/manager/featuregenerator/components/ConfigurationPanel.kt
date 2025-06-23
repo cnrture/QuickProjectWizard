@@ -139,7 +139,7 @@ fun TemplateSelectionContent(
             .padding(16.dp)
     ) {
         QPWText(
-            text = "Feature Templates",
+            text = "Templates",
             color = QPWTheme.colors.white,
             style = TextStyle(
                 fontSize = 18.sp,

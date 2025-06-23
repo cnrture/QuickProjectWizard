@@ -89,7 +89,7 @@ fun FormatterContent() {
     ) {
         QPWText(
             modifier = Modifier.fillMaxWidth(),
-            text = "JSON/XML Formatter & Validator",
+            text = "JSON/XML Formatter",
             style = TextStyle(
                 color = QPWTheme.colors.green,
                 fontSize = 28.sp,
@@ -136,7 +136,7 @@ fun FormatterContent() {
                 title = "Format",
                 icon = Icons.AutoMirrored.Rounded.FormatAlignLeft,
                 actionColor = QPWTheme.colors.green,
-                type = QPWActionCardType.MEDIUM,
+                type = QPWActionCardType.SMALL,
                 onClick = {
                     val result = if (selectedFormat == "JSON") {
                         formatJson(inputText)
@@ -153,7 +153,7 @@ fun FormatterContent() {
                 title = "Minify",
                 icon = Icons.Rounded.Compress,
                 actionColor = QPWTheme.colors.green,
-                type = QPWActionCardType.MEDIUM,
+                type = QPWActionCardType.SMALL,
                 onClick = {
                     val result = if (selectedFormat == "JSON") {
                         minifyJson(inputText)
@@ -170,7 +170,7 @@ fun FormatterContent() {
                 title = "Clear",
                 icon = Icons.Rounded.Clear,
                 actionColor = QPWTheme.colors.red,
-                type = QPWActionCardType.MEDIUM,
+                type = QPWActionCardType.SMALL,
                 onClick = {
                     inputText = if (selectedFormat == "JSON") {
                         getSampleJson()
@@ -203,13 +203,13 @@ fun FormatterContent() {
                         imageVector = if (isValidInput) Icons.Rounded.CheckCircle else Icons.Rounded.Error,
                         contentDescription = null,
                         tint = if (isValidInput) QPWTheme.colors.green else QPWTheme.colors.red,
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(16.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     QPWText(
                         text = errorMessage,
                         color = if (isValidInput) QPWTheme.colors.green else QPWTheme.colors.red,
-                        style = TextStyle(fontSize = 14.sp)
+                        style = TextStyle(fontSize = 12.sp)
                     )
                 }
             }
@@ -226,7 +226,7 @@ fun FormatterContent() {
                 QPWText(
                     text = "Input",
                     color = QPWTheme.colors.white,
-                    style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                    style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Bold)
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -252,7 +252,7 @@ fun FormatterContent() {
                     QPWText(
                         text = "Output",
                         color = QPWTheme.colors.white,
-                        style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                        style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Bold)
                     )
                     QPWActionCard(
                         title = "Copy",
@@ -380,9 +380,8 @@ private fun CollapsibleJsonTextArea(
                             .verticalScroll(scrollState),
                         textStyle = TextStyle(
                             color = QPWTheme.colors.white,
-                            fontSize = 14.sp,
+                            fontSize = 12.sp,
                             fontFamily = FontFamily.Monospace,
-                            lineHeight = 20.sp
                         ),
                         cursorBrush = SolidColor(QPWTheme.colors.green),
                         readOnly = readOnly,
@@ -395,7 +394,7 @@ private fun CollapsibleJsonTextArea(
                                         text = placeholder,
                                         color = QPWTheme.colors.lightGray.copy(alpha = 0.6f),
                                         style = TextStyle(
-                                            fontSize = 14.sp,
+                                            fontSize = 12.sp,
                                             fontFamily = FontFamily.Monospace
                                         )
                                     )
@@ -468,7 +467,7 @@ private fun CollapsibleJsonRenderer(
                             text = "...",
                             color = QPWTheme.colors.lightGray,
                             style = TextStyle(
-                                fontSize = 14.sp,
+                                fontSize = 12.sp,
                                 fontFamily = FontFamily.Monospace
                             )
                         )
@@ -511,9 +510,8 @@ private fun SyntaxHighlightedText(
         text = text,
         color = color,
         style = TextStyle(
-            fontSize = 14.sp,
+            fontSize = 12.sp,
             fontFamily = FontFamily.Monospace,
-            lineHeight = 20.sp
         ),
         modifier = modifier
     )

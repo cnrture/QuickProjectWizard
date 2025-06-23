@@ -1,10 +1,6 @@
 package com.github.cnrture.quickprojectwizard.service
 
-import com.github.cnrture.quickprojectwizard.data.ColorInfo
-import com.github.cnrture.quickprojectwizard.data.FeatureTemplate
-import com.github.cnrture.quickprojectwizard.data.FileTemplate
-import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
-import com.github.cnrture.quickprojectwizard.data.SettingsState
+import com.github.cnrture.quickprojectwizard.data.*
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.Service
