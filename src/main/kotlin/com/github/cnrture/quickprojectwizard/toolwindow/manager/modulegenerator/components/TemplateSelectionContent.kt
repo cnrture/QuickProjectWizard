@@ -145,7 +145,7 @@ private fun TemplateOption(
                         }
                     }
                 }
-                nameState?.let {
+                if (nameState != null && onNameChanged != null && isSelected) {
                     Spacer(modifier = Modifier.height(12.dp))
                     QPWTextField(
                         color = QPWTheme.colors.green,
