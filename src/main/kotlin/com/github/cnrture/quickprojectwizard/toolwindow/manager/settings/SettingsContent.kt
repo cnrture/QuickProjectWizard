@@ -5,8 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Card
-import androidx.compose.material.Scaffold
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.runtime.*
@@ -19,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.compose.ui.window.PopupProperties
 import com.github.cnrture.quickprojectwizard.common.Constants
 import com.github.cnrture.quickprojectwizard.common.Utils
 import com.github.cnrture.quickprojectwizard.components.*
@@ -239,6 +239,7 @@ private fun ModuleTemplatesTab(
     onSetDefault: (ModuleTemplate) -> Unit,
     onImport: () -> Unit,
 ) {
+    var isReviewDialogVisible by remember { mutableStateOf(Pair(false, ModuleTemplate.EMPTY)) }
     var isCreateDialogVisible by remember { mutableStateOf(Pair(false, ModuleTemplate.EMPTY)) }
     var isEditDialogVisible by remember { mutableStateOf(Pair(false, ModuleTemplate.EMPTY)) }
     val settings = SettingsService.getInstance()
@@ -288,11 +289,12 @@ private fun ModuleTemplatesTab(
                 onEdit = { isEditDialogVisible = Pair(true, template) },
                 onDelete = { if (!template.isDefault) onTemplateDelete(template) },
                 onSetDefault = { onSetDefault(template) },
+                onReview = { isReviewDialogVisible = Pair(true, template) },
                 onExport = {
                     Utils.exportModuleTemplate(project, template) { success, message ->
                         Utils.showInfo("Quick Project Wizard", message)
                     }
-                }
+                },
             )
         }
 
@@ -358,6 +360,22 @@ private fun ModuleTemplatesTab(
                 )
             }
         }
+
+        if (isReviewDialogVisible.first) {
+            Dialog(
+                onDismissRequest = {},
+                properties = DialogProperties(
+                    dismissOnBackPress = false,
+                    dismissOnClickOutside = false,
+                    usePlatformDefaultWidth = false,
+                )
+            ) {
+                ModuleTemplateReviewContent(
+                    template = isReviewDialogVisible.second,
+                    onCancelClick = { isReviewDialogVisible = Pair(false, ModuleTemplate.EMPTY) },
+                )
+            }
+        }
     }
 }
 
@@ -369,7 +387,10 @@ private fun ModuleTemplateCard(
     onDelete: () -> Unit,
     onSetDefault: () -> Unit,
     onExport: () -> Unit,
+    onReview: () -> Unit,
 ) {
+    var expanded by remember { mutableStateOf(false) }
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
@@ -409,41 +430,55 @@ private fun ModuleTemplateCard(
                 }
             }
 
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                if (template.id != defaultTemplateId) {
-                    QPWActionCard(
-                        title = "Set Default",
-                        icon = Icons.Rounded.Edit,
-                        type = QPWActionCardType.SMALL,
-                        actionColor = QPWTheme.colors.lightGray,
-                        onClick = onSetDefault
+            Box {
+                IconButton(onClick = { expanded = true }) {
+                    Icon(
+                        imageVector = Icons.Rounded.MoreVert,
+                        contentDescription = "More options",
+                        tint = QPWTheme.colors.lightGray
                     )
                 }
-                if (template.id != "candroid_template") {
-                    QPWActionCard(
-                        title = "Edit",
-                        icon = Icons.Rounded.Edit,
-                        type = QPWActionCardType.SMALL,
-                        actionColor = QPWTheme.colors.lightGray,
-                        onClick = {
-                            onEdit()
-                        }
+                DropdownMenu(
+                    modifier = Modifier.background(
+                        color = QPWTheme.colors.black,
+                        shape = RoundedCornerShape(0.dp)
+                    ),
+                    properties = PopupProperties(dismissOnClickOutside = true),
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false }
+                ) {
+                    if (template.id != defaultTemplateId) {
+                        QPWDropdownItem(
+                            text = "Set Default",
+                            icon = Icons.Rounded.Check,
+                            onClick = { expanded = false; onSetDefault() }
+                        )
+                    }
+                    if (template.id != "candroid_template") {
+                        QPWDropdownItem(
+                            text = "Edit",
+                            icon = Icons.Rounded.Edit,
+                            onClick = { expanded = false; onEdit() }
+                        )
+                    } else {
+                        QPWDropdownItem(
+                            text = "Review",
+                            icon = Icons.Rounded.RemoveRedEye,
+                            onClick = { expanded = false; onReview() }
+                        )
+                    }
+                    QPWDropdownItem(
+                        text = "Export",
+                        icon = Icons.Rounded.Upload,
+                        onClick = { expanded = false; onExport() }
                     )
-                }
-                QPWActionCard(
-                    title = "Export",
-                    icon = Icons.Rounded.FileUpload,
-                    type = QPWActionCardType.SMALL,
-                    actionColor = QPWTheme.colors.lightGray,
-                    onClick = onExport
-                )
-                if (!template.isDefault || template.id != "candroid_template") {
-                    QPWActionCard(
-                        icon = Icons.Rounded.Delete,
-                        type = QPWActionCardType.SMALL,
-                        actionColor = QPWTheme.colors.red,
-                        onClick = onDelete
-                    )
+                    if (!template.isDefault || template.id != "candroid_template") {
+                        QPWDropdownItem(
+                            text = "Delete",
+                            icon = Icons.Rounded.Delete,
+                            onClick = { expanded = false; onDelete() }
+                        )
+                    }
                 }
             }
         }
@@ -705,6 +740,8 @@ private fun FeatureTemplateCard(
     onExport: () -> Unit,
     onReview: () -> Unit,
 ) {
+    var expanded by remember { mutableStateOf(false) }
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
@@ -744,43 +781,55 @@ private fun FeatureTemplateCard(
                 }
             }
 
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                if (template.id != defaultTemplateId) {
-                    QPWActionCard(
-                        title = "Set Default",
-                        type = QPWActionCardType.SMALL,
-                        actionColor = QPWTheme.colors.lightGray,
-                        onClick = onSetDefault
+            Box {
+                IconButton(onClick = { expanded = true }) {
+                    Icon(
+                        imageVector = Icons.Rounded.MoreVert,
+                        contentDescription = "More options",
+                        tint = QPWTheme.colors.lightGray
                     )
                 }
-                if (template.id != "candroid_template") {
-                    QPWActionCard(
-                        icon = Icons.Rounded.Edit,
-                        type = QPWActionCardType.SMALL,
-                        actionColor = QPWTheme.colors.lightGray,
-                        onClick = onEdit,
+                DropdownMenu(
+                    modifier = Modifier.background(
+                        color = QPWTheme.colors.black,
+                        shape = RoundedCornerShape(0.dp)
+                    ),
+                    properties = PopupProperties(dismissOnClickOutside = true),
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false }
+                ) {
+                    if (template.id != defaultTemplateId) {
+                        QPWDropdownItem(
+                            text = "Set Default",
+                            icon = Icons.Rounded.Check,
+                            onClick = { expanded = false; onSetDefault() }
+                        )
+                    }
+                    if (template.id != "candroid_template") {
+                        QPWDropdownItem(
+                            text = "Edit",
+                            icon = Icons.Rounded.Edit,
+                            onClick = { expanded = false; onEdit() }
+                        )
+                    } else {
+                        QPWDropdownItem(
+                            text = "Review",
+                            icon = Icons.Rounded.RemoveRedEye,
+                            onClick = { expanded = false; onReview() }
+                        )
+                    }
+                    QPWDropdownItem(
+                        text = "Export",
+                        icon = Icons.Rounded.Upload,
+                        onClick = { expanded = false; onExport() }
                     )
-                } else {
-                    QPWActionCard(
-                        icon = Icons.Rounded.RemoveRedEye,
-                        type = QPWActionCardType.SMALL,
-                        actionColor = QPWTheme.colors.lightGray,
-                        onClick = onReview,
-                    )
-                }
-                QPWActionCard(
-                    icon = Icons.Rounded.FileUpload,
-                    type = QPWActionCardType.SMALL,
-                    actionColor = QPWTheme.colors.lightGray,
-                    onClick = onExport
-                )
-                if (!template.isDefault || template.id != "candroid_template") {
-                    QPWActionCard(
-                        icon = Icons.Rounded.Delete,
-                        type = QPWActionCardType.SMALL,
-                        actionColor = QPWTheme.colors.red,
-                        onClick = onDelete
-                    )
+                    if (!template.isDefault || template.id != "candroid_template") {
+                        QPWDropdownItem(
+                            text = "Delete",
+                            icon = Icons.Rounded.Delete,
+                            onClick = { expanded = false; onDelete() }
+                        )
+                    }
                 }
             }
         }
