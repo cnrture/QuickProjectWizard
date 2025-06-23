@@ -23,6 +23,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.IconLoader
 import com.intellij.openapi.vfs.VfsUtil
 import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.openapi.wm.ToolWindowManager
 import freemarker.template.Configuration
 import java.io.File
 import java.io.IOException
@@ -149,6 +150,10 @@ object Utils {
 
                         addDependencyToAppModule(project, moduleName)
                         syncProject(project)
+
+                        ApplicationManager.getApplication().invokeLater {
+                            ToolWindowManager.getInstance(project).getToolWindow("QuickProjectWizard")?.hide()
+                        }
                     },
                     workingDirectory = File(project.basePath.orEmpty()),
                     dependencies = selectedModules,
@@ -433,8 +438,8 @@ object Utils {
                 val patterns = listOf(
                     """include\s*\(\s*["']([^"']+)["']\s*\)""".toRegex(),
                     """include\s+['"]([^"']+)["']""".toRegex(),
-                    """include\s+['"]([^"']+)["'](?:\s*,\s*['"]([^"']+)["'])*""".toRegex(),
-                    """include\s+['"]([^"']+)["'](?:\s*,\s*\n\s*['"]([^"']+)["'])*""".toRegex()
+                    """include\s+['"]([^"']+)["'](?:\s*,\s*['"]([^"']+)[""])*""".toRegex(),
+                    """include\s+['"]([^"']+)[""](?:\s*,\s*\n\s*['"]([^"']+)[""])*""".toRegex()
                 )
 
                 val modulesSet = mutableSetOf<String>()
@@ -454,7 +459,7 @@ object Utils {
                 val multiLineMatches = multiLinePattern.findAll(content)
 
                 multiLineMatches.forEach { match ->
-                    val modulePattern = """['"]([^"']+)["']""".toRegex()
+                    val modulePattern = """['"]([^""]+)[""]""".toRegex()
                     val moduleMatches = modulePattern.findAll(match.value)
                     moduleMatches.forEach { moduleMatch ->
                         val moduleValue = moduleMatch.groupValues[1]
