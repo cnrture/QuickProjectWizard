@@ -6,6 +6,8 @@
 
 <img src="src/main/resources/META-INF/pluginIcon.svg" alt="QuickProjectWizard" width="144">
 
+[Documentation](https://quickprojectwizard.candroid.dev/tutorials/project-wizard/)
+
 <!-- Plugin description -->
 
 #### The ultimate Android development companion that simplifies project setup and provides powerful development tools. Create new projects with modern dependencies, manage modules and features, and access essential utilities - all from a single, intuitive interface.
