@@ -113,7 +113,8 @@ object Utils {
                 }
 
                 val moduleNameTrimmed = moduleName.removePrefix(":").replace(":", ".")
-                val finalPackageName = "${packageName}.${moduleNameTrimmed.split(".")}"
+                val finalPackageName =
+                    "${packageName}.${moduleNameTrimmed.split(".").joinToString(".") { it.lowercase() }}"
 
                 val manualLibraryDependenciesString =
                     libraryDependencyFinder.formatLibraryDependencies(selectedLibraries)
