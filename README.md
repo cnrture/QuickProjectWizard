@@ -4,135 +4,330 @@
 [![Version](https://img.shields.io/jetbrains/plugin/v/25221.svg)](https://plugins.jetbrains.com/plugin/25221)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/25221.svg)](https://plugins.jetbrains.com/plugin/25221)
 
-<img src="src/main/resources/META-INF/pluginIcon.svg" alt="New Project" width="144">
+<img src="src/main/resources/META-INF/pluginIcon.svg" alt="QuickProjectWizard" width="144">
 
 <!-- Plugin description -->
 
-#### This plugin simplifies the process of setting up a new Android project with all the necessary dependencies and configurations. It also provides powerful development tools for managing modules, features, and project resources.
-- Popular libraries and frameworks
-- Compose, XML and Compose Multiplatform templates
-- data, di, domain, ui, and common packages
-- Built-in development tools and utilities
+#### The ultimate Android development companion that simplifies project setup and provides powerful development tools. Create new projects with modern dependencies, manage modules and features, and access essential utilities - all from a single, intuitive interface.
+
+🚀 **Project Templates** • 🏗️ **Module & Feature Generation** • 🎨 **Development Tools** • ⚙️ **Team Collaboration**
+
 <!-- Plugin description end -->
 
-## Installation
+## ✨ Features Overview
 
-- Using the IDE built-in plugin system:
-  
-  <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "QuickProjectWizard"</kbd> >
-  <kbd>Install</kbd>
-  
-- Using JetBrains Marketplace:
+### 🚀 Project Creation
 
-  Go to [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/25221-quickprojectwizard) and install it by clicking the <kbd>Install to ...</kbd> button in case your IDE is running.
+- **Compose & XML Templates**: Modern Android project setup with latest dependencies
+- **Compose Multiplatform**: Cross-platform projects for Android, iOS, Desktop, and Web
+- **Smart Dependency Management**: Automatic library integration and configuration
+- **Clean Architecture**: Pre-configured project structure with best practices
 
-  You can also download the [latest release](https://plugins.jetbrains.com/plugin/25221-quickprojectwizard/versions) from JetBrains Marketplace and install it manually using
-  <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
+### 🏗️ Module & Feature Management
 
-- Manually:
+- **Module Generator**: Create new modules with customizable templates
+- **Feature Scaffolding**: Generate complete features with data, domain, and UI layers
+- **Code Migration**: Move existing files into proper module structure
+- **Template System**: Custom templates for consistent code generation
 
-  Download the [latest release](https://github.com/cnrture/QuickProjectWizard/releases/latest) and install it manually using
-  <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
+### 🎨 Development Tools
 
-# Usage
+- **System Color Picker**: Professional color selection with magnification
+- **JSON/XML Formatter**: Format and validate data with syntax highlighting
+- **API Tester**: Built-in HTTP client for testing APIs
+- **File Tree Browser**: Visual directory navigation and selection
 
-## 1. Create a new project
+### ⚙️ Configuration & Settings
 
-### Compose and XML
-<img src="images/new_project.png" alt="New Project">
-
-### Compose Multiplatform
-<img src="images/new_project_cmp.png" alt="New Project">
-
-- Open your Android Studio.
-- Click New Project.
-- Select Quick Project Wizard and click Next.
-</br></br>
-
-## 2. Configure your project
-
-### Compose and XML
-<img src="images/details.png" alt="Quick Project Wizard Page">
-
-### Compose Multiplatform
-<img src="images/details_cmp.png" alt="New Project">
-
-- Select the libraries, dependencies and screens you want to include in your project (for example, Retrofit, Room, Hilt, etc.).
-- Customize versions and additional configurations.
-- After all selections have been made, click Finish.
-</br></br>
-
-## 3. Finalize and start coding
-
-### Compose and XML
-<img src="images/final.png" alt="Quick Project Wizard Page">
-
-### Compose Multiplatform
-<img src="images/final_cmp.png" alt="New Project">
-
-- Review the generated project structure to ensure all necessary dependencies and configurations are correctly applied.
-- Start coding your new project with all the essential tools and libraries already integrated.
-- Congratulations! You have successfully installed and configured the Quick Project Wizard plugin. Your new Android project is now set up with the latest and most essential dependencies, making your development process more efficient and streamlined.
-
-## 4. Configure edit configurations (Just Compose Multiplatform)
-
-<img src="images/edit_configurations.png" alt="Quick Project Wizard Page">
-
-- Open edit configurations.
-
-<img src="images/desktopApp_configuration.png" alt="Quick Project Wizard Page">
-
-- Write your composeApp path instead of "\${PROJECT_DIR}\$" (like : ~/Documents/GitHub/CMPApp/composeApp)
-
-<img src="images/iosApp_configuration.png" alt="Quick Project Wizard Page">
-
-- Select Apple device from Execution Target.
-
-## Development Tools
-
-QuickProjectWizard includes a powerful tool window with several utilities to enhance your development workflow. Access
-it via **View > Tool Windows > QuickProjectWizard**.
-
-### Module Creator
-
-Create new modules in your existing Android project with ease:
-
-- **New Module**: Generate clean modules with customizable templates
-- **Move Existing Files**: Reorganize existing code into proper module structure
-- Automatic dependency detection and configuration
-- Support for different module types (Library, Application, etc.)
-- Template-based code generation
-
-### Feature Creator
-
-Rapidly scaffold new features for your project:
-
-- Generate complete feature structures with data, domain, and UI layers
-- Customizable file templates
-- Interactive file tree browser for selecting target directories
-- Consistent architecture patterns across features
-
-### Color Picker
-
-Professional color picking tool for UI development:
-
-- System-wide color picker with crosshair cursor
-- Magnified preview for precise color selection
-- Color history with recent picks
-- Copy colors in HEX and RGB formats
-- One-click clipboard integration
-
-### Settings Management
-
-Comprehensive plugin configuration:
-
-- Customize default package names and module preferences
-- Import/Export settings for team collaboration
-- Template management for modules and features
-- Persistent configuration across IDE sessions
+- **Template Management**: Create, edit, and share custom templates
+- **Settings Sync**: Automatic backup and restore across updates
+- **Team Collaboration**: Import/export settings for consistent team setup
+- **Cross-Platform Support**: Works seamlessly on Windows, macOS, and Linux
 
 ---
-Plugin based on the [IntelliJ Platform Plugin Template][template].
 
-[template]: https://github.com/JetBrains/intellij-platform-plugin-template
-[docs:plugin-description]: https://plugins.jetbrains.com/docs/intellij/plugin-user-experience.html#plugin-description-and-presentation
+## 📦 Installation
+
+<details>
+<summary><b>🛍️ From JetBrains Marketplace (Recommended)</b></summary>
+
+1. Open Android Studio
+2. Go to **Settings/Preferences** → **Plugins** → **Marketplace**
+3. Search for **"QuickProjectWizard"**
+4. Click **Install** and restart IDE
+
+Or visit [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/25221-quickprojectwizard) directly.
+
+</details>
+
+<details>
+<summary><b>📁 Manual Installation</b></summary>
+
+1. Download the [latest release](https://github.com/cnrture/QuickProjectWizard/releases/latest)
+2. Go to **Settings/Preferences** → **Plugins** → **⚙️** → **Install plugin from disk...**
+3. Select the downloaded file and restart IDE
+
+</details>
+
+---
+
+## 🎯 Quick Start Guide
+
+### 1️⃣ Creating New Projects
+
+#### 🎨 Compose Projects
+
+<img src="images/new_project.png" alt="New Compose Project" width="600">
+
+#### 📱 XML Projects
+
+<img src="images/new_project.png" alt="New XML Project" width="600">
+
+#### 🌍 Compose Multiplatform
+
+<img src="images/new_project_cmp.png" alt="Compose Multiplatform" width="600">
+
+**Steps:**
+
+1. **File** → **New** → **Project**
+2. Select **Quick Project Wizard**
+3. Choose your template (Compose/XML/Multiplatform)
+4. Configure project details and dependencies
+5. Click **Finish** and start coding! 🚀
+
+### 2️⃣ Accessing Development Tools
+
+Open the tool window: **View** → **Tool Windows** → **QuickProjectWizard**
+
+<img src="images/final.png" alt="Tool Window" width="600">
+
+---
+
+## 🛠️ Development Tools Deep Dive
+
+### 🏗️ Module Generator
+
+Create and organize your project modules efficiently:
+
+**Features:**
+
+- ✅ **New Module Creation**: Generate modules with clean architecture
+- ✅ **File Migration**: Move existing code into proper module structure
+- ✅ **Dependency Detection**: Automatic library dependency resolution
+- ✅ **Template Customization**: Use built-in or custom templates
+- ✅ **Multi-Module Support**: Handle complex project structures
+
+**Usage:**
+
+1. Open QuickProjectWizard tool window
+2. Navigate to **Module Generator** tab
+3. Choose **Create New** or **Move Existing Files**
+4. Configure module settings and select dependencies
+5. Generate your module with one click!
+
+### ⚡ Feature Generator
+
+Rapidly scaffold complete features with consistent architecture:
+
+**Generated Structure:**
+
+```
+feature/
+├── data/
+│   ├── repository/
+│   ├── datasource/
+│   └── dto/
+├── domain/
+│   ├── usecase/
+│   ├── repository/
+│   └── model/
+└── presentation/
+    ├── ui/
+    ├── viewmodel/
+    └── contract/
+```
+
+**Benefits:**
+
+- 🎯 **MVVM Architecture**: Clean separation of concerns
+- 🔄 **Compose Integration**: Modern UI with state management
+- 📝 **Custom Templates**: Modify templates to match your coding style
+- 🚀 **Rapid Development**: Generate complete features in seconds
+
+### 🎨 Color Picker
+
+Professional color selection tool integrated into your IDE:
+
+**Features:**
+
+- 🔍 **System-Wide Picking**: Select colors from anywhere on screen
+- 🔎 **Magnification**: Pixel-perfect precision with zoom view
+- 📋 **Multiple Formats**: Copy as HEX, RGB, HSV, or HSL
+- 📚 **Color History**: Quick access to recently used colors
+- ⌨️ **Keyboard Shortcuts**: Efficient workflow integration
+
+**Perfect for:**
+
+- UI/UX color scheme creation
+- Matching colors from designs
+- Brand color consistency
+- Material Design palette generation
+
+### 🧰 JSON/XML Formatter
+
+Format and validate your data with professional tools:
+
+**Capabilities:**
+
+- ✨ **Smart Formatting**: Proper indentation and structure
+- ✅ **Syntax Validation**: Real-time error detection
+- 🎨 **Syntax Highlighting**: Color-coded for better readability
+- 💾 **State Persistence**: Remembers your content across sessions
+- ⚡ **Instant Processing**: Real-time formatting as you type
+
+### 🌐 API Tester
+
+Built-in HTTP client for testing APIs without leaving your IDE:
+
+**Features:**
+
+- 🔗 **All HTTP Methods**: GET, POST, PUT, DELETE, PATCH, etc.
+- 📝 **Request Builder**: Headers, query parameters, body content
+- 📊 **Response Analysis**: Status codes, headers, formatted body
+- 📚 **Request History**: Quick access to previous requests
+- 💾 **Session Persistence**: Saves state between IDE restarts
+
+**Sample Endpoints:**
+
+- Weather API: `https://api.openweathermap.org/data/2.5/weather`
+- JSONPlaceholder: `https://jsonplaceholder.typicode.com/posts`
+- Harry Potter API: `https://api.canerture.com/harrypotterapp/characters`
+
+---
+
+## ⚙️ Settings & Customization
+
+### 📋 Template Management
+
+Create and manage custom templates for consistent code generation:
+
+**Module Templates:**
+
+- Customize file structure and content
+- Use placeholders: `{NAME}`, `{PACKAGE}`, `{FILE_PACKAGE}`
+- Share templates with your team
+- Import/export template collections
+
+**Template Placeholders:**
+
+- `{NAME}` → File name without extension
+- `{PACKAGE}` → Base package name (e.g., com.example.app)
+- `{FILE_PACKAGE}` → Full package path (e.g., com.example.app.feature.home)
+
+### 🔄 Settings Synchronization
+
+Never lose your configurations again:
+
+**Auto-Backup System:**
+
+- ✅ **Automatic Export**: Every setting change is backed up
+- ✅ **Cross-Platform**: Works on Windows, macOS, and Linux
+- ✅ **Update Safe**: Settings persist through plugin updates
+- ✅ **Team Sharing**: Export/import for team consistency
+
+**Backup Location:**
+
+- **Windows**: `C:\Users\{username}\.quickprojectwizard\settings.json`
+- **macOS**: `/Users/{username}/.quickprojectwizard/settings.json`
+- **Linux**: `/home/{username}/.quickprojectwizard/settings.json`
+
+### 👥 Team Collaboration
+
+Share configurations across your development team:
+
+1. **Export Settings**: Generate settings file from your configuration
+2. **Share File**: Distribute via Git, Slack, or email
+3. **Import Settings**: Team members import your configuration
+4. **Consistent Setup**: Everyone uses the same templates and preferences
+
+---
+
+## 🚀 Advanced Usage
+
+### 🎯 Custom Project Templates
+
+Create your own project templates:
+
+1. Set up a project with your preferred structure
+2. Create custom module and feature templates
+3. Configure default settings and dependencies
+4. Export and share with your team
+
+### 🔧 Integration with Existing Projects
+
+Add QuickProjectWizard to existing projects:
+
+1. Use **Module Generator** to create new modules
+2. Migrate existing code with the **File Migration** tool
+3. Generate new features with consistent architecture
+4. Maintain code quality with custom templates
+
+### ⚡ Productivity Tips
+
+**Keyboard Shortcuts:**
+
+- Quick access to tool window
+- Rapid template application
+- Fast color picking workflows
+
+**Best Practices:**
+
+- Use consistent naming conventions
+- Leverage template placeholders effectively
+- Maintain team template libraries
+- Regular settings backup and sync
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! Here's how you can help:
+
+- 🐛 **Report Bugs**: [Create an issue](https://github.com/cnrture/QuickProjectWizard/issues)
+- 💡 **Suggest Features**: Share your ideas for improvements
+- 🔧 **Code Contributions**: Submit pull requests
+- 📖 **Documentation**: Help improve guides and tutorials
+- ⭐ **Spread the Word**: Star the repository and share with others
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🙏 Acknowledgments
+
+- Built with the [IntelliJ Platform Plugin Template](https://github.com/JetBrains/intellij-platform-plugin-template)
+- Inspired by the Android developer community
+- Thanks to all contributors and users for their feedback
+
+---
+
+## 📞 Support
+
+- 📧 **Email**: cnrture@gmail.com
+- 🌐 **Website**: [canerture.com](https://canerture.com)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/cnrture/QuickProjectWizard/discussions)
+- 🐛 **Issues**: [GitHub Issues](https://github.com/cnrture/QuickProjectWizard/issues)
+
+---
+
+<div align="center">
+
+**Made with ❤️ by [Caner Türe](https://github.com/cnrture)**
+
+[⭐ Star this project](https://github.com/cnrture/QuickProjectWizard) • [🍴 Fork it](https://github.com/cnrture/QuickProjectWizard/fork) • [📥 Download](https://plugins.jetbrains.com/plugin/25221-quickprojectwizard)
+
+</div>
