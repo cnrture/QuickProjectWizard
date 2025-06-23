@@ -18,7 +18,20 @@ import java.io.File
 class SettingsService : PersistentStateComponent<SettingsState> {
     private var myState = SettingsState()
 
+    companion object {
+        private fun getAutoBackupPath(): String {
+            val userHome = System.getProperty("user.home")
+            val separator = File.separator
+            return "$userHome${separator}.quickprojectwizard${separator}settings.json"
+        }
+
+        fun getInstance(): SettingsService {
+            return ApplicationManager.getApplication().getService(SettingsService::class.java)
+        }
+    }
+
     init {
+        loadFromAutoBackup()
         setDefaultTemplatesIfEmpty()
     }
 
@@ -30,26 +43,52 @@ class SettingsService : PersistentStateComponent<SettingsState> {
     override fun loadState(state: SettingsState) {
         myState = state
         setDefaultTemplatesIfEmpty()
+        saveToAutoBackup()
+    }
+
+    private fun loadFromAutoBackup() {
+        try {
+            val backupFile = File(getAutoBackupPath())
+            if (backupFile.exists()) {
+                val jsonContent = backupFile.readText()
+                val importedState = Json.decodeFromString(SettingsState.serializer(), jsonContent)
+                myState = importedState
+            }
+        } catch (_: Exception) {
+        }
+    }
+
+    private fun saveToAutoBackup() {
+        try {
+            val backupFile = File(getAutoBackupPath())
+            backupFile.parentFile?.mkdirs()
+            backupFile.writeText(exportSettings())
+        } catch (_: Exception) {
+        }
     }
 
     fun saveTemplate(template: ModuleTemplate) {
         val existingIndex = myState.moduleTemplates.indexOfFirst { it.id == template.id }
         if (existingIndex != -1) myState.moduleTemplates[existingIndex] = template
         else myState.moduleTemplates.add(template)
+        saveToAutoBackup()
     }
 
     fun saveFeatureTemplate(template: FeatureTemplate) {
         val existingIndex = myState.featureTemplates.indexOfFirst { it.id == template.id }
         if (existingIndex != -1) myState.featureTemplates[existingIndex] = template
         else myState.featureTemplates.add(template)
+        saveToAutoBackup()
     }
 
     fun setDefaultModuleTemplate(templateId: String) {
         myState.defaultModuleTemplateId = templateId
+        saveToAutoBackup()
     }
 
     fun setDefaultFeatureTemplate(templateId: String) {
         myState.defaultFeatureTemplateId = templateId
+        saveToAutoBackup()
     }
 
     fun getDefaultModuleTemplate() = myState.moduleTemplates.find { it.id == myState.defaultModuleTemplateId }
@@ -100,12 +139,14 @@ class SettingsService : PersistentStateComponent<SettingsState> {
             myState.colorHistory.add(0, colorInfo)
             if (myState.colorHistory.size > 10) myState.colorHistory.removeAt(myState.colorHistory.size - 1)
         }
+        saveToAutoBackup()
     }
 
     fun saveFormatterState(selectedFormat: String, inputText: String, errorMessage: String) {
         myState.formatterSelectedFormat = selectedFormat
         myState.formatterInputText = inputText
         myState.formatterErrorMessage = errorMessage
+        saveToAutoBackup()
     }
 
     fun saveApiTesterState(
@@ -124,6 +165,7 @@ class SettingsService : PersistentStateComponent<SettingsState> {
         myState.apiQueryParams.clear()
         myState.apiQueryParams.putAll(queryParams)
         myState.apiSelectedTab = selectedTab
+        saveToAutoBackup()
     }
 
     fun getApiSelectedMethod(): String = myState.apiSelectedMethod
@@ -136,8 +178,15 @@ class SettingsService : PersistentStateComponent<SettingsState> {
     fun getFormatterInputText(): String = myState.formatterInputText
     fun getFormatterErrorMessage(): String = myState.formatterErrorMessage
     fun getColorHistory(): List<ColorInfo> = myState.colorHistory.toList()
-    fun removeFeatureTemplate(template: FeatureTemplate) = myState.featureTemplates.removeAll { it.id == template.id }
-    fun removeTemplate(template: ModuleTemplate) = myState.moduleTemplates.removeAll { it.id == template.id }
+    fun removeFeatureTemplate(template: FeatureTemplate) {
+        myState.featureTemplates.removeAll { it.id == template.id }
+        saveToAutoBackup()
+    }
+
+    fun removeTemplate(template: ModuleTemplate) {
+        myState.moduleTemplates.removeAll { it.id == template.id }
+        saveToAutoBackup()
+    }
 
     fun addFeatureTemplate(template: FeatureTemplate) {
         val existingIndex = myState.featureTemplates.indexOfFirst { it.id == template.id }
@@ -146,6 +195,7 @@ class SettingsService : PersistentStateComponent<SettingsState> {
         } else {
             myState.featureTemplates.add(template)
         }
+        saveToAutoBackup()
     }
 
     fun addModuleTemplate(template: ModuleTemplate) {
@@ -155,17 +205,12 @@ class SettingsService : PersistentStateComponent<SettingsState> {
         } else {
             myState.moduleTemplates.add(template)
         }
+        saveToAutoBackup()
     }
 
     private fun setDefaultTemplatesIfEmpty() {
         if (myState.moduleTemplates.isEmpty()) myState.moduleTemplates.addAll(getDefaultModuleTemplates())
         if (myState.featureTemplates.isEmpty()) myState.featureTemplates.addAll(getDefaultFeatureTemplates())
-    }
-
-    companion object {
-        fun getInstance(): SettingsService {
-            return ApplicationManager.getApplication().getService(SettingsService::class.java)
-        }
     }
 }
 
