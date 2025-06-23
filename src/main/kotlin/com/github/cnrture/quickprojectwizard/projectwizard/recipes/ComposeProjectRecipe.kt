@@ -5,13 +5,11 @@ import com.android.tools.idea.wizard.template.ModuleTemplateData
 import com.android.tools.idea.wizard.template.PackageName
 import com.android.tools.idea.wizard.template.RecipeExecutor
 import com.android.tools.idea.wizard.template.escapeKotlinIdentifier
-import com.github.cnrture.quickprojectwizard.service.AnalyticsService
 import com.github.cnrture.quickprojectwizard.common.Utils
 import com.github.cnrture.quickprojectwizard.common.addRootFile
 import com.github.cnrture.quickprojectwizard.common.addSrcFile
 import com.github.cnrture.quickprojectwizard.data.ImageLibrary
 import com.github.cnrture.quickprojectwizard.data.NetworkLibrary
-import com.github.cnrture.quickprojectwizard.service.SettingsService
 import com.github.cnrture.quickprojectwizard.projectwizard.composearch.common.emptyCollectExtension
 import com.github.cnrture.quickprojectwizard.projectwizard.composearch.delegation.emptyMVI
 import com.github.cnrture.quickprojectwizard.projectwizard.composearch.delegation.emptyMVIDelegate
@@ -44,6 +42,8 @@ import com.github.cnrture.quickprojectwizard.projectwizard.general.emptyManifest
 import com.github.cnrture.quickprojectwizard.projectwizard.gradle.getDependencies
 import com.github.cnrture.quickprojectwizard.projectwizard.gradle.getGradleKts
 import com.github.cnrture.quickprojectwizard.projectwizard.gradle.getProjectGradleKts
+import com.github.cnrture.quickprojectwizard.service.AnalyticsService
+import com.github.cnrture.quickprojectwizard.service.SettingsService
 import java.io.File
 
 fun RecipeExecutor.composeProjectRecipe(
@@ -184,7 +184,7 @@ fun RecipeExecutor.composeProjectRecipe(
         selectedNetworkLibrary,
         selectedImageLibrary,
         packagePath,
-        moduleData.apis.minApi.apiLevel,
+        moduleData.getMinApiLevel(),
         javaJvmVersion,
     )
     analyticsService.track("compose_project_created")

@@ -167,6 +167,11 @@ tasks {
     publishPlugin {
         dependsOn(patchChangelog)
     }
+
+    // Skip buildSearchableOptions for publishing
+    buildSearchableOptions {
+        enabled = false
+    }
 }
 
 intellijPlatformTesting {

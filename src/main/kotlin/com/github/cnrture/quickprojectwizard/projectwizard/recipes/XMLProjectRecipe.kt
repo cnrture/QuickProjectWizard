@@ -160,7 +160,7 @@ fun RecipeExecutor.xmlProjectRecipe(
         selectedNetworkLibrary,
         selectedImageLibrary,
         packagePath,
-        moduleData.apis.minApi.apiLevel,
+        moduleData.getMinApiLevel(),
         javaJvmVersion,
         moduleData.themesData.main.name,
     )
