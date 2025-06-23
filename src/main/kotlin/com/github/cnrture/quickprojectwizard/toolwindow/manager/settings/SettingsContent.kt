@@ -22,6 +22,7 @@ import androidx.compose.ui.window.PopupProperties
 import com.github.cnrture.quickprojectwizard.common.Constants
 import com.github.cnrture.quickprojectwizard.common.Utils
 import com.github.cnrture.quickprojectwizard.components.*
+import com.github.cnrture.quickprojectwizard.components.QPWDropdownItem
 import com.github.cnrture.quickprojectwizard.data.FeatureTemplate
 import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
 import com.github.cnrture.quickprojectwizard.service.AnalyticsService
@@ -201,7 +202,7 @@ fun SettingsContent(project: Project) {
                                 analyticsService.track("default_feature_template_set")
                                 Utils.showInfo(
                                     title = "Quick Project Wizard",
-                                    message = "Default feature template set to '${template.name}' successfully!",
+                                    message = "Default template set to '${template.name}' successfully!",
                                 )
                             },
                             onImport = {
@@ -209,6 +210,7 @@ fun SettingsContent(project: Project) {
                                     if (template != null) {
                                         val updatedTemplate = template.copy(
                                             id = java.util.UUID.randomUUID().toString(),
+                                            name = "${template.name} (Copy)",
                                             isDefault = false
                                         )
                                         settings.addFeatureTemplate(updatedTemplate)
@@ -289,12 +291,26 @@ private fun ModuleTemplatesTab(
                 onEdit = { isEditDialogVisible = Pair(true, template) },
                 onDelete = { if (!template.isDefault) onTemplateDelete(template) },
                 onSetDefault = { onSetDefault(template) },
-                onReview = { isReviewDialogVisible = Pair(true, template) },
                 onExport = {
                     Utils.exportModuleTemplate(project, template) { success, message ->
                         Utils.showInfo("Quick Project Wizard", message)
                     }
                 },
+                onReview = { isReviewDialogVisible = Pair(true, template) },
+                onDuplicate = { templateToDuplicate ->
+                    val duplicatedTemplate = templateToDuplicate.copy(
+                        id = java.util.UUID.randomUUID().toString(),
+                        name = "${templateToDuplicate.name} (Copy)",
+                        isDefault = false
+                    )
+                    settings.addModuleTemplate(duplicatedTemplate)
+                    onRefreshTriggered()
+                    analyticsService.track("module_template_duplicated")
+                    Utils.showInfo(
+                        title = "Quick Project Wizard",
+                        message = "Template duplicated as '${duplicatedTemplate.name}' successfully!",
+                    )
+                }
             )
         }
 
@@ -388,6 +404,7 @@ private fun ModuleTemplateCard(
     onSetDefault: () -> Unit,
     onExport: () -> Unit,
     onReview: () -> Unit,
+    onDuplicate: (ModuleTemplate) -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -399,7 +416,7 @@ private fun ModuleTemplateCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(24.dp),
+                .padding(horizontal = 24.dp, vertical = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -467,6 +484,11 @@ private fun ModuleTemplateCard(
                             onClick = { expanded = false; onReview() }
                         )
                     }
+                    QPWDropdownItem(
+                        text = "Duplicate",
+                        icon = Icons.Rounded.ContentCopy,
+                        onClick = { expanded = false; onDuplicate(template) }
+                    )
                     QPWDropdownItem(
                         text = "Export",
                         icon = Icons.Rounded.Upload,
@@ -606,7 +628,7 @@ private fun FeatureTemplatesTab(
             verticalAlignment = Alignment.CenterVertically
         ) {
             QPWText(
-                text = "Templates",
+                text = "Feature",
                 color = QPWTheme.colors.white,
                 style = TextStyle(
                     fontSize = 20.sp,
@@ -640,11 +662,25 @@ private fun FeatureTemplatesTab(
                 onEdit = { isEditDialogVisible = Pair(true, template) },
                 onDelete = { if (!template.isDefault) onTemplateDelete(template) },
                 onSetDefault = { onSetDefault(template) },
-                onReview = { isReviewDialogVisible = Pair(true, template) },
                 onExport = {
                     Utils.exportFeatureTemplate(project, template) { success, message ->
                         Utils.showInfo("Quick Project Wizard", message)
                     }
+                },
+                onReview = { isReviewDialogVisible = Pair(true, template) },
+                onDuplicate = { templateToDuplicate ->
+                    val duplicatedTemplate = templateToDuplicate.copy(
+                        id = java.util.UUID.randomUUID().toString(),
+                        name = "${templateToDuplicate.name} (Copy)",
+                        isDefault = false
+                    )
+                    settings.addFeatureTemplate(duplicatedTemplate)
+                    onRefreshTriggered()
+                    analyticsService.track("feature_template_duplicated")
+                    Utils.showInfo(
+                        title = "Quick Project Wizard",
+                        message = "Template duplicated as '${duplicatedTemplate.name}' successfully!",
+                    )
                 }
             )
         }
@@ -739,6 +775,7 @@ private fun FeatureTemplateCard(
     onSetDefault: () -> Unit,
     onExport: () -> Unit,
     onReview: () -> Unit,
+    onDuplicate: (FeatureTemplate) -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -750,7 +787,7 @@ private fun FeatureTemplateCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(24.dp),
+                .padding(horizontal = 24.dp, vertical = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -818,6 +855,11 @@ private fun FeatureTemplateCard(
                             onClick = { expanded = false; onReview() }
                         )
                     }
+                    QPWDropdownItem(
+                        text = "Duplicate",
+                        icon = Icons.Rounded.ContentCopy,
+                        onClick = { expanded = false; onDuplicate(template) }
+                    )
                     QPWDropdownItem(
                         text = "Export",
                         icon = Icons.Rounded.Upload,
