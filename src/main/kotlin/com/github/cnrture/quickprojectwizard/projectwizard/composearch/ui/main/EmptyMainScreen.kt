@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.sp
+import $packageName.common.collectWithLifecycle
 import $packageName.ui.${screen.lowercase()}.${screen}Contract.UiAction
 import $packageName.ui.${screen.lowercase()}.${screen}Contract.UiEffect
 import $packageName.ui.${screen.lowercase()}.${screen}Contract.UiState
@@ -24,13 +25,23 @@ fun ${screen}Screen(
     uiEffect: Flow<UiEffect>,
     onAction: (UiAction) -> Unit,
 ) {
-    ${screen}Content()
+    uiEffect.collectWithLifecycle {}
+
+    ${screen}Content(
+        modifier = Modifier.fillMaxSize(),
+        uiState = uiState,
+        onAction = onAction,
+    )
 }
 
 @Composable
-fun ${screen}Content() {
+fun ${screen}Content(
+    modifier: Modifier = Modifier,
+    uiState: UiState,
+    onAction: (UiAction) -> Unit,
+) {
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier,
         contentAlignment = Alignment.Center,
     ) {
         Text(

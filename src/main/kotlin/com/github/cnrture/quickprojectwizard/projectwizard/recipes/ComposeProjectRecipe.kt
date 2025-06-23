@@ -13,6 +13,8 @@ import com.github.cnrture.quickprojectwizard.data.ImageLibrary
 import com.github.cnrture.quickprojectwizard.data.NetworkLibrary
 import com.github.cnrture.quickprojectwizard.service.SettingsService
 import com.github.cnrture.quickprojectwizard.projectwizard.composearch.common.emptyCollectExtension
+import com.github.cnrture.quickprojectwizard.projectwizard.composearch.delegation.emptyMVI
+import com.github.cnrture.quickprojectwizard.projectwizard.composearch.delegation.emptyMVIDelegate
 import com.github.cnrture.quickprojectwizard.projectwizard.composearch.ui.components.emptyEmptyScreen
 import com.github.cnrture.quickprojectwizard.projectwizard.composearch.ui.components.emptyLoadingBar
 import com.github.cnrture.quickprojectwizard.projectwizard.composearch.ui.emptyActivity
@@ -118,7 +120,10 @@ fun RecipeExecutor.composeProjectRecipe(
 
         addNavigation(moduleData, packagePath, isNavigationEnable, screenList, isHiltEnable)
 
-        addScreens(moduleData, packagePath.plus(".ui"), isHiltEnable, screenList)
+        addSrcFile(emptyMVI(packagePath), moduleData, "delegation/MVI.kt")
+        addSrcFile(emptyMVIDelegate(packagePath), moduleData, "delegation/MVIDelegate.kt")
+
+        addScreens(moduleData, packagePath, isHiltEnable, screenList)
 
         addSrcFile(emptyEmptyScreen(packagePath), moduleData, "ui/components/EmptyScreen.kt")
         addSrcFile(emptyLoadingBar(packagePath), moduleData, "ui/components/LoadingBar.kt")
@@ -179,7 +184,7 @@ fun RecipeExecutor.composeProjectRecipe(
         selectedNetworkLibrary,
         selectedImageLibrary,
         packagePath,
-        moduleData.apis.minApi.api,
+        moduleData.apis.minApi.apiLevel,
         javaJvmVersion,
     )
     analyticsService.track("compose_project_created")

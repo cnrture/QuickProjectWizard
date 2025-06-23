@@ -15,4 +15,10 @@ class ${SCREEN}ViewModel : ViewModel(), MVI<UiState, UiAction, UiEffect> by mvi(
         viewModelScope.launch {
         }
     }
+
+    // Update state example: updateUiState { UiState(isLoading = false) }
+    // or // updateUiState { copy(isLoading = false) }
+
+    // Update effect example: emitUiEffect(UiEffect.ShowError(it.message.orEmpty()))
+    // Use within a coroutine scope, e.g., viewModelScope.launch { ... }
 }

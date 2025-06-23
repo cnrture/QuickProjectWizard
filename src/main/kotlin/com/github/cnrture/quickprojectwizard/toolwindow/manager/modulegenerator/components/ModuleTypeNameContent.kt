@@ -76,19 +76,21 @@ fun ModuleTypeNameContent(
                 }
             }
             Spacer(modifier = Modifier.size(24.dp))
-            QPWTextField(
-                color = QPWTheme.colors.green,
-                placeholder = "Package Name",
-                value = packageName,
-                onValueChange = { onPackageNameChanged(it) },
-            )
-            Spacer(modifier = Modifier.size(16.dp))
-            QPWTextField(
-                color = QPWTheme.colors.green,
-                placeholder = ":module",
-                value = moduleNameState,
-                onValueChange = { onModuleNameChanged(it) },
-            )
+            Column {
+                QPWTextField(
+                    color = QPWTheme.colors.green,
+                    placeholder = "Package Name",
+                    value = packageName,
+                    onValueChange = { onPackageNameChanged(it) },
+                )
+                Spacer(modifier = Modifier.size(16.dp))
+                QPWTextField(
+                    color = QPWTheme.colors.green,
+                    placeholder = ":module",
+                    value = moduleNameState,
+                    onValueChange = { onModuleNameChanged(it) },
+                )
+            }
         }
     }
 }

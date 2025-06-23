@@ -21,21 +21,23 @@ fun ${SCREEN}Screen(
     uiEffect: Flow<UiEffect>,
     onAction: (UiAction) -> Unit,
 ) {
-    uiEffect.collectWithLifecycle {
+    uiEffect.collectWithLifecycle {}
 
-    }
-
-    when {
-        uiState.isLoading -> LoadingBar()
-        uiState.list.isNotEmpty() -> EmptyScreen()
-        else -> ${SCREEN}Content()
-    }
+    ${SCREEN}Content(
+        modifier = Modifier.fillMaxSize(),
+        uiState = uiState,
+        onAction = onAction,
+    )
 }
 
 @Composable
-fun ${SCREEN}Content() {
+fun ${SCREEN}Content(
+    modifier: Modifier = Modifier,
+    uiState: UiState,
+    onAction: (UiAction) -> Unit,
+) {
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier,
         contentAlignment = Alignment.Center,
     ) {
         Text(

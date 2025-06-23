@@ -323,6 +323,18 @@ object Utils {
 
                 for (i in lines.indices) {
                     if (lines[i].trim().startsWith("rootProject.name")) {
+                        // Clean up rootProject.name by removing spaces from the value
+                        val line = lines[i]
+                        val namePattern = """rootProject\.name\s*=\s*["']([^"']+)["']""".toRegex()
+                        val match = namePattern.find(line)
+                        if (match != null) {
+                            val originalName = match.groupValues[1]
+                            val cleanedName = originalName.replace(" ", "")
+                            if (originalName != cleanedName) {
+                                val quote = if (line.contains("\"")) "\"" else "'"
+                                lines[i] = line.replace(namePattern, "rootProject.name = $quote$cleanedName$quote")
+                            }
+                        }
                         insertIndex = i + 1
                         break
                     }
@@ -443,8 +455,8 @@ object Utils {
                 val content = settingsFile.readText()
                 val patterns = listOf(
                     """include\s*\(\s*["']([^"']+)["']\s*\)""".toRegex(),
-                    """include\s+['"]([^"']+)["']""".toRegex(),
-                    """include\s+['"]([^"']+)["'](?:\s*,\s*['"]([^"']+)[""])*""".toRegex(),
+                    """include\s+['"]([^"']+)[""]""".toRegex(),
+                    """include\s+['"]([^"']+)[""](?:\s*,\s*['"]([^"']+)[""])*""".toRegex(),
                     """include\s+['"]([^"']+)[""](?:\s*,\s*\n\s*['"]([^"']+)[""])*""".toRegex()
                 )
 
