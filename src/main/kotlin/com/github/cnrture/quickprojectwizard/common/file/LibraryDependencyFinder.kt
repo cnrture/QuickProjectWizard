@@ -95,7 +95,6 @@ class LibraryDependencyFinder {
         val bomLibraries = setOf("compose-bom", "firebase", "firebase-bom")
         val annotationProcessors = setOf("room-compiler", "hilt-compiler")
         return StringBuilder().apply {
-            append("    // Library Dependencies\n")
             libraryAliases.forEachIndexed { index, alias ->
                 val formattedAlias = alias.replace("-", ".")
                 val implementationType = when {
