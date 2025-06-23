@@ -1,11 +1,15 @@
 package com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.dialog
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,50 +18,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.common.Constants
-import com.github.cnrture.quickprojectwizard.common.Utils
-import com.github.cnrture.quickprojectwizard.components.*
+import com.github.cnrture.quickprojectwizard.components.QPWActionCard
+import com.github.cnrture.quickprojectwizard.components.QPWActionCardType
+import com.github.cnrture.quickprojectwizard.components.QPWText
+import com.github.cnrture.quickprojectwizard.components.QPWTextField
 import com.github.cnrture.quickprojectwizard.data.FeatureTemplate
 import com.github.cnrture.quickprojectwizard.data.FileTemplate
 import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
-import com.github.cnrture.quickprojectwizard.service.AnalyticsService
-import com.github.cnrture.quickprojectwizard.service.SettingsService
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.component.FileTemplateEditor
 import java.util.*
 
-class TemplateCreatorDialog(
-    private val onRefreshTriggered: () -> Unit,
-) : QPWDialogWrapper(800, 1200, modal = false) {
-
-    val settings = SettingsService.getInstance()
-    val analyticsService = AnalyticsService.getInstance()
-
-    @Composable
-    override fun createDesign() {
-        TemplateCreatorContent(
-            onCancelClick = {
-                onRefreshTriggered()
-                close(0)
-            },
-            onApplyClick = { template ->
-                settings.saveTemplate(template)
-            },
-            onOkayClick = { template ->
-                settings.saveTemplate(template)
-                analyticsService.track("module_template_added")
-                Utils.showInfo(
-                    title = "Quick Project Wizard",
-                    message = "Module template '${template.name}' added successfully!",
-                )
-                onRefreshTriggered()
-                close(1)
-            }
-        )
-    }
-}
-
 @Composable
-private fun TemplateCreatorContent(
+fun TemplateCreatorContent(
     onCancelClick: () -> Unit,
     onApplyClick: (ModuleTemplate) -> Unit,
     onOkayClick: (ModuleTemplate) -> Unit,
@@ -69,17 +42,32 @@ private fun TemplateCreatorContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(QPWTheme.colors.black)
+            .padding(vertical = 80.dp, horizontal = 32.dp)
+            .background(
+                color = QPWTheme.colors.black,
+                shape = RoundedCornerShape(16.dp)
+            )
             .padding(24.dp)
     ) {
-        QPWText(
-            text = "Create New Module Template",
-            color = QPWTheme.colors.white,
-            style = TextStyle(
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold
+        Row {
+            QPWText(
+                text = "Create New Module Template",
+                color = QPWTheme.colors.white,
+                style = TextStyle(
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold
+                )
             )
-        )
+            Spacer(modifier = Modifier.weight(1f))
+            Icon(
+                imageVector = Icons.Rounded.Close,
+                contentDescription = "Close",
+                tint = QPWTheme.colors.lightGray,
+                modifier = Modifier
+                    .size(32.dp)
+                    .clickable { onCancelClick() }
+            )
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -155,13 +143,6 @@ private fun TemplateCreatorContent(
             horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.End)
         ) {
             QPWActionCard(
-                title = "Cancel",
-                type = QPWActionCardType.MEDIUM,
-                actionColor = QPWTheme.colors.lightGray,
-                onClick = onCancelClick
-            )
-
-            QPWActionCard(
                 title = "Apply",
                 type = QPWActionCardType.MEDIUM,
                 actionColor = QPWTheme.colors.green,
@@ -200,39 +181,8 @@ private fun TemplateCreatorContent(
     }
 }
 
-class FeatureTemplateCreatorDialog(
-    private val onRefreshTriggered: () -> Unit,
-) : QPWDialogWrapper(800, 1200, modal = false) {
-
-    val settings = SettingsService.getInstance()
-    val analyticsService = AnalyticsService.getInstance()
-
-    @Composable
-    override fun createDesign() {
-        FeatureTemplateCreatorContent(
-            onCancelClick = {
-                onRefreshTriggered()
-                close(0)
-            },
-            onApplyClick = { template ->
-                settings.saveFeatureTemplate(template)
-            },
-            onOkayClick = { template ->
-                settings.saveFeatureTemplate(template)
-                analyticsService.track("feature_template_added")
-                Utils.showInfo(
-                    title = "Quick Project Wizard",
-                    message = "Feature template '${template.name}' added successfully!",
-                )
-                onRefreshTriggered()
-                close(1)
-            }
-        )
-    }
-}
-
 @Composable
-private fun FeatureTemplateCreatorContent(
+fun FeatureTemplateCreatorContent(
     onCancelClick: () -> Unit,
     onApplyClick: (FeatureTemplate) -> Unit,
     onOkayClick: (FeatureTemplate) -> Unit,
@@ -244,17 +194,32 @@ private fun FeatureTemplateCreatorContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(QPWTheme.colors.black)
+            .padding(vertical = 80.dp, horizontal = 32.dp)
+            .background(
+                color = QPWTheme.colors.black,
+                shape = RoundedCornerShape(16.dp)
+            )
             .padding(24.dp)
     ) {
-        QPWText(
-            text = "Create New Feature Template",
-            color = QPWTheme.colors.white,
-            style = TextStyle(
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold
+        Row {
+            QPWText(
+                text = "Create New Feature Template",
+                color = QPWTheme.colors.white,
+                style = TextStyle(
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold
+                )
             )
-        )
+            Spacer(modifier = Modifier.weight(1f))
+            Icon(
+                imageVector = Icons.Rounded.Close,
+                contentDescription = "Close",
+                tint = QPWTheme.colors.lightGray,
+                modifier = Modifier
+                    .size(32.dp)
+                    .clickable { onCancelClick() }
+            )
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -329,13 +294,6 @@ private fun FeatureTemplateCreatorContent(
                 .padding(top = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.End)
         ) {
-            QPWActionCard(
-                title = "Cancel",
-                type = QPWActionCardType.MEDIUM,
-                actionColor = QPWTheme.colors.lightGray,
-                onClick = onCancelClick
-            )
-
             QPWActionCard(
                 title = "Apply",
                 type = QPWActionCardType.MEDIUM,

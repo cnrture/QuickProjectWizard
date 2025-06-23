@@ -17,6 +17,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.github.cnrture.quickprojectwizard.common.Constants
 import com.github.cnrture.quickprojectwizard.common.Utils
 import com.github.cnrture.quickprojectwizard.components.*
@@ -25,10 +27,10 @@ import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
 import com.github.cnrture.quickprojectwizard.service.AnalyticsService
 import com.github.cnrture.quickprojectwizard.service.SettingsService
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
-import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.dialog.FeatureTemplateCreatorDialog
-import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.dialog.FeatureTemplateEditorDialog
-import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.dialog.TemplateCreatorDialog
-import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.dialog.TemplateEditorDialog
+import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.dialog.FeatureTemplateCreatorContent
+import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.dialog.FeatureTemplateEditorContent
+import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.dialog.TemplateCreatorContent
+import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.dialog.TemplateEditorContent
 import com.intellij.openapi.project.Project
 
 @Composable
@@ -240,6 +242,11 @@ private fun ModuleTemplatesTab(
     onSetDefault: (ModuleTemplate) -> Unit,
     onImport: () -> Unit,
 ) {
+    var isCreateDialogVisible by remember { mutableStateOf(Pair(false, ModuleTemplate.EMPTY)) }
+    var isEditDialogVisible by remember { mutableStateOf(Pair(false, ModuleTemplate.EMPTY)) }
+    val settings = SettingsService.getInstance()
+    val analyticsService = AnalyticsService.getInstance()
+
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -265,7 +272,7 @@ private fun ModuleTemplatesTab(
                     icon = Icons.Rounded.Add,
                     type = QPWActionCardType.SMALL,
                     actionColor = QPWTheme.colors.green,
-                    onClick = { TemplateCreatorDialog(onRefreshTriggered = onRefreshTriggered).show() }
+                    onClick = { isCreateDialogVisible = Pair(true, ModuleTemplate.EMPTY) }
                 )
                 QPWActionCard(
                     title = "Import",
@@ -281,7 +288,7 @@ private fun ModuleTemplatesTab(
             ModuleTemplateCard(
                 template = template,
                 defaultTemplateId = defaultTemplateId,
-                onEdit = { TemplateEditorDialog(template, onRefreshTriggered).show() },
+                onEdit = { isEditDialogVisible = Pair(true, template) },
                 onDelete = { if (!template.isDefault) onTemplateDelete(template) },
                 onSetDefault = { onSetDefault(template) },
                 onExport = {
@@ -290,6 +297,69 @@ private fun ModuleTemplatesTab(
                     }
                 }
             )
+        }
+
+        if (isEditDialogVisible.first) {
+            Dialog(
+                onDismissRequest = {},
+                properties = DialogProperties(
+                    dismissOnBackPress = false,
+                    dismissOnClickOutside = false,
+                    usePlatformDefaultWidth = false,
+                )
+            ) {
+                TemplateEditorContent(
+                    template = isEditDialogVisible.second,
+                    onCancelClick = {
+                        onRefreshTriggered()
+                        isEditDialogVisible = Pair(false, ModuleTemplate.EMPTY)
+                    },
+                    onApplyClick = { updatedTemplate ->
+                        settings.saveTemplate(updatedTemplate)
+                    },
+                    onOkayClick = { updatedTemplate ->
+                        settings.saveTemplate(updatedTemplate)
+                        analyticsService.track("module_template_updated")
+                        Utils.showInfo(
+                            title = "Quick Project Wizard",
+                            message = "Module template '${updatedTemplate.name}' updated successfully!",
+                        )
+                        onRefreshTriggered()
+                        isEditDialogVisible = Pair(false, ModuleTemplate.EMPTY)
+                    },
+                )
+            }
+        }
+
+        if (isCreateDialogVisible.first) {
+            Dialog(
+                onDismissRequest = {},
+                properties = DialogProperties(
+                    dismissOnBackPress = false,
+                    dismissOnClickOutside = false,
+                    usePlatformDefaultWidth = false,
+                )
+            ) {
+                TemplateCreatorContent(
+                    onCancelClick = {
+                        onRefreshTriggered()
+                        isCreateDialogVisible = Pair(false, ModuleTemplate.EMPTY)
+                    },
+                    onApplyClick = { template ->
+                        settings.saveTemplate(template)
+                    },
+                    onOkayClick = { template ->
+                        settings.saveTemplate(template)
+                        analyticsService.track("module_template_added")
+                        Utils.showInfo(
+                            title = "Quick Project Wizard",
+                            message = "Module template '${template.name}' added successfully!",
+                        )
+                        onRefreshTriggered()
+                        isCreateDialogVisible = Pair(false, ModuleTemplate.EMPTY)
+                    }
+                )
+            }
         }
     }
 }
@@ -486,6 +556,11 @@ private fun FeatureTemplatesTab(
     onSetDefault: (FeatureTemplate) -> Unit,
     onImport: () -> Unit,
 ) {
+    var isCreateDialogVisible by remember { mutableStateOf(Pair(false, FeatureTemplate.EMPTY)) }
+    var isEditDialogVisible by remember { mutableStateOf(Pair(false, FeatureTemplate.EMPTY)) }
+    val settings = SettingsService.getInstance()
+    val analyticsService = AnalyticsService.getInstance()
+
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -511,7 +586,7 @@ private fun FeatureTemplatesTab(
                     icon = Icons.Rounded.Add,
                     type = QPWActionCardType.SMALL,
                     actionColor = QPWTheme.colors.green,
-                    onClick = { FeatureTemplateCreatorDialog(onRefreshTriggered).show() }
+                    onClick = { isCreateDialogVisible = Pair(true, FeatureTemplate.EMPTY) }
                 )
                 QPWActionCard(
                     title = "Import",
@@ -527,7 +602,7 @@ private fun FeatureTemplatesTab(
             FeatureTemplateCard(
                 template = template,
                 defaultTemplateId = defaultTemplateId,
-                onEdit = { FeatureTemplateEditorDialog(template, onRefreshTriggered).show() },
+                onEdit = { isEditDialogVisible = Pair(true, template) },
                 onDelete = { if (!template.isDefault) onTemplateDelete(template) },
                 onSetDefault = { onSetDefault(template) },
                 onExport = {
@@ -536,6 +611,69 @@ private fun FeatureTemplatesTab(
                     }
                 }
             )
+        }
+
+        if (isEditDialogVisible.first) {
+            Dialog(
+                onDismissRequest = {},
+                properties = DialogProperties(
+                    dismissOnBackPress = false,
+                    dismissOnClickOutside = false,
+                    usePlatformDefaultWidth = false,
+                )
+            ) {
+                FeatureTemplateEditorContent(
+                    template = isEditDialogVisible.second,
+                    onCancelClick = {
+                        onRefreshTriggered()
+                        isEditDialogVisible = Pair(false, FeatureTemplate.EMPTY)
+                    },
+                    onApplyClick = { updatedTemplate ->
+                        settings.saveFeatureTemplate(updatedTemplate)
+                    },
+                    onOkayClick = { updatedTemplate ->
+                        settings.saveFeatureTemplate(updatedTemplate)
+                        analyticsService.track("feature_template_updated")
+                        Utils.showInfo(
+                            title = "Quick Project Wizard",
+                            message = "Feature template '${updatedTemplate.name}' updated successfully!",
+                        )
+                        onRefreshTriggered()
+                        isEditDialogVisible = Pair(false, FeatureTemplate.EMPTY)
+                    },
+                )
+            }
+        }
+
+        if (isCreateDialogVisible.first) {
+            Dialog(
+                onDismissRequest = {},
+                properties = DialogProperties(
+                    dismissOnBackPress = false,
+                    dismissOnClickOutside = false,
+                    usePlatformDefaultWidth = false,
+                )
+            ) {
+                FeatureTemplateCreatorContent(
+                    onCancelClick = {
+                        onRefreshTriggered()
+                        isCreateDialogVisible = Pair(false, FeatureTemplate.EMPTY)
+                    },
+                    onApplyClick = { template ->
+                        settings.saveFeatureTemplate(template)
+                    },
+                    onOkayClick = { template ->
+                        settings.saveFeatureTemplate(template)
+                        analyticsService.track("feature_template_added")
+                        Utils.showInfo(
+                            title = "Quick Project Wizard",
+                            message = "Feature template '${template.name}' added successfully!",
+                        )
+                        onRefreshTriggered()
+                        isCreateDialogVisible = Pair(false, FeatureTemplate.EMPTY)
+                    }
+                )
+            }
         }
     }
 }
