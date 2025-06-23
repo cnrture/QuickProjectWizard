@@ -16,7 +16,8 @@ import javax.swing.border.Border
 abstract class QPWDialogWrapper(
     width: Int = 0,
     height: Int = 0,
-) : DialogWrapper(true) {
+    modal: Boolean = true,
+) : DialogWrapper(modal) {
 
     private val color = JBColor(Color(0xFF18181B.toInt()), Color(0xFF18181B.toInt()))
 
@@ -25,6 +26,15 @@ abstract class QPWDialogWrapper(
         UIManager.put("Panel.background", color)
         if (width > 0 && height > 0) setSize(width, height)
         window?.setLocationRelativeTo(null)
+
+        if (!modal) {
+            isModal = false
+            window?.let { window ->
+                window.isAlwaysOnTop = false
+                window.isAutoRequestFocus = false
+                window.focusableWindowState = true
+            }
+        }
     }
 
     @Composable

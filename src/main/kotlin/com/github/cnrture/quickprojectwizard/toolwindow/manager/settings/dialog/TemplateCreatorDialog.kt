@@ -27,7 +27,7 @@ import java.util.*
 
 class TemplateCreatorDialog(
     private val onTemplateCreated: (ModuleTemplate) -> Unit,
-) : QPWDialogWrapper(800, 1200) {
+) : QPWDialogWrapper(800, 1200, modal = false) {
 
     @Composable
     override fun createDesign() {
@@ -176,7 +176,7 @@ private fun TemplateCreatorContent(
 
 class FeatureTemplateCreatorDialog(
     private val onTemplateCreated: (FeatureTemplate) -> Unit,
-) : QPWDialogWrapper(800, 1200) {
+) : QPWDialogWrapper(800, 1200, modal = false) {
 
     @Composable
     override fun createDesign() {

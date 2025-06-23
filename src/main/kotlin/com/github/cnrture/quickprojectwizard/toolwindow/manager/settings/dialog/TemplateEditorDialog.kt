@@ -28,7 +28,7 @@ import com.intellij.openapi.components.service
 class TemplateEditorDialog(
     private val template: ModuleTemplate,
     private val onTemplateUpdated: (ModuleTemplate) -> Unit,
-) : QPWDialogWrapper(800, 1200) {
+) : QPWDialogWrapper(800, 1200, modal = false) {
 
     @Composable
     override fun createDesign() {
@@ -189,7 +189,7 @@ private fun TemplateEditorContent(
 class FeatureTemplateEditorDialog(
     private val template: FeatureTemplate,
     private val onTemplateUpdated: (FeatureTemplate) -> Unit,
-) : QPWDialogWrapper(800, 1200) {
+) : QPWDialogWrapper(800, 1200, modal = false) {
 
     @Composable
     override fun createDesign() {
