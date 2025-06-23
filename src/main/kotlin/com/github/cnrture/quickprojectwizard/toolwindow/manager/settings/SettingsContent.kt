@@ -8,10 +8,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.Delete
-import androidx.compose.material.icons.rounded.Edit
-import androidx.compose.material.icons.rounded.Save
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,21 +17,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.github.cnrture.quickprojectwizard.service.AnalyticsService
 import com.github.cnrture.quickprojectwizard.common.Constants
 import com.github.cnrture.quickprojectwizard.common.Utils
 import com.github.cnrture.quickprojectwizard.components.*
 import com.github.cnrture.quickprojectwizard.data.FeatureTemplate
 import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
+import com.github.cnrture.quickprojectwizard.service.AnalyticsService
 import com.github.cnrture.quickprojectwizard.service.SettingsService
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.dialog.FeatureTemplateCreatorDialog
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.dialog.FeatureTemplateEditorDialog
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.dialog.TemplateCreatorDialog
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.dialog.TemplateEditorDialog
+import com.intellij.openapi.project.Project
 
 @Composable
-fun SettingsContent() {
+fun SettingsContent(project: Project) {
     val settings = SettingsService.getInstance()
     val analyticsService = AnalyticsService.getInstance()
     var currentSettings by mutableStateOf(settings.state.copy())
@@ -51,6 +49,7 @@ fun SettingsContent() {
     }
 
     val triggerRefresh = { refreshTrigger++ }
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -135,6 +134,7 @@ fun SettingsContent() {
                     "templates" -> {
                         analyticsService.track("view_module_templates")
                         ModuleTemplatesTab(
+                            project = project,
                             templates = moduleTemplates,
                             defaultTemplateId = currentSettings.defaultModuleTemplateId,
                             onTemplateDelete = { template ->
@@ -174,13 +174,31 @@ fun SettingsContent() {
                                     title = "Quick Project Wizard",
                                     message = "Default template set to '${template.name}' successfully!",
                                 )
-                            }
+                            },
+                            onImport = {
+                                Utils.importModuleTemplate(project) { template, message ->
+                                    if (template != null) {
+                                        val updatedTemplate = template.copy(
+                                            id = java.util.UUID.randomUUID().toString(),
+                                            isDefault = false
+                                        )
+                                        settings.addModuleTemplate(updatedTemplate)
+                                        triggerRefresh()
+                                        analyticsService.track("module_template_imported")
+                                    }
+                                    Utils.showInfo(
+                                        title = "Quick Project Wizard",
+                                        message = message,
+                                    )
+                                }
+                            },
                         )
                     }
 
                     "feature_templates" -> {
                         analyticsService.track("view_feature_templates")
                         FeatureTemplatesTab(
+                            project = project,
                             templates = featureTemplates,
                             defaultTemplateId = currentSettings.defaultFeatureTemplateId,
                             onTemplateDelete = { template ->
@@ -220,7 +238,24 @@ fun SettingsContent() {
                                     title = "Quick Project Wizard",
                                     message = "Default feature template set to '${template.name}' successfully!",
                                 )
-                            }
+                            },
+                            onImport = {
+                                Utils.importFeatureTemplate(project) { template, message ->
+                                    if (template != null) {
+                                        val updatedTemplate = template.copy(
+                                            id = java.util.UUID.randomUUID().toString(),
+                                            isDefault = false
+                                        )
+                                        settings.addFeatureTemplate(updatedTemplate)
+                                        triggerRefresh()
+                                        analyticsService.track("feature_template_imported")
+                                    }
+                                    Utils.showInfo(
+                                        title = "Quick Project Wizard",
+                                        message = message,
+                                    )
+                                }
+                            },
                         )
                     }
                 }
@@ -231,12 +266,14 @@ fun SettingsContent() {
 
 @Composable
 private fun ModuleTemplatesTab(
+    project: Project,
     templates: List<ModuleTemplate>,
     defaultTemplateId: String,
     onTemplateDelete: (ModuleTemplate) -> Unit,
     onTemplateAdd: (ModuleTemplate) -> Unit,
     onTemplateEdit: (ModuleTemplate, ModuleTemplate) -> Unit,
     onSetDefault: (ModuleTemplate) -> Unit,
+    onImport: () -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -255,38 +292,37 @@ private fun ModuleTemplatesTab(
                     fontWeight = FontWeight.Bold
                 )
             )
-            QPWActionCard(
-                title = "Add Template",
-                icon = Icons.Rounded.Add,
-                type = QPWActionCardType.SMALL,
-                actionColor = QPWTheme.colors.green,
-                onClick = {
-                    TemplateCreatorDialog(onTemplateCreated = { newTemplate ->
-                        onTemplateAdd(newTemplate)
-                    }).show()
-                }
-            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                QPWActionCard(
+                    title = "Add Template",
+                    icon = Icons.Rounded.Add,
+                    type = QPWActionCardType.SMALL,
+                    actionColor = QPWTheme.colors.green,
+                    onClick = { TemplateCreatorDialog(onTemplateCreated = { onTemplateAdd(it) }).show() }
+                )
+                QPWActionCard(
+                    title = "Import",
+                    icon = Icons.Rounded.FileDownload,
+                    type = QPWActionCardType.SMALL,
+                    actionColor = QPWTheme.colors.lightGray,
+                    onClick = onImport,
+                )
+            }
         }
 
         templates.forEach { template ->
             ModuleTemplateCard(
                 template = template,
                 defaultTemplateId = defaultTemplateId,
-                onEdit = {
-                    TemplateEditorDialog(
-                        template = template,
-                        onTemplateUpdated = { updatedTemplate ->
-                            onTemplateEdit(template, updatedTemplate)
-                        }
-                    ).show()
-                },
-                onDelete = {
-                    if (!template.isDefault) {
-                        onTemplateDelete(template)
+                onEdit = { TemplateEditorDialog(template) { onTemplateEdit(template, it) }.show() },
+                onDelete = { if (!template.isDefault) onTemplateDelete(template) },
+                onSetDefault = { onSetDefault(template) },
+                onExport = {
+                    Utils.exportModuleTemplate(project, template) { success, message ->
+                        Utils.showInfo("Quick Project Wizard", message)
                     }
-                },
-                onSetDefault = {
-                    onSetDefault(template)
                 }
             )
         }
@@ -300,6 +336,7 @@ private fun ModuleTemplateCard(
     onEdit: () -> Unit,
     onDelete: () -> Unit,
     onSetDefault: () -> Unit,
+    onExport: () -> Unit,
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -359,9 +396,15 @@ private fun ModuleTemplateCard(
                         onEdit()
                     }
                 )
+                QPWActionCard(
+                    title = "Export",
+                    icon = Icons.Rounded.FileUpload,
+                    type = QPWActionCardType.SMALL,
+                    actionColor = QPWTheme.colors.lightGray,
+                    onClick = onExport
+                )
                 if (!template.isDefault || template.id != "candroid_template") {
                     QPWActionCard(
-                        title = "Delete",
                         icon = Icons.Rounded.Delete,
                         type = QPWActionCardType.SMALL,
                         actionColor = QPWTheme.colors.red,
@@ -470,12 +513,14 @@ private fun SettingItem(
 
 @Composable
 private fun FeatureTemplatesTab(
+    project: Project,
     templates: List<FeatureTemplate>,
     defaultTemplateId: String,
     onTemplateDelete: (FeatureTemplate) -> Unit,
     onTemplateAdd: (FeatureTemplate) -> Unit,
     onTemplateEdit: (FeatureTemplate, FeatureTemplate) -> Unit,
     onSetDefault: (FeatureTemplate) -> Unit,
+    onImport: () -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -494,17 +539,28 @@ private fun FeatureTemplatesTab(
                     fontWeight = FontWeight.Bold
                 )
             )
-            QPWActionCard(
-                title = "Add Template",
-                icon = Icons.Rounded.Add,
-                type = QPWActionCardType.SMALL,
-                actionColor = QPWTheme.colors.green,
-                onClick = {
-                    FeatureTemplateCreatorDialog(onTemplateCreated = { newTemplate ->
-                        onTemplateAdd(newTemplate)
-                    }).show()
-                }
-            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                QPWActionCard(
+                    title = "Add Template",
+                    icon = Icons.Rounded.Add,
+                    type = QPWActionCardType.SMALL,
+                    actionColor = QPWTheme.colors.green,
+                    onClick = {
+                        FeatureTemplateCreatorDialog(onTemplateCreated = { newTemplate ->
+                            onTemplateAdd(newTemplate)
+                        }).show()
+                    }
+                )
+                QPWActionCard(
+                    title = "Import",
+                    icon = Icons.Rounded.FileDownload,
+                    type = QPWActionCardType.SMALL,
+                    actionColor = QPWTheme.colors.lightGray,
+                    onClick = onImport,
+                )
+            }
         }
 
         templates.forEach { template ->
@@ -526,6 +582,14 @@ private fun FeatureTemplatesTab(
                 },
                 onSetDefault = {
                     onSetDefault(template)
+                },
+                onExport = {
+                    Utils.exportFeatureTemplate(project, template) { success, message ->
+                        Utils.showInfo(
+                            title = "Quick Project Wizard",
+                            message = message,
+                        )
+                    }
                 }
             )
         }
@@ -539,6 +603,7 @@ private fun FeatureTemplateCard(
     onEdit: () -> Unit,
     onDelete: () -> Unit,
     onSetDefault: () -> Unit,
+    onExport: () -> Unit,
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -583,7 +648,7 @@ private fun FeatureTemplateCard(
                 if (template.id != defaultTemplateId) {
                     QPWActionCard(
                         title = "Set Default",
-                        icon = Icons.Rounded.Edit,
+                        icon = Icons.Rounded.DisabledByDefault,
                         type = QPWActionCardType.SMALL,
                         actionColor = QPWTheme.colors.lightGray,
                         onClick = onSetDefault
@@ -598,9 +663,15 @@ private fun FeatureTemplateCard(
                         onEdit()
                     }
                 )
+                QPWActionCard(
+                    title = "Export",
+                    icon = Icons.Rounded.FileUpload,
+                    type = QPWActionCardType.SMALL,
+                    actionColor = QPWTheme.colors.lightGray,
+                    onClick = onExport
+                )
                 if (!template.isDefault || template.id != "candroid_template") {
                     QPWActionCard(
-                        title = "Delete",
                         icon = Icons.Rounded.Delete,
                         type = QPWActionCardType.SMALL,
                         actionColor = QPWTheme.colors.red,

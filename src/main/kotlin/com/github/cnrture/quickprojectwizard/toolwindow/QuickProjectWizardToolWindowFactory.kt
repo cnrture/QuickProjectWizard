@@ -320,7 +320,7 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                         ApiTesterContent()
                     }
 
-                    "settings" -> SettingsContent()
+                    "settings" -> SettingsContent(project)
                 }
             }
         }

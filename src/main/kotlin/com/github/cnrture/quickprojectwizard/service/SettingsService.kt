@@ -139,6 +139,24 @@ class SettingsService : PersistentStateComponent<SettingsState> {
     fun removeFeatureTemplate(template: FeatureTemplate) = myState.featureTemplates.removeAll { it.id == template.id }
     fun removeTemplate(template: ModuleTemplate) = myState.moduleTemplates.removeAll { it.id == template.id }
 
+    fun addFeatureTemplate(template: FeatureTemplate) {
+        val existingIndex = myState.featureTemplates.indexOfFirst { it.id == template.id }
+        if (existingIndex != -1) {
+            myState.featureTemplates[existingIndex] = template
+        } else {
+            myState.featureTemplates.add(template)
+        }
+    }
+
+    fun addModuleTemplate(template: ModuleTemplate) {
+        val existingIndex = myState.moduleTemplates.indexOfFirst { it.id == template.id }
+        if (existingIndex != -1) {
+            myState.moduleTemplates[existingIndex] = template
+        } else {
+            myState.moduleTemplates.add(template)
+        }
+    }
+
     private fun setDefaultTemplatesIfEmpty() {
         if (myState.moduleTemplates.isEmpty()) myState.moduleTemplates.addAll(getDefaultModuleTemplates())
         if (myState.featureTemplates.isEmpty()) myState.featureTemplates.addAll(getDefaultFeatureTemplates())

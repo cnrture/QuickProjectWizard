@@ -1,6 +1,5 @@
 package com.github.cnrture.quickprojectwizard.common
 
-import com.github.cnrture.quickprojectwizard.service.AnalyticsService
 import com.github.cnrture.quickprojectwizard.common.file.FileWriter
 import com.github.cnrture.quickprojectwizard.common.file.ImportAnalyzer
 import com.github.cnrture.quickprojectwizard.common.file.LibraryDependencyFinder
@@ -8,6 +7,7 @@ import com.github.cnrture.quickprojectwizard.components.QPWMessageDialog
 import com.github.cnrture.quickprojectwizard.data.FeatureTemplate
 import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
 import com.github.cnrture.quickprojectwizard.data.PluginListItem
+import com.github.cnrture.quickprojectwizard.service.AnalyticsService
 import com.intellij.ide.BrowserUtil
 import com.intellij.ide.starters.local.GeneratorTemplateFile
 import com.intellij.notification.NotificationGroupManager
@@ -18,6 +18,8 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.externalSystem.model.ProjectSystemId
 import com.intellij.openapi.externalSystem.service.execution.ProgressExecutionMode
 import com.intellij.openapi.externalSystem.util.ExternalSystemUtil
+import com.intellij.openapi.fileChooser.FileChooser
+import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.IconLoader
@@ -25,6 +27,7 @@ import com.intellij.openapi.vfs.VfsUtil
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.wm.ToolWindowManager
 import freemarker.template.Configuration
+import kotlinx.serialization.json.Json
 import java.io.File
 import java.io.IOException
 import java.io.StringWriter
@@ -630,7 +633,115 @@ object Utils {
                 }
             }
         )
-        notification.setIcon(IconLoader.getIcon("/META-INF/pluginIcon.svg", this::class.java))
+        notification.icon = IconLoader.getIcon("/META-INF/pluginIcon.svg", this::class.java)
         notification.notify(null)
+    }
+
+    fun exportFeatureTemplate(
+        project: Project,
+        template: FeatureTemplate,
+        onComplete: (Boolean, String) -> Unit,
+    ) {
+        try {
+            val descriptor = FileChooserDescriptorFactory
+                .createSingleFolderDescriptor()
+            descriptor.title = "Select Export Location"
+
+            FileChooser.chooseFile(descriptor, project, null) { file ->
+                try {
+                    val json = Json {
+                        prettyPrint = true
+                        encodeDefaults = true
+                    }
+                    val jsonString = json.encodeToString(FeatureTemplate.serializer(), template)
+                    val exportFile = File(file.path, "${template.name.replace(" ", "_")}_feature_template.json")
+                    exportFile.writeText(jsonString)
+                    onComplete(true, "Feature template exported successfully to: ${exportFile.absolutePath}")
+                } catch (e: Exception) {
+                    onComplete(false, "Error exporting feature template: ${e.message}")
+                }
+            }
+        } catch (e: Exception) {
+            onComplete(false, "Error during export: ${e.message}")
+        }
+    }
+
+    fun importFeatureTemplate(
+        project: Project,
+        onComplete: (FeatureTemplate?, String) -> Unit,
+    ) {
+        try {
+            val descriptor = FileChooserDescriptorFactory.createSingleFileDescriptor("json")
+            descriptor.title = "Select Feature Template File"
+
+            FileChooser.chooseFile(descriptor, project, null) { file ->
+                try {
+                    val jsonString = File(file.path).readText()
+                    val json = Json {
+                        ignoreUnknownKeys = true
+                    }
+                    val template = json.decodeFromString(FeatureTemplate.serializer(), jsonString)
+                    onComplete(template, "Feature template imported successfully!")
+                } catch (e: Exception) {
+                    onComplete(null, "Error importing feature template: ${e.message}")
+                }
+            }
+        } catch (e: Exception) {
+            onComplete(null, "Error during import: ${e.message}")
+        }
+    }
+
+    fun exportModuleTemplate(
+        project: Project,
+        template: ModuleTemplate,
+        onComplete: (Boolean, String) -> Unit,
+    ) {
+        try {
+            val descriptor = FileChooserDescriptorFactory.createSingleFolderDescriptor()
+            descriptor.title = "Select Export Location"
+
+            FileChooser.chooseFile(descriptor, project, null) { file ->
+                try {
+                    val json = Json {
+                        prettyPrint = true
+                        encodeDefaults = true
+                    }
+                    val jsonString = json.encodeToString(ModuleTemplate.serializer(), template)
+                    val exportFile = File(file.path, "${template.name.replace(" ", "_")}_module_template.json")
+                    exportFile.writeText(jsonString)
+                    onComplete(true, "Module template exported successfully to: ${exportFile.absolutePath}")
+                } catch (e: Exception) {
+                    onComplete(false, "Error exporting module template: ${e.message}")
+                }
+            }
+        } catch (e: Exception) {
+            onComplete(false, "Error during export: ${e.message}")
+        }
+    }
+
+    fun importModuleTemplate(
+        project: Project,
+        onComplete: (ModuleTemplate?, String) -> Unit,
+    ) {
+        try {
+            val descriptor = FileChooserDescriptorFactory
+                .createSingleFileDescriptor("json")
+            descriptor.title = "Select Module Template File"
+
+            FileChooser.chooseFile(descriptor, project, null) { file ->
+                try {
+                    val jsonString = File(file.path).readText()
+                    val json = Json {
+                        ignoreUnknownKeys = true
+                    }
+                    val template = json.decodeFromString(ModuleTemplate.serializer(), jsonString)
+                    onComplete(template, "Module template imported successfully!")
+                } catch (e: Exception) {
+                    onComplete(null, "Error importing module template: ${e.message}")
+                }
+            }
+        } catch (e: Exception) {
+            onComplete(null, "Error during import: ${e.message}")
+        }
     }
 }
