@@ -422,15 +422,17 @@ private fun ModuleTemplateCard(
                         onClick = onSetDefault
                     )
                 }
-                QPWActionCard(
-                    title = "Edit",
-                    icon = Icons.Rounded.Edit,
-                    type = QPWActionCardType.SMALL,
-                    actionColor = QPWTheme.colors.lightGray,
-                    onClick = {
-                        onEdit()
-                    }
-                )
+                if (template.id != "candroid_template") {
+                    QPWActionCard(
+                        title = "Edit",
+                        icon = Icons.Rounded.Edit,
+                        type = QPWActionCardType.SMALL,
+                        actionColor = QPWTheme.colors.lightGray,
+                        onClick = {
+                            onEdit()
+                        }
+                    )
+                }
                 QPWActionCard(
                     title = "Export",
                     icon = Icons.Rounded.FileUpload,
@@ -736,15 +738,17 @@ private fun FeatureTemplateCard(
                         onClick = onSetDefault
                     )
                 }
-                QPWActionCard(
-                    title = "Edit",
-                    icon = Icons.Rounded.Edit,
-                    type = QPWActionCardType.SMALL,
-                    actionColor = QPWTheme.colors.lightGray,
-                    onClick = {
-                        onEdit()
-                    }
-                )
+                if (template.id != "candroid_template") {
+                    QPWActionCard(
+                        title = "Edit",
+                        icon = Icons.Rounded.Edit,
+                        type = QPWActionCardType.SMALL,
+                        actionColor = QPWTheme.colors.lightGray,
+                        onClick = {
+                            onEdit()
+                        }
+                    )
+                }
                 QPWActionCard(
                     title = "Export",
                     icon = Icons.Rounded.FileUpload,
