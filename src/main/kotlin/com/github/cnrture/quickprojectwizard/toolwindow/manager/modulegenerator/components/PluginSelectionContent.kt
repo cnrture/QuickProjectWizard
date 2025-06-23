@@ -12,15 +12,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.components.QPWCheckbox
 import com.github.cnrture.quickprojectwizard.components.QPWText
+import com.github.cnrture.quickprojectwizard.data.PluginListItem
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun PluginSelectionContent(
-    availablePlugins: List<String>,
-    selectedPlugins: List<String>,
-    onPluginSelected: (String) -> Unit,
-    plugins: List<String>,
+    availablePlugins: List<PluginListItem>,
+    onPluginSelected: (PluginListItem) -> Unit,
 ) {
     if (availablePlugins.isNotEmpty()) {
         Column(
@@ -58,11 +57,10 @@ fun PluginSelectionContent(
                     verticalArrangement = Arrangement.spacedBy(4.dp),
                     horizontalArrangement = Arrangement.spacedBy(4.dp),
                 ) {
-                    plugins.forEach { plugin ->
-                        val isChecked = plugin in selectedPlugins
+                    availablePlugins.forEach { plugin ->
                         QPWCheckbox(
-                            checked = isChecked,
-                            label = plugin,
+                            checked = plugin.isSelected,
+                            label = plugin.name,
                             isBackgroundEnable = true,
                             color = QPWTheme.colors.green,
                             onCheckedChange = { onPluginSelected(plugin) },

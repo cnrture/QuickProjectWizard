@@ -7,6 +7,7 @@ import com.github.cnrture.quickprojectwizard.common.file.LibraryDependencyFinder
 import com.github.cnrture.quickprojectwizard.components.QPWMessageDialog
 import com.github.cnrture.quickprojectwizard.data.FeatureTemplate
 import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
+import com.github.cnrture.quickprojectwizard.data.PluginListItem
 import com.intellij.ide.BrowserUtil
 import com.intellij.ide.starters.local.GeneratorTemplateFile
 import com.intellij.notification.NotificationGroupManager
@@ -90,7 +91,7 @@ object Utils {
         libraryDependencyFinder: LibraryDependencyFinder,
         selectedLibraries: List<String>,
         selectedModules: List<String>,
-        selectedPlugins: List<String> = emptyList(),
+        selectedPlugins: List<PluginListItem> = emptyList(),
         template: ModuleTemplate? = null,
         from: String,
     ): List<File> {

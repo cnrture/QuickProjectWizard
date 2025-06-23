@@ -19,6 +19,7 @@ import com.github.cnrture.quickprojectwizard.common.file.FileWriter
 import com.github.cnrture.quickprojectwizard.common.file.LibraryDependencyFinder
 import com.github.cnrture.quickprojectwizard.components.QPWActionCard
 import com.github.cnrture.quickprojectwizard.components.QPWMessageDialog
+import com.github.cnrture.quickprojectwizard.data.PluginListItem
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulegenerator.components.*
 import com.intellij.openapi.project.Project
@@ -55,9 +56,9 @@ fun MoveExistingFilesToModuleContent(
     showFileTreeDialog: Boolean,
     onFileTreeDialogStateChange: () -> Unit,
     onSelectedSrc: (String) -> Unit,
-    availablePlugins: List<String>,
-    selectedPlugins: List<String>,
-    onPluginSelected: (String) -> Unit,
+    availablePlugins: List<PluginListItem>,
+    selectedPlugins: List<PluginListItem>,
+    onPluginSelected: (PluginListItem) -> Unit,
 ) {
     val radioOptions = listOf(Constants.ANDROID, Constants.KOTLIN)
     Row(modifier = modifier) {
@@ -167,9 +168,7 @@ fun MoveExistingFilesToModuleContent(
                 ) {
                     PluginSelectionContent(
                         availablePlugins = availablePlugins,
-                        selectedPlugins = selectedPlugins,
                         onPluginSelected = onPluginSelected,
-                        plugins = availablePlugins,
                     )
                     LibrarySelectionContent(
                         availableLibraries = availableLibraries,

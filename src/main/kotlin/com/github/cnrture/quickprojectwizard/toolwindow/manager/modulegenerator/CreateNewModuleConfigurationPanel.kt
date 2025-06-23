@@ -18,6 +18,7 @@ import com.github.cnrture.quickprojectwizard.components.QPWActionCard
 import com.github.cnrture.quickprojectwizard.components.QPWActionCardType
 import com.github.cnrture.quickprojectwizard.components.QPWMessageDialog
 import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
+import com.github.cnrture.quickprojectwizard.data.PluginListItem
 import com.github.cnrture.quickprojectwizard.service.SettingsService
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulegenerator.components.*
@@ -43,9 +44,9 @@ fun CreateNewModuleConfigurationPanel(
     libraryGroups: Map<String, List<String>>,
     expandedGroups: Map<String, Boolean>,
     onGroupExpandToggle: (String) -> Unit,
-    availablePlugins: List<String>,
-    selectedPlugins: List<String>,
-    onPluginSelected: (String) -> Unit,
+    availablePlugins: List<PluginListItem>,
+    selectedPlugins: List<PluginListItem>,
+    onPluginSelected: (PluginListItem) -> Unit,
     templates: List<ModuleTemplate>,
     selectedTemplate: ModuleTemplate?,
     onTemplateSelected: (ModuleTemplate?) -> Unit,
@@ -148,9 +149,7 @@ fun CreateNewModuleConfigurationPanel(
             ) {
                 PluginSelectionContent(
                     availablePlugins = availablePlugins,
-                    selectedPlugins = selectedPlugins,
                     onPluginSelected = onPluginSelected,
-                    plugins = availablePlugins,
                 )
                 LibrarySelectionContent(
                     availableLibraries = availableLibraries,

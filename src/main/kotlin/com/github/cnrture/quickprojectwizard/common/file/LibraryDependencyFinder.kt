@@ -3,7 +3,9 @@ package com.github.cnrture.quickprojectwizard.common.file
 import com.github.cnrture.quickprojectwizard.common.Constants
 import com.github.cnrture.quickprojectwizard.data.LibraryInfo
 import com.github.cnrture.quickprojectwizard.data.PluginInfo
+import com.github.cnrture.quickprojectwizard.data.PluginListItem
 import java.io.File
+import kotlin.collections.map
 
 class LibraryDependencyFinder {
 
@@ -107,12 +109,13 @@ class LibraryDependencyFinder {
         }.toString()
     }
 
-    fun formatPluginDependencies(pluginAliases: List<String>): String {
-        if (pluginAliases.isEmpty()) return Constants.EMPTY
+    fun formatPluginDependencies(pluginAliases: List<PluginListItem>): String {
+        val plugins = pluginAliases.filter { it.isSelected }.map { it.name }
+        if (plugins.isEmpty()) return Constants.EMPTY
         return StringBuilder().apply {
-            pluginAliases.forEachIndexed { index, alias ->
+            plugins.forEachIndexed { index, alias ->
                 append("    alias(libs.plugins.${alias.replace("-", ".")})")
-                if (index != pluginAliases.lastIndex) append("\n")
+                if (index != plugins.lastIndex) append("\n")
             }
         }.toString()
     }

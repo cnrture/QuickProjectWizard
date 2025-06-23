@@ -18,6 +18,7 @@ import com.github.cnrture.quickprojectwizard.common.rootDirectoryString
 import com.github.cnrture.quickprojectwizard.common.rootDirectoryStringDropLast
 import com.github.cnrture.quickprojectwizard.components.QPWTabRow
 import com.github.cnrture.quickprojectwizard.components.QPWText
+import com.github.cnrture.quickprojectwizard.data.PluginListItem
 import com.github.cnrture.quickprojectwizard.service.SettingsService
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.intellij.openapi.project.Project
@@ -39,8 +40,7 @@ fun ModuleGeneratorContent(project: Project) {
     val libraryGroups = mutableStateMapOf<String, List<String>>()
     val expandedGroups = mutableStateMapOf<String, Boolean>()
 
-    val availablePlugins = mutableStateListOf<String>()
-    val selectedPlugins = mutableStateListOf<String>()
+    val availablePlugins = mutableStateListOf<PluginListItem>()
 
     var selectedTemplate by remember { mutableStateOf(settings.getDefaultModuleTemplate()) }
     val availableTemplates = remember { settings.getModuleTemplates() }
@@ -82,7 +82,7 @@ fun ModuleGeneratorContent(project: Project) {
         libraryDependencyFinder = libraryDependencyFinder,
         onAvailablePluginsLoaded = {
             availablePlugins.clear()
-            availablePlugins.addAll(it)
+            availablePlugins.addAll(it.map { PluginListItem(it) })
         },
     )
 
@@ -158,9 +158,12 @@ fun ModuleGeneratorContent(project: Project) {
                         expandedGroups = expandedGroups,
                         onGroupExpandToggle = { expandedGroups[it] = !(expandedGroups[it] ?: false) },
                         availablePlugins = availablePlugins,
-                        selectedPlugins = selectedPlugins,
-                        onPluginSelected = {
-                            if (it in selectedPlugins) selectedPlugins.remove(it) else selectedPlugins.add(it)
+                        selectedPlugins = availablePlugins,
+                        onPluginSelected = { plugin ->
+                            val index = availablePlugins.indexOfFirst { it.name == plugin.name }
+                            if (index != -1) {
+                                availablePlugins[index] = plugin.copy(isSelected = !plugin.isSelected)
+                            }
                         },
                         templates = availableTemplates,
                         selectedTemplate = selectedTemplate,
@@ -220,9 +223,12 @@ fun ModuleGeneratorContent(project: Project) {
                         onFileTreeDialogStateChange = { showFileTreeDialog = !showFileTreeDialog },
                         onSelectedSrc = { selectedSrc.value = it },
                         availablePlugins = availablePlugins,
-                        selectedPlugins = selectedPlugins,
-                        onPluginSelected = {
-                            if (it in selectedPlugins) selectedPlugins.remove(it) else selectedPlugins.add(it)
+                        selectedPlugins = availablePlugins,
+                        onPluginSelected = { plugin ->
+                            val index = availablePlugins.indexOfFirst { it.name == plugin.name }
+                            if (index != -1) {
+                                availablePlugins[index] = plugin.copy(isSelected = !plugin.isSelected)
+                            }
                         },
                     )
                 }

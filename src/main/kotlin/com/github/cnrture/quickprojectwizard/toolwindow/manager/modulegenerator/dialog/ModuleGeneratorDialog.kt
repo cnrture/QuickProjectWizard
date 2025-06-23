@@ -23,6 +23,7 @@ import com.github.cnrture.quickprojectwizard.common.file.LibraryDependencyFinder
 import com.github.cnrture.quickprojectwizard.common.rootDirectoryString
 import com.github.cnrture.quickprojectwizard.common.rootDirectoryStringDropLast
 import com.github.cnrture.quickprojectwizard.components.*
+import com.github.cnrture.quickprojectwizard.data.PluginListItem
 import com.github.cnrture.quickprojectwizard.service.AnalyticsService
 import com.github.cnrture.quickprojectwizard.service.SettingsService
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
@@ -69,8 +70,7 @@ class ModuleGeneratorDialog(
         val libraryGroups = mutableStateMapOf<String, List<String>>()
         val expandedGroups = mutableStateMapOf<String, Boolean>()
 
-        val availablePlugins = mutableStateListOf<String>()
-        val selectedPlugins = mutableStateListOf<String>()
+        val availablePlugins = mutableStateListOf<PluginListItem>()
 
         val moduleType = mutableStateOf(settings.state.preferredModuleType)
         val packageName = mutableStateOf(settings.state.defaultPackageName)
@@ -101,9 +101,9 @@ class ModuleGeneratorDialog(
         Utils.loadAvailablePlugins(
             project = project,
             libraryDependencyFinder = libraryDependencyFinder,
-            onAvailablePluginsLoaded = {
+            onAvailablePluginsLoaded = { list ->
                 availablePlugins.clear()
-                availablePlugins.addAll(it)
+                availablePlugins.addAll(list.map { PluginListItem(it) })
             },
         )
         analyticsService.track("view_module_generator_dialog")
@@ -162,9 +162,11 @@ class ModuleGeneratorDialog(
                     expandedGroups = expandedGroups,
                     onGroupExpandToggle = { expandedGroups[it] = !(expandedGroups[it] ?: false) },
                     availablePlugins = availablePlugins,
-                    selectedPlugins = selectedPlugins,
-                    onPluginSelected = {
-                        if (it in selectedPlugins) selectedPlugins.remove(it) else selectedPlugins.add(it)
+                    onPluginSelected = { plugin ->
+                        val index = availablePlugins.indexOfFirst { it.name == plugin.name }
+                        if (index != -1) {
+                            availablePlugins[index] = plugin.copy(isSelected = !plugin.isSelected)
+                        }
                     },
                 )
             }
@@ -200,9 +202,8 @@ class ModuleGeneratorDialog(
         libraryGroups: Map<String, List<String>>,
         expandedGroups: Map<String, Boolean>,
         onGroupExpandToggle: (String) -> Unit,
-        availablePlugins: List<String>,
-        selectedPlugins: List<String>,
-        onPluginSelected: (String) -> Unit,
+        availablePlugins: List<PluginListItem>,
+        onPluginSelected: (PluginListItem) -> Unit,
     ) {
         val radioOptions = listOf(Constants.ANDROID, Constants.KOTLIN)
         Scaffold(
@@ -243,7 +244,7 @@ class ModuleGeneratorDialog(
                                         libraryDependencyFinder = libraryDependencyFinder,
                                         selectedModules = selectedModules,
                                         selectedLibraries = selectedLibraries,
-                                        selectedPlugins = selectedPlugins,
+                                        selectedPlugins = availablePlugins,
                                         from = "action",
                                     )
                                     close(0)
@@ -307,9 +308,7 @@ class ModuleGeneratorDialog(
                 ) {
                     PluginSelectionContent(
                         availablePlugins = availablePlugins,
-                        selectedPlugins = selectedPlugins,
                         onPluginSelected = onPluginSelected,
-                        plugins = availablePlugins,
                     )
                     LibrarySelectionContent(
                         availableLibraries = availableLibraries,
