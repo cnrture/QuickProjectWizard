@@ -6,7 +6,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -149,14 +148,15 @@ private fun TemplateCreatorContent(
         ) {
             QPWActionCard(
                 title = "Cancel",
-                icon = Icons.Rounded.Delete,
+                type = QPWActionCardType.MEDIUM,
                 actionColor = QPWTheme.colors.lightGray,
                 onClick = onCancel
             )
 
             QPWActionCard(
-                title = "Create Template",
+                title = "Add Template",
                 icon = Icons.Rounded.Add,
+                type = QPWActionCardType.MEDIUM,
                 actionColor = QPWTheme.colors.green,
                 onClick = {
                     if (templateName.isNotBlank()) {
@@ -298,14 +298,15 @@ private fun FeatureTemplateCreatorContent(
         ) {
             QPWActionCard(
                 title = "Cancel",
-                icon = Icons.Rounded.Delete,
+                type = QPWActionCardType.MEDIUM,
                 actionColor = QPWTheme.colors.lightGray,
                 onClick = onCancel
             )
 
             QPWActionCard(
-                title = "Create Template",
+                title = "Add Template",
                 icon = Icons.Rounded.Add,
+                type = QPWActionCardType.MEDIUM,
                 actionColor = QPWTheme.colors.green,
                 onClick = {
                     if (templateName.isNotBlank()) {
