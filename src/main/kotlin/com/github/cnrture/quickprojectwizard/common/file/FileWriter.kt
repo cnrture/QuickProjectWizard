@@ -284,7 +284,7 @@ class FileWriter() {
                 writer.flush()
                 writer.close()
                 filesCreated.add(file)
-            } catch (e: IOException) {
+            } catch (_: IOException) {
             }
         }
 

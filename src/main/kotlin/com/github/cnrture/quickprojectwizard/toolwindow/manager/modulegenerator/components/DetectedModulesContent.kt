@@ -8,7 +8,7 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.PlayArrow
+import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -85,7 +85,7 @@ fun DetectedModulesContent(
                                         )
                                     }
                                 },
-                            imageVector = Icons.Rounded.PlayArrow,
+                            imageVector = Icons.Rounded.Refresh,
                             tint = QPWTheme.colors.green,
                             contentDescription = null,
                         )
