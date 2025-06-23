@@ -148,24 +148,7 @@ fun SettingsContent(project: Project) {
                                     )
                                 }
                             },
-                            onTemplateAdd = { newTemplate ->
-                                settings.saveTemplate(newTemplate)
-                                triggerRefresh()
-                                analyticsService.track("module_template_added")
-                                Utils.showInfo(
-                                    title = "Quick Project Wizard",
-                                    message = "Template '${newTemplate.name}' added successfully!",
-                                )
-                            },
-                            onTemplateEdit = { oldTemplate, updatedTemplate ->
-                                settings.saveTemplate(updatedTemplate)
-                                triggerRefresh()
-                                analyticsService.track("module_template_updated")
-                                Utils.showInfo(
-                                    title = "Quick Project Wizard",
-                                    message = "Template '${updatedTemplate.name}' updated successfully!",
-                                )
-                            },
+                            onRefreshTriggered = { triggerRefresh() },
                             onSetDefault = { template ->
                                 settings.setDefaultModuleTemplate(template.id)
                                 triggerRefresh()
@@ -212,24 +195,7 @@ fun SettingsContent(project: Project) {
                                     )
                                 }
                             },
-                            onTemplateAdd = { newTemplate ->
-                                settings.saveFeatureTemplate(newTemplate)
-                                triggerRefresh()
-                                analyticsService.track("feature_template_added")
-                                Utils.showInfo(
-                                    title = "Quick Project Wizard",
-                                    message = "Feature template '${newTemplate.name}' added successfully!",
-                                )
-                            },
-                            onTemplateEdit = { oldTemplate, updatedTemplate ->
-                                settings.saveFeatureTemplate(updatedTemplate)
-                                triggerRefresh()
-                                analyticsService.track("feature_template_updated")
-                                Utils.showInfo(
-                                    title = "Quick Project Wizard",
-                                    message = "Feature template '${updatedTemplate.name}' updated successfully!",
-                                )
-                            },
+                            onRefreshTriggered = { triggerRefresh() },
                             onSetDefault = { template ->
                                 settings.setDefaultFeatureTemplate(template.id)
                                 triggerRefresh()
@@ -270,8 +236,7 @@ private fun ModuleTemplatesTab(
     templates: List<ModuleTemplate>,
     defaultTemplateId: String,
     onTemplateDelete: (ModuleTemplate) -> Unit,
-    onTemplateAdd: (ModuleTemplate) -> Unit,
-    onTemplateEdit: (ModuleTemplate, ModuleTemplate) -> Unit,
+    onRefreshTriggered: () -> Unit,
     onSetDefault: (ModuleTemplate) -> Unit,
     onImport: () -> Unit,
 ) {
@@ -300,7 +265,7 @@ private fun ModuleTemplatesTab(
                     icon = Icons.Rounded.Add,
                     type = QPWActionCardType.SMALL,
                     actionColor = QPWTheme.colors.green,
-                    onClick = { TemplateCreatorDialog(onTemplateCreated = { onTemplateAdd(it) }).show() }
+                    onClick = { TemplateCreatorDialog(onRefreshTriggered = onRefreshTriggered).show() }
                 )
                 QPWActionCard(
                     title = "Import",
@@ -316,7 +281,7 @@ private fun ModuleTemplatesTab(
             ModuleTemplateCard(
                 template = template,
                 defaultTemplateId = defaultTemplateId,
-                onEdit = { TemplateEditorDialog(template) { onTemplateEdit(template, it) }.show() },
+                onEdit = { TemplateEditorDialog(template, onRefreshTriggered).show() },
                 onDelete = { if (!template.isDefault) onTemplateDelete(template) },
                 onSetDefault = { onSetDefault(template) },
                 onExport = {
@@ -517,8 +482,7 @@ private fun FeatureTemplatesTab(
     templates: List<FeatureTemplate>,
     defaultTemplateId: String,
     onTemplateDelete: (FeatureTemplate) -> Unit,
-    onTemplateAdd: (FeatureTemplate) -> Unit,
-    onTemplateEdit: (FeatureTemplate, FeatureTemplate) -> Unit,
+    onRefreshTriggered: () -> Unit,
     onSetDefault: (FeatureTemplate) -> Unit,
     onImport: () -> Unit,
 ) {
@@ -547,11 +511,7 @@ private fun FeatureTemplatesTab(
                     icon = Icons.Rounded.Add,
                     type = QPWActionCardType.SMALL,
                     actionColor = QPWTheme.colors.green,
-                    onClick = {
-                        FeatureTemplateCreatorDialog(onTemplateCreated = { newTemplate ->
-                            onTemplateAdd(newTemplate)
-                        }).show()
-                    }
+                    onClick = { FeatureTemplateCreatorDialog(onRefreshTriggered).show() }
                 )
                 QPWActionCard(
                     title = "Import",
@@ -567,28 +527,12 @@ private fun FeatureTemplatesTab(
             FeatureTemplateCard(
                 template = template,
                 defaultTemplateId = defaultTemplateId,
-                onEdit = {
-                    FeatureTemplateEditorDialog(
-                        template = template,
-                        onTemplateUpdated = { updatedTemplate ->
-                            onTemplateEdit(template, updatedTemplate)
-                        }
-                    ).show()
-                },
-                onDelete = {
-                    if (!template.isDefault) {
-                        onTemplateDelete(template)
-                    }
-                },
-                onSetDefault = {
-                    onSetDefault(template)
-                },
+                onEdit = { FeatureTemplateEditorDialog(template, onRefreshTriggered).show() },
+                onDelete = { if (!template.isDefault) onTemplateDelete(template) },
+                onSetDefault = { onSetDefault(template) },
                 onExport = {
                     Utils.exportFeatureTemplate(project, template) { success, message ->
-                        Utils.showInfo(
-                            title = "Quick Project Wizard",
-                            message = message,
-                        )
+                        Utils.showInfo("Quick Project Wizard", message)
                     }
                 }
             )

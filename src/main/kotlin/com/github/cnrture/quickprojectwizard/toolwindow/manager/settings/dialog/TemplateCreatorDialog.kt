@@ -13,50 +13,58 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.github.cnrture.quickprojectwizard.common.Constants
+import com.github.cnrture.quickprojectwizard.common.Utils
 import com.github.cnrture.quickprojectwizard.components.*
 import com.github.cnrture.quickprojectwizard.data.FeatureTemplate
 import com.github.cnrture.quickprojectwizard.data.FileTemplate
 import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
+import com.github.cnrture.quickprojectwizard.service.AnalyticsService
 import com.github.cnrture.quickprojectwizard.service.SettingsService
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.component.FileTemplateEditor
-import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.components.service
 import java.util.*
 
 class TemplateCreatorDialog(
-    private val onTemplateCreated: (ModuleTemplate) -> Unit,
+    private val onRefreshTriggered: () -> Unit,
 ) : QPWDialogWrapper(800, 1200, modal = false) {
+
+    val settings = SettingsService.getInstance()
+    val analyticsService = AnalyticsService.getInstance()
 
     @Composable
     override fun createDesign() {
         TemplateCreatorContent(
-            onSave = { template ->
-                onTemplateCreated(template)
-                saveTemplateToSettings(template)
+            onCancelClick = {
+                onRefreshTriggered()
                 close(0)
             },
-            onCancel = {
+            onApplyClick = { template ->
+                settings.saveTemplate(template)
+            },
+            onOkayClick = { template ->
+                settings.saveTemplate(template)
+                analyticsService.track("module_template_added")
+                Utils.showInfo(
+                    title = "Quick Project Wizard",
+                    message = "Module template '${template.name}' added successfully!",
+                )
+                onRefreshTriggered()
                 close(1)
             }
         )
-    }
-
-    private fun saveTemplateToSettings(template: ModuleTemplate) {
-        val settingsService = service<SettingsService>()
-        ApplicationManager.getApplication().invokeLater {
-            settingsService.saveTemplate(template)
-        }
     }
 }
 
 @Composable
 private fun TemplateCreatorContent(
-    onSave: (ModuleTemplate) -> Unit,
-    onCancel: () -> Unit,
+    onCancelClick: () -> Unit,
+    onApplyClick: (ModuleTemplate) -> Unit,
+    onOkayClick: (ModuleTemplate) -> Unit,
 ) {
     var templateName by remember { mutableStateOf("") }
     val fileTemplates = remember { mutableStateListOf<FileTemplate>() }
+    var id by remember { mutableStateOf(Constants.EMPTY) }
 
     Column(
         modifier = Modifier
@@ -150,63 +158,88 @@ private fun TemplateCreatorContent(
                 title = "Cancel",
                 type = QPWActionCardType.MEDIUM,
                 actionColor = QPWTheme.colors.lightGray,
-                onClick = onCancel
+                onClick = onCancelClick
             )
 
             QPWActionCard(
-                title = "Add Template",
-                icon = Icons.Rounded.Add,
+                title = "Apply",
                 type = QPWActionCardType.MEDIUM,
                 actionColor = QPWTheme.colors.green,
+                isEnabled = templateName.isNotBlank() && fileTemplates.any { it.fileName.isNotBlank() },
                 onClick = {
                     if (templateName.isNotBlank()) {
                         val template = ModuleTemplate(
-                            id = UUID.randomUUID().toString(),
+                            id = id.ifEmpty { UUID.randomUUID().toString().apply { id = this } },
                             name = templateName,
                             fileTemplates = fileTemplates.filter { it.fileName.isNotBlank() },
                             isDefault = false
                         )
-                        onSave(template)
+                        onApplyClick(template)
                     }
                 }
+            )
+
+            QPWActionCard(
+                title = "Okay",
+                type = QPWActionCardType.MEDIUM,
+                actionColor = QPWTheme.colors.green,
+                isEnabled = templateName.isNotBlank() && fileTemplates.any { it.fileName.isNotBlank() },
+                onClick = {
+                    if (templateName.isNotBlank()) {
+                        val template = ModuleTemplate(
+                            id = id.ifEmpty { UUID.randomUUID().toString().apply { id = this } },
+                            name = templateName,
+                            fileTemplates = fileTemplates.filter { it.fileName.isNotBlank() },
+                            isDefault = false
+                        )
+                        onOkayClick(template)
+                    }
+                },
             )
         }
     }
 }
 
 class FeatureTemplateCreatorDialog(
-    private val onTemplateCreated: (FeatureTemplate) -> Unit,
+    private val onRefreshTriggered: () -> Unit,
 ) : QPWDialogWrapper(800, 1200, modal = false) {
+
+    val settings = SettingsService.getInstance()
+    val analyticsService = AnalyticsService.getInstance()
 
     @Composable
     override fun createDesign() {
         FeatureTemplateCreatorContent(
-            onSave = { template ->
-                onTemplateCreated(template)
-                saveTemplateToSettings(template)
+            onCancelClick = {
+                onRefreshTriggered()
                 close(0)
             },
-            onCancel = {
+            onApplyClick = { template ->
+                settings.saveFeatureTemplate(template)
+            },
+            onOkayClick = { template ->
+                settings.saveFeatureTemplate(template)
+                analyticsService.track("feature_template_added")
+                Utils.showInfo(
+                    title = "Quick Project Wizard",
+                    message = "Feature template '${template.name}' added successfully!",
+                )
+                onRefreshTriggered()
                 close(1)
             }
         )
-    }
-
-    private fun saveTemplateToSettings(template: FeatureTemplate) {
-        val settingsService = service<SettingsService>()
-        ApplicationManager.getApplication().invokeLater {
-            settingsService.saveFeatureTemplate(template)
-        }
     }
 }
 
 @Composable
 private fun FeatureTemplateCreatorContent(
-    onSave: (FeatureTemplate) -> Unit,
-    onCancel: () -> Unit,
+    onCancelClick: () -> Unit,
+    onApplyClick: (FeatureTemplate) -> Unit,
+    onOkayClick: (FeatureTemplate) -> Unit,
 ) {
     var templateName by remember { mutableStateOf("") }
     val fileTemplates = remember { mutableStateListOf<FileTemplate>() }
+    var id by remember { mutableStateOf(Constants.EMPTY) }
 
     Column(
         modifier = Modifier
@@ -300,25 +333,43 @@ private fun FeatureTemplateCreatorContent(
                 title = "Cancel",
                 type = QPWActionCardType.MEDIUM,
                 actionColor = QPWTheme.colors.lightGray,
-                onClick = onCancel
+                onClick = onCancelClick
             )
 
             QPWActionCard(
-                title = "Add Template",
-                icon = Icons.Rounded.Add,
+                title = "Apply",
                 type = QPWActionCardType.MEDIUM,
                 actionColor = QPWTheme.colors.green,
+                isEnabled = templateName.isNotBlank() && fileTemplates.any { it.fileName.isNotBlank() },
                 onClick = {
                     if (templateName.isNotBlank()) {
                         val template = FeatureTemplate(
-                            id = UUID.randomUUID().toString(),
+                            id = id.ifEmpty { UUID.randomUUID().toString().apply { id = this } },
                             name = templateName,
                             fileTemplates = fileTemplates.filter { it.fileName.isNotBlank() },
                             isDefault = false
                         )
-                        onSave(template)
+                        onApplyClick(template)
                     }
-                }
+                },
+            )
+
+            QPWActionCard(
+                title = "Okay",
+                type = QPWActionCardType.MEDIUM,
+                actionColor = QPWTheme.colors.green,
+                isEnabled = templateName.isNotBlank() && fileTemplates.any { it.fileName.isNotBlank() },
+                onClick = {
+                    if (templateName.isNotBlank()) {
+                        val template = FeatureTemplate(
+                            id = id.ifEmpty { UUID.randomUUID().toString().apply { id = this } },
+                            name = templateName,
+                            fileTemplates = fileTemplates.filter { it.fileName.isNotBlank() },
+                            isDefault = false
+                        )
+                        onOkayClick(template)
+                    }
+                },
             )
         }
     }

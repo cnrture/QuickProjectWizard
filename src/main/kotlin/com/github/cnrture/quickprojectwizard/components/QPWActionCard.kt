@@ -28,6 +28,7 @@ fun QPWActionCard(
     actionColor: Color,
     isTextVisible: Boolean = true,
     type: QPWActionCardType = QPWActionCardType.LARGE,
+    isEnabled: Boolean = true,
     onClick: () -> Unit,
 ) {
     val fontSize = when (type) {
@@ -58,15 +59,18 @@ fun QPWActionCard(
     Row(
         modifier = modifier
             .background(
-                color = QPWTheme.colors.gray,
+                color = if (isEnabled) QPWTheme.colors.gray else QPWTheme.colors.lightGray.copy(alpha = 0.1f),
                 shape = RoundedCornerShape(12.dp),
             )
             .border(
                 width = borderSize,
-                color = actionColor,
+                color = if (isEnabled) actionColor else QPWTheme.colors.lightGray.copy(alpha = 0.1f),
                 shape = RoundedCornerShape(12.dp)
             )
-            .clickable { onClick() }
+            .then(
+                if (isEnabled) Modifier.clickable { onClick() }
+                else Modifier
+            )
             .padding(padding),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,

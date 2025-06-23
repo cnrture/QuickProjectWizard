@@ -15,49 +15,55 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.github.cnrture.quickprojectwizard.common.Utils
 import com.github.cnrture.quickprojectwizard.components.*
 import com.github.cnrture.quickprojectwizard.data.FeatureTemplate
 import com.github.cnrture.quickprojectwizard.data.FileTemplate
 import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
+import com.github.cnrture.quickprojectwizard.service.AnalyticsService
 import com.github.cnrture.quickprojectwizard.service.SettingsService
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.component.FileTemplateEditor
-import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.components.service
 
 class TemplateEditorDialog(
     private val template: ModuleTemplate,
-    private val onTemplateUpdated: (ModuleTemplate) -> Unit,
+    private val onRefreshTriggered: () -> Unit,
 ) : QPWDialogWrapper(800, 1200, modal = false) {
+
+    val settings = SettingsService.getInstance()
+    val analyticsService = AnalyticsService.getInstance()
 
     @Composable
     override fun createDesign() {
         TemplateEditorContent(
             template = template,
-            onSave = { updatedTemplate ->
-                onTemplateUpdated(updatedTemplate)
-                saveToSettingsService(updatedTemplate)
+            onCancelClick = {
+                onRefreshTriggered()
                 close(0)
             },
-            onCancel = {
+            onApplyClick = { updatedTemplate ->
+                settings.saveTemplate(updatedTemplate)
+            },
+            onOkayClick = { updatedTemplate ->
+                settings.saveTemplate(updatedTemplate)
+                analyticsService.track("module_template_updated")
+                Utils.showInfo(
+                    title = "Quick Project Wizard",
+                    message = "Module template '${updatedTemplate.name}' updated successfully!",
+                )
+                onRefreshTriggered()
                 close(1)
-            }
+            },
         )
-    }
-
-    private fun saveToSettingsService(updatedTemplate: ModuleTemplate) {
-        val settingsService = service<SettingsService>()
-        ApplicationManager.getApplication().invokeLater {
-            settingsService.saveTemplate(updatedTemplate)
-        }
     }
 }
 
 @Composable
 private fun TemplateEditorContent(
     template: ModuleTemplate,
-    onSave: (ModuleTemplate) -> Unit,
-    onCancel: () -> Unit,
+    onCancelClick: () -> Unit,
+    onApplyClick: (ModuleTemplate) -> Unit,
+    onOkayClick: (ModuleTemplate) -> Unit,
 ) {
     var templateName by remember { mutableStateOf(template.name) }
     val fileTemplates = remember { mutableStateListOf<FileTemplate>().apply { addAll(template.fileTemplates) } }
@@ -166,21 +172,35 @@ private fun TemplateEditorContent(
                 title = "Cancel",
                 type = QPWActionCardType.MEDIUM,
                 actionColor = QPWTheme.colors.lightGray,
-                onClick = onCancel
+                onClick = onCancelClick
             )
 
             QPWActionCard(
-                title = "Save Changes",
-                icon = Icons.Rounded.Edit,
+                title = "Apply",
                 type = QPWActionCardType.MEDIUM,
                 actionColor = QPWTheme.colors.green,
+                isEnabled = templateName.isNotBlank() && fileTemplates.any { it.fileName.isNotBlank() },
                 onClick = {
                     val updatedTemplate = template.copy(
                         name = templateName,
                         fileTemplates = fileTemplates.filter { it.fileName.isNotBlank() }
                     )
-                    onSave(updatedTemplate)
+                    onApplyClick(updatedTemplate)
                 }
+            )
+
+            QPWActionCard(
+                title = "Okay",
+                type = QPWActionCardType.MEDIUM,
+                actionColor = QPWTheme.colors.green,
+                isEnabled = templateName.isNotBlank() && fileTemplates.any { it.fileName.isNotBlank() },
+                onClick = {
+                    val updatedTemplate = template.copy(
+                        name = templateName,
+                        fileTemplates = fileTemplates.filter { it.fileName.isNotBlank() }
+                    )
+                    onOkayClick(updatedTemplate)
+                },
             )
         }
     }
@@ -188,37 +208,43 @@ private fun TemplateEditorContent(
 
 class FeatureTemplateEditorDialog(
     private val template: FeatureTemplate,
-    private val onTemplateUpdated: (FeatureTemplate) -> Unit,
+    private val onRefreshTriggered: () -> Unit,
 ) : QPWDialogWrapper(800, 1200, modal = false) {
+
+    val settings = SettingsService.getInstance()
+    val analyticsService = AnalyticsService.getInstance()
 
     @Composable
     override fun createDesign() {
         FeatureTemplateEditorContent(
             template = template,
-            onSave = { updatedTemplate ->
-                onTemplateUpdated(updatedTemplate)
-                saveToSettingsService(updatedTemplate)
+            onCancelClick = {
+                onRefreshTriggered()
                 close(0)
             },
-            onCancel = {
+            onApplyClick = { updatedTemplate ->
+                settings.saveFeatureTemplate(updatedTemplate)
+            },
+            onOkayClick = { updatedTemplate ->
+                settings.saveFeatureTemplate(updatedTemplate)
+                analyticsService.track("feature_template_updated")
+                Utils.showInfo(
+                    title = "Quick Project Wizard",
+                    message = "Feature template '${updatedTemplate.name}' updated successfully!",
+                )
+                onRefreshTriggered()
                 close(1)
-            }
+            },
         )
-    }
-
-    private fun saveToSettingsService(updatedTemplate: FeatureTemplate) {
-        val settingsService = service<SettingsService>()
-        ApplicationManager.getApplication().invokeLater {
-            settingsService.saveFeatureTemplate(updatedTemplate)
-        }
     }
 }
 
 @Composable
 private fun FeatureTemplateEditorContent(
     template: FeatureTemplate,
-    onSave: (FeatureTemplate) -> Unit,
-    onCancel: () -> Unit,
+    onCancelClick: () -> Unit,
+    onApplyClick: (FeatureTemplate) -> Unit,
+    onOkayClick: (FeatureTemplate) -> Unit,
 ) {
     var templateName by remember { mutableStateOf(template.name) }
     val fileTemplates = remember { mutableStateListOf<FileTemplate>().apply { addAll(template.fileTemplates) } }
@@ -327,21 +353,35 @@ private fun FeatureTemplateEditorContent(
                 title = "Cancel",
                 type = QPWActionCardType.MEDIUM,
                 actionColor = QPWTheme.colors.lightGray,
-                onClick = onCancel
+                onClick = onCancelClick
             )
 
             QPWActionCard(
-                title = "Save Changes",
-                icon = Icons.Rounded.Edit,
+                title = "Apply",
                 type = QPWActionCardType.MEDIUM,
                 actionColor = QPWTheme.colors.green,
+                isEnabled = templateName.isNotBlank() && fileTemplates.any { it.fileName.isNotBlank() },
                 onClick = {
                     val updatedTemplate = template.copy(
                         name = templateName,
                         fileTemplates = fileTemplates.filter { it.fileName.isNotBlank() }
                     )
-                    onSave(updatedTemplate)
+                    onApplyClick(updatedTemplate)
                 }
+            )
+
+            QPWActionCard(
+                title = "Okay",
+                type = QPWActionCardType.MEDIUM,
+                actionColor = QPWTheme.colors.green,
+                isEnabled = templateName.isNotBlank() && fileTemplates.any { it.fileName.isNotBlank() },
+                onClick = {
+                    val updatedTemplate = template.copy(
+                        name = templateName,
+                        fileTemplates = fileTemplates.filter { it.fileName.isNotBlank() }
+                    )
+                    onOkayClick(updatedTemplate)
+                },
             )
         }
     }
