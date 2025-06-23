@@ -344,7 +344,7 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
             elevation = 0.dp
         ) {
             Row(
-                modifier = Modifier.padding(if (isExpanded) 12.dp else 6.dp),
+                modifier = Modifier.padding(if (isExpanded) 8.dp else 6.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
             ) {
