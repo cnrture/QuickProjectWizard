@@ -48,9 +48,27 @@ class SettingsService : PersistentStateComponent<SettingsState> {
             if (backupFile.exists()) {
                 val jsonContent = backupFile.readText()
                 val importedState = Json.decodeFromString(SettingsState.serializer(), jsonContent)
+
+                val updatedModuleTemplates = importedState.moduleTemplates.toMutableList()
+                val moduleIndex = updatedModuleTemplates.indexOfFirst { it.id == "candroid_template" }
+                if (moduleIndex != -1) {
+                    updatedModuleTemplates[moduleIndex] = getDefaultModuleTemplates().first()
+                }
+                importedState.moduleTemplates.clear()
+                importedState.moduleTemplates.addAll(updatedModuleTemplates)
+
+                val updatedFeatureTemplates = importedState.featureTemplates.toMutableList()
+                val featureIndex = updatedFeatureTemplates.indexOfFirst { it.id == "candroid_template" }
+                if (featureIndex != -1) {
+                    updatedFeatureTemplates[featureIndex] = getDefaultFeatureTemplates().first()
+                }
+                importedState.featureTemplates.clear()
+                importedState.featureTemplates.addAll(updatedFeatureTemplates)
+
                 myState = importedState
             }
         } catch (_: Exception) {
+            setDefaultTemplatesIfEmpty()
         }
     }
 
@@ -207,6 +225,23 @@ class SettingsService : PersistentStateComponent<SettingsState> {
     private fun setDefaultTemplatesIfEmpty() {
         if (myState.moduleTemplates.isEmpty()) myState.moduleTemplates.addAll(getDefaultModuleTemplates())
         if (myState.featureTemplates.isEmpty()) myState.featureTemplates.addAll(getDefaultFeatureTemplates())
+
+        // Always ensure candroid_template is up-to-date
+        updateCanDroidTemplates()
+    }
+
+    private fun updateCanDroidTemplates() {
+        // Update candroid_template in module templates
+        val moduleIndex = myState.moduleTemplates.indexOfFirst { it.id == "candroid_template" }
+        if (moduleIndex != -1) {
+            myState.moduleTemplates[moduleIndex] = getDefaultModuleTemplates().first()
+        }
+
+        // Update candroid_template in feature templates
+        val featureIndex = myState.featureTemplates.indexOfFirst { it.id == "candroid_template" }
+        if (featureIndex != -1) {
+            myState.featureTemplates[featureIndex] = getDefaultFeatureTemplates().first()
+        }
     }
 }
 
@@ -222,6 +257,7 @@ fun getDefaultModuleTemplates(): List<ModuleTemplate> {
                     fileContent = """
 package {FILE_PACKAGE}
 
+abc22222
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
