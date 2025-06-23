@@ -27,10 +27,7 @@ import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
 import com.github.cnrture.quickprojectwizard.service.AnalyticsService
 import com.github.cnrture.quickprojectwizard.service.SettingsService
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
-import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.dialog.FeatureTemplateCreatorContent
-import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.dialog.FeatureTemplateEditorContent
-import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.dialog.TemplateCreatorContent
-import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.dialog.TemplateEditorContent
+import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.dialog.*
 import com.intellij.openapi.project.Project
 
 @Composable
@@ -560,6 +557,7 @@ private fun FeatureTemplatesTab(
 ) {
     var isCreateDialogVisible by remember { mutableStateOf(Pair(false, FeatureTemplate.EMPTY)) }
     var isEditDialogVisible by remember { mutableStateOf(Pair(false, FeatureTemplate.EMPTY)) }
+    var isReviewDialogVisible by remember { mutableStateOf(Pair(false, FeatureTemplate.EMPTY)) }
     val settings = SettingsService.getInstance()
     val analyticsService = AnalyticsService.getInstance()
 
@@ -607,6 +605,7 @@ private fun FeatureTemplatesTab(
                 onEdit = { isEditDialogVisible = Pair(true, template) },
                 onDelete = { if (!template.isDefault) onTemplateDelete(template) },
                 onSetDefault = { onSetDefault(template) },
+                onReview = { isReviewDialogVisible = Pair(true, template) },
                 onExport = {
                     Utils.exportFeatureTemplate(project, template) { success, message ->
                         Utils.showInfo("Quick Project Wizard", message)
@@ -677,6 +676,22 @@ private fun FeatureTemplatesTab(
                 )
             }
         }
+
+        if (isReviewDialogVisible.first) {
+            Dialog(
+                onDismissRequest = {},
+                properties = DialogProperties(
+                    dismissOnBackPress = false,
+                    dismissOnClickOutside = false,
+                    usePlatformDefaultWidth = false,
+                )
+            ) {
+                FeatureTemplateReviewContent(
+                    template = isReviewDialogVisible.second,
+                    onCancelClick = { isReviewDialogVisible = Pair(false, FeatureTemplate.EMPTY) },
+                )
+            }
+        }
     }
 }
 
@@ -688,6 +703,7 @@ private fun FeatureTemplateCard(
     onDelete: () -> Unit,
     onSetDefault: () -> Unit,
     onExport: () -> Unit,
+    onReview: () -> Unit,
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -744,9 +760,15 @@ private fun FeatureTemplateCard(
                         icon = Icons.Rounded.Edit,
                         type = QPWActionCardType.SMALL,
                         actionColor = QPWTheme.colors.lightGray,
-                        onClick = {
-                            onEdit()
-                        }
+                        onClick = onEdit,
+                    )
+                } else {
+                    QPWActionCard(
+                        title = "Preview",
+                        icon = Icons.Rounded.RemoveRedEye,
+                        type = QPWActionCardType.SMALL,
+                        actionColor = QPWTheme.colors.lightGray,
+                        onClick = onReview,
                     )
                 }
                 QPWActionCard(
