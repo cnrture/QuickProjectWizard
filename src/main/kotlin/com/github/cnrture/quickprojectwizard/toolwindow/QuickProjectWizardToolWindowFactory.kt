@@ -217,7 +217,9 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                         )
                     }
                     Spacer(modifier = Modifier.weight(1f))
-                    Column {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
                         QPWActionCard(
                             title = "Export Settings",
                             icon = Icons.Rounded.FileUpload,
@@ -256,7 +258,8 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                         ) {
                             Column(
                                 modifier = Modifier.padding(8.dp),
-                                verticalArrangement = Arrangement.spacedBy(6.dp)
+                                verticalArrangement = Arrangement.spacedBy(6.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
                             ) {
                                 ContactButton(
                                     title = "Website",
@@ -352,7 +355,7 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                     imageVector = icon,
                     contentDescription = null,
                     tint = if (isSelected) color else QPWTheme.colors.lightGray,
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(20.dp)
                 )
                 if (isExpanded) {
                     QPWText(
