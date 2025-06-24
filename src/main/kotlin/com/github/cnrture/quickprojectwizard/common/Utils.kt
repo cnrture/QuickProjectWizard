@@ -679,14 +679,14 @@ object Utils {
         notification.addAction(
             object : AnAction("Contact Developer") {
                 override fun actionPerformed(e: AnActionEvent) {
-                    BrowserUtil.browse("https://bento.me/canerture")
+                    BrowserUtil.browse("https://candroid.dev/")
                 }
             }
         )
         notification.addAction(
             object : AnAction("Open Plugin Page") {
                 override fun actionPerformed(e: AnActionEvent) {
-                    BrowserUtil.browse("https://plugins.jetbrains.com/plugin/25221-quickprojectwizard?noRedirect=true")
+                    BrowserUtil.browse("https://quickprojectwizard.candroid.dev/overview")
                 }
             }
         )
