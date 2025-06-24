@@ -317,6 +317,14 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
+## This Text is also available in
+
+[[English](https://img.shields.io/badge/EN-⚫-green.svg)]()
+
+[![Turkish](https://img.shields.io/badge/TR-◯-green.svg)](locals/tr.md) 
+
+---
+
 ## 📞 Support
 
 - 📧 **Email**: cnrture@gmail.com
