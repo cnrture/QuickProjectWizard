@@ -37,6 +37,7 @@ import com.github.cnrture.quickprojectwizard.toolwindow.manager.featuregenerator
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.formatter.FormatterContent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulegenerator.ModuleGeneratorContent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.SettingsContent
+import com.github.cnrture.quickprojectwizard.toolwindow.manager.codesnippet.CodeSnippetContent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.dialog.ExportSettingsContent
 import com.intellij.ide.BrowserUtil
 import com.intellij.notification.NotificationType
@@ -212,6 +213,15 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                         )
 
                         SidebarButton(
+                            title = "Snippet",
+                            icon = Icons.Rounded.Code,
+                            isSelected = selectedSection == "snippet",
+                            color = QPWTheme.colors.purple,
+                            isExpanded = isExpanded,
+                            onClick = { selectedSection = "snippet" }
+                        )
+
+                        SidebarButton(
                             title = "Settings",
                             icon = Icons.Rounded.Settings,
                             isSelected = selectedSection == "settings",
@@ -317,6 +327,11 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                     "api" -> {
                         analyticsService.track("view_api_tester")
                         ApiTesterContent()
+                    }
+
+                    "snippet" -> {
+                        analyticsService.track("view_code_snippet")
+                        CodeSnippetContent()
                     }
 
                     "settings" -> SettingsContent(project)

@@ -51,10 +51,14 @@ dependencies {
     implementation(libs.kotlinx.serialization)
     implementation(libs.freemarker)
     implementation(libs.detekt.formatting)
+    implementation(libs.batik.awt.util)
+    implementation(libs.batik.dom)
+    implementation(libs.batik.svggen)
+    implementation(libs.batik.codec)
     implementation(compose.desktop.currentOs)
     implementation(compose.materialIconsExtended)
 
-    // IntelliJ Platform Gradle Plugin Dependencies Extension - read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-dependencies-extension.html
+    // IntelliJ Platform Gradle Plugin Dependencies Extension - read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-dependencies.html
     intellijPlatform {
         create(providers.gradleProperty("platformType"), providers.gradleProperty("platformVersion"))
 
