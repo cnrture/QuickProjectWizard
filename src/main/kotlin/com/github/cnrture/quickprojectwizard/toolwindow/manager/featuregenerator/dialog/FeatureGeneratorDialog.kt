@@ -20,7 +20,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.github.cnrture.quickprojectwizard.service.AnalyticsService
 import com.github.cnrture.quickprojectwizard.common.Constants
 import com.github.cnrture.quickprojectwizard.common.Utils
 import com.github.cnrture.quickprojectwizard.common.file.FileWriter
@@ -28,8 +27,10 @@ import com.github.cnrture.quickprojectwizard.common.rootDirectoryString
 import com.github.cnrture.quickprojectwizard.common.rootDirectoryStringDropLast
 import com.github.cnrture.quickprojectwizard.components.*
 import com.github.cnrture.quickprojectwizard.data.FeatureTemplate
+import com.github.cnrture.quickprojectwizard.service.AnalyticsService
 import com.github.cnrture.quickprojectwizard.service.SettingsService
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
+import com.intellij.notification.NotificationType
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import java.io.File
@@ -126,9 +127,17 @@ class FeatureGeneratorDialog(
                             if (validateInput()) {
                                 selectedTemplate?.let {
                                     createFeature(it)
-                                } ?: run { QPWMessageDialog("Please select a feature template").show() }
+                                } ?: run {
+                                    Utils.showInfo(
+                                        message = "Please select a feature template",
+                                        type = NotificationType.WARNING,
+                                    )
+                                }
                             } else {
-                                QPWMessageDialog("Please fill out required values").show()
+                                Utils.showInfo(
+                                    message = "Please fill out required values",
+                                    type = NotificationType.WARNING,
+                                )
                             }
                         },
                     )
@@ -326,7 +335,10 @@ class FeatureGeneratorDialog(
                 from = "action",
             )
         } catch (e: Exception) {
-            QPWMessageDialog("Error: ${e.message}").show()
+            Utils.showInfo(
+                message = "Failed to create feature: ${e.message}",
+                type = NotificationType.ERROR,
+            )
         } finally {
             close(0)
         }

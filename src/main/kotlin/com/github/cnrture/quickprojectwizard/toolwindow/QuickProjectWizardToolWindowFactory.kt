@@ -23,9 +23,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.github.cnrture.quickprojectwizard.common.Constants
+import com.github.cnrture.quickprojectwizard.common.Utils
 import com.github.cnrture.quickprojectwizard.components.QPWActionCard
 import com.github.cnrture.quickprojectwizard.components.QPWActionCardType
-import com.github.cnrture.quickprojectwizard.components.QPWMessageDialog
 import com.github.cnrture.quickprojectwizard.components.QPWText
 import com.github.cnrture.quickprojectwizard.data.SettingsState
 import com.github.cnrture.quickprojectwizard.service.AnalyticsService
@@ -39,6 +39,7 @@ import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulegenerator.
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.SettingsContent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.dialog.ExportSettingsContent
 import com.intellij.ide.BrowserUtil
+import com.intellij.notification.NotificationType
 import com.intellij.openapi.fileChooser.FileChooser
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.project.Project
@@ -334,7 +335,11 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                     settings = settings,
                     onExport = { success, message ->
                         analyticsService.track("export_settings")
-                        QPWMessageDialog(message).show()
+                        if (success) isExportDialogVisible = false
+                        Utils.showInfo(
+                            message = message,
+                            type = if (success) NotificationType.INFORMATION else NotificationType.ERROR,
+                        )
                     },
                     onCancel = { isExportDialogVisible = false }
                 )
@@ -427,10 +432,16 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
         descriptor.title = "Import Settings"
         FileChooser.chooseFile(descriptor, project, null) { file ->
             if (settings.importFromFile(file.path)) {
-                QPWMessageDialog("Settings imported successfully!").show()
+                Utils.showInfo(
+                    message = "Settings imported successfully!",
+                    type = NotificationType.INFORMATION,
+                )
                 onSuccess(settings.state)
             } else {
-                QPWMessageDialog("Failed to import settings. Please check the file format.").show()
+                Utils.showInfo(
+                    message = "Failed to import settings. Please check the file format.",
+                    type = NotificationType.ERROR,
+                )
             }
         }
     }

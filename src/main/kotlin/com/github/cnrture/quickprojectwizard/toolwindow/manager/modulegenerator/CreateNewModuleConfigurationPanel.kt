@@ -16,12 +16,12 @@ import com.github.cnrture.quickprojectwizard.common.file.FileWriter
 import com.github.cnrture.quickprojectwizard.common.file.LibraryDependencyFinder
 import com.github.cnrture.quickprojectwizard.components.QPWActionCard
 import com.github.cnrture.quickprojectwizard.components.QPWActionCardType
-import com.github.cnrture.quickprojectwizard.components.QPWMessageDialog
 import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
 import com.github.cnrture.quickprojectwizard.data.PluginListItem
 import com.github.cnrture.quickprojectwizard.service.SettingsService
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulegenerator.components.*
+import com.intellij.notification.NotificationType
 import com.intellij.openapi.project.Project
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -100,7 +100,10 @@ fun CreateNewModuleConfigurationPanel(
                                 from = "new",
                             )
                         } else {
-                            QPWMessageDialog("Please fill out required values").show()
+                            Utils.showInfo(
+                                message = "Please fill out required values",
+                                type = NotificationType.WARNING,
+                            )
                         }
                     },
                 )

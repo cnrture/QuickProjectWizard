@@ -3,13 +3,13 @@ package com.github.cnrture.quickprojectwizard.common
 import com.github.cnrture.quickprojectwizard.common.file.FileWriter
 import com.github.cnrture.quickprojectwizard.common.file.ImportAnalyzer
 import com.github.cnrture.quickprojectwizard.common.file.LibraryDependencyFinder
-import com.github.cnrture.quickprojectwizard.components.QPWMessageDialog
 import com.github.cnrture.quickprojectwizard.data.FeatureTemplate
 import com.github.cnrture.quickprojectwizard.data.ModuleTemplate
 import com.github.cnrture.quickprojectwizard.data.PluginListItem
 import com.github.cnrture.quickprojectwizard.service.AnalyticsService
 import com.intellij.ide.BrowserUtil
 import com.intellij.ide.starters.local.GeneratorTemplateFile
+import com.intellij.notification.NotificationDisplayType
 import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationType
 import com.intellij.openapi.actionSystem.AnAction
@@ -67,17 +67,28 @@ object Utils {
                 file = File(projectRoot, cleanSelectedPath),
                 featureName = featureName,
                 packageName = packagePath.plus(".${featureName.lowercase()}"),
-                showErrorDialog = { QPWMessageDialog("Error: $it").show() },
+                showErrorDialog = {
+                    showInfo(
+                        message = "Error creating feature: $it",
+                        type = NotificationType.ERROR
+                    )
+                },
                 showSuccessDialog = {
                     analyticsService.track("${from}_feature_created")
-                    QPWMessageDialog("Success").show()
+                    showInfo(
+                        message = "Feature '$featureName' created successfully",
+                        type = NotificationType.INFORMATION
+                    )
                     val currentlySelectedFile = project.getCurrentlySelectedFile(selectedSrc)
                     listOf(currentlySelectedFile).refreshFileSystem()
                 },
                 selectedTemplate = selectedTemplate
             )
         } catch (e: Exception) {
-            QPWMessageDialog("Error: ${e.message}").show()
+            showInfo(
+                message = "Error creating feature: ${e.message}",
+                type = NotificationType.ERROR
+            )
         }
     }
 
@@ -108,7 +119,10 @@ object Utils {
             if (settingsGradleFile != null) {
                 val moduleName = moduleName.trim()
                 if (!moduleName.startsWith(":")) {
-                    QPWMessageDialog("Module name must start with ':' (e.g. ':home' or ':feature:home')").show()
+                    showInfo(
+                        message = "Module name must start with ':' (e.g. ':home' or ':feature:home')",
+                        type = NotificationType.ERROR
+                    )
                     return emptyList()
                 }
 
@@ -131,10 +145,18 @@ object Utils {
                     modulePathAsString = moduleName,
                     name = name,
                     moduleType = moduleType,
-                    showErrorDialog = { QPWMessageDialog(it).show() },
+                    showErrorDialog = {
+                        showInfo(
+                            message = "Error creating module: $it",
+                            type = NotificationType.ERROR
+                        )
+                    },
                     showSuccessDialog = {
                         analyticsService.track("${from}_module_created")
-                        QPWMessageDialog("Module '$moduleName' created successfully").show()
+                        showInfo(
+                            message = "Module '$moduleName' created successfully",
+                            type = NotificationType.INFORMATION
+                        )
 
                         val projectDir = File(project.basePath.orEmpty())
                         VfsUtil.markDirtyAndRefresh(false, true, true, VfsUtil.findFileByIoFile(projectDir, true))
@@ -169,11 +191,17 @@ object Utils {
                 )
                 return filesCreated
             } else {
-                QPWMessageDialog("Couldn't find settings.gradle(.kts) file").show()
+                showInfo(
+                    message = "Couldn't find settings.gradle(.kts) file",
+                    type = NotificationType.ERROR
+                )
                 return emptyList()
             }
         } catch (e: Exception) {
-            QPWMessageDialog("Error: ${e.message}").show()
+            showInfo(
+                message = "Error creating module: ${e.message}",
+                type = NotificationType.ERROR
+            )
             return emptyList()
         }
     }
@@ -189,7 +217,10 @@ object Utils {
 
         try {
             if (!sourceDir.exists() || !sourceDir.isDirectory) {
-                QPWMessageDialog("Source directory does not exist or is not a directory").show()
+                showInfo(
+                    message = "Source directory does not exist or is not a directory",
+                    type = NotificationType.ERROR
+                )
                 return
             }
 
@@ -206,7 +237,10 @@ object Utils {
             }.toList()
 
             if (sourceFiles.isEmpty()) {
-                QPWMessageDialog("No source files found to move in ${sourceDir.absolutePath}").show()
+                showInfo(
+                    message = "No source files found to move in ${sourceDir.absolutePath}",
+                    type = NotificationType.WARNING
+                )
                 return
             }
 
@@ -276,10 +310,15 @@ object Utils {
             ApplicationManager.getApplication().invokeLater {
                 openNewModule(project, modulePath, movedFiles)
             }
-
-            QPWMessageDialog("Moved ${movedFiles.size} files to new module").show()
+            showInfo(
+                message = "Files moved to new module: ${targetModulePath.replace(":", "/")}",
+                type = NotificationType.INFORMATION
+            )
         } catch (e: Exception) {
-            QPWMessageDialog("Error moving files: ${e.message}").show()
+            showInfo(
+                message = "Error moving files: ${e.message}",
+                type = NotificationType.ERROR
+            )
             e.printStackTrace()
         }
     }
@@ -311,7 +350,10 @@ object Utils {
         val settingsFile = listOf(settingsGradleKtsPath, settingsGradlePath).firstOrNull {
             it.exists()
         } ?: run {
-            QPWMessageDialog("Can't find settings.gradle(.kts) file")
+            showInfo(
+                message = "Can't find settings.gradle(.kts) file in project: ${project.name}",
+                type = NotificationType.ERROR
+            )
             return null
         }
 
@@ -626,13 +668,13 @@ object Utils {
         }
     }
 
-    fun showInfo(title: String, message: String) {
+    fun showInfo(title: String? = null, message: String, type: NotificationType = NotificationType.INFORMATION) {
         val notification = NotificationGroupManager.getInstance()
             .getNotificationGroup("QPW Notification Group")
             .createNotification(
-                title = title,
+                title = title ?: "Quick Project Wizard",
                 content = message,
-                type = NotificationType.INFORMATION,
+                type = type,
             )
         notification.addAction(
             object : AnAction("Contact Developer") {

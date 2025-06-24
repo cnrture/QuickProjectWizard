@@ -21,10 +21,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.cnrture.quickprojectwizard.common.Utils
 import com.github.cnrture.quickprojectwizard.common.file.FileWriter
-import com.github.cnrture.quickprojectwizard.components.*
+import com.github.cnrture.quickprojectwizard.components.QPWActionCard
+import com.github.cnrture.quickprojectwizard.components.QPWActionCardType
+import com.github.cnrture.quickprojectwizard.components.QPWText
+import com.github.cnrture.quickprojectwizard.components.QPWTextField
 import com.github.cnrture.quickprojectwizard.data.FeatureTemplate
 import com.github.cnrture.quickprojectwizard.service.SettingsService
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
+import com.intellij.notification.NotificationType
 import com.intellij.openapi.project.Project
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -68,9 +72,17 @@ fun ConfigurationPanel(
                                     selectedTemplate = selectedTemplate,
                                     from = "tool",
                                 )
-                            } ?: run { QPWMessageDialog("Please select a feature template").show() }
+                            } ?: run {
+                                Utils.showInfo(
+                                    message = "Please select a feature template",
+                                    type = NotificationType.WARNING,
+                                )
+                            }
                         } else {
-                            QPWMessageDialog("Please fill out required values").show()
+                            Utils.showInfo(
+                                message = "Please fill out required values",
+                                type = NotificationType.WARNING,
+                            )
                         }
                     },
                 )

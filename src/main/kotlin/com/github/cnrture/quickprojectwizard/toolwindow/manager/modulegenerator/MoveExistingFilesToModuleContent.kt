@@ -18,10 +18,10 @@ import com.github.cnrture.quickprojectwizard.common.Utils
 import com.github.cnrture.quickprojectwizard.common.file.FileWriter
 import com.github.cnrture.quickprojectwizard.common.file.LibraryDependencyFinder
 import com.github.cnrture.quickprojectwizard.components.QPWActionCard
-import com.github.cnrture.quickprojectwizard.components.QPWMessageDialog
 import com.github.cnrture.quickprojectwizard.data.PluginListItem
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulegenerator.components.*
+import com.intellij.notification.NotificationType
 import com.intellij.openapi.project.Project
 
 @Composable
@@ -111,7 +111,10 @@ fun MoveExistingFilesToModuleContent(
                                     from = "existing",
                                 )
                             } else {
-                                QPWMessageDialog("Please fill out required values").show()
+                                Utils.showInfo(
+                                    message = "Please fill out required values",
+                                    type = NotificationType.WARNING,
+                                )
                             }
                         }
                     )

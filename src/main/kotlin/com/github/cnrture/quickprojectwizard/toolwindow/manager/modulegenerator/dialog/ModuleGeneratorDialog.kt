@@ -22,12 +22,16 @@ import com.github.cnrture.quickprojectwizard.common.file.FileWriter
 import com.github.cnrture.quickprojectwizard.common.file.LibraryDependencyFinder
 import com.github.cnrture.quickprojectwizard.common.rootDirectoryString
 import com.github.cnrture.quickprojectwizard.common.rootDirectoryStringDropLast
-import com.github.cnrture.quickprojectwizard.components.*
+import com.github.cnrture.quickprojectwizard.components.QPWActionCard
+import com.github.cnrture.quickprojectwizard.components.QPWActionCardType
+import com.github.cnrture.quickprojectwizard.components.QPWDialogWrapper
+import com.github.cnrture.quickprojectwizard.components.QPWText
 import com.github.cnrture.quickprojectwizard.data.PluginListItem
 import com.github.cnrture.quickprojectwizard.service.AnalyticsService
 import com.github.cnrture.quickprojectwizard.service.SettingsService
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulegenerator.components.*
+import com.intellij.notification.NotificationType
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import java.io.File
@@ -242,7 +246,10 @@ class ModuleGeneratorDialog(
                                 } catch (_: Exception) {
                                 }
                             } else {
-                                QPWMessageDialog("Please fill out required values").show()
+                                Utils.showInfo(
+                                    message = "Please fill out required values",
+                                    type = NotificationType.WARNING,
+                                )
                             }
                         }
                     )
