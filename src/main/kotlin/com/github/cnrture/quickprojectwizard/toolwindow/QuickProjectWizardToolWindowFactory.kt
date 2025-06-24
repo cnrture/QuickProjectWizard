@@ -20,14 +20,16 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.github.cnrture.quickprojectwizard.service.AnalyticsService
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.github.cnrture.quickprojectwizard.common.Constants
 import com.github.cnrture.quickprojectwizard.components.QPWActionCard
 import com.github.cnrture.quickprojectwizard.components.QPWActionCardType
 import com.github.cnrture.quickprojectwizard.components.QPWMessageDialog
 import com.github.cnrture.quickprojectwizard.components.QPWText
-import com.github.cnrture.quickprojectwizard.service.SettingsService
 import com.github.cnrture.quickprojectwizard.data.SettingsState
+import com.github.cnrture.quickprojectwizard.service.AnalyticsService
+import com.github.cnrture.quickprojectwizard.service.SettingsService
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.apitester.ApiTesterContent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.colorpicker.ColorPickerContent
@@ -35,7 +37,7 @@ import com.github.cnrture.quickprojectwizard.toolwindow.manager.featuregenerator
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.formatter.FormatterContent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.modulegenerator.ModuleGeneratorContent
 import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.SettingsContent
-import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.dialog.ExportSettingsDialog
+import com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.dialog.ExportSettingsContent
 import com.intellij.ide.BrowserUtil
 import com.intellij.openapi.fileChooser.FileChooser
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
@@ -100,6 +102,7 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
         val analyticsService = AnalyticsService.getInstance()
         var selectedSection by remember { mutableStateOf("module") }
         var isExpanded by remember { mutableStateOf(settings.state.isActionsExpanded) }
+        var isExportDialogVisible by remember { mutableStateOf(false) }
 
         Row(
             modifier = Modifier
@@ -226,15 +229,7 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
                             type = QPWActionCardType.SMALL,
                             actionColor = QPWTheme.colors.green,
                             isTextVisible = isExpanded,
-                            onClick = {
-                                ExportSettingsDialog(
-                                    settings = settings,
-                                    onComplete = { success, message ->
-                                        analyticsService.track("export_settings")
-                                        QPWMessageDialog(message).show()
-                                    }
-                                ).show()
-                            }
+                            onClick = { isExportDialogVisible = true }
                         )
                         Spacer(modifier = Modifier.height(12.dp))
                         QPWActionCard(
@@ -325,6 +320,24 @@ class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
 
                     "settings" -> SettingsContent(project)
                 }
+            }
+        }
+
+        if (isExportDialogVisible) {
+            Dialog(
+                onDismissRequest = { isExportDialogVisible = false },
+                properties = DialogProperties(
+                    usePlatformDefaultWidth = true
+                )
+            ) {
+                ExportSettingsContent(
+                    settings = settings,
+                    onExport = { success, message ->
+                        analyticsService.track("export_settings")
+                        QPWMessageDialog(message).show()
+                    },
+                    onCancel = { isExportDialogVisible = false }
+                )
             }
         }
     }

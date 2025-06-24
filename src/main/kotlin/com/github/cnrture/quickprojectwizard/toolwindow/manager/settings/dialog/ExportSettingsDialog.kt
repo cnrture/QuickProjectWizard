@@ -2,6 +2,7 @@ package com.github.cnrture.quickprojectwizard.toolwindow.manager.settings.dialog
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.FolderOpen
 import androidx.compose.material.icons.rounded.Save
@@ -12,7 +13,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.github.cnrture.quickprojectwizard.components.*
+import com.github.cnrture.quickprojectwizard.components.QPWActionCard
+import com.github.cnrture.quickprojectwizard.components.QPWActionCardType
+import com.github.cnrture.quickprojectwizard.components.QPWText
+import com.github.cnrture.quickprojectwizard.components.QPWTextField
 import com.github.cnrture.quickprojectwizard.service.SettingsService
 import com.github.cnrture.quickprojectwizard.theme.QPWTheme
 import com.intellij.openapi.fileChooser.FileChooser
@@ -22,26 +26,8 @@ import com.intellij.openapi.vfs.VirtualFile
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class ExportSettingsDialog(
-    private val settings: SettingsService,
-    private val onComplete: (Boolean, String) -> Unit,
-) : QPWDialogWrapper(600, 400) {
-
-    @Composable
-    override fun createDesign() {
-        ExportSettingsContent(
-            settings = settings,
-            onExport = { success, message ->
-                onComplete(success, message)
-                close(if (success) 0 else 1)
-            },
-            onCancel = { close(1) }
-        )
-    }
-}
-
 @Composable
-private fun ExportSettingsContent(
+fun ExportSettingsContent(
     settings: SettingsService,
     onExport: (Boolean, String) -> Unit,
     onCancel: () -> Unit,
@@ -55,8 +41,12 @@ private fun ExportSettingsContent(
 
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .background(QPWTheme.colors.black)
+            .wrapContentHeight()
+            .padding(vertical = 80.dp, horizontal = 32.dp)
+            .background(
+                color = QPWTheme.colors.black,
+                shape = RoundedCornerShape(16.dp)
+            )
             .padding(24.dp)
     ) {
         QPWText(
@@ -78,80 +68,76 @@ private fun ExportSettingsContent(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        Column {
+        QPWText(
+            text = "Export Location",
+            color = QPWTheme.colors.white,
+            style = TextStyle(
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
             QPWText(
-                text = "Export Location",
-                color = QPWTheme.colors.white,
-                style = TextStyle(
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
+                modifier = Modifier.weight(1f),
+                text = selectedDirectory?.path ?: "Select a directory...",
+                color = if (selectedDirectory != null) QPWTheme.colors.white else QPWTheme.colors.lightGray,
+                style = TextStyle(fontSize = 14.sp)
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            QPWActionCard(
+                title = "Browse",
+                icon = Icons.Rounded.FolderOpen,
+                type = QPWActionCardType.SMALL,
+                actionColor = QPWTheme.colors.lightGray,
+                onClick = {
+                    val project = ProjectManager.getInstance().defaultProject
+                    val descriptor = FileChooserDescriptorFactory.createSingleFolderDescriptor()
+                    descriptor.title = "Select Export Directory"
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                QPWText(
-                    modifier = Modifier.weight(1f),
-                    text = selectedDirectory?.path ?: "Select a directory...",
-                    color = if (selectedDirectory != null) QPWTheme.colors.white else QPWTheme.colors.lightGray,
-                    style = TextStyle(fontSize = 14.sp)
-                )
-
-                QPWActionCard(
-                    title = "Browse",
-                    icon = Icons.Rounded.FolderOpen,
-                    type = QPWActionCardType.SMALL,
-                    actionColor = QPWTheme.colors.lightGray,
-                    onClick = {
-                        val project = ProjectManager.getInstance().defaultProject
-                        val descriptor = FileChooserDescriptorFactory.createSingleFolderDescriptor()
-                        descriptor.title = "Select Export Directory"
-
-                        FileChooser.chooseFile(descriptor, project, null) { directory ->
-                            selectedDirectory = directory
-                        }
+                    FileChooser.chooseFile(descriptor, project, null) { directory ->
+                        selectedDirectory = directory
                     }
-                )
-            }
+                }
+            )
         }
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        Column {
-            QPWText(
-                text = "File Name",
-                color = QPWTheme.colors.white,
-                style = TextStyle(
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
+        QPWText(
+            text = "File Name",
+            color = QPWTheme.colors.white,
+            style = TextStyle(
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold
             )
+        )
 
-            Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-            QPWTextField(
-                modifier = Modifier.fillMaxWidth(),
-                placeholder = "Enter filename (without .json)",
-                color = QPWTheme.colors.white,
-                value = fileName,
-                onValueChange = { fileName = it }
-            )
+        QPWTextField(
+            modifier = Modifier.fillMaxWidth(),
+            placeholder = "Enter filename (without .json)",
+            color = QPWTheme.colors.white,
+            value = fileName,
+            onValueChange = { fileName = it }
+        )
 
-            Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(4.dp))
 
-            QPWText(
-                text = "File will be saved as: $fileName.json",
-                color = QPWTheme.colors.lightGray,
-                style = TextStyle(fontSize = 12.sp)
-            )
-        }
+        QPWText(
+            text = "File will be saved as: $fileName.json",
+            color = QPWTheme.colors.lightGray,
+            style = TextStyle(fontSize = 12.sp)
+        )
 
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.size(24.dp))
 
         Row(
             modifier = Modifier.fillMaxWidth(),

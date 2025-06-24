@@ -316,7 +316,7 @@ private fun ModuleTemplatesTab(
 
         if (isEditDialogVisible.first) {
             Dialog(
-                onDismissRequest = {},
+                onDismissRequest = { isEditDialogVisible = Pair(false, ModuleTemplate.EMPTY) },
                 properties = DialogProperties(
                     dismissOnBackPress = false,
                     dismissOnClickOutside = false,
@@ -348,7 +348,7 @@ private fun ModuleTemplatesTab(
 
         if (isCreateDialogVisible.first) {
             Dialog(
-                onDismissRequest = {},
+                onDismissRequest = { isCreateDialogVisible = Pair(false, ModuleTemplate.EMPTY) },
                 properties = DialogProperties(
                     dismissOnBackPress = false,
                     dismissOnClickOutside = false,
@@ -379,7 +379,7 @@ private fun ModuleTemplatesTab(
 
         if (isReviewDialogVisible.first) {
             Dialog(
-                onDismissRequest = {},
+                onDismissRequest = { isReviewDialogVisible = Pair(false, ModuleTemplate.EMPTY) },
                 properties = DialogProperties(
                     dismissOnBackPress = false,
                     dismissOnClickOutside = false,
@@ -750,7 +750,7 @@ private fun FeatureTemplatesTab(
 
         if (isReviewDialogVisible.first) {
             Dialog(
-                onDismissRequest = {},
+                onDismissRequest = { isReviewDialogVisible = Pair(false, FeatureTemplate.EMPTY) },
                 properties = DialogProperties(
                     dismissOnBackPress = false,
                     dismissOnClickOutside = false,
