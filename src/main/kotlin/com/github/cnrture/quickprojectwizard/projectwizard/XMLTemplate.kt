@@ -99,13 +99,13 @@ val xmlTemplate = template {
         EnumWidget(selectedImageLibrary),
         TextFieldWidget(screens),
         LabelWidget(
-            "Please enter the screens you want to create. (e.g. Home, Detail, Profile)" +
+            text = "Please enter the screens you want to create. (e.g. Home, Detail, Profile)" +
                 "\nNote: First item is start destination"
         ),
-        LabelWidget(" "),
+        LabelWidget(text = " "),
         TextFieldWidget(javaJvmVersion),
-        LabelWidget("8 or 11 or 17 etc."),
-        LabelWidget(" "),
+        LabelWidget(text = "8 or 11 or 17 etc."),
+        LabelWidget(text = " "),
         UrlLinkWidget("Created by Caner Ture", "https://candroid.dev"),
         PackageNameWidget(defaultPackageNameParameter),
     )

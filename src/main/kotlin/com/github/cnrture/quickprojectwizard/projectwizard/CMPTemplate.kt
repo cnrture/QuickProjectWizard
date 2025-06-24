@@ -80,7 +80,7 @@ val composeMultiplatformTemplate = template {
         CheckBoxWidget(isDataDomainDiUiEnable),
         TextFieldWidget(screens),
         LabelWidget(
-            "Please enter the screens you want to create. (e.g. Home, Detail, Profile)" +
+            text = "Please enter the screens you want to create. (e.g. Home, Detail, Profile)" +
                 "\nNote: First item is start destination"
         ),
         UrlLinkWidget("Created by Caner Ture", "https://candroid.dev"),

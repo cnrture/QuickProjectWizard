@@ -5,14 +5,8 @@
     <vendor email="cnrture@gmail.com" url="https://canerture.com">Caner Ture</vendor>
 
     <depends>com.intellij.modules.platform</depends>
-    <depends>org.jetbrains.android</depends>
-    <depends>com.intellij.modules.androidstudio</depends>
     <depends>com.intellij.modules.java</depends>
-
-    <extensions defaultExtensionNs="com.android.tools.idea.wizard.template">
-        <wizardTemplateProvider
-                implementation="com.github.cnrture.quickprojectwizard.projectwizard.AndroidStudioTemplateProvider"/>
-    </extensions>
+    <depends optional="true" config-file="android-only.xml">org.jetbrains.android</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <notificationGroup id="QPW Notification Group"

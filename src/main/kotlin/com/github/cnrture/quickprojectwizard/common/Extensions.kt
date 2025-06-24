@@ -9,7 +9,7 @@ import com.github.cnrture.quickprojectwizard.projectwizard.gradle.Version
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VfsUtil
 import java.io.File
-import java.net.URL
+import java.net.URI
 import com.github.cnrture.quickprojectwizard.common.file.File as ProjectFile
 
 fun Project.getCurrentlySelectedFile(selectedSrc: String): File =
@@ -161,6 +161,6 @@ fun getImage(className: String, imagePath: String): Thumb {
     return if (imageUrl != null) {
         Thumb { imageUrl }
     } else {
-        Thumb { URL("https://canerture.com/$imagePath.png") }
+        Thumb { URI("https://canerture.com/$imagePath.png").toURL() }
     }
 }

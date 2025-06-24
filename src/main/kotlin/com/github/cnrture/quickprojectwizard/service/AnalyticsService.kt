@@ -5,7 +5,7 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.Service
 import kotlinx.coroutines.*
 import java.net.HttpURLConnection
-import java.net.URL
+import java.net.URI
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -32,7 +32,7 @@ class AnalyticsService {
         withContext(Dispatchers.IO) {
             try {
                 val baseUrl = "https://www.google-analytics.com/mp/collect"
-                val url = URL("$baseUrl?measurement_id=$measurementId&api_secret=$apiSecret")
+                val url = URI("$baseUrl?measurement_id=$measurementId&api_secret=$apiSecret").toURL()
                 val connection = url.openConnection() as HttpURLConnection
 
                 connection.requestMethod = "POST"

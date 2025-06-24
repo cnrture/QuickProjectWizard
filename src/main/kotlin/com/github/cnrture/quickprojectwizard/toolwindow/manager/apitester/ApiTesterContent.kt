@@ -34,7 +34,7 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
-import java.net.URL
+import java.net.URI
 import kotlin.time.measureTime
 
 @Composable
@@ -484,13 +484,13 @@ private suspend fun makeApiRequest(
 
     val time = measureTime {
         try {
-            val url = URL(
+            val url = URI(
                 urlString + (if (queryParams.isNotEmpty()) {
                     buildQueryParamsString(queryParams)
                 } else {
                     ""
                 })
-            )
+            ).toURL()
             connection = url.openConnection() as HttpURLConnection
 
             connection.apply {
