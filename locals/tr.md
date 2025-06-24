@@ -319,7 +319,7 @@ Bu proje MIT Lisansı ile lisanslanmıştır – detaylar için [LICENSE](LICENS
 
 ## Diğer Dil Seçenekleri
 
-[[English](https://img.shields.io/badge/EN-◯-green.svg)](/)
+[![English](https://img.shields.io/badge/EN-◯-green.svg)](/)
 
 [![Turkish](https://img.shields.io/badge/TR-⚫-green.svg)]()
 
