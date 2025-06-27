@@ -1,6 +1,5 @@
 package ${PACKAGE_NAME}.di
 
-import androidx.lifecycle.SavedStateHandle
 import ${PACKAGE_NAME}.data.repository.MainRepositoryImpl
 <#if IS_KTOR_ENABLE>
 import ${PACKAGE_NAME}.data.source.remote.MainService
@@ -47,7 +46,7 @@ val dataModule = module {
 <#else>
     single<MainRepository> { MainRepositoryImpl() }
 </#if>
-    single { SavedStateHandle() }
+
 }
 
 val viewModelModule = module {
