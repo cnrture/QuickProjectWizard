@@ -9,7 +9,7 @@ intelliJPlatform = "2.6.0"
 kover = "0.9.1"
 qodana = "2025.1.1"
 ktorVersion = "3.2.0"
-kotlinxSerialization = "1.8.1"
+kotlinxSerialization = "1.9.0"
 freeMarker = "2.3.34"
 detekt = "1.23.8"
 
