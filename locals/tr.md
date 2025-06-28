@@ -10,7 +10,7 @@
 
 <!-- Plugin description -->
 
-#### The ultimate Android development companion that simplifies project setup and provides powerful development tools. Create new projects with modern dependencies, manage modules and features, and access essential utilities - all from a single, intuitive interface.
+#### Android geliştirme sürecinizin vazgeçilmez yardımcısı: Proje kurulumunu kolaylaştıran, güçlü geliştirme araçları sunan bu araç sayesinde modern bağımlılıklarla yeni projeler oluşturabilir, modülleri ve özellikleri yönetebilir, temel araçlara tek bir sezgisel arayüzden erişebilirsiniz.
 
 🚀 **Proje Şablonları** • 🏗️ **Modül & Feature Geliştirme** • 🎨 **Geliştirme Araçları** • ⚙️ **Takım Çalışması**
 
@@ -89,7 +89,7 @@ Ya da doğrudan [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/252
 
 <img title="" src="../images/new_project_cmp.png" alt="Compose Multiplatform" width="600">
 
-**Steps:**
+**Adımlar:**
 
 1. **File** → **New** → **Project**
 2. **Quick Project Wizard**’ı seç
@@ -320,7 +320,6 @@ Bu proje MIT Lisansı ile lisanslanmıştır – detaylar için [LICENSE](LICENS
 ## Diğer Dil Seçenekleri
 
 [![English](https://img.shields.io/badge/EN-◯-green.svg)](/)
-
 [![Turkish](https://img.shields.io/badge/TR-⚫-green.svg)]()
 
 ---
