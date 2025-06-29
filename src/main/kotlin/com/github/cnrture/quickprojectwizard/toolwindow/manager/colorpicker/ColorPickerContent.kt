@@ -21,6 +21,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.github.cnrture.quickprojectwizard.common.hsvToColor
+import com.github.cnrture.quickprojectwizard.common.toHSV
 import com.github.cnrture.quickprojectwizard.service.AnalyticsService
 import com.github.cnrture.quickprojectwizard.components.QPWActionCard
 import com.github.cnrture.quickprojectwizard.components.QPWActionCardType
@@ -100,6 +102,11 @@ fun ColorPickerContent() {
                         colorInfo = colorInfo,
                         onCopyHex = { copyToClipboard(colorInfo.hex) },
                         onCopyRgb = { copyToClipboard(colorInfo.rgb) },
+                        onAdjustColorLightness = { percent ->
+                            val adjustedColor = adjustColorLightness(colorInfo.color, percent)
+                            val adjustedColorInfo = createColorInfo(adjustedColor)
+                            settings.addColorToHistory(adjustedColorInfo)
+                            colorHistory = settings.getColorHistory()}
                     )
                 }
             }
@@ -137,6 +144,7 @@ private fun ColorHistoryItem(
     colorInfo: ColorInfo,
     onCopyHex: () -> Unit,
     onCopyRgb: () -> Unit,
+    onAdjustColorLightness: (percent: Float) -> Unit
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -166,6 +174,28 @@ private fun ColorHistoryItem(
                 Spacer(modifier = Modifier.height(8.dp))
                 ColorInfoRow(label = "RGB:", value = colorInfo.rgb)
             }
+
+            Column(
+                modifier = Modifier.width(IntrinsicSize.Max)
+            ) {
+                QPWActionCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = "+20%",
+                    icon = Icons.Rounded.ContentCopy,
+                    actionColor = QPWTheme.colors.purple,
+                    type = QPWActionCardType.SMALL,
+                    onClick = { onAdjustColorLightness(1.2f) })
+                Spacer(modifier = Modifier.height(8.dp))
+                QPWActionCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = "-20%",
+                    icon = Icons.Rounded.ContentCopy,
+                    actionColor = QPWTheme.colors.purple,
+                    type = QPWActionCardType.SMALL,
+                    onClick = { onAdjustColorLightness(0.8f) })
+            }
+
+            Spacer(modifier = Modifier.width(8.dp))
 
             Column {
                 QPWActionCard(
@@ -385,4 +415,11 @@ private fun copyToClipboard(text: String) {
     } catch (e: Exception) {
         println("❌ Error copying to clipboard: ${e.message}")
     }
+}
+
+private fun adjustColorLightness(color: Color, percent: Float): Color {
+    val hsv = color.toHSV()
+    hsv[2] = (hsv[2] * percent).coerceAtMost(1f)
+    val shiftedColor = Color.hsvToColor(hsv[0], hsv[1], hsv[2])
+    return shiftedColor
 }
