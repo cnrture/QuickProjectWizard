@@ -42,6 +42,7 @@ import com.intellij.ide.BrowserUtil
 import com.intellij.notification.NotificationType
 import com.intellij.openapi.fileChooser.FileChooser
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
+import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ProjectManager
 import com.intellij.openapi.wm.ToolWindow
@@ -51,7 +52,7 @@ import java.awt.BorderLayout
 import javax.swing.JComponent
 import javax.swing.JPanel
 
-class QuickProjectWizardToolWindowFactory : ToolWindowFactory {
+class QuickProjectWizardToolWindowFactory : ToolWindowFactory, DumbAware {
 
     private val settings = SettingsService.getInstance()
 

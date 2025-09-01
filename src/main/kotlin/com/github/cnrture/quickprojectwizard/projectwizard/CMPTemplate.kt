@@ -67,6 +67,7 @@ val composeMultiplatformTemplate = template {
     val screens = stringParameter {
         name = "Screens"
         default = ""
+        help = "Please enter the screens you want to create. (e.g. Home, Detail, Profile)"
     }
 
     widgets(

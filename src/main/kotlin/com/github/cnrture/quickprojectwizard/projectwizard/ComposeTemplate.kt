@@ -83,11 +83,13 @@ val composeTemplate = template {
     val screens = stringParameter {
         name = "Screens"
         default = ""
+        help = "Please enter the screens you want to create. (e.g. Home, Detail, Profile)"
     }
 
     val javaJvmVersion = stringParameter {
         name = "Java & JVM Version"
         default = "17"
+        help = "8 or 11 or 17 etc."
     }
 
     widgets(
