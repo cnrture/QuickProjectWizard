@@ -10,7 +10,8 @@
 
 - Bug fixes
 
-[Unreleased]: https://github.com/cnrture/QuickProjectWizard/compare/v0.0.7...HEAD
+[Unreleased]: https://github.com/cnrture/QuickProjectWizard/compare/v0.0.8...HEAD
+[0.0.8]: https://github.com/cnrture/QuickProjectWizard/commits/v0.0.8
 [0.0.7]: https://github.com/cnrture/QuickProjectWizard/commits/v0.0.7
 [0.0.6]: https://github.com/cnrture/QuickProjectWizard/commits/v0.0.6
 [0.0.5]: https://github.com/cnrture/QuickProjectWizard/commits/v0.0.5
