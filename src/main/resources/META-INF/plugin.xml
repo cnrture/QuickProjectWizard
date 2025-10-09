@@ -2,7 +2,7 @@
 <idea-plugin>
     <id>com.github.cnrture.quickprojectwizard</id>
     <name>QuickProjectWizard</name>
-    <vendor email="cnrture@gmail.com" url="https://canerture.com">Caner Ture</vendor>
+    <vendor email="cnrture@gmail.com" url="https://candroid.dev">Caner Ture</vendor>
 
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.java</depends>
