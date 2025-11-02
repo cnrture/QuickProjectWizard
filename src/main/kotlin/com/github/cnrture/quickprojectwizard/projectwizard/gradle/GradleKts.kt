@@ -19,6 +19,7 @@ fun getGradleKts(
     minApi: Int,
     javaJvmVersion: String,
 ) = StringBuilder().apply {
+    append("import org.jetbrains.kotlin.gradle.dsl.JvmTarget\n\n")
     append("plugins {\n")
     addGradlePlugin(Plugin.AndroidApplication)
     addGradlePlugin(Plugin.JetbrainsKotlinAndroid)

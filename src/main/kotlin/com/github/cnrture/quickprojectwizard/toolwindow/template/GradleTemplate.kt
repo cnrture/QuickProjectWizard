@@ -9,11 +9,11 @@ $plugins
 
 android {
     namespace = "$packageName"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 21
-        targetSdk = 35
+        targetSdk = 36
     }
 
     compileOptions {

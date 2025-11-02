@@ -115,12 +115,12 @@ kotlin {
 
 android {
     namespace = "${PACKAGE_NAME}"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "${PACKAGE_NAME}"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
     }
