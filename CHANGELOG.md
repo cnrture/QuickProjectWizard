@@ -4,11 +4,22 @@
 
 ## [Unreleased]
 
-## [0.0.8]
+## [0.0.9]
 
 ### Added
 
-- Bug fixes
+- **Ktorfit Support**: Added Ktorfit as a network library option for Compose Multiplatform projects
+- **Network Library Selection**: Choose between Ktor or Ktorfit when creating new CMP projects
+
+### Changed
+
+- **Platform Compatibility**: Updated to support IntelliJ Platform 2025.2.2.3 and build 252.*
+- **Gradle Update**: Updated to Gradle 8.13.0 for better performance and stability
+- **SDK Versions**: Updated project templates to use latest stable SDK versions
+
+### Removed
+
+- Removed unused UI components to improve plugin performance
 
 [Unreleased]: https://github.com/cnrture/QuickProjectWizard/compare/v0.0.8...HEAD
 [0.0.8]: https://github.com/cnrture/QuickProjectWizard/commits/v0.0.8
