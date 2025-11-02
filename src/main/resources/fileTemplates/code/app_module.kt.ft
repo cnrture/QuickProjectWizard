@@ -1,12 +1,15 @@
 package ${PACKAGE_NAME}.di
 
 import ${PACKAGE_NAME}.data.repository.MainRepositoryImpl
-<#if IS_KTOR_ENABLE>
+<#if IS_KTOR_ENABLE || IS_KTORFIT_ENABLE>
 import ${PACKAGE_NAME}.data.source.remote.MainService
 </#if>
 import ${PACKAGE_NAME}.domain.repository.MainRepository
 ${VIEW_MODEL_IMPORTS}
-<#if IS_KTOR_ENABLE>
+<#if IS_KTORFIT_ENABLE>
+import de.jensklingenberg.ktorfit.Ktorfit
+</#if>
+<#if IS_KTOR_ENABLE || IS_KTORFIT_ENABLE>
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
@@ -21,7 +24,7 @@ import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
 val dataModule = module {
-<#if IS_KTOR_ENABLE>
+<#if IS_KTOR_ENABLE || IS_KTORFIT_ENABLE>
     single {
         HttpClient {
             defaultRequest {
@@ -39,9 +42,21 @@ val dataModule = module {
             }
         }
     }
+    <#if IS_KTOR_ENABLE>
     single<MainService> { MainService(get()) }
+    <#else>
+    single<MainService> { get<Ktorfit>().create() }
+    </#if>
 </#if>
-<#if IS_KTOR_ENABLE>
+<#if IS_KTORFIT_ENABLE>
+    single {
+        Ktorfit.Builder()
+            .baseUrl("https://api.example.com/")
+            .httpClient(get<HttpClient>())
+            .build()
+    }
+</#if>
+<#if IS_KTOR_ENABLE || IS_KTORFIT_ENABLE>
     single<MainRepository> { MainRepositoryImpl(get()) }
 <#else>
     single<MainRepository> { MainRepositoryImpl() }

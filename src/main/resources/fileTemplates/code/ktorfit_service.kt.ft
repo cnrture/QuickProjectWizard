@@ -1,0 +1,8 @@
+package ${PACKAGE_NAME}.data.source.remote
+
+import de.jensklingenberg.ktorfit.http.GET
+
+interface MainService {
+    @GET("sample-endpoint")
+    suspend fun fetchData(): String
+}

@@ -8,8 +8,10 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinxSerialization)
-<#if IS_ROOM_ENABLE>
+<#if IS_KOIN_ENABLE || IS_KTORFIT_ENABLE || IS_ROOM_ENABLE>
     alias(libs.plugins.ksp)
+</#if>
+<#if IS_ROOM_ENABLE>
     alias(libs.plugins.room.plugin)
 </#if>
 }
@@ -72,6 +74,11 @@ kotlin {
             implementation(libs.kotlinx.serialization)
             <#if IS_KTOR_ENABLE>
             implementation(libs.ktor.client.core)
+            </#if>
+            <#if IS_KTORFIT_ENABLE>
+            implementation(libs.ktorfit)
+            </#if>
+            <#if IS_KTOR_ENABLE || IS_KTORFIT_ENABLE>
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
             </#if>

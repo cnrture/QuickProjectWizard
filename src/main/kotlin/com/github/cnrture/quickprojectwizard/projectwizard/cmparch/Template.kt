@@ -27,6 +27,7 @@ object Template {
     const val REPOSITORY = "repository.kt"
     const val CONSTANTS = "constants.kt"
     const val SERVICE = "service.kt"
+    const val KTOR_FIT_SERVICE = "ktorfit_service.kt"
     const val APP_MODULE = "app_module.kt"
     const val APPLICATION = "application.kt"
     const val NAVIGATION_GRAPH = "navigation_graph.kt"

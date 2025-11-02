@@ -6,6 +6,7 @@ import com.github.cnrture.quickprojectwizard.service.AnalyticsService
 import com.github.cnrture.quickprojectwizard.common.Utils
 import com.github.cnrture.quickprojectwizard.data.CMPConfigModel
 import com.github.cnrture.quickprojectwizard.data.CMPImageLibrary
+import com.github.cnrture.quickprojectwizard.data.CMPNetworkLibrary
 import com.github.cnrture.quickprojectwizard.projectwizard.cmparch.*
 import com.github.cnrture.quickprojectwizard.projectwizard.gradle.Versions
 import com.intellij.ide.fileTemplates.FileTemplateManager
@@ -20,7 +21,7 @@ fun composeMultiplatformProjectRecipe(
     isAndroidEnable: Boolean,
     isIosEnable: Boolean,
     isDesktopEnable: Boolean,
-    isKtorServiceEnable: Boolean,
+    selectedNetworkLibrary: CMPNetworkLibrary,
     isRoomEnable: Boolean,
     selectedImageLibrary: CMPImageLibrary,
     isKoinEnable: Boolean,
@@ -90,7 +91,7 @@ fun composeMultiplatformProjectRecipe(
         this.isAndroidEnable = isAndroidEnable
         this.isIOSEnable = isIosEnable
         this.isDesktopEnable = isDesktopEnable
-        this.isKtorEnable = isKtorServiceEnable
+        this.selectedNetworkLibrary = selectedNetworkLibrary
         this.isRoomEnable = isRoomEnable
         this.isCoilEnable = selectedImageLibrary == CMPImageLibrary.Coil
         this.isKamelEnable = selectedImageLibrary == CMPImageLibrary.Kamel
@@ -100,7 +101,8 @@ fun composeMultiplatformProjectRecipe(
         this.screens = screenList
         this.packageName = packagePath
     }
-
+    val isKtorEnable = config.selectedNetworkLibrary == CMPNetworkLibrary.Ktor
+    val isKtorfitEnable = config.selectedNetworkLibrary == CMPNetworkLibrary.Ktorfit
     val dataModel = mutableMapOf(
         "APP_NAME" to moduleData.themesData.appName,
         "APP_NAME_LOWERCASE" to moduleData.themesData.appName.lowercase(),
@@ -117,7 +119,8 @@ fun composeMultiplatformProjectRecipe(
         "IS_ANDROID_ENABLE" to config.isAndroidEnable,
         "IS_IOS_ENABLE" to config.isIOSEnable,
         "IS_DESKTOP_ENABLE" to config.isDesktopEnable,
-        "IS_KTOR_ENABLE" to config.isKtorEnable,
+        "IS_KTOR_ENABLE" to isKtorEnable,
+        "IS_KTORFIT_ENABLE" to isKtorfitEnable,
         "IS_ROOM_ENABLE" to config.isRoomEnable,
         "IS_COIL_ENABLE" to config.isCoilEnable,
         "IS_KAMEL_ENABLE" to config.isKamelEnable,
@@ -132,6 +135,7 @@ fun composeMultiplatformProjectRecipe(
         "CMP_MULTIPLATFORM" to Versions.versionList["cmp-multiplatform"].orEmpty(),
         "CMP_KOIN" to Versions.versionList["cmp-koin"].orEmpty(),
         "CMP_KTOR" to Versions.versionList["cmp-ktor"].orEmpty(),
+        "KTORFIT" to Versions.versionList["ktorfit"].orEmpty(),
         "CMP_NAVIGATION" to Versions.versionList["cmp-navigation"].orEmpty(),
         "CMP_KOTLINX_COROUTINES" to Versions.versionList["cmp-kotlinx-coroutines"].orEmpty(),
         "CMP_COIL" to Versions.versionList["cmp-coil"].orEmpty(),

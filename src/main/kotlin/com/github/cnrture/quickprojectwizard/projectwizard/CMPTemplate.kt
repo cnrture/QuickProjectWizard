@@ -4,6 +4,7 @@ import com.android.tools.idea.wizard.template.*
 import com.android.tools.idea.wizard.template.impl.defaultPackageNameParameter
 import com.github.cnrture.quickprojectwizard.common.getImage
 import com.github.cnrture.quickprojectwizard.data.CMPImageLibrary
+import com.github.cnrture.quickprojectwizard.data.CMPNetworkLibrary
 import com.github.cnrture.quickprojectwizard.projectwizard.gradle.network.getVersions
 import com.github.cnrture.quickprojectwizard.projectwizard.recipes.composeMultiplatformProjectRecipe
 import kotlinx.coroutines.runBlocking
@@ -39,9 +40,9 @@ val composeMultiplatformTemplate = template {
         default = false
     }
 
-    val isKtorServiceEnable = booleanParameter {
-        name = "Ktor Service"
-        default = false
+    val selectedNetworkLibrary = enumParameter<CMPNetworkLibrary> {
+        name = "Network Library"
+        default = CMPNetworkLibrary.None
     }
 
     val selectedImageLibrary = enumParameter<CMPImageLibrary> {
@@ -74,7 +75,7 @@ val composeMultiplatformTemplate = template {
         CheckBoxWidget(isAndroidEnable),
         CheckBoxWidget(isIosEnable),
         CheckBoxWidget(isDesktopEnable),
-        CheckBoxWidget(isKtorServiceEnable),
+        EnumWidget(selectedNetworkLibrary),
         EnumWidget(selectedImageLibrary),
         CheckBoxWidget(isKoinEnable),
         CheckBoxWidget(isNavigationEnable),
@@ -97,7 +98,7 @@ val composeMultiplatformTemplate = template {
             isAndroidEnable = isAndroidEnable.value,
             isIosEnable = isIosEnable.value,
             isDesktopEnable = isDesktopEnable.value,
-            isKtorServiceEnable = isKtorServiceEnable.value,
+            selectedNetworkLibrary = selectedNetworkLibrary.value,
             isRoomEnable = false,
             selectedImageLibrary = selectedImageLibrary.value,
             isKoinEnable = isKoinEnable.value,

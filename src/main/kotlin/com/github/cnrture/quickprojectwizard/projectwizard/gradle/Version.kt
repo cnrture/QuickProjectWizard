@@ -47,6 +47,7 @@ object Versions {
         "cmp-room" to "2.7.0-alpha08",
         "cmp-sqlite" to "2.5.0-SNAPSHOT",
         "cmp-kotlinx-serialization" to "1.7.3",
+        "ktorfit" to "2.6.4",
     )
 }
 
@@ -86,4 +87,5 @@ sealed class Version(val name: String, val value: String) {
     data object WorkManager : Version("workManagerVersion", Versions.versionList["workManagerVersion"] ?: "2.10.1")
     data object KotlinxSerialization :
         Version("kotlinXSerialization", Versions.versionList["kotlinXSerialization"] ?: "1.8.1")
+    data object Ktorfit : Version("ktorfit", Versions.versionList["ktorfit"] ?: "2.6.4")
 }

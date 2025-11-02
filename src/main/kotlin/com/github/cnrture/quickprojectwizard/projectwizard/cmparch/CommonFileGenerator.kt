@@ -2,6 +2,7 @@ package com.github.cnrture.quickprojectwizard.projectwizard.cmparch
 
 import com.github.cnrture.quickprojectwizard.common.Utils
 import com.github.cnrture.quickprojectwizard.data.CMPConfigModel
+import com.github.cnrture.quickprojectwizard.data.CMPNetworkLibrary
 import com.intellij.ide.fileTemplates.FileTemplateManager
 import com.intellij.ide.starters.local.GeneratorAsset
 import com.intellij.ide.starters.local.GeneratorTemplateFile
@@ -136,11 +137,20 @@ class CommonFileGenerator(
                     )
                 }
 
-                if (params.isKtorEnable) {
+                if (params.selectedNetworkLibrary == CMPNetworkLibrary.Ktor) {
                     add(
                         GeneratorTemplateFile(
                             "composeApp/src/commonMain/kotlin/$packageName/data/source/remote/MainService.kt",
                             ftManager.getCodeTemplate(Template.SERVICE)
+                        )
+                    )
+                }
+
+                if (params.selectedNetworkLibrary == CMPNetworkLibrary.Ktorfit) {
+                    add(
+                        GeneratorTemplateFile(
+                            "composeApp/src/commonMain/kotlin/$packageName/data/source/remote/MainService.kt",
+                            ftManager.getCodeTemplate(Template.KTOR_FIT_SERVICE)
                         )
                     )
                 }

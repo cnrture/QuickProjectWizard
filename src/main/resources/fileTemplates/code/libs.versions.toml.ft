@@ -8,8 +8,11 @@ serialization = "${CMP_KOTLINX_SERIALIZATION}"
 <#if IS_KOIN_ENABLE>
 koin = "${CMP_KOIN}"
 </#if>
-<#if IS_KTOR_ENABLE>
+<#if IS_KTOR_ENABLE || IS_KTORFIT_ENABLE>
 ktor = "${CMP_KTOR}"
+</#if>
+<#if IS_KTORFIT_ENABLE>
+ktorfit = "${KTORFIT}"
 </#if>
 <#if IS_NAVIGATION_ENABLE>
 navigationCompose = "${CMP_NAVIGATION}"
@@ -21,10 +24,12 @@ coil = "${CMP_COIL}"
 <#if IS_KAMEL_ENABLE>
 kamel = "${CMP_KAMEL}"
 </#if>
+<#if IS_KTOR_ENABLE || IS_KTORFIT_ENABLE || IS_ROOM_ENABLE>
+ksp = "${CMP_KSP}"
+</#if>
 <#if IS_ROOM_ENABLE>
 room = "${CMP_ROOM}"
 sqlite = "${CMP_SQLITE}"
-ksp = "${CMP_KSP}"
 </#if>
 
 [libraries]
@@ -43,12 +48,19 @@ koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }
 </#if>
 <#if IS_KTOR_ENABLE>
-ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+<#if IS_DESKTOP_ENABLE>
 ktor-client-engine = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
+</#if>
+</#if>
+<#if IS_KTORFIT_ENABLE>
+ktorfit = { module = "de.jensklingenberg.ktorfit:ktorfit-lib", version.ref = "ktorfit" }
+</#if>
+<#if IS_KTOR_ENABLE || IS_KTORFIT_ENABLE>
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 </#if>
 <#if IS_NAVIGATION_ENABLE>
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
@@ -73,5 +85,7 @@ kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref =
 kotlinxSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 <#if IS_ROOM_ENABLE>
 room-plugin = { id = "androidx.room", version.ref = "room" }
+</#if>
+<#if IS_KTOR_ENABLE || IS_KTORFIT_ENABLE || IS_ROOM_ENABLE>
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 </#if>
