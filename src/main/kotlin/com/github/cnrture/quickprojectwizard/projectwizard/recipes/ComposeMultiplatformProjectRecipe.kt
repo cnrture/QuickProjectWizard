@@ -171,6 +171,7 @@ fun composeMultiplatformProjectRecipe(
         }
     }
     analyticsService.track("compose_multiplatform_project_created")
+
     Utils.showInfo(
         title = "Quick Project Wizard",
         message = "Your project is ready! 🚀 If you like the plugin, please comment and rate it on the plugin page. 🙏",
