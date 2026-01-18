@@ -1,13 +1,16 @@
 package com.github.cnrture.quickprojectwizard.projectwizard.xmlarch.ui
 
+import com.github.cnrture.quickprojectwizard.data.DILibrary
+
 fun emptyActivityXML(
     packageName: String,
-    isHiltEnable: Boolean,
+    selectedDILibrary: DILibrary,
     dataDiDomainPresentationUiPackages: Boolean,
 ): String {
     return when {
         !dataDiDomainPresentationUiPackages -> withoutHilt(packageName)
-        isHiltEnable -> hilt(packageName)
+        selectedDILibrary == DILibrary.Hilt -> hilt(packageName)
+        selectedDILibrary == DILibrary.Koin -> withoutHilt(packageName)
         else -> withoutHilt(packageName)
     }
 }

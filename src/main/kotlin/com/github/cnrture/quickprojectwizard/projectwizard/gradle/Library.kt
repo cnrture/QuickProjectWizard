@@ -65,4 +65,7 @@ sealed class Library(val libName: String, val group: String, val name: String, v
     data object WorkManager : Library("workManager", "androidx.work", "work-runtime-ktx", "workManagerVersion")
     data object KotlinxSerialization :
         Library("kotlinx-serialization", "org.jetbrains.kotlinx", "kotlinx-serialization-json", "kotlinXSerialization")
+
+    data object KoinAndroid : Library("koin-android", "io.insert-koin", "koin-android", "koin")
+    data object KoinCompose : Library("koin-androidx-compose", "io.insert-koin", "koin-androidx-compose", "koinCompose")
 }

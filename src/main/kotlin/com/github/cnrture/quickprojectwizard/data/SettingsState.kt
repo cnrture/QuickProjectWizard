@@ -21,7 +21,6 @@ data class SettingsState(
     var gradleKotlinTemplate: String = Constants.EMPTY,
 
     var isCompose: Boolean = true,
-    var isHiltEnable: Boolean = true,
     var isActionsExpanded: Boolean = true,
 
     var colorHistory: MutableList<ColorInfo> = mutableListOf(),

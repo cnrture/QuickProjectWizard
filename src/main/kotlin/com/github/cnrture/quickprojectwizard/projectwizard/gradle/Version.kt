@@ -24,6 +24,8 @@ object Versions {
         "ktor" to "3.0.1",
         "hilt" to "2.55",
         "hiltNavigationCompose" to "1.2.0",
+        "koin" to "4.0.1",
+        "koinCompose" to "4.0.1",
         "navigation" to "2.9.0",
         "kotlinXSerialization" to "1.8.1",
         "ktlint" to "11.3.2",
@@ -87,5 +89,8 @@ sealed class Version(val name: String, val value: String) {
     data object WorkManager : Version("workManagerVersion", Versions.versionList["workManagerVersion"] ?: "2.10.1")
     data object KotlinxSerialization :
         Version("kotlinXSerialization", Versions.versionList["kotlinXSerialization"] ?: "1.8.1")
+
     data object Ktorfit : Version("ktorfit", Versions.versionList["ktorfit"] ?: "2.6.4")
+    data object Koin : Version("koin", Versions.versionList["koin"] ?: "4.0.1")
+    data object KoinCompose : Version("koinCompose", Versions.versionList["koinCompose"] ?: "4.0.1")
 }

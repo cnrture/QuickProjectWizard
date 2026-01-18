@@ -3,6 +3,7 @@ package com.github.cnrture.quickprojectwizard.projectwizard
 import com.android.tools.idea.wizard.template.*
 import com.android.tools.idea.wizard.template.impl.defaultPackageNameParameter
 import com.github.cnrture.quickprojectwizard.common.getImage
+import com.github.cnrture.quickprojectwizard.data.DILibrary
 import com.github.cnrture.quickprojectwizard.data.ImageLibrary
 import com.github.cnrture.quickprojectwizard.data.NetworkLibrary
 import com.github.cnrture.quickprojectwizard.projectwizard.gradle.network.getVersions
@@ -36,9 +37,9 @@ val xmlTemplate = template {
         default = false
     }
 
-    val isHiltEnable = booleanParameter {
-        name = "Hilt"
-        default = false
+    val selectedDILibrary = enumParameter<DILibrary> {
+        name = "Dependency Injection"
+        default = DILibrary.None
     }
 
     val isNavigationEnable = booleanParameter {
@@ -90,7 +91,7 @@ val xmlTemplate = template {
 
     widgets(
         CheckBoxWidget(isRoomEnable),
-        CheckBoxWidget(isHiltEnable),
+        EnumWidget(selectedDILibrary),
         CheckBoxWidget(isNavigationEnable),
         CheckBoxWidget(isFirebaseEnable),
         CheckBoxWidget(isKtLintEnable),
@@ -121,7 +122,7 @@ val xmlTemplate = template {
             isRoomEnable = isRoomEnable.value,
             isWorkManagerEnable = isWorkManagerEnable.value,
             selectedNetworkLibrary = selectedNetworkLibrary.value,
-            isHiltEnable = isHiltEnable.value,
+            selectedDILibrary = selectedDILibrary.value,
             isNavigationEnable = isNavigationEnable.value,
             selectedImageLibrary = selectedImageLibrary.value,
             isKtLintEnable = isKtLintEnable.value,

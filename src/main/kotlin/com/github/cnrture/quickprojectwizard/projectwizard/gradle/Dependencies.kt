@@ -3,12 +3,13 @@ package com.github.cnrture.quickprojectwizard.projectwizard.gradle
 import com.github.cnrture.quickprojectwizard.common.addLibsDependency
 import com.github.cnrture.quickprojectwizard.common.addLibsPlugin
 import com.github.cnrture.quickprojectwizard.common.addLibsVersion
+import com.github.cnrture.quickprojectwizard.data.DILibrary
 import com.github.cnrture.quickprojectwizard.data.ImageLibrary
 import com.github.cnrture.quickprojectwizard.data.NetworkLibrary
 
 fun getDependencies(
     isCompose: Boolean,
-    isHiltEnable: Boolean,
+    selectedDILibrary: DILibrary,
     isKtLintEnable: Boolean,
     isDetektEnable: Boolean,
     isFirebaseEnable: Boolean,
@@ -18,6 +19,8 @@ fun getDependencies(
     selectedNetworkLibrary: NetworkLibrary,
     selectedImageLibrary: ImageLibrary,
 ) = StringBuilder().apply {
+    val isHiltEnable = selectedDILibrary == DILibrary.Hilt
+    val isKoinEnable = selectedDILibrary == DILibrary.Koin
     append("[versions]\n")
     addDefaultVersions()
     if (isHiltEnable || isRoomEnable || selectedImageLibrary == ImageLibrary.Glide) addLibsVersion(Version.Ksp)
@@ -35,6 +38,10 @@ fun getDependencies(
     if (isHiltEnable) {
         addLibsVersion(Version.Hilt)
         if (isCompose) addLibsVersion(Version.HiltNavigationCompose)
+    }
+    if (isKoinEnable) {
+        addLibsVersion(Version.Koin)
+        if (isCompose) addLibsVersion(Version.KoinCompose)
     }
     if (isNavigationEnable) addLibsVersion(Version.Navigation)
     if (isKtLintEnable) addLibsVersion(Version.KtLint)
@@ -65,6 +72,10 @@ fun getDependencies(
         addLibsDependency(Library.HiltCompiler)
         addLibsDependency(Library.HiltAndroid)
         if (isCompose) addLibsDependency(Library.HiltNavigationCompose)
+    }
+    if (isKoinEnable) {
+        addLibsDependency(Library.KoinAndroid)
+        if (isCompose) addLibsDependency(Library.KoinCompose)
     }
     addNavigationLibrary(isCompose, isNavigationEnable)
     addImageLibraryDependencies(isCompose, selectedImageLibrary)

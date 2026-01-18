@@ -1,12 +1,13 @@
 package com.github.cnrture.quickprojectwizard.projectwizard.gradle
 
 import com.github.cnrture.quickprojectwizard.common.*
+import com.github.cnrture.quickprojectwizard.data.DILibrary
 import com.github.cnrture.quickprojectwizard.data.ImageLibrary
 import com.github.cnrture.quickprojectwizard.data.NetworkLibrary
 
 fun getGradleKts(
     isCompose: Boolean,
-    isHiltEnable: Boolean,
+    selectedDILibrary: DILibrary,
     isKtLintEnable: Boolean,
     isDetektEnable: Boolean,
     isFirebaseEnable: Boolean,
@@ -19,6 +20,8 @@ fun getGradleKts(
     minApi: Int,
     javaJvmVersion: String,
 ) = StringBuilder().apply {
+    val isHiltEnable = selectedDILibrary == DILibrary.Hilt
+    val isKoinEnable = selectedDILibrary == DILibrary.Koin
     append("import org.jetbrains.kotlin.gradle.dsl.JvmTarget\n\n")
     append("plugins {\n")
     addGradlePlugin(Plugin.AndroidApplication)
@@ -82,6 +85,12 @@ fun getGradleKts(
         if (isCompose) addGradleImplementation(Library.HiltNavigationCompose)
     }
 
+    if (isKoinEnable) {
+        append("\n")
+        append("    // Koin\n")
+        addGradleImplementation(Library.KoinAndroid)
+        if (isCompose) addGradleImplementation(Library.KoinCompose)
+    }
 
     if (isNavigationEnable) {
         append("\n")

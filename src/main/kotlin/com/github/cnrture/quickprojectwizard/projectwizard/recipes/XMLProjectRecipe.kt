@@ -5,13 +5,12 @@ import com.android.tools.idea.wizard.template.ModuleTemplateData
 import com.android.tools.idea.wizard.template.PackageName
 import com.android.tools.idea.wizard.template.RecipeExecutor
 import com.android.tools.idea.wizard.template.escapeKotlinIdentifier
-import com.github.cnrture.quickprojectwizard.service.AnalyticsService
 import com.github.cnrture.quickprojectwizard.common.Utils
 import com.github.cnrture.quickprojectwizard.common.addRootFile
 import com.github.cnrture.quickprojectwizard.common.addSrcFile
+import com.github.cnrture.quickprojectwizard.data.DILibrary
 import com.github.cnrture.quickprojectwizard.data.ImageLibrary
 import com.github.cnrture.quickprojectwizard.data.NetworkLibrary
-import com.github.cnrture.quickprojectwizard.service.SettingsService
 import com.github.cnrture.quickprojectwizard.projectwizard.general.data.model.emptyMainEntityModel
 import com.github.cnrture.quickprojectwizard.projectwizard.general.data.repository.emptyMainRepositoryImpl
 import com.github.cnrture.quickprojectwizard.projectwizard.general.data.source.local.emptyMainDao
@@ -19,9 +18,7 @@ import com.github.cnrture.quickprojectwizard.projectwizard.general.data.source.l
 import com.github.cnrture.quickprojectwizard.projectwizard.general.data.source.remote.emptyKtorApi
 import com.github.cnrture.quickprojectwizard.projectwizard.general.data.source.remote.emptyMainService
 import com.github.cnrture.quickprojectwizard.projectwizard.general.detekt.emptyDetektConfig
-import com.github.cnrture.quickprojectwizard.projectwizard.general.di.emptyLocalModule
-import com.github.cnrture.quickprojectwizard.projectwizard.general.di.emptyMainRepositoryModule
-import com.github.cnrture.quickprojectwizard.projectwizard.general.di.emptyNetworkModule
+import com.github.cnrture.quickprojectwizard.projectwizard.general.di.*
 import com.github.cnrture.quickprojectwizard.projectwizard.general.domain.emptyMainRepository
 import com.github.cnrture.quickprojectwizard.projectwizard.general.emptyConstants
 import com.github.cnrture.quickprojectwizard.projectwizard.general.emptyMainApplication
@@ -31,6 +28,8 @@ import com.github.cnrture.quickprojectwizard.projectwizard.gradle.getGradleKts
 import com.github.cnrture.quickprojectwizard.projectwizard.gradle.getProjectGradleKts
 import com.github.cnrture.quickprojectwizard.projectwizard.xmlarch.common.emptyCollectExtension
 import com.github.cnrture.quickprojectwizard.projectwizard.xmlarch.ui.*
+import com.github.cnrture.quickprojectwizard.service.AnalyticsService
+import com.github.cnrture.quickprojectwizard.service.SettingsService
 import java.io.File
 
 fun RecipeExecutor.xmlProjectRecipe(
@@ -39,7 +38,7 @@ fun RecipeExecutor.xmlProjectRecipe(
     isRoomEnable: Boolean,
     isWorkManagerEnable: Boolean,
     selectedNetworkLibrary: NetworkLibrary,
-    isHiltEnable: Boolean,
+    selectedDILibrary: DILibrary,
     isNavigationEnable: Boolean,
     selectedImageLibrary: ImageLibrary,
     isKtLintEnable: Boolean,
@@ -52,9 +51,10 @@ fun RecipeExecutor.xmlProjectRecipe(
     val packagePath = escapeKotlinIdentifier(packageName)
     val analyticsService = AnalyticsService.getInstance()
     val settings = SettingsService.getInstance()
+    val isHiltEnable = selectedDILibrary == DILibrary.Hilt
+    val isKoinEnable = selectedDILibrary == DILibrary.Koin
     settings.loadState(
         settings.state.copy(
-            isHiltEnable = isHiltEnable,
             isCompose = false,
             defaultPackageName = packagePath,
         )
@@ -71,7 +71,7 @@ fun RecipeExecutor.xmlProjectRecipe(
     addActivity(
         moduleData,
         packagePath,
-        isHiltEnable,
+        selectedDILibrary,
         dataDiDomainPresentationUiPackages,
         isNavigationEnable,
     )
@@ -81,7 +81,7 @@ fun RecipeExecutor.xmlProjectRecipe(
     mergeXml(
         emptyManifestXml(
             "@style/${moduleData.themesData.main.name}",
-            isHiltEnable,
+            selectedDILibrary,
             dataDiDomainPresentationUiPackages,
         ),
         manifestOut.resolve("AndroidManifest.xml")
@@ -96,13 +96,17 @@ fun RecipeExecutor.xmlProjectRecipe(
             addSrcFile(emptyMainApplication(packagePath), moduleData, "MainApp.kt")
         }
 
+        if (isKoinEnable) {
+            addSrcFile(emptyMainApplication(packagePath, isKoin = true), moduleData, "MainApp.kt")
+        }
+
         addSrcFile(emptyConstants(packagePath), moduleData, "common/Constants.kt")
 
         addExtensions(moduleData, packagePath)
 
         addNavigation(moduleData, packagePath, isNavigationEnable, screenList)
 
-        addScreens(moduleData, packagePath, isHiltEnable, screenList)
+        addScreens(moduleData, packagePath, selectedDILibrary, screenList)
 
         addSrcFile(emptyMainRepository(packagePath), moduleData, "domain/repository/MainRepository.kt")
 
@@ -121,6 +125,20 @@ fun RecipeExecutor.xmlProjectRecipe(
             addSrcFile(emptyMainRepositoryModule(packagePath), moduleData, "di/RepositoryModule.kt")
         }
 
+        if (isKoinEnable) {
+            val hasNetwork = selectedNetworkLibrary != NetworkLibrary.None
+            addSrcFile(
+                emptyMainRepositoryModule(
+                    packagePath,
+                    isKoin = true,
+                    hasNetwork = hasNetwork,
+                    hasLocal = isRoomEnable
+                ),
+                moduleData,
+                "di/RepositoryModule.kt"
+            )
+        }
+
         if (selectedNetworkLibrary != NetworkLibrary.None) {
             addSrcFile(
                 emptyMainService(packagePath, selectedNetworkLibrary),
@@ -130,6 +148,14 @@ fun RecipeExecutor.xmlProjectRecipe(
 
             if (isHiltEnable) {
                 addSrcFile(emptyNetworkModule(packagePath, selectedNetworkLibrary), moduleData, "di/NetworkModule.kt")
+            }
+
+            if (isKoinEnable) {
+                addSrcFile(
+                    emptyNetworkModule(packagePath, selectedNetworkLibrary, isKoin = true),
+                    moduleData,
+                    "di/NetworkModule.kt"
+                )
             }
 
             if (selectedNetworkLibrary == NetworkLibrary.Ktor) {
@@ -145,12 +171,28 @@ fun RecipeExecutor.xmlProjectRecipe(
             if (isHiltEnable) {
                 addSrcFile(emptyLocalModule(packagePath), moduleData, "di/LocalModule.kt")
             }
+
+            if (isKoinEnable) {
+                addSrcFile(emptyLocalModule(packagePath, isKoin = true), moduleData, "di/LocalModule.kt")
+            }
+        }
+
+        // Generate appModule for Koin
+        if (isKoinEnable) {
+            val hasNetworkModule = selectedNetworkLibrary != NetworkLibrary.None
+            val hasRepositoryModule = true
+            addSrcFile(emptyViewModelModule(packagePath, screenList), moduleData, "di/ViewModelModule.kt")
+            addSrcFile(
+                emptyAppModule(packagePath, hasNetworkModule, isRoomEnable, hasRepositoryModule, hasViewModel = true),
+                moduleData,
+                "di/AppModule.kt"
+            )
         }
     }
 
     addDependenciesAndGradle(
         moduleData,
-        isHiltEnable,
+        selectedDILibrary,
         isKtLintEnable,
         isDetektEnable,
         isFirebaseEnable,
@@ -185,12 +227,12 @@ private fun RecipeExecutor.addExtensions(
 private fun RecipeExecutor.addActivity(
     moduleData: ModuleTemplateData,
     packagePath: String,
-    isHiltEnable: Boolean,
+    selectedDILibrary: DILibrary,
     dataDiDomainPresentationUiPackages: Boolean,
     isNavigationEnable: Boolean,
 ) {
     addSrcFile(
-        emptyActivityXML(packagePath, isHiltEnable, dataDiDomainPresentationUiPackages),
+        emptyActivityXML(packagePath, selectedDILibrary, dataDiDomainPresentationUiPackages),
         moduleData,
         "ui/MainActivity.kt"
     )
@@ -227,19 +269,19 @@ private fun RecipeExecutor.addNavigation(
 private fun RecipeExecutor.addScreens(
     moduleData: ModuleTemplateData,
     packagePath: String,
-    isHiltEnable: Boolean,
+    selectedDILibrary: DILibrary,
     screenList: List<String>,
 ) {
     screenList.forEach {
         val isFirstLetterUpperCase = it[0].isUpperCase()
         val xmlName = it.split("(?=[A-Z])".toRegex()).joinToString("_").lowercase()
         addSrcFile(
-            emptyMainFragment(packagePath, it, isHiltEnable),
+            emptyMainFragment(packagePath, it, selectedDILibrary),
             moduleData,
             "ui/${it.lowercase()}/${it}Fragment.kt"
         )
         addSrcFile(
-            emptyMainViewModelXML(packagePath, it, isHiltEnable),
+            emptyMainViewModelXML(packagePath, it, selectedDILibrary),
             moduleData,
             "ui/${it.lowercase()}/${it}ViewModel.kt"
         )
@@ -254,7 +296,7 @@ private fun RecipeExecutor.addScreens(
 
 private fun addDependenciesAndGradle(
     moduleData: ModuleTemplateData,
-    isHiltEnable: Boolean,
+    selectedDILibrary: DILibrary,
     isKtLintEnable: Boolean,
     isDetektEnable: Boolean,
     isFirebaseEnable: Boolean,
@@ -270,7 +312,7 @@ private fun addDependenciesAndGradle(
 ) {
     val dependencies = getDependencies(
         isCompose = false,
-        isHiltEnable = isHiltEnable,
+        selectedDILibrary = selectedDILibrary,
         isKtLintEnable = isKtLintEnable,
         isDetektEnable = isDetektEnable,
         isFirebaseEnable = isFirebaseEnable,
@@ -283,7 +325,7 @@ private fun addDependenciesAndGradle(
 
     val gradleKts = getGradleKts(
         isCompose = false,
-        isHiltEnable = isHiltEnable,
+        selectedDILibrary = selectedDILibrary,
         isKtLintEnable = isKtLintEnable,
         isDetektEnable = isDetektEnable,
         isFirebaseEnable = isFirebaseEnable,
@@ -300,7 +342,7 @@ private fun addDependenciesAndGradle(
     val projectGradleKts =
         getProjectGradleKts(
             false,
-            isHiltEnable,
+            selectedDILibrary,
             isRoomEnable,
             isKtLintEnable,
             isDetektEnable,

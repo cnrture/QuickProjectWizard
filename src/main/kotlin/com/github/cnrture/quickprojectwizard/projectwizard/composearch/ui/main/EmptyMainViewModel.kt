@@ -1,10 +1,12 @@
 package com.github.cnrture.quickprojectwizard.projectwizard.composearch.ui.main
 
-fun emptyMainViewModel(packageName: String, screen: String, isHiltEnable: Boolean): String {
-    return if (isHiltEnable) {
-        hilt(packageName, screen)
-    } else {
-        withoutHilt(packageName, screen)
+import com.github.cnrture.quickprojectwizard.data.DILibrary
+
+fun emptyMainViewModel(packageName: String, screen: String, selectedDILibrary: DILibrary): String {
+    return when (selectedDILibrary) {
+        DILibrary.Hilt -> hilt(packageName, screen)
+        DILibrary.Koin -> koin(packageName, screen)
+        DILibrary.None -> withoutDI(packageName, screen)
     }
 }
 
@@ -32,7 +34,7 @@ class ${screen}ViewModel @Inject constructor() : ViewModel(), MVI<UiState, UiAct
 }
 """
 
-private fun withoutHilt(packageName: String, screen: String) = """
+private fun koin(packageName: String, screen: String) = """
 package $packageName.ui.${screen.lowercase()}
 
 import androidx.lifecycle.ViewModel
@@ -42,6 +44,28 @@ import $packageName.delegation.mvi
 import $packageName.ui.${screen.lowercase()}.${screen}Contract.UiAction
 import $packageName.ui.${screen.lowercase()}.${screen}Contract.UiEffect
 import $packageName.ui.${screen.lowercase()}.${screen}Contract.UiState
+import kotlinx.coroutines.launch
+
+class ${screen}ViewModel : ViewModel(), MVI<UiState, UiAction, UiEffect> by mvi(UiState()) {
+
+    override fun onAction(uiAction: UiAction) {
+        viewModelScope.launch {
+        }
+    }
+}
+"""
+
+private fun withoutDI(packageName: String, screen: String) = """
+package $packageName.ui.${screen.lowercase()}
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import $packageName.delegation.MVI
+import $packageName.delegation.mvi
+import $packageName.ui.${screen.lowercase()}.${screen}Contract.UiAction
+import $packageName.ui.${screen.lowercase()}.${screen}Contract.UiEffect
+import $packageName.ui.${screen.lowercase()}.${screen}Contract.UiState
+import kotlinx.coroutines.launch
 
 class ${screen}ViewModel : ViewModel(), MVI<UiState, UiAction, UiEffect> by mvi(UiState()) {
 

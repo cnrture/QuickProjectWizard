@@ -1,5 +1,9 @@
 package com.github.cnrture.quickprojectwizard.projectwizard.general.di
 
+fun emptyLocalModule(packageName: String, isKoin: Boolean = false): String {
+    return if (isKoin) emptyLocalModuleKoin(packageName) else emptyLocalModule(packageName)
+}
+
 fun emptyLocalModule(packageName: String) = """
 package $packageName.di
 
@@ -28,5 +32,30 @@ object LocalModule {
 
     @Provides
     fun provideMainDao(database: MainRoomDB): MainDao = database.mainDao()
+}
+"""
+
+fun emptyLocalModuleKoin(packageName: String) = """
+package $packageName.di
+
+import androidx.room.Room
+import $packageName.data.source.local.MainDao
+import $packageName.data.source.local.MainRoomDB
+import org.koin.android.ext.koin.androidContext
+import org.koin.dsl.module
+
+val localModule = module {
+
+    single {
+        Room.databaseBuilder(
+            androidContext(),
+            MainRoomDB::class.java,
+            MainRoomDB::class.simpleName!!
+        ).build()
+    }
+
+    single<MainDao> {
+        get<MainRoomDB>().mainDao()
+    }
 }
 """
