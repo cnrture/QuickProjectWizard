@@ -50,6 +50,8 @@ object Versions {
         "cmp-sqlite" to "2.5.0-SNAPSHOT",
         "cmp-kotlinx-serialization" to "1.7.3",
         "ktorfit" to "2.6.4",
+        "koin" to "4.1.1",
+        "koin-compose" to "4.1.1",
     )
 }
 
@@ -91,6 +93,6 @@ sealed class Version(val name: String, val value: String) {
         Version("kotlinXSerialization", Versions.versionList["kotlinXSerialization"] ?: "1.8.1")
 
     data object Ktorfit : Version("ktorfit", Versions.versionList["ktorfit"] ?: "2.6.4")
-    data object Koin : Version("koin", Versions.versionList["koin"] ?: "4.0.1")
-    data object KoinCompose : Version("koinCompose", Versions.versionList["koinCompose"] ?: "4.0.1")
+    data object Koin : Version("koin", Versions.versionList["koin"] ?: "4.1.1")
+    data object KoinCompose : Version("koin-compose", Versions.versionList["koin-compose"] ?: "4.1.1")
 }
