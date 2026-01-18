@@ -48,6 +48,8 @@ sealed class Library(val libName: String, val group: String, val name: String, v
     data object KtorSerialization :
         Library("ktor-serialization-kotlinx-json", "io.ktor", "ktor-serialization-kotlinx-json", "ktor")
 
+    data object Ktorfit : Library("ktorfit-lib", "de.jensklingenberg.ktorfit", "ktorfit-lib", "ktorfit")
+    data object KtorfitKsp : Library("ktorfit-ksp", "de.jensklingenberg.ktorfit", "ktorfit-ksp", "ktorfit")
     data object HiltAndroid : Library("hilt-android", "com.google.dagger", "hilt-android", "hilt")
     data object HiltCompiler : Library("hilt-compiler", "com.google.dagger", "hilt-compiler", "hilt")
     data object HiltNavigationCompose :

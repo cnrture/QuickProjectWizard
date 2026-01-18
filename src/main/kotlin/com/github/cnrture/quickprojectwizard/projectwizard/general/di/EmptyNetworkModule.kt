@@ -6,6 +6,7 @@ fun emptyNetworkModule(packageName: String, selectedNetworkLibrary: NetworkLibra
     return when (selectedNetworkLibrary) {
         NetworkLibrary.Retrofit -> if (isKoin) emptyRetrofitModuleKoin(packageName) else emptyRetrofitModule(packageName)
         NetworkLibrary.Ktor -> if (isKoin) emptyKtorModuleKoin(packageName) else emptyKtorModule(packageName)
+        NetworkLibrary.Ktorfit -> if (isKoin) emptyKtorfitModuleKoin(packageName) else emptyKtorfitModule(packageName)
         NetworkLibrary.None -> ""
     }
 }
@@ -86,5 +87,91 @@ import org.koin.dsl.module
 
 val networkModule = module {
     single { MainService() }
+}
+"""
+
+private fun emptyKtorfitModule(packageName: String) = """
+package $packageName.di
+
+import $packageName.data.source.remote.MainService
+import $packageName.data.source.remote.createMainService
+import de.jensklingenberg.ktorfit.Ktorfit
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
+
+@Module
+@InstallIn(SingletonComponent::class)
+object NetworkModule {
+
+    @Provides
+    fun provideHttpClient(): HttpClient {
+        return HttpClient {
+            install(ContentNegotiation) {
+                json(
+                    Json {
+                        prettyPrint = true
+                        isLenient = true
+                        ignoreUnknownKeys = true
+                    }
+                )
+            }
+        }
+    }
+
+    @Provides
+    fun provideKtorfit(httpClient: HttpClient): Ktorfit {
+        return Ktorfit.Builder()
+            .baseUrl("https://api.example.com/")
+            .httpClient(httpClient)
+            .build()
+    }
+
+    @Provides
+    fun provideMainService(ktorfit: Ktorfit): MainService {
+        return ktorfit.createMainService()
+    }
+}
+"""
+
+private fun emptyKtorfitModuleKoin(packageName: String) = """
+package $packageName.di
+
+import $packageName.data.source.remote.MainService
+import de.jensklingenberg.ktorfit.Ktorfit
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
+import org.koin.dsl.module
+
+val networkModule = module {
+    single {
+        HttpClient {
+            install(ContentNegotiation) {
+                json(
+                    Json {
+                        prettyPrint = true
+                        isLenient = true
+                        ignoreUnknownKeys = true
+                    }
+                )
+            }
+        }
+    }
+    
+    single {
+        Ktorfit.Builder()
+            .baseUrl("https://api.example.com/")
+            .httpClient(get())
+            .build()
+    }
+    
+    single { get<Ktorfit>().create<MainService>() }
 }
 """

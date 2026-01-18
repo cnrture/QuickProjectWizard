@@ -6,6 +6,7 @@ fun emptyMainService(packageName: String, selectedNetworkLibrary: NetworkLibrary
     return when (selectedNetworkLibrary) {
         NetworkLibrary.Retrofit -> retrofit(packageName)
         NetworkLibrary.Ktor -> ktor(packageName)
+        NetworkLibrary.Ktorfit -> ktorfit(packageName)
         else -> ""
     }
 }
@@ -22,5 +23,16 @@ package $packageName.data.source.remote
 import $packageName.data.remote.KtorApi
 
 class MainService : KtorApi()
+"""
+
+fun ktorfit(packageName: String) = """
+package $packageName.data.source.remote
+
+import de.jensklingenberg.ktorfit.http.GET
+
+interface MainService {
+    @GET("endpoint")
+    suspend fun getData(): String
+}
 """
 

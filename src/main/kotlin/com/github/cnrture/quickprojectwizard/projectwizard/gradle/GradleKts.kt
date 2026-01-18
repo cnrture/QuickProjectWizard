@@ -22,18 +22,22 @@ fun getGradleKts(
 ) = StringBuilder().apply {
     val isHiltEnable = selectedDILibrary == DILibrary.Hilt
     val isKoinEnable = selectedDILibrary == DILibrary.Koin
+    val isKtorfitEnable = selectedNetworkLibrary == NetworkLibrary.Ktorfit
+    val isKtorEnable = selectedNetworkLibrary == NetworkLibrary.Ktor
     append("import org.jetbrains.kotlin.gradle.dsl.JvmTarget\n\n")
     append("plugins {\n")
     addGradlePlugin(Plugin.AndroidApplication)
     addGradlePlugin(Plugin.JetbrainsKotlinAndroid)
     if (isCompose) addGradlePlugin(Plugin.ComposeCompiler)
-    if (isHiltEnable || isRoomEnable || selectedImageLibrary == ImageLibrary.Glide) addGradlePlugin(Plugin.Ksp)
+    if (isHiltEnable || isRoomEnable || selectedImageLibrary == ImageLibrary.Glide || isKtorfitEnable) addGradlePlugin(
+        Plugin.Ksp
+    )
     if (isHiltEnable) addGradlePlugin(Plugin.Hilt)
     if (isKtLintEnable) addGradlePlugin(Plugin.KtLint)
     if (isDetektEnable) addGradlePlugin(Plugin.Detekt)
     if (isFirebaseEnable) addGradlePlugin(Plugin.GoogleServices)
     if (!isCompose && isNavigationEnable) addGradlePlugin(Plugin.NavigationSafeArgs)
-    if (isNavigationEnable && isCompose) addGradlePlugin(Plugin.KotlinxSerialization)
+    if ((isNavigationEnable && isCompose) || isKtorEnable || isKtorfitEnable) addGradlePlugin(Plugin.KotlinxSerialization)
     append("}\n\n")
 
     addAndroidBlock(packagePath, minApi, javaJvmVersion, isCompose)
@@ -68,6 +72,17 @@ fun getGradleKts(
         NetworkLibrary.Ktor -> {
             append("\n")
             append("    // Ktor\n")
+            addGradleImplementation(Library.KtorClientCore)
+            addGradleImplementation(Library.KtorClientOkHttp)
+            addGradleImplementation(Library.KtorContentNegotiation)
+            addGradleImplementation(Library.KtorSerialization)
+        }
+
+        NetworkLibrary.Ktorfit -> {
+            append("\n")
+            append("    // Ktorfit\n")
+            addGradleImplementation(Library.Ktorfit)
+            addKspImplementation(Library.KtorfitKsp)
             addGradleImplementation(Library.KtorClientCore)
             addGradleImplementation(Library.KtorClientOkHttp)
             addGradleImplementation(Library.KtorContentNegotiation)

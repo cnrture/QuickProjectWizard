@@ -91,13 +91,13 @@ val xmlTemplate = template {
 
     widgets(
         CheckBoxWidget(isRoomEnable),
-        EnumWidget(selectedDILibrary),
         CheckBoxWidget(isNavigationEnable),
         CheckBoxWidget(isFirebaseEnable),
         CheckBoxWidget(isKtLintEnable),
         CheckBoxWidget(isDetektEnable),
         CheckBoxWidget(isWorkManagerEnable),
         CheckBoxWidget(dataDiDomainPresentationUiPackages),
+        EnumWidget(selectedDILibrary),
         EnumWidget(selectedNetworkLibrary),
         EnumWidget(selectedImageLibrary),
         TextFieldWidget(screens),
@@ -105,10 +105,8 @@ val xmlTemplate = template {
             text = "Please enter the screens you want to create. (e.g. Home, Detail, Profile)" +
                 "\nNote: First item is start destination"
         ),
-        LabelWidget(text = " "),
         TextFieldWidget(javaJvmVersion),
         LabelWidget(text = "8 or 11 or 17 etc."),
-        LabelWidget(text = " "),
         UrlLinkWidget("Created by Caner Ture", "https://candroid.dev"),
         PackageNameWidget(defaultPackageNameParameter),
     )

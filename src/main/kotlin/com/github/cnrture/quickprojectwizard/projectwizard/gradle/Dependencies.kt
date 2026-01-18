@@ -21,9 +21,13 @@ fun getDependencies(
 ) = StringBuilder().apply {
     val isHiltEnable = selectedDILibrary == DILibrary.Hilt
     val isKoinEnable = selectedDILibrary == DILibrary.Koin
+    val isKtorfitEnable = selectedNetworkLibrary == NetworkLibrary.Ktorfit
+    val isKtorEnable = selectedNetworkLibrary == NetworkLibrary.Ktor
     append("[versions]\n")
     addDefaultVersions()
-    if (isHiltEnable || isRoomEnable || selectedImageLibrary == ImageLibrary.Glide) addLibsVersion(Version.Ksp)
+    if (isHiltEnable || isRoomEnable || selectedImageLibrary == ImageLibrary.Glide || isKtorfitEnable) addLibsVersion(
+        Version.Ksp
+    )
     if (isCompose) {
         addLibsVersion(Version.ActivityCompose)
         addLibsVersion(Version.ComposeBom)
@@ -51,7 +55,7 @@ fun getDependencies(
         addLibsVersion(Version.Firebase)
     }
     if (isWorkManagerEnable) addLibsVersion(Version.WorkManager)
-    if (isNavigationEnable && isCompose) addLibsVersion(Version.KotlinxSerialization)
+    if ((isNavigationEnable && isCompose) || isKtorEnable || isKtorfitEnable) addLibsVersion(Version.KotlinxSerialization)
 
     append("\n[libraries]\n")
     addDefaultDependencies()
@@ -87,13 +91,15 @@ fun getDependencies(
     addLibsPlugin(Plugin.AndroidApplication)
     addLibsPlugin(Plugin.JetbrainsKotlinAndroid)
     if (isCompose) addLibsPlugin(Plugin.ComposeCompiler)
-    if (isHiltEnable || isRoomEnable || selectedImageLibrary == ImageLibrary.Glide) addLibsPlugin(Plugin.Ksp)
+    if (isHiltEnable || isRoomEnable || selectedImageLibrary == ImageLibrary.Glide || isKtorfitEnable) addLibsPlugin(
+        Plugin.Ksp
+    )
     if (isHiltEnable) addLibsPlugin(Plugin.Hilt)
     if (isKtLintEnable) addLibsPlugin(Plugin.KtLint)
     if (isDetektEnable) addLibsPlugin(Plugin.Detekt)
     if (isFirebaseEnable) addLibsPlugin(Plugin.GoogleServices)
     if (!isCompose && isNavigationEnable) addLibsPlugin(Plugin.NavigationSafeArgs)
-    if (isNavigationEnable && isCompose) addLibsPlugin(Plugin.KotlinxSerialization)
+    if ((isNavigationEnable && isCompose) || isKtorEnable || isKtorfitEnable) addLibsPlugin(Plugin.KotlinxSerialization)
 }
 
 private fun StringBuilder.addDefaultVersions() {
@@ -121,6 +127,11 @@ private fun StringBuilder.addNetworkLibraryVersions(selectedNetworkLibrary: Netw
     when (selectedNetworkLibrary) {
         NetworkLibrary.Retrofit -> addLibsVersion(Version.Retrofit)
         NetworkLibrary.Ktor -> addLibsVersion(Version.Ktor)
+        NetworkLibrary.Ktorfit -> {
+            addLibsVersion(Version.Ktorfit)
+            addLibsVersion(Version.Ktor)
+        }
+
         else -> Unit
     }
 }
@@ -156,6 +167,15 @@ private fun StringBuilder.addNetworkLibraryDependencies(selectedNetworkLibrary: 
         }
 
         NetworkLibrary.Ktor -> {
+            addLibsDependency(Library.KtorClientCore)
+            addLibsDependency(Library.KtorClientOkHttp)
+            addLibsDependency(Library.KtorContentNegotiation)
+            addLibsDependency(Library.KtorSerialization)
+        }
+
+        NetworkLibrary.Ktorfit -> {
+            addLibsDependency(Library.Ktorfit)
+            addLibsDependency(Library.KtorfitKsp)
             addLibsDependency(Library.KtorClientCore)
             addLibsDependency(Library.KtorClientOkHttp)
             addLibsDependency(Library.KtorContentNegotiation)

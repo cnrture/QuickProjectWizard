@@ -1,3 +1,3 @@
 package com.github.cnrture.quickprojectwizard.data
 
-enum class NetworkLibrary { None, Retrofit, Ktor }
+enum class NetworkLibrary { None, Retrofit, Ktor, Ktorfit }
