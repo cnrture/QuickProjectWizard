@@ -20,9 +20,11 @@
 - **Bug Fixes**: Resolved various bugs reported in previous versions to improve overall stability
 
 ### Removed
+
 - **Legacy Code Cleanup**: Removed legacy code paths to streamline project generation
 
-[Unreleased]: https://github.com/cnrture/QuickProjectWizard/compare/v0.0.9...HEAD
+[Unreleased]: https://github.com/cnrture/QuickProjectWizard/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/cnrture/QuickProjectWizard/commits/v1.0.0
 [0.0.9]: https://github.com/cnrture/QuickProjectWizard/commits/v0.0.9
 [0.0.8]: https://github.com/cnrture/QuickProjectWizard/commits/v0.0.8
 [0.0.7]: https://github.com/cnrture/QuickProjectWizard/commits/v0.0.7
