@@ -13,17 +13,10 @@ val composeMultiplatformTemplate = template {
     name = "QuickProjectWizard - CMP"
     description = "Quickly create a new project with libraries, tools and screens you want."
     minApi = 23
+    constraints = listOf(TemplateConstraint.AndroidX, TemplateConstraint.Kotlin)
     category = Category.Other
     formFactor = FormFactor.Generic
     screens = listOf(WizardUiContext.NewProject, WizardUiContext.NewProjectExtraDetail)
-
-    runBlocking {
-        try {
-            getVersions()
-        } catch (e: Exception) {
-            println("Failed to fetch versions: ${e.message}")
-        }
-    }
 
     val isAndroidEnable = booleanParameter {
         name = "Android"
