@@ -19,14 +19,6 @@ val xmlTemplate = template {
     formFactor = FormFactor.Mobile
     screens = listOf(WizardUiContext.NewProject, WizardUiContext.NewProjectExtraDetail)
 
-    runBlocking {
-        try {
-            getVersions()
-        } catch (e: Exception) {
-            println("Failed to fetch versions: ${e.message}")
-        }
-    }
-
     val selectedNetworkLibrary = enumParameter<NetworkLibrary> {
         name = "Network Library"
         default = NetworkLibrary.None

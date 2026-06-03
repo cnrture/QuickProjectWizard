@@ -1,5 +1,9 @@
 rootProject.name = "${APP_NAME}"
+<#if IS_KTS>
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+<#else>
+enableFeaturePreview('TYPESAFE_PROJECT_ACCESSORS')
+</#if>
 
 pluginManagement {
     repositories {
@@ -28,4 +32,8 @@ dependencyResolutionManagement {
     }
 }
 
+<#if IS_KTS>
 include(":composeApp")
+<#else>
+include ':composeApp'
+</#if>

@@ -13,19 +13,20 @@ fun getProjectGradleKts(
     isFirebaseEnable: Boolean,
     isNavigationEnable: Boolean,
     selectedImageLibrary: ImageLibrary,
+    isKts: Boolean = true
 ) = StringBuilder().apply {
     val isHiltEnable = selectedDILibrary == DILibrary.Hilt
     append("// Top-level build file where you can add configuration options common to all sub-projects/modules.\n")
     append("plugins {\n")
-    addGradlePlugin(Plugin.AndroidApplication, true)
-    addGradlePlugin(Plugin.JetbrainsKotlinAndroid, true)
-    if (isCompose) addGradlePlugin(Plugin.ComposeCompiler, true)
-    if (isHiltEnable || isRoomEnable || selectedImageLibrary == ImageLibrary.Glide) addGradlePlugin(Plugin.Ksp, true)
-    if (isHiltEnable) addGradlePlugin(Plugin.Hilt, true)
-    if (isKtLintEnable) addGradlePlugin(Plugin.KtLint, true)
-    if (isDetektEnable) addGradlePlugin(Plugin.Detekt, true)
-    if (isFirebaseEnable) addGradlePlugin(Plugin.GoogleServices, true)
-    if (!isCompose && isNavigationEnable) addGradlePlugin(Plugin.NavigationSafeArgs, true)
-    if (isNavigationEnable && isCompose) addGradlePlugin(Plugin.KotlinxSerialization, true)
+    addGradlePlugin(Plugin.AndroidApplication, isProject = true, isKts = isKts)
+    addGradlePlugin(Plugin.JetbrainsKotlinAndroid, isProject = true, isKts = isKts)
+    if (isCompose) addGradlePlugin(Plugin.ComposeCompiler, isProject = true, isKts = isKts)
+    if (isHiltEnable || isRoomEnable || selectedImageLibrary == ImageLibrary.Glide) addGradlePlugin(Plugin.Ksp, isProject = true, isKts = isKts)
+    if (isHiltEnable) addGradlePlugin(Plugin.Hilt, isProject = true, isKts = isKts)
+    if (isKtLintEnable) addGradlePlugin(Plugin.KtLint, isProject = true, isKts = isKts)
+    if (isDetektEnable) addGradlePlugin(Plugin.Detekt, isProject = true, isKts = isKts)
+    if (isFirebaseEnable) addGradlePlugin(Plugin.GoogleServices, isProject = true, isKts = isKts)
+    if (!isCompose && isNavigationEnable) addGradlePlugin(Plugin.NavigationSafeArgs, isProject = true, isKts = isKts)
+    if (isNavigationEnable && isCompose) addGradlePlugin(Plugin.KotlinxSerialization, isProject = true, isKts = isKts)
     append("}")
 }

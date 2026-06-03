@@ -294,7 +294,7 @@ private fun RecipeExecutor.addScreens(
     }
 }
 
-private fun addDependenciesAndGradle(
+private fun RecipeExecutor.addDependenciesAndGradle(
     moduleData: ModuleTemplateData,
     selectedDILibrary: DILibrary,
     isKtLintEnable: Boolean,
@@ -310,6 +310,17 @@ private fun addDependenciesAndGradle(
     javaJvmVersion: String,
     styleName: String,
 ) {
+    val projectRoot = moduleData.rootDir.parentFile
+    
+    // Fallback: Check if the project is using KTS or Groovy
+    // We check for .kts files first. If they exist, isKts = true.
+    val isKts = File(projectRoot, "settings.gradle.kts").exists() || 
+                File(projectRoot, "build.gradle.kts").exists() ||
+                (!File(projectRoot, "settings.gradle").exists() && !File(projectRoot, "build.gradle").exists())
+
+    val buildGradlePath = if (isKts) "app/build.gradle.kts" else "app/build.gradle"
+    val projectBuildGradlePath = if (isKts) "build.gradle.kts" else "build.gradle"
+
     val dependencies = getDependencies(
         isCompose = false,
         selectedDILibrary = selectedDILibrary,
@@ -337,50 +348,28 @@ private fun addDependenciesAndGradle(
         packagePath = packagePath,
         minApi = minApi,
         javaJvmVersion = javaJvmVersion,
+        isKts = isKts
     )
 
     val projectGradleKts =
         getProjectGradleKts(
-            false,
-            selectedDILibrary,
-            isRoomEnable,
-            isKtLintEnable,
-            isDetektEnable,
-            isFirebaseEnable,
-            isNavigationEnable,
-            selectedImageLibrary,
+            isCompose = false,
+            selectedDILibrary = selectedDILibrary,
+            isRoomEnable = isRoomEnable,
+            isKtLintEnable = isKtLintEnable,
+            isDetektEnable = isDetektEnable,
+            isFirebaseEnable = isFirebaseEnable,
+            isNavigationEnable = isNavigationEnable,
+            selectedImageLibrary = selectedImageLibrary,
+            isKts = isKts
         )
 
-    val libsVersionFile = File(moduleData.rootDir.parentFile, "gradle/libs.versions.toml")
-    val buildGradleFile = File(moduleData.rootDir.parentFile, "app/build.gradle.kts")
-    val projectBuildGradleFile = File(moduleData.rootDir.parentFile, "build.gradle.kts")
-    val themesFile = File(moduleData.rootDir.parentFile, "app/src/main/res/values/themes.xml")
-    val themesNightFile = File(moduleData.rootDir.parentFile, "app/src/main/res/values-night/themes.xml")
+    // Use RecipeExecutor.save for ALL files to ensure integration with Wizard
+    addRootFile(dependencies.toString(), moduleData, "gradle/libs.versions.toml")
+    addRootFile(gradleKts.toString(), moduleData, buildGradlePath)
+    addRootFile(projectGradleKts.toString(), moduleData, projectBuildGradlePath)
 
-    if (libsVersionFile.exists() && libsVersionFile.isFile) {
-        libsVersionFile.writeText(
-            """$dependencies
-            """.trimIndent()
-        )
-    }
-
-    if (buildGradleFile.exists() && buildGradleFile.isFile) {
-        buildGradleFile.writeText(
-            """$gradleKts
-            """.trimIndent()
-        )
-    }
-
-    if (projectBuildGradleFile.exists() && projectBuildGradleFile.isFile) {
-        projectBuildGradleFile.writeText(
-            """$projectGradleKts
-            """.trimIndent()
-        )
-    }
-
-    if (themesFile.exists() && themesFile.isFile) {
-        themesFile.writeText(
-            """
+    val themesContent = """
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.${styleName}" parent="Theme.Material3.DayNight.NoActionBar">
@@ -391,22 +380,7 @@ private fun addDependenciesAndGradle(
     <style name="$styleName" parent="Base.${styleName}" />
 </resources>
 """.trimIndent()
-        )
-    }
 
-    if (themesNightFile.exists() && themesNightFile.isFile) {
-        themesNightFile.writeText(
-            """
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.${styleName}" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-    </style>
-
-    <style name="$styleName" parent="Base.${styleName}" />
-</resources>
-""".trimIndent()
-        )
-    }
+    addRootFile(themesContent, moduleData, "app/src/main/res/values/themes.xml")
+    addRootFile(themesContent, moduleData, "app/src/main/res/values-night/themes.xml")
 }

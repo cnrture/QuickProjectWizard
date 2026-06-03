@@ -9,15 +9,18 @@ import io.ktor.client.statement.*
 import kotlinx.serialization.json.Json
 
 suspend fun getVersions() {
-    val client = HttpClient(CIO) {
-        this.engine {
-            requestTimeout = 5000
+    try {
+        val client = HttpClient(CIO) {
+            this.engine {
+                requestTimeout = 5000
+            }
         }
+        val response: HttpResponse = client.get("https://api.canerture.com/qpwizard/versions")
+        val versions = Json.decodeFromString<List<VersionModel>>(response.bodyAsText())
+        val newVersionsMap = versions.associate { it.name to it.value }
+        Versions.updateVersions(newVersionsMap)
+        client.close()
+    } catch (e: Exception) {
+        println("Failed to fetch versions: ${e.message}")
     }
-    val response: HttpResponse = client.get("https://api.canerture.com/qpwizard/versions")
-    val versions = Json.decodeFromString<List<VersionModel>>(response.bodyAsText())
-    versions.forEach {
-        Versions.versionList[it.name] = it.value
-    }
-    client.close()
 }

@@ -23,16 +23,17 @@ class TemplateWriter {
         dependencies: List<String> = emptyList(),
         libraryDependencies: String = Constants.EMPTY,
         pluginDependencies: String = Constants.EMPTY,
+        isKts: Boolean = true,
     ): List<File> {
         try {
             val gradleTemplate = if (moduleType == Constants.ANDROID) {
                 val dependencies = buildDependenciesBlock(dependencies, libraryDependencies)
-                GradleTemplate.getAndroidModuleGradleTemplate(packageName, dependencies, pluginDependencies)
+                GradleTemplate.getAndroidModuleGradleTemplate(packageName, dependencies, pluginDependencies, isKts)
             } else {
-                GradleTemplate.getKotlinModuleGradleTemplate(plugins = pluginDependencies)
+                GradleTemplate.getKotlinModuleGradleTemplate(pluginDependencies, isKts)
             }
 
-            val fileName = "build.gradle.kts"
+            val fileName = if (isKts) "build.gradle.kts" else "build.gradle"
             val filePath = Paths.get(moduleFile.absolutePath, fileName).toFile()
             val file: Writer = FileWriter(Paths.get(moduleFile.absolutePath, fileName).toFile())
             file.write(gradleTemplate)

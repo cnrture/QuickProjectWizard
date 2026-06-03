@@ -20,14 +20,6 @@ val composeTemplate = template {
     formFactor = FormFactor.Mobile
     screens = listOf(WizardUiContext.NewProject, WizardUiContext.NewProjectExtraDetail)
 
-    runBlocking {
-        try {
-            getVersions()
-        } catch (e: Exception) {
-            println("Failed to fetch versions: ${e.message}")
-        }
-    }
-
     val projectName = defaultPackageNameParameter.value.split(".").last()
         .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
 

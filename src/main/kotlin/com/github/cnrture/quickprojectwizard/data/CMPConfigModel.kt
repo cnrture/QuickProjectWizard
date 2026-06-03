@@ -18,6 +18,7 @@ class CMPConfigModel : WizardModel() {
     var isDataDomainDiUiEnable: Boolean by mutableStateOf(false)
     var screens: List<String> by mutableStateOf(emptyList())
     var packageName by mutableStateOf("")
+    var isKts: Boolean by mutableStateOf(true)
 
     override fun handleFinished() = Unit
 }

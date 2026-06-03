@@ -653,17 +653,25 @@ object Utils {
         outputDir: VirtualFile,
         asset: GeneratorTemplateFile,
     ) {
-        Configuration(Configuration.VERSION_2_3_33).apply {
+        val content = processTemplate(dataModel, asset)
+        val outputFilePathParts = asset.relativePath.split('/')
+        val dirPath = outputFilePathParts.dropLast(1).joinToString("/")
+        val targetDir = VfsUtil.createDirectoryIfMissing(outputDir, dirPath)
+            ?: throw IOException("Failed to create directory: $dirPath")
+        val outputFile = targetDir.createChildData(this, outputFilePathParts.last())
+        VfsUtil.saveText(outputFile, content)
+    }
+
+    fun processTemplate(
+        dataModel: Map<String, Any>,
+        asset: GeneratorTemplateFile,
+    ): String {
+        return Configuration(Configuration.VERSION_2_3_33).run {
             setClassLoaderForTemplateLoading(this::class.java.classLoader, "fileTemplates/code")
-            val outputFilePathParts = asset.relativePath.split('/')
-            val dirPath = outputFilePathParts.dropLast(1).joinToString("/")
-            val targetDir = VfsUtil.createDirectoryIfMissing(outputDir, dirPath)
-                ?: throw IOException("Failed to create directory: $dirPath")
-            val outputFile = targetDir.createChildData(this, outputFilePathParts.last())
             StringWriter().use { writer ->
                 val template = "${asset.template.name}.${asset.template.extension}"
                 getTemplate("${template}.ft").process(dataModel, writer)
-                VfsUtil.saveText(outputFile, writer.toString())
+                writer.toString()
             }
         }
     }
