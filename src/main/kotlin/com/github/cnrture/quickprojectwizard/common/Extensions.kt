@@ -57,50 +57,86 @@ fun StringBuilder.addLibsPlugin(plugin: Plugin) {
     append("${plugin.name} = { id = \"${plugin.id}\", version.ref = \"${plugin.verRef}\" }\n")
 }
 
-fun StringBuilder.addGradlePlugin(plugin: Plugin, isProject: Boolean = false) {
+fun StringBuilder.addGradlePlugin(plugin: Plugin, isProject: Boolean = false, isKts: Boolean = true) {
     val name = plugin.name.replace("-", ".")
-    val lastPath = if (isProject) " apply false" else ""
-    append("    alias(libs.plugins.$name)$lastPath\n")
+    val lastPath = if (isProject) (if (isKts) " apply false" else " apply false") else ""
+    if (isKts) {
+        append("    alias(libs.plugins.$name)$lastPath\n")
+    } else {
+        append("    alias libs.plugins.$name$lastPath\n")
+    }
 }
 
-fun StringBuilder.addGradleImplementation(library: Library) {
+fun StringBuilder.addGradleImplementation(library: Library, isKts: Boolean = true) {
     val name = library.libName.replace("-", ".")
-    append("    implementation(libs.$name)\n")
+    if (isKts) {
+        append("    implementation(libs.$name)\n")
+    } else {
+        append("    implementation libs.$name\n")
+    }
 }
 
-fun StringBuilder.addGradleDetektImplementation(library: Library) {
+fun StringBuilder.addGradleDetektImplementation(library: Library, isKts: Boolean = true) {
     val name = library.libName.replace("-", ".")
-    append("    detektPlugins(libs.$name)\n")
+    if (isKts) {
+        append("    detektPlugins(libs.$name)\n")
+    } else {
+        append("    detektPlugins libs.$name\n")
+    }
 }
 
-fun StringBuilder.addGradlePlatformImplementation(library: Library) {
+fun StringBuilder.addGradlePlatformImplementation(library: Library, isKts: Boolean = true) {
     val name = library.libName.replace("-", ".")
-    append("    implementation(platform(libs.$name))\n")
+    if (isKts) {
+        append("    implementation(platform(libs.$name))\n")
+    } else {
+        append("    implementation platform(libs.$name)\n")
+    }
 }
 
-fun StringBuilder.addGradleTestImplementation(library: Library) {
+fun StringBuilder.addGradleTestImplementation(library: Library, isKts: Boolean = true) {
     val name = library.libName.replace("-", ".")
-    append("    testImplementation(libs.$name)\n")
+    if (isKts) {
+        append("    testImplementation(libs.$name)\n")
+    } else {
+        append("    testImplementation libs.$name\n")
+    }
 }
 
-fun StringBuilder.addGradleAndroidTestImplementation(library: Library) {
+fun StringBuilder.addGradleAndroidTestImplementation(library: Library, isKts: Boolean = true) {
     val name = library.libName.replace("-", ".")
-    append("    androidTestImplementation(libs.$name)\n")
+    if (isKts) {
+        append("    androidTestImplementation(libs.$name)\n")
+    } else {
+        append("    androidTestImplementation libs.$name\n")
+    }
 }
 
-fun StringBuilder.addGradleAndroidTestPlatformImplementation(library: Library) {
+fun StringBuilder.addGradleAndroidTestPlatformImplementation(library: Library, isKts: Boolean = true) {
     val name = library.libName.replace("-", ".")
-    append("    androidTestImplementation(platform(libs.$name))\n")
+    if (isKts) {
+        append("    androidTestImplementation(platform(libs.$name))\n")
+    } else {
+        append("    androidTestImplementation platform(libs.$name)\n")
+    }
 }
 
-fun StringBuilder.addGradleDebugImplementation(library: Library) {
+fun StringBuilder.addGradleDebugImplementation(library: Library, isKts: Boolean = true) {
     val name = library.libName.replace("-", ".")
-    append("    debugImplementation(libs.$name)\n")
+    if (isKts) {
+        append("    debugImplementation(libs.$name)\n")
+    } else {
+        append("    debugImplementation libs.$name\n")
+    }
 }
 
-fun StringBuilder.addKspImplementation(library: Library) {
+fun StringBuilder.addKspImplementation(library: Library, isKts: Boolean = true) {
     val name = library.libName.replace("-", ".")
-    append("    ksp(libs.$name)\n")
+    if (isKts) {
+        append("    ksp(libs.$name)\n")
+    } else {
+        append("    ksp libs.$name\n")
+    }
 }
 
 fun StringBuilder.addDetektBlock() {
@@ -113,23 +149,40 @@ fun StringBuilder.addDetektBlock() {
     append("}\n")
 }
 
-fun StringBuilder.addAndroidBlock(packageName: String, minApi: Int, javaJvmVersion: String, isCompose: Boolean) {
+fun StringBuilder.addAndroidBlock(
+    packageName: String,
+    minApi: Int,
+    javaJvmVersion: String,
+    isCompose: Boolean,
+    isKts: Boolean = true
+) {
+    val assignment = if (isKts) " = " else " "
     append("android {\n")
-    append("    namespace = \"${packageName}\"\n")
-    append("    compileSdk = 36\n\n")
-    append("    android.buildFeatures.buildConfig = true\n\n")
+    append("    namespace${assignment}\"${packageName}\"\n")
+    append("    compileSdk${assignment}36\n\n")
+    if (isKts) {
+        append("    android.buildFeatures.buildConfig = true\n\n")
+    } else {
+        append("    buildFeatures {\n")
+        append("        buildConfig true\n")
+        append("    }\n\n")
+    }
     append("    defaultConfig {\n")
-    append("        applicationId = \"${packageName}\"\n")
-    append("        minSdk = $minApi\n")
-    append("        targetSdk = 36\n")
-    append("        versionCode = 1\n")
-    append("        versionName = \"1.0\"\n\n")
-    append("        testInstrumentationRunner = \"androidx.test.runner.AndroidJUnitRunner\"\n")
-    append("        vectorDrawables.useSupportLibrary = true\n")
+    append("        applicationId${assignment}\"${packageName}\"\n")
+    append("        minSdk${assignment}$minApi\n")
+    append("        targetSdk${assignment}36\n")
+    append("        versionCode${assignment}1\n")
+    append("        versionName${assignment}\"1.0\"\n\n")
+    append("        testInstrumentationRunner${assignment}\"androidx.test.runner.AndroidJUnitRunner\"\n")
+    if (isKts) {
+        append("        vectorDrawables.useSupportLibrary = true\n")
+    } else {
+        append("        vectorDrawables.useSupportLibrary true\n")
+    }
     append("    }\n\n")
     append("    buildTypes {\n")
     append("        release {\n")
-    append("            isMinifyEnabled = false\n")
+    append("            isMinifyEnabled${assignment}false\n")
     append("            proguardFiles(\n")
     append("                getDefaultProguardFile(\"proguard-android-optimize.txt\"),\n")
     append("                \"proguard-rules.pro\"\n")
@@ -137,14 +190,20 @@ fun StringBuilder.addAndroidBlock(packageName: String, minApi: Int, javaJvmVersi
     append("        }\n")
     append("    }\n")
     append("    compileOptions {\n")
-    append("        sourceCompatibility = JavaVersion.VERSION_$javaJvmVersion\n")
-    append("        targetCompatibility = JavaVersion.VERSION_$javaJvmVersion\n")
+    append("        sourceCompatibility${assignment}JavaVersion.VERSION_$javaJvmVersion\n")
+    append("        targetCompatibility${assignment}JavaVersion.VERSION_$javaJvmVersion\n")
     append("    }\n")
-    append("    kotlin {\n")
-    append("        compilerOptions.jvmTarget.set(JvmTarget.JVM_$javaJvmVersion)\n")
-    append("    }\n")
+    if (isKts) {
+        append("    kotlin {\n")
+        append("        compilerOptions.jvmTarget.set(JvmTarget.JVM_$javaJvmVersion)\n")
+        append("    }\n")
+    } else {
+        append("    kotlinOptions {\n")
+        append("        jvmTarget = '$javaJvmVersion'\n")
+        append("    }\n")
+    }
     append("    buildFeatures {\n")
-    if (isCompose) append("        compose = true\n") else append("        viewBinding = true\n")
+    if (isCompose) append("        compose${assignment}true\n") else append("        viewBinding${assignment}true\n")
     append("    }\n")
     append("    packaging {\n")
     append("        resources {\n")

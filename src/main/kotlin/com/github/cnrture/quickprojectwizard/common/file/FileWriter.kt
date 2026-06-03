@@ -52,6 +52,8 @@ class FileWriter() {
             modulePathAsString = modulePathAsString,
         )
 
+        val isKts = settingsGradleFile.name.endsWith(".kts")
+
         filesCreated += createDefaultModuleStructure(
             packageName = packageName,
             moduleFile = moduleFile,
@@ -62,6 +64,7 @@ class FileWriter() {
             libraryDependencies = libraryDependencies,
             pluginDependencies = pluginDependencies,
             template = template,
+            isKts = isKts,
         )
 
         showSuccessDialog()
@@ -79,6 +82,7 @@ class FileWriter() {
         libraryDependencies: String = Constants.EMPTY,
         pluginDependencies: String = Constants.EMPTY,
         template: ModuleTemplate? = null,
+        isKts: Boolean = true,
     ): List<File> {
         val filesCreated = mutableListOf<File>()
 
@@ -89,6 +93,7 @@ class FileWriter() {
             dependencies = dependencies,
             libraryDependencies = libraryDependencies,
             pluginDependencies = pluginDependencies,
+            isKts = isKts,
         )
 
         if (moduleType == Constants.ANDROID) {

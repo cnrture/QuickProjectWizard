@@ -1,21 +1,27 @@
 package com.github.cnrture.quickprojectwizard.projectwizard.recipes
 
 import com.android.tools.idea.wizard.template.ModuleTemplateData
+import com.android.tools.idea.wizard.template.RecipeExecutor
 import com.android.tools.idea.wizard.template.escapeKotlinIdentifier
 import com.github.cnrture.quickprojectwizard.service.AnalyticsService
 import com.github.cnrture.quickprojectwizard.common.Utils
+import com.github.cnrture.quickprojectwizard.common.addRootFile
 import com.github.cnrture.quickprojectwizard.data.CMPConfigModel
 import com.github.cnrture.quickprojectwizard.data.CMPImageLibrary
 import com.github.cnrture.quickprojectwizard.data.CMPNetworkLibrary
 import com.github.cnrture.quickprojectwizard.projectwizard.cmparch.*
 import com.github.cnrture.quickprojectwizard.projectwizard.gradle.Versions
+import com.github.cnrture.quickprojectwizard.projectwizard.gradle.network.getVersions
 import com.intellij.ide.fileTemplates.FileTemplateManager
 import com.intellij.ide.starters.local.GeneratorAsset
 import com.intellij.ide.starters.local.GeneratorEmptyDirectory
 import com.intellij.ide.starters.local.GeneratorTemplateFile
+import kotlinx.coroutines.runBlocking
 import org.jetbrains.kotlin.idea.core.util.toVirtualFile
+import java.io.File
+import java.io.StringWriter
 
-fun composeMultiplatformProjectRecipe(
+fun RecipeExecutor.composeMultiplatformProjectRecipe(
     moduleData: ModuleTemplateData,
     packageName: String,
     isAndroidEnable: Boolean,
@@ -29,9 +35,33 @@ fun composeMultiplatformProjectRecipe(
     isDataDomainDiUiEnable: Boolean,
     screens: String,
 ) {
+    runBlocking {
+        try {
+            getVersions()
+        } catch (e: Exception) {
+            println("Failed to fetch versions: ${e.message}")
+        }
+    }
     val analyticsService = AnalyticsService.getInstance()
     val (projectData, _, _) = moduleData
     val packagePath = escapeKotlinIdentifier(packageName)
+    
+    val projectRoot = projectData.rootDir
+    // For Compose Multiplatform, we force KTS as it's the standard and most reliable way
+    // and the user mentioned they don't mind if it's KTS for CMP.
+    val isKts = true
+    
+    // Proactively neutralize Groovy files if they were pre-created by the Wizard.
+    // We save an empty string to them or try to delete them. 
+    // Deleting them from disk is more effective to prevent them from showing up in the project.
+    try {
+        val groovyBuild = File(projectRoot, "build.gradle")
+        val groovySettings = File(projectRoot, "settings.gradle")
+        if (groovyBuild.exists()) groovyBuild.delete()
+        if (groovySettings.exists()) groovySettings.delete()
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
 
     val screenList = if (screens.isNotEmpty()) {
         screens.split(",").map { it.trim() }.filter { it.isNotEmpty() }
@@ -100,6 +130,7 @@ fun composeMultiplatformProjectRecipe(
         this.isDataDomainDiUiEnable = isDataDomainDiUiEnable
         this.screens = screenList
         this.packageName = packagePath
+        this.isKts = isKts
     }
     val isKtorEnable = config.selectedNetworkLibrary == CMPNetworkLibrary.Ktor
     val isKtorfitEnable = config.selectedNetworkLibrary == CMPNetworkLibrary.Ktorfit
@@ -127,6 +158,7 @@ fun composeMultiplatformProjectRecipe(
         "IS_KOIN_ENABLE" to config.isKoinEnable,
         "IS_NAVIGATION_ENABLE" to config.isNavigationEnable,
         "IS_DATA_DOMAIN_DI_UI_ENABLE" to config.isDataDomainDiUiEnable,
+        "IS_KTS" to config.isKts,
         "SCREENS" to screenList,
         "CMP_AGP" to Versions.versionList["cmp-agp"].orEmpty(),
         "CMP_KOTLIN" to Versions.versionList["cmp-kotlin"].orEmpty(),
@@ -162,10 +194,19 @@ fun composeMultiplatformProjectRecipe(
             if (config.isDesktopEnable) DesktopFileGenerator(config) else null,
         )
         assets.addAll(platforms.flatMap { it.generate(fileTemplateManager, config.packageName) })
+        
         assets.forEach { asset ->
             when (asset) {
                 is GeneratorEmptyDirectory -> Utils.createEmptyDirectory(this, asset.relativePath)
-                is GeneratorTemplateFile -> Utils.generateFileFromTemplate(dataModel, this, asset)
+                is GeneratorTemplateFile -> {
+                    // Use RecipeExecutor.save for everything to ensure correct behavior in Wizard
+                    try {
+                        val content = Utils.processTemplate(dataModel, asset)
+                        save(content, projectRoot.resolve(asset.relativePath))
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
                 else -> throw IllegalArgumentException("Unknown asset type: $asset")
             }
         }

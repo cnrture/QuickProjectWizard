@@ -23,11 +23,11 @@ class CommonFileGenerator(
                         ftManager.getCodeTemplate(Template.IDEA_WORKSPACE)
                     ),
                     GeneratorTemplateFile(
-                        "build.gradle.kts",
+                        if (params.isKts) "build.gradle.kts" else "build.gradle",
                         ftManager.getCodeTemplate(Template.GRADLE_KTS)
                     ),
                     GeneratorTemplateFile(
-                        "settings.gradle.kts",
+                        if (params.isKts) "settings.gradle.kts" else "settings.gradle",
                         ftManager.getCodeTemplate(Template.SETTINGS_GRADLE)
                     ),
                     GeneratorTemplateFile(
