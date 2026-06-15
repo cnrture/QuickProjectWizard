@@ -1,6 +1,5 @@
 package com.github.cnrture.quickprojectwizard.projectwizard.gradle.network
 
-import com.github.cnrture.quickprojectwizard.data.VersionModel
 import com.github.cnrture.quickprojectwizard.projectwizard.gradle.Versions
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
@@ -14,10 +13,8 @@ suspend fun getVersions() {
             requestTimeout = 5000
         }
     }
-    val response: HttpResponse = client.get("https://api.canerture.com/qpwizard/versions")
-    val versions = Json.decodeFromString<List<VersionModel>>(response.bodyAsText())
-    versions.forEach {
-        Versions.versionList[it.name] = it.value
-    }
+    val response: HttpResponse = client.get("https://api.candroid.dev/qpwizard/versions")
+    val versions = Json.decodeFromString<Map<String, String>>(response.bodyAsText())
+    Versions.versionList = versions.toMutableMap()
     client.close()
 }

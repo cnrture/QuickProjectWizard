@@ -4,6 +4,12 @@
 
 ## [Unreleased]
 
+## [1.1]
+
+### 🔧 Improvements
+
+- **Extended IDE Compatibility** — Raised the supported build range upper bound to `263.*`, so the plugin now works on IntelliJ Platform 2026.1, 2026.2, and 2026.3 (including Android Studio Quail and later builds).
+
 ## [1.0.0]
 
 ### Added

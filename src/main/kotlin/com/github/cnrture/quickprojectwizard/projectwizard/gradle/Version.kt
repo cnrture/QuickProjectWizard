@@ -1,7 +1,7 @@
 package com.github.cnrture.quickprojectwizard.projectwizard.gradle
 
 object Versions {
-    val versionList = mutableMapOf(
+    var versionList = mutableMapOf(
         "agp" to "8.9.3",
         "kotlin" to "2.1.21",
         "core-ktx" to "1.16.0",
