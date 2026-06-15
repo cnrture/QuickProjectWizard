@@ -327,7 +327,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Support
 
 - 📧 **Email**: cnrture@gmail.com
-- 🌐 **Website**: [canerture.com](https://canerture.com)
+- 🌐 **Website**: [candroid.dev](https://candroid.dev)
 - 💬 **Discussions**: [GitHub Discussions](https://github.com/cnrture/QuickProjectWizard/discussions)
 - 🐛 **Issues**: [GitHub Issues](https://github.com/cnrture/QuickProjectWizard/issues)
 
